@@ -1,0 +1,435 @@
+//Validar limite fechas
+Ext.apply(Ext.form.VTypes, {
+    daterange : function (val, field) {
+        var date = field.parseDate(val);
+        if (!date) {
+            return false;
+        }
+        if (field.startDate && (!this.dateRangeMax || (date.getTime() != this.dateRangeMax.getTime()))) {
+            var start = Ext.getCmp(field.startDate); //field.up('form').down('#'+field.startDate);
+            start.setMaxValue(date);
+            start.validate();
+            this.dateRangeMax = date;
+
+        } else if (field.endDate && (!this.dateRangeMin || (date.getTime() != this.dateRangeMin.getTime()))) {
+            var end = Ext.getCmp(field.endDate); //field.up('form').down('#' + field.endDate);
+            end.setMinValue(date);
+            end.validate();
+            this.dateRangeMin = date;
+        }
+        return true;
+    }
+});
+
+
+
+var msg = function (title, msg, icono, boton, fn) {
+    Ext.Msg.show({
+        title: title,
+        msg: msg,
+        minWidth: 200,
+        modal: true,
+        closable: false,
+        icon: icono,    //Ext.Msg.INFO,
+        buttons: boton,  //Ext.Msg.OK
+        fn: fn
+    });
+};
+
+var closeWin = function () {
+    var ewin = Ext.WindowManager.getActive();
+    if (ewin) {
+        //ewin.close();
+        ewin.destroy();
+    }
+};
+
+var CerrarLimpiarTab = function () {
+    //Removemos el TABpanel
+    var a = tabs.getActiveTab();
+    tabs.remove(a, true);
+};
+
+var ObtenerTiempo = function () {
+    var date = new Date;
+    var tiempo = [];
+
+    tiempo['segundos'] = date.getSeconds();
+    tiempo['minutos'] = date.getMinutes();
+    tiempo['horas'] = date.getHours();
+
+    return (tiempo);
+};
+
+var ObtenerFecha = function () {
+    var date = new Date;
+    var anio = date.getFullYear();
+    var dia = date.getDate();
+    var day; var mes;
+    switch (date.getDay()) {
+        case 0:
+            day = "Domingo";
+            break;
+        case 1:
+            day = "Lunes";
+            break;
+        case 2:
+            day = "Martes";
+            break;
+        case 3:
+            day = "Miércoles";
+            break;
+        case 4:
+            day = "Jueves";
+            break;
+        case 5:
+            day = "Viernes";
+            break;
+        case 6:
+            day = "Sábado";
+            break;
+    }
+
+    switch (date.getMonth()) {
+        case 0:
+            mes = "Enero";
+            break;
+        case 1:
+            mes = "Febrero";
+            break;
+        case 2:
+            mes = "Marzo";
+            break;
+        case 3:
+            mes = "Abril";
+            break;
+        case 4:
+            mes = "Mayo";
+            break;
+        case 5:
+            mes = "Junio";
+            break;
+        case 6:
+            mes = "Julio";
+            break;
+        case 7:
+            mes = "Agosto";
+            break;
+        case 8:
+            mes = "Septiembre";
+            break;
+        case 9:
+            mes = "Octubre";
+            break;
+        case 10:
+            mes = "Noviembre";
+            break;
+        case 11:
+            mes = "Diciembre";
+            break;
+    }
+
+    return (day + ' ' + dia + ' de ' + mes + ' del ' + anio);
+};
+
+
+var obtenerMesAnio = function () {
+    var date = new Date;
+    var anio = date.getFullYear();
+    var mes;
+
+
+    switch (date.getMonth()) {
+        case 0:
+            mes = "Enero";
+            break;
+        case 1:
+            mes = "Febrero";
+            break;
+        case 2:
+            mes = "Marzo";
+            break;
+        case 3:
+            mes = "Abril";
+            break;
+        case 4:
+            mes = "Mayo";
+            break;
+        case 5:
+            mes = "Junio";
+            break;
+        case 6:
+            mes = "Julio";
+            break;
+        case 7:
+            mes = "Agosto";
+            break;
+        case 8:
+            mes = "Septiembre";
+            break;
+        case 9:
+            mes = "Octubre";
+            break;
+        case 10:
+            mes = "Noviembre";
+            break;
+        case 11:
+            mes = "Diciembre";
+            break;
+    }
+
+    return mes + " " + anio;
+};
+
+/**
+ * @return {string}
+ */
+
+var ObtenerFechaShort2 = function () {
+    var date = new Date;
+    var anio = date.getFullYear();
+    var dia = date.getDate();
+    var mes;
+
+    switch (date.getMonth()) {
+        case 0:
+            mes = "01";
+            break;
+        case 1:
+            mes = "02";
+            break;
+        case 2:
+            mes = "03";
+            break;
+        case 3:
+            mes = "04";
+            break;
+        case 4:
+            mes = "05";
+            break;
+        case 5:
+            mes = "06";
+            break;
+        case 6:
+            mes = "07";
+            break;
+        case 7:
+            mes = "08";
+            break;
+        case 8:
+            mes = "09";
+            break;
+        case 9:
+            mes = "10";
+            break;
+        case 10:
+            mes = "11";
+            break;
+        case 11:
+            mes = "12";
+            break;
+    }
+
+    return anio + '/' + mes + '/' + dia;
+};
+
+var ObtenerFechaShort = function () {
+    var date = new Date;
+    var anio = date.getFullYear();
+    var dia = date.getDate();
+    var mes;
+
+    switch (date.getMonth()) {
+        case 0:
+            mes = "01";
+            break;
+        case 1:
+            mes = "02";
+            break;
+        case 2:
+            mes = "03";
+            break;
+        case 3:
+            mes = "04";
+            break;
+        case 4:
+            mes = "05";
+            break;
+        case 5:
+            mes = "06";
+            break;
+        case 6:
+            mes = "07";
+            break;
+        case 7:
+            mes = "08";
+            break;
+        case 8:
+            mes = "09";
+            break;
+        case 9:
+            mes = "10";
+            break;
+        case 10:
+            mes = "11";
+            break;
+        case 11:
+            mes = "12";
+            break;
+    }
+
+    return dia + '/' + mes + '/' + anio;
+};
+
+var ObtenerHora = function () {
+    var date = new Date;
+    var hora = date.getHours();
+    //if(hora <= 9){
+    //    hora = '0' + hora;
+    //}
+    return (hora);
+};
+
+var ObtenerMinuto = function () {
+    var date = new Date;
+    var minutos = date.getMinutes();
+    //if(minutos <= 9){
+    //    minutos = '0' + minutos;
+    //}
+    return (minutos);
+};
+
+/**************************************************************************
+ * Validando Formularios Dinamicamnte
+ *
+ * Manda un mensajeBox con los nombres de los campos obligatorios que no
+ * fueron completados correctamente (en base a "name")
+ *
+ * @param form: Nombre del formulario con getCmp()
+ * @returns {boolean} //Devuelve si el formulario es valido o no
+ *
+ * Modo de uso (En el boton submit o donde desees validar, agrega lo siguiente
+ *
+ *
+
+ //Este fragmento va en en el boton del formulario a validar
+ var form = this.up('form').getForm();
+ if(!ValidarFormulario(form)) return;
+ //TODO (Resto del codigo)
+
+ *
+ */
+
+var ValidarFormulario = function (form) {
+    if (form.isValid()) {
+        return true;
+    } else {
+        var invalidFields = [];
+        Ext.suspendLayouts();
+        form.getFields().filterBy(function (field) {
+            if (field.validate()) return;
+            invalidFields.push(field);
+        });
+        Ext.resumeLayouts(true);
+        var fieldNames = [];
+        var field;
+        var fields = invalidFields;
+        for (var i = 0; i < fields.length; i++) {
+            field = fields[i];
+            if (field.getFieldLabel() === '') {
+                fieldNames.push(field.getName());
+            } else {
+                fieldNames.push(field.getFieldLabel());
+            }
+        }
+        msg("Error - Campos Invalidos", "Debe ingresar " + fieldNames.join(', '), Ext.Msg.INFO, Ext.Msg.OK);
+        return false;
+    }
+};
+
+var ValidarPorId = function (campo, TituloCampo) {
+    if (campo === null || campo === '') {
+        //console.log("Hola Mundo!, esta vacio")
+        msg("Campo no valido", "Debe ingresar un " + TituloCampo, Ext.Msg.INFO, Ext.Msg.OK);
+        return false;
+    } else {
+        //console.log(campo);
+        return true;
+    }
+};
+
+var showToast = function(html)
+{
+    Ext.toast({
+        html: html,
+        closable: false,
+        align: 't',
+        slideDUration: 400,
+        maxWidth: 400
+    }); 
+};
+
+var obtenerMesesPeriodoTexto = function(mes, periodo){
+    var mesesTexto = "";
+    var valorMes = 0;
+    var seleccion = false;
+    console.log(mes, periodo);
+    switch(periodo){
+        case "TRIMESTRAL":
+            seleccion = mes <= 3;
+            valorMes = 3;
+            break;
+
+        case "SEMESTRAL":
+            seleccion = mes <= 6;
+            valorMes = 6;
+            break;
+
+        case "BIMESTRAL":
+            seleccion = mes <= 2;
+            valorMes = 2;
+            break;
+
+        case "ANUAL":
+            seleccion = mes <= 12;
+            valorMes = 12;
+            break;
+    }
+    if(seleccion){
+        var indexMes = mes-1;
+        for(var i = 1; i < 12; i++){
+            
+            
+            i = indexMes;
+            console.log(indexMes);
+            if(indexMes < 12){
+                mesesTexto += storeExtras_cargarMeses.getAt(indexMes).data.NOMBRE + ", ";
+            }else{
+                break;
+            }
+            indexMes = indexMes+(valorMes);
+            
+        }
+    }
+
+    return mesesTexto;
+}
+
+var sleep = function(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+
+    var cerrarVentanas =  function () {
+        Ext.WindowManager.each(function(component) {
+            console.log(component);
+            if (component.getXType() === 'window') {
+                component.destroy();
+            }
+        });
+    }
+
+
+  var verde = '#4cd385;';
+  var rojo = '#e74c3c;';
+  var amarillo = '#f7b85c;';

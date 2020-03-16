@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>application/views/Formularios/Home/Home.js</url>
+            <bookmark id="1">
+                <name/>
+                <line>119</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+<<<<<<< working copy
+            <file>file:/C:/xampp/htdocs/SGL/appmovil/app/view/indDispo/IndDispoController.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/appmovil/app/view/indDispo/IndDispoModel.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/appmovil/app/</file>
+=======
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Tiempos/Home.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/models/eventos/EventosModel.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/resources/css/main.css</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/controllers/eventos/EventosController.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Tiendas/StoreEventos.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Indicadores/ResumenIndicadores.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Raiz/3.contenedor.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Menus/menuIndicadores.js</file>
+>>>>>>> merge rev
+        </group>
+    </open-files>
+</project-private>

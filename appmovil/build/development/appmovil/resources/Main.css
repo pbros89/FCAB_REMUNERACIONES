@@ -1,0 +1,29 @@
+.menu-icon-grilla {
+    background-image: url('images/tab/grid.png') !important;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+}
+
+.menu-icon-lista {
+    background-image: url('images/tab/list.png') !important;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+}
+
+.menu-icon-exit {
+    background-image: url('images/tab/exit.png') !important;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+}
+
+.tab-icon-nok {
+    background-image: url('images/tab/back.png') !important;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+}
+
+.tab-icon-add {
+    background-image: url('images/tab/add.png') !important;
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+}

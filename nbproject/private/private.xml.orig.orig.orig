@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>application/views/Formularios/Home/Home.js</url>
+            <bookmark id="1">
+                <name/>
+                <line>119</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< working copy
+<<<<<<< working copy
+        <group>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Tiempos/LocomotorasMantencion.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/RegistrarEvento.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/Calendario.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/models/conciliacion/ConciliacionModel.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Menus/menuTiempos.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/InicioCronograma24.js</file>
+        </group>
+=======
+<<<<<<< working copy
+        <group/>
+=======
+        <group>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Tiempos/LocomotorasMantencion.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/RegistrarEvento.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/Calendario.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/models/conciliacion/ConciliacionModel.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Menus/menuTiempos.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/InicioCronograma24.js</file>
+        </group>
+>>>>>>> merge rev
+>>>>>>> merge rev
+=======
+        <group>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Tiendas/StoreConciliacion.js</file>
+<<<<<<< working copy
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Tiendas/StoreExtras.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/RegistrarEvento.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/controllers/extras/ExtrasController.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/models/conciliacion/ConciliacionModel.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/Calendario.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/main.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/models/extras/ExtrasModel.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/controllers/conciliacion/ConciliacionController.php</file>
+=======
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/RegistrarEvento.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/models/conciliacion/ConciliacionModel.php</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/Calendario.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/InicioCronograma24.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Menus/menuTiempos.js</file>
+            <file>file:/C:/xampp/htdocs/SGL/application/views/Formularios/Conciliacion/Cronograma24.js</file>
+>>>>>>> merge rev
+        </group>
+>>>>>>> merge rev
+    </open-files>
+</project-private>

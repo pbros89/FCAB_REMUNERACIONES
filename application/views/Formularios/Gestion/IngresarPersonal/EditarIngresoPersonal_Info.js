@@ -17,7 +17,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
             Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #dtNacimiento')[0].setValue(param.FECHA_NACIMIENTO);
             Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtApeMat')[0].setValue(param.APE_MAT);
             Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCalle')[0].setValue(param.CALLE);
-            //var txtCelular = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCelular')[0];
+            Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtPeriodo')[0].setValue(param.PERIODO);
             Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCiudad')[0].setValue(param.CIUDAD);
             Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtComuna')[0].setValue(param.COMUNA);
             Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCorreo')[0].setValue(param.CORREO);
@@ -59,11 +59,11 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
     
             items: [{
                 xtype: 'container',
-                columnWidth: 1,
+                columnWidth: 0.5,
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 0 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -72,7 +72,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
                     allowDecimals: false,
                     labelAlign:'top',
                     fieldLabel: 'Rut',
-                    width: '20%',
+                    width: '40%',
                     readOnly : true,
                     allowBlank: false,
                     maxValue: 999999999,
@@ -85,13 +85,33 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
                     name: 'txtDV',
                     labelAlign:'top',
                     fieldLabel: 'DV',
-                    width: '5%',
+                    width: '10%',
                     typeAhead: true,
                     readOnly : true,
                     maxLength: 1,
                     allowBlank: false,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
                 }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: {
+                    type: 'hbox',
+                    pack: 'end'   
+                },
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtPeriodo',
+                    name: 'txtPeriodo',
+                    labelAlign:'top',
+                    fieldLabel: 'Periodo',
+                    anchor: '100%',
+                    typeAhead: true,
+                    maxLength: 100,
+                    allowBlank: false,   
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'
+                },]
             },{
                 xtype: 'container',
                 columnWidth: .5,
@@ -118,7 +138,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
                     itemId: 'txtApePat',
                     name: 'txtApePat',
                     labelAlign:'top',
-                    fieldLabel: 'Apellido',
+                    fieldLabel: 'Apellido Paterno',
                     anchor: '100%',
                     typeAhead: true,
                     maxLength: 100,
@@ -334,7 +354,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtFono',
                     name: 'txtFono',
                     forcePrecision: true,

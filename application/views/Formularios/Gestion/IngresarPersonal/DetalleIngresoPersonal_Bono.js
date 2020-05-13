@@ -86,7 +86,7 @@ Ext.define('fcab.Container.DetalleIngresoPersonalBono.Grilla', {
                             record.get('TIPO_CONCEPTO') === 'CANTIDAD' ||
                             record.get('TIPO_CONCEPTO') === 'MONTO' ||
                             record.get('TIPO_CONCEPTO') === 'RANGO' 
-                    ? 'numberfield' : 'combobox';
+                    ? 'thousandnumber' : 'combobox';
                 
                 if(fieldType === 'combobox' && record.get('TIPO_CONCEPTO') === 'BOOLEANO')
                 {
@@ -247,7 +247,7 @@ Ext.define('fcab.Container.DetalleIngresoPersonalBono.Grilla', {
                     };
                 }
                 
-                if(fieldType === 'numberfield'){
+                if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
                     var rangoFin = 999999999;
 
@@ -263,8 +263,6 @@ Ext.define('fcab.Container.DetalleIngresoPersonalBono.Grilla', {
 
                     return {
                         xtype: fieldType,
-                        forcePrecision: true,
-                        decimalPrecision: 5,
                         maxValue: rangoFin,
                         minValue: rangoIni,
                         allowBlank: false,

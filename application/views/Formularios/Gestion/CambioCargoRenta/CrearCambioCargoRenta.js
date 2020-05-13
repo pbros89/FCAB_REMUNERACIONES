@@ -10,11 +10,16 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
     
     constructor: function (config) {
         this.callParent([config]);
-        storeCargarCentroCostosFiltro.load();
-        storeCargarCargosFiltro.load();
-        storeCargarParam_TIPO_CAMBIO_CARGO_R.load();
-        storeCargarParam_JORNADA.load();
-        storeCargarParam_TIPO_CONTRATO.load();
+    },
+    listeners: {
+        afterrender: function() {
+            storeCargarCentroCostosFiltro.load();
+            storeCargarCargosFiltro.load();
+            storeCargarParam_TIPO_CAMBIO_CARGO_R.load();
+            storeCargarParam_JORNADA.load();
+            storeCargarParam_TIPO_CONTRATO.load();
+            storeExtras_cargarPeriodos.load();
+        }
     },
     items: [{
         xtype: 'form',
@@ -22,12 +27,12 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
         border: false,
         frame: false,
         bodyPadding: 10,
+        height: 600, 
         layout: {
             type: 'column',
             align: 'strech'
         },
         autoScroll: true,
-        height: 600, 
         items:[{
             
             xtype: 'fieldset',
@@ -45,7 +50,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -304,7 +309,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'textfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtSueldoOld',
                     name: 'txtSueldoOld',
                     labelAlign:'top',
@@ -327,6 +332,30 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
             },
     
             items: [{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
                 xtype: 'container',
                 columnWidth: 1,
                 layout: 'anchor',
@@ -359,7 +388,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     xtype: 'combo',
                     name: 'cbCC',
                     itemId: 'cbCC',
-                    displayField: 'NOMBRE',
+                    displayField: 'NOMBRE_FULL',
                     valueField: 'CODIGO',
                     store: storeCargarCentroCostosFiltro,
                     fieldLabel: 'Centro de Costo',
@@ -383,7 +412,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     xtype: 'combo',
                     name: 'cbCargo',
                     itemId: 'cbCargo',
-                    displayField: 'NOMBRE',
+                    displayField: 'NOMBRE_FULL',
                     valueField: 'CODIGO',
                     store: storeCargarCargosFiltro,
                     fieldLabel: 'Cargo',
@@ -486,7 +515,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtSueldo',
                     name: 'txtSueldo',
                     forcePrecision: true,
@@ -563,6 +592,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                                 , P_FECHA_FIN_CONTRATO : values.dtFin
                                 , P_SUELDO_BASE : txtSueldo
                                 , P_OBSERVACION: values.txtObs
+                                , P_PERIODO: values.cbPeriodo
 
                             },
                             callback: function(records, operation, success) {

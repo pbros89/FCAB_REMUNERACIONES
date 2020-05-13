@@ -32,7 +32,8 @@ class CambiarCargoRentaModel extends CI_Model {
                     NOM_TIPO_CAMBIO,
                     TO_CHAR(FECHA_FIN_CONTRATO, 'YYYY/MM/DD') FECHA_FIN_CONTRATO,
                     TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') FECHA_CREACION,
-                    ESTADO
+                    ESTADO,
+                    PERIODO
                 FROM NOV_CAMBIO_CARGO_RENTA CAM 
                 WHERE 1 = 1 ";
 
@@ -51,6 +52,8 @@ class CambiarCargoRentaModel extends CI_Model {
                     $sql .= "AND TO_DATE('$p_fec2', 'YYYY/MM/DD') ";
                 }elseif (!empty($p_fec1)) {
                     $sql .= "AND TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') = '$p_fec1' ";
+                }else{
+                    $sql .= "AND TRUNC(FECHA_CREACION, 'MM') = TRUNC(SYSDATE, 'MM') ";
                 }
 
                 $sql .= "ORDER BY PK_ID DESC";
@@ -78,7 +81,9 @@ class CambiarCargoRentaModel extends CI_Model {
         , $P_SUELDO_BASE
         , $P_OBSERVACION 
         , $P_COD_TIPO_CAMBIO   
-        , $P_NOM_TIPO_CAMBIO   )
+        , $P_NOM_TIPO_CAMBIO   
+        , $P_PERIODO
+    )
     
     {
         $r_est = 0;
@@ -103,6 +108,7 @@ class CambiarCargoRentaModel extends CI_Model {
                         , :P_OBSERVACION
                         , :P_COD_TIPO_CAMBIO
                         , :P_NOM_TIPO_CAMBIO
+                        , :P_PERIODO
                         , :r_est
                         , :r_msg);END;");
         
@@ -125,6 +131,8 @@ class CambiarCargoRentaModel extends CI_Model {
 
         oci_bind_by_name($proc,"P_FECHA_FIN_CONTRATO", $P_FECHA_FIN_CONTRATO, 20,SQLT_CHR);
         oci_bind_by_name($proc,"P_SUELDO_BASE", $P_SUELDO_BASE);
+        
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20,SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -178,6 +186,35 @@ class CambiarCargoRentaModel extends CI_Model {
     
     oci_bind_by_name($proc,"P_COD", $P_COD, -1, OCI_B_INT);
     oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+    oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+    oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+    oci_execute($proc);
+
+    $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+    return $result;
+}
+
+public function anularCambioCargoRenta(
+    $P_COD 
+  , $P_USUARIO 
+  , $P_OBS)
+
+{
+    $r_est = 0;
+    $r_msg = "";
+    $proc = oci_parse(
+            $this->db->conn_id,
+                "BEGIN NOV_ANU_CAMBIO_CARGO_RENTA(
+                      :P_COD  
+                    , :P_USUARIO
+                    , :P_OBS
+                    , :r_est
+                    , :r_msg);END;");
+    
+    oci_bind_by_name($proc,"P_COD", $P_COD, -1, OCI_B_INT);
+    oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+    oci_bind_by_name($proc,"P_OBS", $P_OBS, 1000, SQLT_CHR);
     oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
     oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 

@@ -4,28 +4,20 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleCC', {
     itemId: 'MainProcesoMensualDetalleCC',
     border: false,
     frame: false,
-    scrollable: false,
-    listeners: {
-        beforerender: function (){
-            //cargarCCConceptoNo();
-            //cargarCCConceptoSi();
-        }
-    },
     items: [{
-        xtype: 'panel',
-        width: '100%',
-        layout: {
-            type: 'vbox',
-            align: 'middle',
-            pack: 'center',
-        },
-        items: [{
-            xtype: 'container',
-            layout: 'hbox',
-            margin: '0 0 10 0',
+            xtype: 'panel',
+            layout: {
+                type: 'hbox',
+                align: 'middle',
+                pack: 'center',
+            },
+            border: false,
+            width: '100%',
+            height: "100px",
+            margin: 10,
             items: [{
                 xtype: 'textfield',
-                fieldLabel: 'ID',
+                fieldLabel: 'Buscar por ID',
                 labelAlign:'top',
                 name: 'txtId',
                 itemId: 'txtId',
@@ -40,7 +32,7 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleCC', {
                 }
             },{
                 xtype: 'textfield',
-                fieldLabel: 'Nombre',
+                fieldLabel: 'Buscar por Nombre',
                 labelAlign:'top',
                 name: 'txtNombre',
                 itemId: 'txtNombre',
@@ -52,11 +44,59 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleCC', {
                         cargarDetalleCCProcesoMensual();
                     }
                 }
+            },{
+                xtype: 'container',
+                layout: {
+                    type: 'vbox',
+                    align: 'middle',
+                    pack: 'center',
+                },
+                width: '100%',
+                items: [{
+                    xtype: 'button',
+                    text: 'Terminar todos los CC',
+                    handler: function() {
+                        var param = Ext.getCmp('MainProcesoMensualDetalle').myExtraParams.param2.data;
+                        Ext.MessageBox.confirm('Terminar todos los CC', '¿Esta seguro de terminar los centros de costos?', function(btn) {
+                            if (btn === 'yes') {
+                                storeTerminarAllCC.load({
+                                    params: {
+                                        p_cod_emp: EMPRESA,
+                                        p_proceso: param.PK_PROCESO,
+                                        p_tipo: param.PK_TIPO,
+                                        p_usuario: NOMBRE
+                                    },
+                                    callback: function(records, operation, success) {
+                                        if(records != null) {
+                                            if(records[0].data.r_msg == 'OK'){
+                                                showToast('Centrs de Costos terminados correctamente');
+                                                if(Ext.getCmp('MainProcesoMensualDetalle') != null){
+                                                    cargarDetalleProcesoMensual();
+                                                    cargarCCPersonasProcesoMensualDetalle();
+                                                }
+                                                if(Ext.getCmp('PersonasProcesoMensual') != null){
+                                                    cargarCCPersonasProcesoMensual();
+                                                }
+                                            }else{
+                                                Ext.MessageBox.show({
+                                                    title: 'ADVERTENCIA',
+                                                    msg: records[0].data.r_msg,
+                                                    icon: Ext.MessageBox.WARNING,
+                                                    buttons: Ext.Msg.OK
+                                                });
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }]
             }]
         },{
-            xtype: 'MainProcesoMensualDetalleCCGrilla'
+            xtype: 'MainProcesoMensualDetalleCCGrilla',
+            flex: 1,
         }]
-    }]
 });
 
 Ext.define('fcab.Container.MainProcesoMensual.DetalleCCGrilla', {
@@ -68,7 +108,26 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleCCGrilla', {
     emptyText: 'Sin datos para mostrar',
     filtros: null,
     scrollable: true,
+    autoScroll: true,
+    width : '100%',
+    height: '350',
     plugins: pluginFactory(),
+    dockedItems: [{
+        xtype: 'toolbar',
+        items: [{
+            text: 'Exportar',
+            tooltip: 'Exportar xls',
+            iconCls: 'icon-form-download',
+            handler: function () {
+                this.ownerCt.ownerCt.saveDocumentAs({
+                  type: 'excel',
+                  title: "Centros de Costos",
+                  fileName: 'CC_PROC_MENSUAL_' + new Date().getTime() +'.xls'
+                });
+            }
+
+        },]
+    }],
     columns: [
         {
             text     : 'ID',
@@ -209,8 +268,7 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleCCGrilla', {
             }]
         },
     ],
-    width : '100%',
-    height: 480
+    
 });
 
 var cargarDetalleCCProcesoMensual = function(){

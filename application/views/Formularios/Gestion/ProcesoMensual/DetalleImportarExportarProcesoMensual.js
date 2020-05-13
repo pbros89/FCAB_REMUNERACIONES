@@ -2,19 +2,13 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleImportarExportar', {
     extend: 'Ext.container.Container',
     xtype: 'MainProcesoMensualDetalleImportarExportar',
     itemId: 'MainProcesoMensualDetalleImportarExportar',
-    id: 'MainProcesoMensualDetalleImportarExportar',
     border: false,
     frame: false,
-    scrollable: false,
-    margin: '20',
-    height: 565,
-    layout:'vbox',
     items: [{ 
         xtype: 'panel',
         width: '100%',
         margin: '10 0 10 0',
         title: "Exportar Archivo",
-        height: '250',
         border: true,
         layout: {
             type: 'vbox',
@@ -24,33 +18,61 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleImportarExportar', {
         items: [{
             border: false,
             margin: '20 20 0 20',
-            html: "<h3><b><i>Genera el archivo XLS con todos los conceptos que participan del proceso.</i></b></h3>"
+            html: "<h3><b><i>Genera el archivo XLS con todos los conceptos del centro de costo seleccionado.</i></b></h3>"
+        },{
+            xtype: 'combo',
+            name: 'cbCc',
+            margin: '20 20 0 20',
+            itemId: 'cbCc',
+            displayField: 'DESC_CC',
+            valueField: 'PK_COD_CC',
+            store: storeCargarCCProcesoMensual2,
+            fieldLabel: 'Centro de Costo',
+            labelAlign:'left',
+            queryMode: 'local',
+            triggerAction: 'all',
+            editable: true,
+            typeAhead: true,
+            selectOnFocus: true,
+            forceSelection: true,
+            allowBlank: true,  
+            readOnly: false,
+            width: '100%'
         },{
             xtype:'button',
             text: 'Exportar',
-            tooltip: 'Exporta el listado de conceptos de todas las personas',
+            tooltip: 'Exporta Archivo',
             scale: 'large',
             margin: '20',
             columnWidth: .1,
             handler: function() {
 
-
                 var param = Ext.getCmp('MainProcesoMensualDetalle').myExtraParams.param2.data;
-
-                Ext.create('Ext.form.Panel', {
-                    renderTo: Ext.getBody(),
-                    standardSubmit: true,
-                    url: host + 'procesoMensual/ProcesoMensualController/exportarProcesoMensualRRHH',
-                    timeout : 300000,
-                }).submit({
-                    timeout : 300000,
-                    params: {
-                        p_proceso : param.PK_PROCESO, //ESTACION,
-                        p_tipo : param.PK_TIPO, 
-                        p_cod_emp : EMPRESA, 
-                    },
-                    target: 'Exportar' + '-form-iframe',
-                });
+                var cc = Ext.ComponentQuery.query('#MainProcesoMensualDetalleImportarExportar #cbCc')[0].value;
+                if(cc) {
+                    Ext.create('Ext.form.Panel', {
+                        renderTo: Ext.getBody(),
+                        standardSubmit: true,
+                        url: host + 'procesoMensual/ProcesoMensualController/exportarProcesoMensualRRHH',
+                        timeout : 300000,
+                    }).submit({
+                        timeout : 300000,
+                        params: {
+                            p_proceso : param.PK_PROCESO, //ESTACION,
+                            p_tipo : param.PK_TIPO, 
+                            p_cod_emp : EMPRESA, 
+                            p_cod_cc : cc
+                        },
+                        target: 'Exportar' + '-form-iframe',
+                    });
+                }else{
+                    Ext.MessageBox.show({
+                        title: 'Exportar Archivo',
+                        msg: 'Seleccione Centro de Costo',
+                        icon: Ext.MessageBox.WARNING,
+                        buttons: Ext.Msg.OK
+                    });
+                }
 
             }
         },]
@@ -59,7 +81,6 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleImportarExportar', {
         width: '100%',
         margin: '10 0 10 0',
         title: "Importar Archivo",
-        height: '250',
         border: true,
         layout: {
             type: 'vbox',
@@ -70,6 +91,25 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleImportarExportar', {
             border: false,
             margin: '20 20 0 20',
             html: "<h3><b><i>Carga del archivo de conceptos</i></b></h3>"
+        },{
+            xtype: 'combo',
+            name: 'cbCc2',
+            margin: '20 20 0 20',
+            itemId: 'cbCc2',
+            displayField: 'DESC_CC',
+            valueField: 'PK_COD_CC',
+            store: storeCargarCCProcesoMensual2,
+            fieldLabel: 'Centro de Costo',
+            labelAlign:'left',
+            queryMode: 'local',
+            triggerAction: 'all',
+            editable: true,
+            typeAhead: true,
+            selectOnFocus: true,
+            forceSelection: true,
+            allowBlank: false,  
+            readOnly: false,
+            width: '100%'
         },{
             xtype: 'filefield',
             accept: '.xls',
@@ -85,10 +125,11 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleImportarExportar', {
             xtype:'button',
             margin: '20',
             text: 'Importar',
-            tooltip: 'Importar planilla generada por el exportador',
+            tooltip: 'Importar Archivo',
             scale: 'large',
             handler: function() {
                 var param = Ext.getCmp('MainProcesoMensualDetalle').myExtraParams.param2.data;
+                var cc = Ext.ComponentQuery.query('#MainProcesoMensualDetalleImportarExportar #cbCc2')[0].value;
                 var form = this.up('form').getForm();
                 if(form.isValid()) {
                     //console.log(form.getValues());
@@ -99,12 +140,17 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleImportarExportar', {
                             p_proceso : param.PK_PROCESO, 
                             p_tipo : param.PK_TIPO, 
                             p_cod_emp : EMPRESA, 
+                            p_cod_cc : cc,
+                            p_usuario : NOMBRE, 
+                            
                         },
+                        timeout : 300000,
                         success: function (f, a) {
 
                             if(a.result.items.r_msg != null && a.result.items.r_msg == "OK") {
                                 var param1 = Ext.getCmp('MainProcesoMensualDetalle').myExtraParams.param1;
                                 var param2 = Ext.getCmp('MainProcesoMensualDetalle').myExtraParams.param2;
+                                param2.data.p_cod_cc = cc;
                                 ventanaDinamica("DetalleErroresImpotarProcesoMensual", "Detalle Importación", "1000", "", "DetalleErroresImpotarProcesoMensual", 1, 0, param1, param2);
                             }else{
                                 Ext.MessageBox.show({

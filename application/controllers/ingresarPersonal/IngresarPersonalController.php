@@ -98,7 +98,7 @@ class IngresarPersonalController extends CI_Controller {
         $P_MONTO_ADI_EMP = $this->input->get('P_MONTO_ADI_EMP');  
         $P_FORMATO_ADI_EMP = $this->input->get('P_FORMATO_ADI_EMP');  
         $P_COD_TIPO_CONTRATO = $this->input->get('P_COD_TIPO_CONTRATO');  
-
+        $P_PERIODO = $this->input->get('P_PERIODO');  
 
         $query = $this->IngresarPersonalModel->crearIngresarPersonal( 
               $P_RUT  
@@ -167,7 +167,9 @@ class IngresarPersonalController extends CI_Controller {
             , $P_FORMATO_ADI_TRA
             , $P_MONTO_ADI_EMP
             , $P_FORMATO_ADI_EMP
-            , $P_COD_TIPO_CONTRATO );
+            , $P_COD_TIPO_CONTRATO 
+            , $P_PERIODO
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -246,6 +248,8 @@ class IngresarPersonalController extends CI_Controller {
         $P_COD_TIPO_CONTRATO = $this->input->get('P_COD_TIPO_CONTRATO');  
         $P_PK_ID = $this->input->get('P_PK_ID');  
 
+        $P_PERIODO = $this->input->get('P_PERIODO');  
+
 
         $query = $this->IngresarPersonalModel->modificarIngresarPersonal( 
               $P_RUT  
@@ -315,7 +319,9 @@ class IngresarPersonalController extends CI_Controller {
             , $P_MONTO_ADI_EMP
             , $P_FORMATO_ADI_EMP
             , $P_COD_TIPO_CONTRATO 
-            , $P_PK_ID );
+            , $P_PK_ID 
+            , $P_PERIODO
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -360,6 +366,23 @@ class IngresarPersonalController extends CI_Controller {
         $p_usuario = $this->input->get('p_usuario');  
 
         $query = $this->IngresarPersonalModel->eliminarIngresoPersonal($p_ingreso, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function anularIngresoPersonal()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->IngresarPersonalModel->anularIngresoPersonal(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

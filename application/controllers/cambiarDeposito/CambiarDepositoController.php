@@ -39,7 +39,8 @@ class CambiarDepositoController extends CI_Controller {
         $P_COD_BANCO = $this->input->get('P_COD_BANCO');  
         $P_NOM_BANCO = $this->input->get('P_NOM_BANCO');  
         $P_NUM_CUENTA = $this->input->get('P_NUM_CUENTA');  
-        $P_OBSERVACION = $this->input->get('P_OBSERVACION');        
+        $P_OBSERVACION = $this->input->get('P_OBSERVACION'); 
+        $P_PERIODO = $this->input->get('P_PERIODO');        
 
         $query = $this->CambiarDepositoModel->crearCambioDeposito(
               $P_RUT  
@@ -51,7 +52,9 @@ class CambiarDepositoController extends CI_Controller {
             , $P_COD_BANCO   
             , $P_NOM_BANCO   
             , $P_NUM_CUENTA   
-            , $P_OBSERVACION  );
+            , $P_OBSERVACION 
+            , $P_PERIODO 
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -84,6 +87,23 @@ class CambiarDepositoController extends CI_Controller {
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
 
+    }
+
+    public function anularCambioDeposito()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->CambiarDepositoModel->anularCambioDeposito(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
     }
     
 }

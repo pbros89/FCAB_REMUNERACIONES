@@ -35,13 +35,16 @@ class CambioBonoController extends CI_Controller {
         $P_USUARIO = $this->input->get('P_USUARIO');  
         $P_COD_EMP = $this->input->get('P_COD_EMP');  
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');
+        $P_PERIODO = $this->input->get('P_PERIODO');
 
         $query = $this->CambioBonoModel->crearCambioBono(
             $P_RUT 
           , $P_DV 
           , $P_COD_EMP 
           , $P_USUARIO 
-          , $P_OBSERVACION   );
+          , $P_OBSERVACION  
+          , $P_PERIODO 
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -97,6 +100,23 @@ class CambioBonoController extends CI_Controller {
         $p_personal = $this->input->get('p_personal');  
 
         $query = $this->CambioBonoModel->cargarConceptosPersonal($p_personal);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function anularCambioBono()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->CambioBonoModel->anularCambioBono(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

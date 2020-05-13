@@ -38,8 +38,19 @@ class FiniquitoController extends CI_Controller {
         $p_usuario = $this->input->get('p_usuario');  
         $p_cod_emp = $this->input->get('p_cod_emp');  
         $p_obs = $this->input->get('p_obs');  
+        $P_PERIODO = $this->input->get('P_PERIODO');  
 
-        $query = $this->FiniquitoModel->crearFiniquito($p_rut, $p_dv, $p_cod_causal, $p_nom_causal, $p_fecha_baja, $p_cod_emp, $p_usuario, $p_obs);
+        $query = $this->FiniquitoModel->crearFiniquito(
+            $p_rut, 
+            $p_dv, 
+            $p_cod_causal, 
+            $p_nom_causal, 
+            $p_fecha_baja,
+            $p_cod_emp, 
+            $p_usuario, 
+            $p_obs,
+            $P_PERIODO);
+
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
@@ -52,8 +63,18 @@ class FiniquitoController extends CI_Controller {
         $p_fecha_baja = $this->input->get('p_fecha_baja');  
         $p_usuario = $this->input->get('p_usuario');  
         $p_obs = $this->input->get('p_obs');  
+        $P_PERIODO = $this->input->get('P_PERIODO');
 
-        $query = $this->FiniquitoModel->editarFiniquito($p_finiquito, $p_cod_causal, $p_nom_causal, $p_fecha_baja, $p_usuario, $p_obs);
+        $query = $this->FiniquitoModel->editarFiniquito(
+            $p_finiquito, 
+            $p_cod_causal, 
+            $p_nom_causal, 
+            $p_fecha_baja, 
+            $p_usuario, 
+            $p_obs,
+            $P_PERIODO
+        );
+
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
@@ -109,6 +130,23 @@ class FiniquitoController extends CI_Controller {
         $p_valor = $this->input->get('p_valor');  
 
         $query = $this->FiniquitoModel->modificarFiniquitoConcepto($p_finiquito, $p_cod_concepto, $p_usuario, $p_valor);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function anularFiniquito()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->FiniquitoModel->anularFiniquito(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

@@ -12,6 +12,14 @@ Ext.define("fcab.Container.CrearCambioDeposito", {
         this.callParent([config]);
         storeCargarParam_BANCO.load();
         storeCargarParam_FORMA_PAGO.load();
+        storeExtras_cargarPeriodos.load();
+    },
+    listeners: {
+        afterrender: function() {
+            storeCargarParam_BANCO.load();
+            storeCargarParam_FORMA_PAGO.load();
+            storeExtras_cargarPeriodos.load();
+        }
     },
     items: [{
         xtype: 'form',
@@ -42,7 +50,7 @@ Ext.define("fcab.Container.CrearCambioDeposito", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -285,6 +293,30 @@ Ext.define("fcab.Container.CrearCambioDeposito", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbFormaPago',
                     itemId: 'cbFormaPago',
                     displayField: 'NOMBRE',
@@ -392,7 +424,7 @@ Ext.define("fcab.Container.CrearCambioDeposito", {
                                 , P_NOM_BANCO : cbBanco.getRawValue()
                                 , P_NUM_CUENTA : values.txtCuenta
                                 , P_OBSERVACION: values.txtObs
-
+                                , P_PERIODO: values.cbPeriodo
                             },
                             callback: function(records, operation, success) {
                                 if(records != null) {

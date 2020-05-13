@@ -46,7 +46,8 @@ class CambiarCargoRentaController extends CI_Controller {
         $P_NOM_TIPO_CAMBIO = $this->input->get('P_NOM_TIPO_CAMBIO'); 
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');  
         $P_FECHA_FIN_CONTRATO = $this->input->get('P_FECHA_FIN_CONTRATO');  
-        $P_SUELDO_BASE = $this->input->get('P_SUELDO_BASE');        
+        $P_SUELDO_BASE = $this->input->get('P_SUELDO_BASE');  
+        $P_PERIODO = $this->input->get('P_PERIODO');        
 
         $query = $this->CambiarCargoRentaModel->crearCambioCargoRenta(
               $P_RUT  
@@ -65,7 +66,9 @@ class CambiarCargoRentaController extends CI_Controller {
             , $P_SUELDO_BASE
             , $P_OBSERVACION
             , $P_COD_TIPO_CAMBIO
-            , $P_NOM_TIPO_CAMBIO   );
+            , $P_NOM_TIPO_CAMBIO  
+            , $P_PERIODO 
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -100,6 +103,24 @@ class CambiarCargoRentaController extends CI_Controller {
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
 
+    }
+
+    public function anularCambioCargoRenta()
+    {
+
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->CambiarCargoRentaModel->anularCambioCargoRenta(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
     }
     
 }

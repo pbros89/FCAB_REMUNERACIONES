@@ -1,11 +1,18 @@
 Ext.define('fcab.Container.MasterCC.Crear', {
     extend: 'Ext.container.Container',
     xtype: 'MasterCCCrear',
+    itemId: 'MasterCCCrear',
     border: false,
     frame: false,
     style: "margin: 0px auto 0px auto;",
     layout: 'anchor',
     scrollable: true,
+    listeners: {
+        afterrender: function() {
+            storeCargarParam_GERENCIA.load();
+            storeCargarParam_DEPARTAMENTO.load();
+        }
+    },
     items: [{
         xtype: 'form',
         titleAlign: 'center',
@@ -56,6 +63,54 @@ Ext.define('fcab.Container.MasterCC.Crear', {
                 style: 'margin-bottom: 5px',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbGerencia',
+                    itemId: 'cbGerencia',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_GERENCIA,
+                    fieldLabel: 'Gerencia',
+                    labelAlign:'left',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin-bottom: 5px',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbDepartamento',
+                    itemId: 'cbDepartamento',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_DEPARTAMENTO,
+                    fieldLabel: 'Departamento',
+                    labelAlign:'left',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin-bottom: 5px',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbEstado',
                     itemId: 'cbEstado',
                     store: [['A','ACTIVO'],['I','INACTIVO']],
@@ -76,6 +131,8 @@ Ext.define('fcab.Container.MasterCC.Crear', {
             text: 'Crear',
             handler: function () {
                 var form = this.up('form').getForm();
+                var cbGerencia = Ext.ComponentQuery.query('#MasterCCCrear #cbGerencia')[0];
+                var cbDepartamento = Ext.ComponentQuery.query('#MasterCCCrear #cbDepartamento')[0];
                 if (!ValidarFormulario(form)) return;
                 //TODO: Solo actualizara si es llamado desde una ventana (modal), en caso contrario no hara nada.
                 var ewin = Ext.WindowManager.getActive();
@@ -88,7 +145,11 @@ Ext.define('fcab.Container.MasterCC.Crear', {
                             p_cod_emp: EMPRESA,
                             p_nombre: values.txtNombre,
                             p_usuario: NOMBRE,
-                            p_estado: values.cbEstado
+                            p_estado: values.cbEstado,
+                            p_cod_ger: values.cbGerencia,
+                            p_nom_ger: cbGerencia.getRawValue(),
+                            p_cod_dep: values.cbDepartamento,
+                            p_nom_dep: cbDepartamento.getRawValue(),
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {

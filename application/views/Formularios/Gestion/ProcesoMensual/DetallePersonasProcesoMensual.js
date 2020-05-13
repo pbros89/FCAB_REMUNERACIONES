@@ -5,9 +5,43 @@ Ext.define('fcab.Container.MainProcesoMensual.DetallePersonas', {
     id: 'MainProcesoMensualDetallePersonas',
     border: false,
     frame: false,
-    scrollable: false,
-    items: [{ 
-        xtype: 'MainProcesoMensualDetallePersonasGrilla'
+    items: [{
+        xtype: 'panel',
+        width: '100%',
+        layout: {
+            type: 'vbox',
+            align: 'middle',
+            pack: 'center',
+        },
+        items: [{
+            margin: 10,
+            xtype: 'combo',
+            name: 'cbCc',
+            itemId: 'cbCc',
+            displayField: 'DESC_CC',
+            valueField: 'PK_COD_CC',
+            store: storeCargarCCProcesoMensual2,
+            fieldLabel: 'Buscar por CC',
+            labelAlign:'top',
+            queryMode: 'local',
+            triggerAction: 'all',
+            editable: true,
+            typeAhead: true,
+            selectOnFocus: true,
+            forceSelection: true,
+            allowBlank: true,  
+            readOnly: false,
+            width: 500,
+            listeners:{
+                change: function (cb, nuevoValor) {
+                    if(nuevoValor != null){
+                        cargarCCPersonasProcesoMensualDetalle();
+                    }
+                }
+            }
+        },{ 
+            xtype: 'MainProcesoMensualDetallePersonasGrilla'
+        }]
     }]
     
 });
@@ -20,7 +54,6 @@ Ext.define('fcab.Container.MainProcesoMensual.DetallePersonasGrilla', {
     columnLines: true,
     emptyText: 'Sin datos para mostrar',
     filtros: null,
-    height: 550,
     plugins: pluginFactory(),
     listeners: {
         itemdblclick: function( view, rec, node, index, e, options ) {
@@ -240,31 +273,18 @@ Ext.define('fcab.Container.MainProcesoMensual.DetallePersonasGrilla', {
     dockedItems: [{
         xtype: 'toolbar',
         items: [{
-            xtype: 'combo',
-            name: 'cbCc',
-            itemId: 'cbCc',
-            displayField: 'DESC_CC',
-            valueField: 'PK_COD_CC',
-            store: storeCargarCCProcesoMensual2,
-            fieldLabel: 'Buscar por CC',
-            labelAlign:'top',
-            queryMode: 'local',
-            triggerAction: 'all',
-            editable: true,
-            typeAhead: true,
-            selectOnFocus: true,
-            forceSelection: true,
-            allowBlank: true,  
-            readOnly: false,
-            width: 500,
-            listeners:{
-                change: function (cb, nuevoValor) {
-                    if(nuevoValor != null){
-                        cargarCCPersonasProcesoMensualDetalle();
-                    }
-                }
+            text: 'Exportar',
+            tooltip: 'Exportar xls',
+            iconCls: 'icon-form-download',
+            handler: function () {
+                this.ownerCt.ownerCt.saveDocumentAs({
+                  type: 'excel',
+                  title: "Personas",
+                  fileName: 'PER_PROC_MENSUAL_' + new Date().getTime() +'.xls'
+                });
             }
-        }]
+
+        },]
     }],
     width : '100%',
 });

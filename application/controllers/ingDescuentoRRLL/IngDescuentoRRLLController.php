@@ -44,6 +44,7 @@ class IngDescuentoRRLLController extends CI_Controller {
         $P_FORMATO_VALOR = $this->input->get('P_FORMATO_VALOR');
         $P_ANHO_DESCUENTO = $this->input->get('P_ANHO_DESCUENTO');
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');
+        $P_PERIODO = $this->input->get('P_PERIODO');
 
         $query = $this->IngDescuentoRRLLModel->crearIngDescuentoRRLL(
               $P_RUT 
@@ -59,7 +60,9 @@ class IngDescuentoRRLLController extends CI_Controller {
             , $P_MES_DESCUENTO 
             , $P_FORMATO_VALOR
             , $P_OBSERVACION 
-            , $P_ANHO_DESCUENTO);
+            , $P_ANHO_DESCUENTO
+            , $P_PERIODO
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -81,6 +84,7 @@ class IngDescuentoRRLLController extends CI_Controller {
         $P_FORMATO_VALOR = $this->input->get('P_FORMATO_VALOR');
         $P_ANHO_DESCUENTO = $this->input->get('P_ANHO_DESCUENTO');
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');
+        $P_PERIODO = $this->input->get('P_PERIODO');
 
         $query = $this->IngDescuentoRRLLModel->modificarIngDescuentoRRLL(
             $P_COD
@@ -96,6 +100,7 @@ class IngDescuentoRRLLController extends CI_Controller {
           , $P_FORMATO_VALOR
           , $P_OBSERVACION
           , $P_ANHO_DESCUENTO
+          , $P_PERIODO
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
@@ -120,6 +125,23 @@ class IngDescuentoRRLLController extends CI_Controller {
         $p_usuario = $this->input->get('p_usuario');  
 
         $query = $this->IngDescuentoRRLLModel->eliminarIngDescuentoRRLL($p_cod, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function anularIngDescuentoRRLL()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->IngDescuentoRRLLModel->anularIngDescuentoRRLL(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

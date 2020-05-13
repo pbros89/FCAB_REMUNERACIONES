@@ -290,19 +290,17 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                 layout: 'anchor',
                 style: 'margin:0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtInicial',
                     name: 'txtInicial',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
-                    allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Valor Inicial',
                     anchor: '100%',
+                    allowDecimals: true,
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0,
-                    value: 0
+                    maxValue: 999999999,
+                    value: 0,
                 }]
             },{
                 xtype: 'container',
@@ -310,19 +308,16 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                 layout: 'anchor',
                 style: 'margin:0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtRangoIni',
                     name: 'txtRangoIni',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Rango Inicial',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
-                    minValue: 0
-                    //value: recRow.data["DURACION"]
+                    minValue: 0,
+                    maxValue: 999999999
                 }]
             },{
                 xtype: 'container',
@@ -330,19 +325,16 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                 layout: 'anchor',
                 style: 'margin-bottom: 5px',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtRangoFin',
                     name: 'txtRangoFin',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Rango Final',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
-                    minValue: 0
-                    //value: recRow.data["DURACION"]
+                    minValue: 0,
+                    maxValue: 999999999
                 }]
             },{
                 xtype: 'container',
@@ -352,6 +344,13 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                 items: [{
                     xtype: 'MasterConceptoCrearSeleccionGrilla',
                 }]
+            },{
+                xtype: 'checkbox',
+                columnWidth: 1,
+                boxLabel: 'Copiar valor proceso anterior',
+                name: 'chCopiar',
+                checked: false,
+                inputValue: '1'
             },{
                 xtype: 'container',
                 columnWidth: 1,
@@ -398,12 +397,21 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                 var values = form.getValues();
                 var ewin = Ext.WindowManager.getActive();
                 var loading = true;
+                console.log(values.txtInicial);
                 var grid = Ext.ComponentQuery.query('#MasterConceptoCrearSeleccionGrilla')[0];
 
                 var existeInicial = false;
                 var txtInicial = values.txtInicial != null ? values.txtInicial.replace(",", ".") : null;
                 var txtRangoIni = values.txtRangoIni != null ? values.txtRangoIni.replace(",", ".") : null;
                 var txtRangoFin = values.txtRangoFin != null ? values.txtRangoFin.replace(",", ".") : null;
+
+                if(values.chCopiar){
+                    values.chCopiar = '1';
+                }else {
+                    values.chCopiar = '0';
+                }
+
+
                 //VALIDAR FORMAULARIO
                 if (!ValidarFormulario(form)) return;
                 //VALIDAR CANTIDAD DE VALORES CUANDO ES TIPO SELECCIONAR
@@ -512,7 +520,8 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                             p_rango_fin: txtRangoFin,
                             p_inicial: txtInicial,
                             p_usuario: NOMBRE,
-                            p_estado: values.cbEstado
+                            p_estado: values.cbEstado,
+                            p_copiar: values.chCopiar
                         },
                         callback: function(records, operation, success) {
                             
@@ -567,7 +576,8 @@ Ext.define('fcab.Container.MasterConcepto.CrearSeleccionGrilla', {
             sortable : true,
             dataIndex: 'VALOR',
             //align: 'center',
-            flex: 1
+            flex: 1,
+            renderer: Ext.util.Format.numberRenderer('0.0,0')
         },
 
         {
@@ -589,16 +599,17 @@ Ext.define('fcab.Container.MasterConcepto.CrearSeleccionGrilla', {
     dockedItems: [{
         xtype: 'toolbar',
         items: [{
-            xtype: 'numberfield',
+            xtype: 'thousandnumber',
             itemId: 'txtValor',
             name: 'txtValor',
-            forcePrecision: true,
-            decimalPrecision: 5,
             allowDecimals: true,
             labelAlign:'left',
             fieldLabel: 'Valor',
             anchor: '100%',
             allowBlank: true,
+            currencySymbol: null,
+            decimalSeparator: ',',
+            thousandSeparator: '.',
             maxValue: 999999999,
             minValue: 0
         },{

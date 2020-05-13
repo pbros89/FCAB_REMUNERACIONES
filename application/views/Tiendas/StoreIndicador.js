@@ -12,12 +12,6 @@ var storeCargarConteoMensual =  Ext.create('Ext.data.Store', {
                 console.log(proxy);
                 console.log(response);
                 console.log(operation);
-                Ext.MessageBox.show({
-                    title: 'EXCEPCION',
-                    msg: 'Problemas al conteo mensual',
-                    icon: Ext.MessageBox.ERROR,
-                    buttons: Ext.Msg.OK
-                });
             }
             
             

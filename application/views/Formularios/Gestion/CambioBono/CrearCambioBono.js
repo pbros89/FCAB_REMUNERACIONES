@@ -11,6 +11,11 @@ Ext.define("fcab.Container.CrearCambioBono", {
     constructor: function (config) {
         this.callParent([config]);
     },
+    listeners: {
+        afterrender: function() {
+            storeExtras_cargarPeriodos.load();
+        }
+    },
     items: [{
         xtype: 'form',
         titleAlign: 'center',
@@ -41,7 +46,7 @@ Ext.define("fcab.Container.CrearCambioBono", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -227,6 +232,30 @@ Ext.define("fcab.Container.CrearCambioBono", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
+                    xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
                     xtype: 'textareafield',
                     itemId: 'txtObs',
                     name: 'txtObs',
@@ -266,6 +295,7 @@ Ext.define("fcab.Container.CrearCambioBono", {
                                 , P_COD_EMP : EMPRESA
                                 , P_USUARIO : NOMBRE
                                 , P_OBSERVACION: values.txtObs
+                                , P_PERIODO: values.cbPeriodo
 
                             },
                             callback: function(records, operation, success) {

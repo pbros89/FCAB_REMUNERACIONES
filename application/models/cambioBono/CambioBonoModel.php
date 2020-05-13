@@ -22,7 +22,8 @@ class CambioBonoModel extends CI_Model {
                     OBSERVACION,
                     ESTADO,
                     TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') FECHA_CREACION,
-                    TO_CHAR(FECHA_MODIFICO, 'YYYY/MM/DD') FECHA_MODIFICO
+                    TO_CHAR(FECHA_MODIFICO, 'YYYY/MM/DD') FECHA_MODIFICO,
+                    PERIODO
                 FROM NOV_CAMBIO_BONO CAM 
                 WHERE 1 = 1 ";
 
@@ -41,6 +42,8 @@ class CambioBonoModel extends CI_Model {
                     $sql .= "AND TO_DATE('$p_fec2', 'YYYY/MM/DD') ";
                 }elseif (!empty($p_fec1)) {
                     $sql .= "AND TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') = '$p_fec1' ";
+                }else{
+                    $sql .= "AND TRUNC(FECHA_CREACION, 'MM') = TRUNC(SYSDATE, 'MM') ";
                 }
 
                 $sql .= "ORDER BY PK_ID DESC";
@@ -55,7 +58,9 @@ class CambioBonoModel extends CI_Model {
         , $P_DV 
         , $P_COD_EMP 
         , $P_USUARIO 
-        , $P_OBSERVACION   )
+        , $P_OBSERVACION  
+        , $P_PERIODO 
+    )
     {
 
         $r_est = 0;
@@ -68,6 +73,7 @@ class CambioBonoModel extends CI_Model {
                         , :P_COD_EMP 
                         , :P_USUARIO 
                         , :P_OBSERVACION 
+                        , :P_PERIODO
                         , :r_est
                         , :r_msg);END;");
         
@@ -76,7 +82,8 @@ class CambioBonoModel extends CI_Model {
         oci_bind_by_name($proc,"P_COD_EMP", $P_COD_EMP, 100, SQLT_CHR);
         oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
         oci_bind_by_name($proc,"P_OBSERVACION", $P_OBSERVACION, 1000, SQLT_CHR);
-        
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20,SQLT_CHR);
+
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -208,6 +215,35 @@ public function cargarConceptosPersonal($p_personal){
 
     $query = $this->db->query($sql);
     return $query->result();
+}
+
+public function anularCambioBono(
+    $P_COD,
+    $P_USUARIO,
+    $P_OBS
+) {
+    $r_est = 0;
+    $r_msg = "";
+    $proc = oci_parse(
+        $this->db->conn_id,
+        "BEGIN NOV_ANU_CAMBIO_BONO(
+                  :P_COD  
+                , :P_USUARIO
+                , :P_OBS
+                , :r_est
+                , :r_msg);END;"
+    );
+
+    oci_bind_by_name($proc, "P_COD", $P_COD, -1, OCI_B_INT);
+    oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+    oci_bind_by_name($proc, "P_OBS", $P_OBS, 1000, SQLT_CHR);
+    oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+    oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
+
+    oci_execute($proc);
+
+    $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+    return $result;
 }
     
 }

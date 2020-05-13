@@ -45,7 +45,7 @@ class CambiarAFPController extends CI_Controller {
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');  
         $P_COD_REG_APV = $this->input->get('P_COD_REG_APV');  
         $P_NOM_REG_APV = $this->input->get('P_NOM_REG_APV');  
-        
+        $P_PERIODO = $this->input->get('P_PERIODO');
         
 
         $query = $this->CambiarAFPModel->crearCambioAFP(
@@ -63,7 +63,9 @@ class CambiarAFPController extends CI_Controller {
           , $P_NOM_REG_APV
           , $P_MONTO
           , $P_TIPO_MONTO 
-          , $P_OBSERVACION  );
+          , $P_OBSERVACION  
+          , $P_PERIODO
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -99,6 +101,24 @@ class CambiarAFPController extends CI_Controller {
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
 
+    }
+
+    public function anularCambioAFP()
+    {
+
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->CambiarAFPModel->anularCambioAFP(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
     }
     
 }

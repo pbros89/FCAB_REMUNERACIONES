@@ -34,7 +34,8 @@ class CambiarSaludModel extends CI_Model {
                     USR_CREADOR,
                     OBSERVACION,
                     TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') FECHA_CREACION,
-                    ESTADO
+                    ESTADO,
+                    PERIODO
                 FROM NOV_CAMBIO_SALUD CAM 
                 WHERE 1 = 1 ";
 
@@ -53,6 +54,8 @@ class CambiarSaludModel extends CI_Model {
                     $sql .= "AND TO_DATE('$p_fec2', 'YYYY/MM/DD') ";
                 }elseif (!empty($p_fec1)) {
                     $sql .= "AND TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') = '$p_fec1' ";
+                }else{
+                    $sql .= "AND TRUNC(FECHA_CREACION, 'MM') = TRUNC(SYSDATE, 'MM') ";
                 }
 
                 $sql .= "ORDER BY PK_ID DESC";
@@ -82,7 +85,9 @@ class CambiarSaludModel extends CI_Model {
         , $P_TIPO_ADI_EMP  
         , $P_VALOR_CONVENIO 
         , $P_TIPO_CONVENIO  
-        , $P_OBSERVACION    )
+        , $P_OBSERVACION 
+        , $P_PERIODO   
+    )
     
     {
         $r_est = 0;
@@ -109,6 +114,7 @@ class CambiarSaludModel extends CI_Model {
                         , :P_VALOR_CONVENIO 
                         , :P_TIPO_CONVENIO  
                         , :P_OBSERVACION
+                        , :P_PERIODO
                         , :r_est
                         , :r_msg);END;");
         
@@ -131,6 +137,7 @@ class CambiarSaludModel extends CI_Model {
         oci_bind_by_name($proc,"P_TIPO_ADI_EMP", $P_TIPO_ADI_EMP, 20,SQLT_CHR);
         oci_bind_by_name($proc,"P_VALOR_CONVENIO", $P_VALOR_CONVENIO);
         oci_bind_by_name($proc,"P_TIPO_CONVENIO", $P_TIPO_CONVENIO, 20,SQLT_CHR);
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20,SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -193,5 +200,33 @@ class CambiarSaludModel extends CI_Model {
         return $result;
     }
 
+    public function anularCambioSalud(
+        $P_COD,
+        $P_USUARIO,
+        $P_OBS
+    ) {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+            $this->db->conn_id,
+            "BEGIN NOV_ANU_CAMBIO_SALUD(
+                      :P_COD  
+                    , :P_USUARIO
+                    , :P_OBS
+                    , :r_est
+                    , :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "P_COD", $P_COD, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_OBS", $P_OBS, 1000, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
     
 }

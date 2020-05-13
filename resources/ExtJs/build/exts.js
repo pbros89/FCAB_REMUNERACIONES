@@ -973,7 +973,7 @@ Ext.onReady(function () {
             noCache: false,
             params: {
                 p_usuario : p_usuario,
-                p_empresa : p_empresa,
+                p_cod_emp : p_empresa,
                 p_estado : 'A'
             },
             success: function (response) {

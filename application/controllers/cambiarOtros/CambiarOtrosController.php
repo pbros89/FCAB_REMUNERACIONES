@@ -39,18 +39,38 @@ class CambiarOtrosController extends CI_Controller {
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');  
         $P_CORREO = $this->input->get('P_CORREO');  
         $P_TELEFONO = $this->input->get('P_TELEFONO');  
-
+        $P_COD_EST_CIVIL = $this->input->get('P_COD_EST_CIVIL');  
+        $P_NOM_EST_CIVIL = $this->input->get('P_NOM_EST_CIVIL');  
+        $P_COD_ESCOLARIDAD = $this->input->get('P_COD_ESCOLARIDAD');  
+        $P_NOM_ESCOLARIDAD = $this->input->get('P_NOM_ESCOLARIDAD');  
+        $P_CALLE = $this->input->get('P_CALLE');  
+        $P_NUMERO = $this->input->get('P_NUMERO');  
+        $P_DEPARTAMENTO = $this->input->get('P_DEPARTAMENTO');  
+        $P_CIUDAD = $this->input->get('P_CIUDAD');  
+        $P_COMUNA = $this->input->get('P_COMUNA');  
+        $P_PERIODO = $this->input->get('P_PERIODO');  
 
         $query = $this->CambiarOtrosModel->crearCambioOtros(
-            $P_RUT  
-          , $P_DV  
-          , $P_COD_EMP 
-          , $P_USUARIO 
-          , $P_COD_TIPO_CAMBIO  
-          , $P_NOM_TIPO_CAMBIO
-          , $P_CORREO
+              $P_RUT  
+            , $P_DV  
+            , $P_COD_EMP 
+            , $P_USUARIO 
+            , $P_COD_TIPO_CAMBIO  
+            , $P_NOM_TIPO_CAMBIO
+            , $P_CORREO
             , $P_TELEFONO  
-            , $P_OBSERVACION    );
+            , $P_OBSERVACION    
+            ,$P_COD_EST_CIVIL 
+            , $P_NOM_EST_CIVIL 
+            , $P_COD_ESCOLARIDAD 
+            , $P_NOM_ESCOLARIDAD 
+            , $P_CALLE 
+            , $P_NUMERO 
+            , $P_DEPARTAMENTO 
+            , $P_CIUDAD 
+            , $P_COMUNA
+            , $P_PERIODO 
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -84,6 +104,23 @@ class CambiarOtrosController extends CI_Controller {
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
 
+    }
+
+    public function anularCambioOtros()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->CambiarOtrosModel->anularCambioOtros(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
     }
     
 }

@@ -47,6 +47,14 @@ Ext.define('fcab.Container.ConceptosPersonaProcesoMensualDescuento.Grilla', {
             flex:2,
             //hidden: true
         },
+        {
+            text     : 'Valor Anterior',
+            sortable : true,
+            dataIndex: 'VALOR_ANTERIOR',
+            align: 'center',
+            flex:1,
+            //hidden: true
+        },
         { 
             text: 'Valor', 
             sortable : true,
@@ -84,7 +92,7 @@ Ext.define('fcab.Container.ConceptosPersonaProcesoMensualDescuento.Grilla', {
                             record.get('TIPO_CONCEPTO') === 'CANTIDAD' ||
                             record.get('TIPO_CONCEPTO') === 'MONTO' ||
                             record.get('TIPO_CONCEPTO') === 'RANGO' 
-                    ? 'numberfield' : 'combobox';
+                    ? 'thousandnumber' : 'combobox';
                 
                 if(fieldType === 'combobox' && record.get('TIPO_CONCEPTO') === 'BOOLEANO')
                 {
@@ -260,7 +268,7 @@ Ext.define('fcab.Container.ConceptosPersonaProcesoMensualDescuento.Grilla', {
                     };
                 }
                 
-                if(fieldType === 'numberfield'){
+                if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
                     var rangoFin = 999999999;
 
@@ -276,8 +284,6 @@ Ext.define('fcab.Container.ConceptosPersonaProcesoMensualDescuento.Grilla', {
 
                     return {
                         xtype: fieldType,
-                        forcePrecision: true,
-                        decimalPrecision: 5,
                         maxValue: rangoFin,
                         minValue: rangoIni,
                         allowBlank: false,

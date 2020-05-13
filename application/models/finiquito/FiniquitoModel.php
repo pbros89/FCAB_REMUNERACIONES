@@ -25,7 +25,8 @@ class FiniquitoModel extends CI_Model {
                     to_char(FECHA_MODIFICO, 'yyyy/mm/dd') FECHA_MODIFICO,
                     ESTADO,
                     FK_COD_EMP,
-                    OBSERVACION
+                    OBSERVACION,
+                    PERIODO
                 FROM NOV_FINIQUITOS FIN 
                 WHERE 1 = 1 ";
 
@@ -49,6 +50,8 @@ class FiniquitoModel extends CI_Model {
                     $sql .= "AND TO_DATE('$p_fec2', 'YYYY/MM/DD') ";
                 }elseif (!empty($p_fec1)) {
                     $sql .= "AND TO_CHAR(FECHA_BAJA, 'YYYY/MM/DD') = '$p_fec1' ";
+                }else{
+                    $sql .= "AND TRUNC(FECHA_BAJA, 'MM') = TRUNC(SYSDATE, 'MM') ";
                 }
 
                 $sql .= "ORDER BY PK_FINIQUITO DESC";
@@ -59,7 +62,16 @@ class FiniquitoModel extends CI_Model {
     }
 
 
-    public function crearFiniquito($p_rut, $p_dv, $p_cod_causal, $p_nom_causal, $p_fecha_baja, $p_cod_emp, $p_usuario, $p_obs)
+    public function crearFiniquito(
+        $p_rut, 
+        $p_dv, 
+        $p_cod_causal, 
+        $p_nom_causal, 
+        $p_fecha_baja, 
+        $p_cod_emp, 
+        $p_usuario, 
+        $p_obs,
+        $P_PERIODO)
     {
         $r_est = 0;
         $r_msg = "";
@@ -74,6 +86,7 @@ class FiniquitoModel extends CI_Model {
                             :p_cod_emp,
                             :p_usuario,
                             :p_obs,
+                            :P_PERIODO,
                             :r_est,
                             :r_msg);END;");
         
@@ -85,6 +98,7 @@ class FiniquitoModel extends CI_Model {
         oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp, 20,SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_obs", $p_obs, 1000, SQLT_CHR);
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20,SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -95,7 +109,14 @@ class FiniquitoModel extends CI_Model {
     }
 
 
-    public function editarFiniquito($p_finiquito,  $p_cod_causal, $p_nom_causal, $p_fecha_baja, $p_usuario, $p_obs)
+    public function editarFiniquito(
+        $p_finiquito,  
+        $p_cod_causal, 
+        $p_nom_causal, 
+        $p_fecha_baja, 
+        $p_usuario,
+        $p_obs,
+        $P_PERIODO)
     {
         $r_est = 0;
         $r_msg = "";
@@ -108,6 +129,7 @@ class FiniquitoModel extends CI_Model {
                             :p_fecha_baja,
                             :p_usuario,
                             :p_obs,
+                            :P_PERIODO,
                             :r_est,
                             :r_msg);END;");
         
@@ -117,6 +139,7 @@ class FiniquitoModel extends CI_Model {
         oci_bind_by_name($proc,"p_fecha_baja", $p_fecha_baja, 30, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_obs", $p_obs, 1000, SQLT_CHR);
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -135,7 +158,9 @@ class FiniquitoModel extends CI_Model {
                     TO_CHAR(PER.FECHA_FIN_CONTRATO, 'YYYY/MM/DD') FECHA_FIN_CONTRATO_FORMAT
                 FROM NOV_PERSONAL PER ";
         if(!empty($p_rut)) {
-            $sql .= "WHERE (case substr(rut, 0, 1) when '0' then substr(rut, 2) else rut end) = upper('$p_rut')
+            $sql .= "WHERE (
+                        (case substr(rut, 0, 1) when '0' then substr(rut, 2) else rut end) = upper('$p_rut') 
+                        OR rut = upper('$p_rut'))
                 AND FECHA_BAJA IS NULL
                 AND COD_EMP = '$p_cod_emp' ";
         }
@@ -249,7 +274,36 @@ class FiniquitoModel extends CI_Model {
         $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
         return $result;
     }
+
     
+    public function anularFiniquito(
+        $P_COD,
+        $P_USUARIO,
+        $P_OBS
+    ) {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+            $this->db->conn_id,
+            "BEGIN NOV_ANU_FINIQUITO(
+                      :P_COD  
+                    , :P_USUARIO
+                    , :P_OBS
+                    , :r_est
+                    , :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "P_COD", $P_COD, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_OBS", $P_OBS, 1000, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
 
 
     

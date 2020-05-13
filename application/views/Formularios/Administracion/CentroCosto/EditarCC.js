@@ -10,10 +10,14 @@ Ext.define('fcab.Container.MasterCC.Editar', {
     listeners:{
         afterrender: function(){
             var param = Ext.getCmp('MasterCCEditar').myExtraParams.param2.data;
-            console.log(param);
+            storeCargarParam_GERENCIA.load();
+            storeCargarParam_DEPARTAMENTO.load();
             Ext.ComponentQuery.query('#MasterCCEditar #txtId')[0].setValue(param.PK_COD_CC);
             Ext.ComponentQuery.query('#MasterCCEditar #txtNombre')[0].setValue(param.NOM_CC);
             Ext.ComponentQuery.query('#MasterCCEditar #cbEstado')[0].setValue(param.ESTADO);
+            Ext.ComponentQuery.query('#MasterCCEditar #cbGerencia')[0].setValue(param.COD_GERENCIA);
+            Ext.ComponentQuery.query('#MasterCCEditar #cbDepartamento')[0].setValue(param.COD_DEPARTAMENTO);
+            
         }
     },
     items: [{
@@ -67,6 +71,54 @@ Ext.define('fcab.Container.MasterCC.Editar', {
                 style: 'margin-bottom: 5px',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbGerencia',
+                    itemId: 'cbGerencia',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_GERENCIA,
+                    fieldLabel: 'Gerencia',
+                    labelAlign:'left',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin-bottom: 5px',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbDepartamento',
+                    itemId: 'cbDepartamento',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_DEPARTAMENTO,
+                    fieldLabel: 'Departamento',
+                    labelAlign:'left',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin-bottom: 5px',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbEstado',
                     itemId: 'cbEstado',
                     store: [['A','ACTIVO'],['I','INACTIVO']],
@@ -86,6 +138,8 @@ Ext.define('fcab.Container.MasterCC.Editar', {
             text: 'Editar',
             handler: function () {
                 var form = this.up('form').getForm();
+                var cbGerencia = Ext.ComponentQuery.query('#MasterCCEditar #cbGerencia')[0];
+                var cbDepartamento = Ext.ComponentQuery.query('#MasterCCEditar #cbDepartamento')[0];
                 if (!ValidarFormulario(form)) return;
                 //TODO: Solo actualizara si es llamado desde una ventana (modal), en caso contrario no hara nada.
                 var ewin = Ext.WindowManager.getActive();
@@ -100,7 +154,11 @@ Ext.define('fcab.Container.MasterCC.Editar', {
                             p_cod_emp: recRow.data.PFK_COD_EMP,
                             p_nombre: values.txtNombre,
                             p_usuario: NOMBRE,
-                            p_estado: values.cbEstado
+                            p_estado: values.cbEstado,
+                            p_cod_ger: values.cbGerencia,
+                            p_nom_ger: cbGerencia.getRawValue(),
+                            p_cod_dep: values.cbDepartamento,
+                            p_nom_dep: cbDepartamento.getRawValue(),
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {

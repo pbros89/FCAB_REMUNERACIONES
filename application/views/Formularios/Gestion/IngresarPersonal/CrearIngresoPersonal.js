@@ -26,6 +26,7 @@ Ext.define("fcab.Container.CrearIngresoPersonal", {
             storeCargarCentroCostosFiltro.load();
             storeCargarCargosFiltro.load();
             storeCargarParam_CUENTA_AHORRO2.load();
+            storeExtras_cargarPeriodos.load();
         },
         'tabchange': function (tabPanel, tab) {
             var tabPer = Ext.ComponentQuery.query('#CrearIngresoPersonal #tabPer')[0];

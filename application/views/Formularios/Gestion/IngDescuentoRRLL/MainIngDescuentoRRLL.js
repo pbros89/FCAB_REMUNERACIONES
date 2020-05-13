@@ -32,6 +32,12 @@
                     case 'ELIMINAR':
                         Ext.ComponentQuery.query('#MainIngDescuentoRRLLGrilla #btnEliminar')[0].setHidden(false);
                         break;
+                    case 'ANULAR':
+                        Ext.ComponentQuery.query('#MainIngDescuentoRRLLGrilla #btnAnular')[0].setHidden(false);
+                        break;
+                    case 'DOCUMENTO':
+                        Ext.ComponentQuery.query('#MainIngDescuentoRRLLGrilla #btnDoc')[0].setHidden(false);
+                        break;
                 }
             }else if(pantalla == 'INGRESO_DESCUENTO_RRLL' && estado != 'A' && acc == 'EDITAR'){
                 //SUSPENDE EVENTOS DE LA GRILLA (DOBLECLICK)
@@ -71,8 +77,12 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             renderer : function(value, meta) {
                 if(value === 'EN ESPERA')
                 {
-                    meta.style = 'color:red;';
+                    meta.style = 'color:orange;';
                     return 'EN ESPERA';
+                }else if(value === 'ANULADO')
+                {
+                    meta.style = 'color:red;';
+                    return 'ANULADO';
                 }else if(value === 'TERMINADO'){
                     meta.style = 'color:green;';
                     return 'TERMINADO';
@@ -92,6 +102,13 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             text     : 'ID',
             sortable : true,
             dataIndex: 'PK_COD',
+            //align: 'center',
+            width: 100
+        },
+        {
+            text     : 'Periodo',
+            sortable : true,
+            dataIndex: 'PERIODO',
             //align: 'center',
             width: 100
         },
@@ -153,7 +170,8 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             sortable : true,
             dataIndex: 'MONTO_TOTAL',
             //align: 'center',
-            width: 100
+            width: 100,
+            renderer: Ext.util.Format.numberRenderer('0.0,0')
         },
         {
             text     : 'Cuotas',
@@ -167,7 +185,8 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             sortable : true,
             dataIndex: 'VALOR_CUOTA',
             //align: 'center',
-            width: 100
+            width: 100,
+            renderer: Ext.util.Format.numberRenderer('0.0,0')
         },
         {
             text     : 'Año Descuento',
@@ -298,6 +317,61 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             }
 
         }, {
+            text: 'Anular',
+            itemId: 'btnAnular',
+            hidden: true,
+            tooltip: 'Anular Item seleccionado',
+            iconCls: 'icon-form-suspend',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickAnularIngDescuentoRRLL(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione el item que desea anular", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+
+        },{
+            text: "Documentos",
+            itemId: "btnDoc",
+            hidden: true,
+            tooltip: "Ver documentos",
+            iconCls: "icon-form-folder",
+            handler: function() {
+              var grid = this.up("grid"); //Recuperamos la grilla
+              try {
+                //Obtenemos el index del item seleccionado
+                var rowIndex = grid.getSelectionModel().getCurrentPosition()
+                  .rowIdx;
+                var rec = grid.getStore();
+                var recRow = rec.getAt(rowIndex);
+                if (ROL == "ADMIN" || ROL == "SUPER_ADMIN" || recRow.data.ESTADO == 'EN ESPERA') 
+                {
+                  modalAdjuntosAdmin(
+                    recRow.data.PK_COD,
+                    "descuento_rrll",
+                    "Descuento RRLL " + recRow.data.PK_COD
+                  );
+                } else {
+                  modalAdjuntosBasic(
+                    recRow.data.PK_COD,
+                    "descuento_rrll",
+                    "Descuento RRLL " + recRow.data.PK_COD
+                  );
+                }
+              } catch (e) {
+                msg(
+                  "Nada seleccionado",
+                  "Por favor, seleccione el item",
+                  Ext.Msg.ERROR,
+                  Ext.Msg.OK
+                );
+                console.debug(e);
+              }
+            }
+        },{
             text: 'Refrescar',
             tooltip: 'Refrescar Pantalla',
             iconCls: 'icon-form-refresh',
@@ -385,6 +459,44 @@ var clickTerminarIngDescuentoRRLL = function(grid, rowIndex) {
         }
     });
 }
+
+var clickAnularIngDescuentoRRLL= function(grid, rowIndex) {
+    var rec = grid.getStore();
+    var recRow = rec.getAt(rowIndex);
+    Ext.MessageBox.confirm(
+        'Anular Descuento RRLL', 
+        '¿Esta seguro de anular el descuento?<br>'+
+        '<b>-Los registros anulados no seran considerados para reportes.<br></b>', 
+    function(btn) {
+        if (btn === 'yes') {
+            storeAnularIngDescuentoRRLL.load({
+                params:{
+                    p_cod: recRow.data.PK_COD,
+                    p_obs: '',
+                    p_usuario: NOMBRE
+                },
+                callback: function(records, operation, success) {
+                    if(records != null) {
+                        if(records[0].data.r_msg == 'OK'){
+                            showToast('Descuento RRLL anulado correctamente.');
+                            cargarMainIngDescuentoRRLL(null);
+                            
+                        }else{
+                            Ext.MessageBox.show({
+                                title: 'ADVERTENCIA',
+                                msg: records[0].data.r_msg,
+                                icon: Ext.MessageBox.WARNING,
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                    }
+                    
+                }
+            });
+            
+        }
+    });
+};
 
 var clickEliminarIngDescuentoRRLL= function (grid, rowIndex) {
     var rec = grid.getStore();

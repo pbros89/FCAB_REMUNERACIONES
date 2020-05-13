@@ -60,7 +60,7 @@ Ext.define('fcab.Container.MasterCC.Grilla', {
     },
     columns: [
         {
-            text     : 'ID EMPRESA',
+            text     : 'ID Empresa',
             sortable : true,
             dataIndex: 'PK_COD_EMP',
             //align: 'center',
@@ -68,11 +68,27 @@ Ext.define('fcab.Container.MasterCC.Grilla', {
             flex: 1
         },
         {
-            text     : 'EMPRESA',
+            text     : 'Empresa',
             sortable : true,
             dataIndex: 'NOM_EMP',
             //align: 'center',
             hidden: true,
+            flex: 1
+        },
+        {
+            text     : 'Gerencia',
+            sortable : true,
+            dataIndex: 'NOM_GERENCIA',
+            //align: 'center',
+            hidden: false,
+            flex: 1
+        },
+        {
+            text     : 'Departamento',
+            sortable : true,
+            dataIndex: 'NOM_DEPARTAMENTO',
+            //align: 'center',
+            hidden: false,
             flex: 1
         },
         {

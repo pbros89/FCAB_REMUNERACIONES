@@ -76,7 +76,7 @@ Ext.define('fcab.Container.MainFiniquitoDetalleDescuento.Grilla', {
                             record.get('TIPO_CONCEPTO') === 'CANTIDAD' ||
                             record.get('TIPO_CONCEPTO') === 'MONTO' ||
                             record.get('TIPO_CONCEPTO') === 'RANGO' 
-                    ? 'numberfield' : 'combobox';
+                    ? 'thousandnumber' : 'combobox';
                 
                 if(fieldType === 'combobox' && record.get('TIPO_CONCEPTO') === 'BOOLEANO')
                 {
@@ -237,7 +237,7 @@ Ext.define('fcab.Container.MainFiniquitoDetalleDescuento.Grilla', {
                     };
                 }
                 
-                if(fieldType === 'numberfield'){
+                if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
                     var rangoFin = 999999999;
 
@@ -253,12 +253,9 @@ Ext.define('fcab.Container.MainFiniquitoDetalleDescuento.Grilla', {
 
                     return {
                         xtype: fieldType,
-                        forcePrecision: true,
-                        decimalPrecision: 5,
                         maxValue: rangoFin,
                         minValue: rangoIni,
                         allowBlank: false,
-                        tooltip:'PROBLEMA',
                         
                         listeners:{
                             change: function(obj, newValue, oldValue){
@@ -285,16 +282,7 @@ Ext.define('fcab.Container.MainFiniquitoDetalleDescuento.Grilla', {
                 }
                 
             },
-            renderer : function(value, meta, record) {
-                /*if(record.data.TIPO_META === "BOOL" && record.data.VALOR_FINAL === record.data.META_FINAL ||
-                        record.data.TIPO_META === "NUMBER" && parseInt(record.data.VALOR_FINAL) === parseInt(record.data.META_FINAL))
-                {
-                    meta.style = "color:GREEN; font-weight: bold;"; //verde
-                }else{
-                    meta.style = "color:RED; font-weight: bold;"; //rojo
-                } */
-                return value;
-            }
+            renderer: Ext.util.Format.numberRenderer('0.0,0')
         },
     ],
     minHeight: 500,

@@ -81,6 +81,13 @@ Ext.define('fcab.view.MyViewport', {
                                 countAdmin++;
                             }
                             break;
+                        case 'CALENDARIO':
+                            if(estado == 'A') {
+                                var p = rootAdmin.items.items[0].store.getById('menu_calendario');
+                                p.data.cls = '';
+                                countAdmin++;
+                            }
+                            break;
                         /**************** MENUS GESTION *******************/
 
                         case 'PROCESO_MENSUAL':
@@ -324,7 +331,7 @@ Ext.define('fcab.view.MyViewport', {
     } ,
     items: [{
         xtype: 'panel',
-        title: 'FCAB Remuneraciones',
+        title: 'FCAB Recursos Humanos',
         region: 'north',
         collapsible:false,
         tools: [{
@@ -382,6 +389,16 @@ Ext.define('fcab.view.MyViewport', {
                 activeOnTop: false
             },
             items: [{
+                title: 'Gestión',
+                scroll: 'vertical',
+                autoScroll:true,
+                expanded: true,
+                items: menuGestion,
+                //hidden: true,
+                //disabled: true,
+                id:'menuGestion'
+
+            }, {
                 title: 'Administración',
                 scroll: 'vertical',
                 autoScroll:true,
@@ -389,15 +406,6 @@ Ext.define('fcab.view.MyViewport', {
                 //hidden: true,
                 //disabled: true,
                 id:'menuAdmin'
-
-            }, {
-                title: 'Gestión',
-                scroll: 'vertical',
-                autoScroll:true,
-                items: menuGestion,
-                //hidden: true,
-                //disabled: true,
-                id:'menuGestion'
 
             }, {
                 title: 'Reportes',

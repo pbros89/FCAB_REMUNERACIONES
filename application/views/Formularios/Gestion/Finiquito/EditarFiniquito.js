@@ -17,6 +17,7 @@ Ext.define("fcab.Container.MainFiniquitoEditar", {
             Ext.ComponentQuery.query('#MainFiniquitoEditar #cbCausal')[0].setValue(param.COD_CAUSAL);
             Ext.ComponentQuery.query('#MainFiniquitoEditar #dtBaja')[0].setValue(param.FECHA_BAJA);
             Ext.ComponentQuery.query('#MainFiniquitoEditar #txtObs')[0].setValue(param.OBSERVACION);
+            Ext.ComponentQuery.query('#MainFiniquitoEditar #txtPeriodo')[0].setValue(param.PERIODO);
 
             storeCargarPersonalFiniquito.load({
                 params : {
@@ -175,6 +176,24 @@ Ext.define("fcab.Container.MainFiniquitoEditar", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtPeriodo',
+                    name: 'txtPeriodo',
+                    labelAlign:'top',
+                    fieldLabel: 'Rut',
+                    anchor: '100%',
+                    typeAhead: true,
+                    maxLength: 20,
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
                     xtype: 'combo',
                     name: 'cbCausal',
                     itemId: 'cbCausal',
@@ -256,6 +275,7 @@ Ext.define("fcab.Container.MainFiniquitoEditar", {
                                 , p_usuario : NOMBRE
                                 , p_cod_emp: EMPRESA
                                 , p_obs: values.txtObs
+                                , P_PERIODO: param.PERIODO
                                 
                             },
                             callback: function(records, operation, success) {

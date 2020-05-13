@@ -22,6 +22,8 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
             Ext.ComponentQuery.query('#MasterConceptoEditar #txtRangoFin')[0].setValue(param.RANGO_FIN);
             Ext.ComponentQuery.query('#MasterConceptoEditar #txtObservacion')[0].setValue(param.OBSERVACION);
             Ext.ComponentQuery.query('#MasterConceptoEditar #cbEstado')[0].setValue(param.ESTADO);
+            Ext.ComponentQuery.query('#MasterConceptoEditar #chCopiar')[0].setValue(
+                (param.COPIAR_ANTERIOR == "1" ? true:false));
 
             storeCargarConceptoVal.load({
                 params: {
@@ -293,11 +295,9 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                 layout: 'anchor',
                 style: 'margin:0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtInicial',
                     name: 'txtInicial',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Valor Inicial',
@@ -313,11 +313,9 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                 layout: 'anchor',
                 style: 'margin:0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtRangoIni',
                     name: 'txtRangoIni',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     labelAlign:'top',
                     fieldLabel: 'Rango Inicial',
                     anchor: '100%',
@@ -332,11 +330,9 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                 layout: 'anchor',
                 style: 'margin-bottom: 5px',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtRangoFin',
                     name: 'txtRangoFin',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     labelAlign:'top',
                     fieldLabel: 'Rango Final',
                     anchor: '100%',
@@ -353,6 +349,14 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                 items: [{
                     xtype: 'MasterConceptoEditarSeleccionGrilla',
                 }]
+            },{
+                xtype: 'checkbox',
+                columnWidth: 1,
+                boxLabel: 'Copiar el valor del proceso mensual anterior.',
+                name: 'chCopiar',
+                itemId: 'chCopiar',
+                checked: false,
+                inputValue: '1'
             },{
                 xtype: 'container',
                 columnWidth: 1,
@@ -403,6 +407,13 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                 var txtInicial = values.txtInicial != null ? values.txtInicial.replace(",", ".") : null;
                 var txtRangoIni = values.txtRangoIni != null ? values.txtRangoIni.replace(",", ".") : null;
                 var txtRangoFin = values.txtRangoFin != null ? values.txtRangoFin.replace(",", ".") : null;
+
+                if(values.chCopiar){
+                    values.chCopiar = '1';
+                }else {
+                    values.chCopiar = '0';
+                }
+
                 //VALIDAR FORMAULARIO
                 if (!ValidarFormulario(form)) return;
                 //VALIDAR CANTIDAD DE VALORES CUANDO ES TIPO SELECCIONAR
@@ -510,7 +521,8 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                             p_rango_fin: txtRangoFin,
                             p_inicial: txtInicial,
                             p_usuario: NOMBRE,
-                            p_estado: values.cbEstado
+                            p_estado: values.cbEstado,
+                            p_copiar: values.chCopiar
                         },
                         callback: function(records, operation, success) {
                             Ext.MessageBox.hide();
@@ -555,7 +567,8 @@ Ext.define('fcab.Container.MasterConcepto.EditarSeleccionGrilla', {
             sortable : true,
             dataIndex: 'VALOR',
             //align: 'center',
-            flex: 1
+            flex: 1,
+            renderer: Ext.util.Format.numberRenderer('0.0,0')
         },
 
         {
@@ -608,11 +621,9 @@ Ext.define('fcab.Container.MasterConcepto.EditarSeleccionGrilla', {
     dockedItems: [{
         xtype: 'toolbar',
         items: [{
-            xtype: 'numberfield',
+            xtype: 'thousandnumber',
             itemId: 'txtValor',
             name: 'txtValor',
-            forcePrecision: true,
-            decimalPrecision: 5,
             labelAlign:'left',
             fieldLabel: 'Valor',
             anchor: '100%',

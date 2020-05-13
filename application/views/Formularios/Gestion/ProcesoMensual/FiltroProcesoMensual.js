@@ -73,6 +73,10 @@ Ext.define('fcab.Container.MainProcesoMensual.Filtro', {
                     {
                         "NOMBRE": "REPROCESO",
                         "VALOR": "REPROCESO"
+                    },
+                    {
+                        "NOMBRE": "RRHH",
+                        "VALOR": "RRHH"
                     }
                 ]
             }),
@@ -84,7 +88,7 @@ Ext.define('fcab.Container.MainProcesoMensual.Filtro', {
         layout: 'anchor',
         style: 'margin: 0 5 5 5',
         items: [{
-            xtype: 'numberfield',
+            xtype: 'thousandnumber',
             itemId: 'txtAnho',
             name: 'txtAnho',
             forcePrecision: true,

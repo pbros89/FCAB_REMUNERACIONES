@@ -20,7 +20,11 @@ class CentroCostoModel extends CI_Model {
                     TO_CHAR(CC.FECHA_CREACION, 'YYYY/MM/DD HH24:MI') FECHA_CREACION, 
                     CC.USR_CREADOR, 
                     TO_CHAR(CC.FECHA_MODIFICO, 'YYYY/MM/DD HH24:MI') FECHA_MODIFICO, 
-                    CC.USR_MODIFICO
+                    CC.USR_MODIFICO,
+                    COD_GERENCIA,
+                    NOM_GERENCIA,
+                    COD_DEPARTAMENTO,
+                    NOM_DEPARTAMENTO
                 FROM NOV_CENTRO_COSTOS CC, NOV_EMPRESAS EMP  
                 WHERE CC.PFK_COD_EMP = EMP.PK_COD_EMP ";
 
@@ -53,7 +57,8 @@ class CentroCostoModel extends CI_Model {
     public function cargarCentroCostosFiltro($p_cod_emp) {
         $sql = "SELECT 
                     CC.PK_COD_CC CODIGO, 
-                    CC.PK_COD_CC || ' - ' || CC.NOMBRE NOMBRE
+                    CC.NOMBRE,
+                    CC.PK_COD_CC || ' - ' || CC.NOMBRE NOMBRE_FULL
                 FROM NOV_CENTRO_COSTOS CC  
                 WHERE CC.ESTADO = 'A' ";
 
@@ -70,7 +75,7 @@ class CentroCostoModel extends CI_Model {
         return $query->result();
     }
 
-    public function crearCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado)
+    public function crearCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado, $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep)
     {
         $r_est = 0;
         $r_msg = "";
@@ -82,6 +87,10 @@ class CentroCostoModel extends CI_Model {
                             :p_nombre,
                             :p_usuario,
                             :p_estado,
+                            :p_cod_ger,
+                            :p_nom_ger,
+                            :p_cod_dep,
+                            :p_nom_dep,
                             :r_est,
                             :r_msg);END;");
         
@@ -89,6 +98,10 @@ class CentroCostoModel extends CI_Model {
         oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
         oci_bind_by_name($proc,"p_nombre", $p_nombre, 200, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"p_cod_ger", $p_cod_ger, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"p_nom_ger", $p_nom_ger, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"p_cod_dep", $p_cod_dep, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"p_nom_dep", $p_nom_dep, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
@@ -99,7 +112,7 @@ class CentroCostoModel extends CI_Model {
         return $result;
     }
 
-    public function modificarCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado)
+    public function modificarCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado, $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep)
     {
         $r_est = 0;
         $r_msg = "";
@@ -111,6 +124,10 @@ class CentroCostoModel extends CI_Model {
                             :p_nombre,
                             :p_usuario,
                             :p_estado,
+                            :p_cod_ger,
+                            :p_nom_ger,
+                            :p_cod_dep,
+                            :p_nom_dep,
                             :r_est,
                             :r_msg);END;");
         
@@ -119,6 +136,10 @@ class CentroCostoModel extends CI_Model {
         oci_bind_by_name($proc,"p_nombre", $p_nombre, 200, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"p_cod_ger", $p_cod_ger, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"p_nom_ger", $p_nom_ger, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"p_cod_dep", $p_cod_dep, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"p_nom_dep", $p_nom_dep, 100, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 

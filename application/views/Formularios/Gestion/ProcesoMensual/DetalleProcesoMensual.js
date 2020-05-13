@@ -3,47 +3,40 @@ Ext.define('fcab.Container.MainProcesoMensual.Detalle', {
     xtype: 'MainProcesoMensualDetalle',
     itemId: 'MainProcesoMensualDetalle',
     activeTab: 0,
-    width : '100%',
-
+    width :'100%',
+    height: 600,
+    
     listeners: {
         beforerender: function(){
             cargarDetalleProcesoMensual();
         }
     },
-    //buttonAlign: 'center',
-    defaults: {
-        
-        scrollable: true
-    },
-    layout: {
-        align: "stretch",
-        pack: 'center'
-    },
     items: [{
         title: 'General',
-        height: 565,
+        scrollable: true,
+        autoScroll: true,
         items:[{
             xtype: 'MainProcesoMensualDetalleGeneral',
         }]
     }, {
         title: 'Centros de Costos',
-        height: 565,
+        scrollable: true,
+        autoScroll: true,
         items:[{
             xtype: 'MainProcesoMensualDetalleCC'
         }]
     },{
         title: 'Trabajadores',
-        height: 565,
-        layout:'fit',
+        scrollable: true,
+        autoScroll: true,
         items:[{
             xtype: 'MainProcesoMensualDetallePersonas'
         }]
     },{
         title: 'Exportar / Importar',
         itemId:'tabExport',
-        height: 565,
-        hidden: true,
-        layout: 'fit',
+        scrollable: true,
+        autoScroll: true,
         items:[{
             xtype: 'MainProcesoMensualDetalleImportarExportar'
         }]
@@ -68,11 +61,11 @@ var cargarDetalleProcesoMensual = function() {
         callback: function(records, operation, success) {
             console.log(records);
             if(records !== null && records.length > 0) {
-                if(records[0].data.PK_TIPO == 'RRHH') {
+                /*if(records[0].data.PK_TIPO == 'RRHH') {
                     Ext.ComponentQuery.query('#MainProcesoMensualDetalle #tabExport')[0].tab.show();
                 }else{
                     Ext.ComponentQuery.query('#MainProcesoMensualDetalle #tabExport')[0].tab.hide();
-                }
+                }*/
                 Ext.ComponentQuery.query('#MainProcesoMensualDetalleGeneral #txtCCEspera')[0].setValue(records[0].data.CC_ESPERA);
                 Ext.ComponentQuery.query('#MainProcesoMensualDetalleGeneral #txtCCTerminado')[0].setValue(records[0].data.CC_TERMINADO);
                 Ext.ComponentQuery.query('#MainProcesoMensualDetalleGeneral #txtTrabEspera')[0].setValue(records[0].data.PERSONA_ESPERA);

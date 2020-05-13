@@ -43,6 +43,7 @@ class IngHaberRRLLController extends CI_Controller {
         $P_USA_FECHA = $this->input->get('P_USA_FECHA');
         $P_FORMATO_VALOR = $this->input->get('P_FORMATO_VALOR');
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');
+        $P_PERIODO = $this->input->get('P_PERIODO');
 
         $query = $this->IngHaberRRLLModel->crearIngHaberRRLL(
               $P_RUT 
@@ -57,7 +58,9 @@ class IngHaberRRLLController extends CI_Controller {
             , $P_TERMINO
             , $P_USA_FECHA
             , $P_FORMATO_VALOR
-            , $P_OBSERVACION);
+            , $P_OBSERVACION
+            , $P_PERIODO
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -78,6 +81,7 @@ class IngHaberRRLLController extends CI_Controller {
         $P_USA_FECHA = $this->input->get('P_USA_FECHA');
         $P_FORMATO_VALOR = $this->input->get('P_FORMATO_VALOR');
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');
+        $P_PERIODO = $this->input->get('P_PERIODO');
 
         $query = $this->IngHaberRRLLModel->modificarIngHaberRRLL(
               $P_COD 
@@ -92,6 +96,7 @@ class IngHaberRRLLController extends CI_Controller {
             , $P_USA_FECHA 
             , $P_FORMATO_VALOR 
             , $P_OBSERVACION 
+            , $P_PERIODO
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
@@ -120,4 +125,20 @@ class IngHaberRRLLController extends CI_Controller {
         $this->output->set_output($result);
     }
 
+    public function anularIngHaberRRLL()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->IngHaberRRLLModel->anularIngHaberRRLL(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
 }

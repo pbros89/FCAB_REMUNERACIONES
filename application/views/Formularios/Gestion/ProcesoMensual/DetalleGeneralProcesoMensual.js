@@ -2,7 +2,7 @@ Ext.define('fcab.Container.MainProcesoMensual.DetalleGeneral', {
     extend: 'Ext.form.Panel',
     xtype: 'MainProcesoMensualDetalleGeneral',
     itemId: 'MainProcesoMensualDetalleGeneral',
-    autoScroll: true,
+    scrollable: false,
     layout: {
         type: 'column',
         align: "stretch",

@@ -33,7 +33,8 @@ class IngDescuentoRRLLModel extends CI_Model {
                     COD_CC,
                     NOM_CC,
                     TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') FECHA_CREACION,
-                    TO_CHAR(FECHA_MODIFICO, 'YYYY/MM/DD') FECHA_MODIFICO
+                    TO_CHAR(FECHA_MODIFICO, 'YYYY/MM/DD') FECHA_MODIFICO,
+                    PERIODO
                 FROM NOV_ING_DESCUENTOS_RRLL ING 
                 WHERE 1 = 1 ";
 
@@ -52,6 +53,8 @@ class IngDescuentoRRLLModel extends CI_Model {
                     $sql .= "AND TO_DATE('$p_fec2', 'YYYY/MM/DD') ";
                 }elseif (!empty($p_fec1)) {
                     $sql .= "AND TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') = '$p_fec1' ";
+                }else{
+                    $sql .= "AND TRUNC(FECHA_CREACION, 'MM') = TRUNC(SYSDATE, 'MM') ";
                 }
 
                 $sql .= "ORDER BY PK_COD DESC";
@@ -75,7 +78,9 @@ class IngDescuentoRRLLModel extends CI_Model {
         , $P_MES_DESCUENTO 
         , $P_FORMATO_VALOR
         , $P_OBSERVACION 
-        , $P_ANHO_DESCUENTO   )
+        , $P_ANHO_DESCUENTO   
+        , $P_PERIODO
+    )
     {
 
         $r_est = 0;
@@ -96,7 +101,8 @@ class IngDescuentoRRLLModel extends CI_Model {
                         , :P_MES_DESCUENTO 
                         , :P_FORMATO_VALOR
                         , :P_OBSERVACION 
-                        , :P_ANHO_DESCUENTO 
+                        , :P_ANHO_DESCUENTO
+                        , :P_PERIODO 
                         , :r_est
                         , :r_msg);END;");
         
@@ -114,6 +120,7 @@ class IngDescuentoRRLLModel extends CI_Model {
         oci_bind_by_name($proc,"P_FORMATO_VALOR", $P_FORMATO_VALOR, 20, SQLT_CHR);
         oci_bind_by_name($proc,"P_ANHO_DESCUENTO", $P_ANHO_DESCUENTO);
         oci_bind_by_name($proc,"P_OBSERVACION", $P_OBSERVACION, 1000, SQLT_CHR);
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
         
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
@@ -139,6 +146,7 @@ class IngDescuentoRRLLModel extends CI_Model {
         , $P_FORMATO_VALOR
         , $P_OBSERVACION
         , $P_ANHO_DESCUENTO
+        , $P_PERIODO
     )
     {
         $r_est = 0;
@@ -159,6 +167,7 @@ class IngDescuentoRRLLModel extends CI_Model {
                         , :P_FORMATO_VALOR
                         , :P_OBSERVACION 
                         , :P_ANHO_DESCUENTO 
+                        , :P_PERIODO
                         , :r_est
                         , :r_msg);END;");
 
@@ -176,6 +185,7 @@ class IngDescuentoRRLLModel extends CI_Model {
         oci_bind_by_name($proc,"P_FORMATO_VALOR", $P_FORMATO_VALOR, 20, SQLT_CHR);
         oci_bind_by_name($proc,"P_ANHO_DESCUENTO", $P_ANHO_DESCUENTO);
         oci_bind_by_name($proc,"P_OBSERVACION", $P_OBSERVACION, 1000, SQLT_CHR);
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -233,6 +243,36 @@ class IngDescuentoRRLLModel extends CI_Model {
         $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
         return $result;
     }
+
+    public function anularIngDescuentoRRLL(
+        $P_COD,
+        $P_USUARIO,
+        $P_OBS
+    ) {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+            $this->db->conn_id,
+            "BEGIN NOV_ANU_ING_DESC_RRLL(
+                      :P_COD  
+                    , :P_USUARIO
+                    , :P_OBS
+                    , :r_est
+                    , :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "P_COD", $P_COD, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_OBS", $P_OBS, 1000, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
 
     
 }

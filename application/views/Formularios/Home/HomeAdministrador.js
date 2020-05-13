@@ -4,7 +4,7 @@ Ext.define('fcab.Container.HomeAdministrador', {
     itemId: 'homeAdmin',
     border: null,
     width : '100%',
-    padding: 30,
+    padding: 10,
     layout: {
         type: 'vbox',
         align: 'center',
@@ -12,6 +12,7 @@ Ext.define('fcab.Container.HomeAdministrador', {
     },
     listeners: {
         beforerender: function() {
+            mostrarPanelesNovedades();
             cargarConteoMensualHomeAdmin();
             refreshCargarConteoMensualHomeAdmin();
         }
@@ -48,7 +49,15 @@ Ext.define('fcab.Container.HomeAdministrador', {
             },
             margin: '10px',
             border: false,
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlIngresoMain',
+            hidden: true,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_ingreso_personal", "Ingresar Personal", "MainIngresoPersonal");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Ingresos</h3>',
                 border: false
@@ -80,8 +89,16 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 pack: 'center'
             },
             margin: '10px',
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlSaludMain',
+            hidden: true,
             border: false,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_cambio_salud", "Cambiar Salud", "MainCambioSalud");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Salud</h3>',
                 border: false
@@ -113,8 +130,16 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 pack: 'center'
             },
             margin: '10px',
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlAFPMain',
+            hidden: true,
             border: false,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_cambio_afp", "Cambiar AFP", "MainCambioAFP");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">AFP</h3>',
                 border: false
@@ -146,8 +171,16 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 pack: 'center'
             },
             margin: '10px',
-            hidden: (ROL == 'RRLL'),
             border: false,
+            itemId: 'pnlSindicatoMain',
+            hidden: true,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_cambio_sindicato", "Cambiar Sindicato", "MainCambioSindicato");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Sindicato</h3>',
                 border: false
@@ -179,8 +212,16 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 pack: 'center'
             },
             margin: '10px',
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlDepositoMain',
+            hidden: true,
             border: false,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_cambio_deposito", "Cambiar Deposito Rem", "MainCambioDeposito");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Deposito Rem</h3>',
                 border: false
@@ -212,8 +253,16 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 pack: 'center'
             },
             margin: '10px',
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlCargoMain',
+            hidden: true,
             border: false,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_cambio_cargo_renta", "Cambiar Cargo Renta", "MainCambioCargoRenta");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Cargo Renta</h3>',
                 border: false
@@ -246,7 +295,15 @@ Ext.define('fcab.Container.HomeAdministrador', {
             },
             margin: '10px',
             border: false,
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlFiniquitoMain',
+            hidden: true,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_finiquito_personal", "Finiquitar Personal", "MainFiniquito");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Finiquito</h3>',
                 border: false
@@ -279,7 +336,15 @@ Ext.define('fcab.Container.HomeAdministrador', {
             },
             margin: '10px',
             border: false,
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlBonoMain',
+            hidden: true,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_cambio_bono", "Cambiar Bonos", "MainCambioBono");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Bonos</h3>',
                 border: false
@@ -309,7 +374,16 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 pack: 'center'
             },
             margin: '10px',
+            itemId: 'pnlHaberRRLLMain',
+            hidden: true,
             border: false,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_ing_haber_rrll", "Haber RRLL", "MainIngHaberRRLL");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Haber RRLL</h3>',
                 border: false
@@ -339,7 +413,16 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 pack: 'center'
             },
             margin: '10px',
+            itemId: 'pnlDesRRLLMain',
+            hidden: true,
             border: false,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_ing_descuento_rrll", "Descuento RRLL", "MainIngDescuentoRRLL");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Desc. RRLL</h3>',
                 border: false
@@ -370,7 +453,15 @@ Ext.define('fcab.Container.HomeAdministrador', {
             },
             margin: '10px',
             border: false,
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlOtrosMain',
+            hidden: true,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_cambio_otros", "Cambiar Otros", "MainCambioOtros");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Otros</h3>',
                 border: false
@@ -401,7 +492,15 @@ Ext.define('fcab.Container.HomeAdministrador', {
             },
             margin: '10px',
             border: false,
-            hidden: (ROL == 'RRLL'),
+            itemId: 'pnlAusentismoMain',
+            hidden: true,
+            style: 'cursor: pointer;',
+            listeners: {
+                dblclick: function() {
+                    dblClickPanelNovedad("menu_ausentismo", "Ausentismo", "MainAusentismo");
+                },
+                element: 'body'
+            },
             items:[{
                 html: '<h3 style="color: #25709e;">Ausentismo</h3>',
                 border: false
@@ -433,7 +532,7 @@ Ext.define('fcab.Container.HomeAdministrador', {
             type: 'hbox',
         },
         width: '50%',
-        padding: '50',
+        padding: '10',
         items: [{
             width: '100%',
             height: 100,
@@ -452,7 +551,7 @@ Ext.define('fcab.Container.HomeAdministrador', {
             type: 'hbox',
         },
         width: '100%',
-        padding: '30',
+        padding: '20 10',
         items: [{
             itemId: 'pnlProcesoActivo1',
             width: '50%',
@@ -505,6 +604,79 @@ Ext.define('fcab.Container.HomeAdministrador', {
     }, ]
 
 });
+
+var dblClickPanelNovedad = function (id, tituloTab, formulario) {
+    addTab(id, tituloTab, "icon-listaTab", formulario, 1);
+}
+
+var mostrarPanelesNovedades = function() {
+    ROL_ACCIONES.forEach(accion => {
+        var estado = accion.ESTADO;
+        var acc = accion.PFK_ACCION;
+        var pantalla = accion.PFK_PANTALLA;
+
+        var pnlIngreso = Ext.ComponentQuery.query('#homeAdmin #pnlIngresoMain')[0];
+        var pnlSalud = Ext.ComponentQuery.query('#homeAdmin #pnlSaludMain')[0];
+        var pnlAFP = Ext.ComponentQuery.query('#homeAdmin #pnlAFPMain')[0];
+        var pnlSindicato = Ext.ComponentQuery.query('#homeAdmin #pnlSindicatoMain')[0];
+        var pnlDeposito = Ext.ComponentQuery.query('#homeAdmin #pnlDepositoMain')[0];
+        var pnlCargo = Ext.ComponentQuery.query('#homeAdmin #pnlCargoMain')[0];
+        var pnlFiniquito = Ext.ComponentQuery.query('#homeAdmin #pnlFiniquitoMain')[0];
+        var pnlOtros = Ext.ComponentQuery.query('#homeAdmin #pnlOtrosMain')[0];
+        var pnlBono = Ext.ComponentQuery.query('#homeAdmin #pnlBonoMain')[0];
+        var pnlDesRRLL = Ext.ComponentQuery.query('#homeAdmin #pnlDesRRLLMain')[0];
+        var pnlHaberRRLL = Ext.ComponentQuery.query('#homeAdmin #pnlHaberRRLLMain')[0];
+        var pnlAusentismo = Ext.ComponentQuery.query('#homeAdmin #pnlAusentismoMain')[0];
+
+        if(pantalla == 'AUSENTISMO' && acc == 'VER' && estado == 'A'){
+            pnlAusentismo.show();
+        }
+
+        if(pantalla == 'CAMBIO_AFP' && acc == 'VER' && estado == 'A'){
+            pnlAFP.show();
+        }
+
+        if(pantalla == 'CAMBIO_BONO' && acc == 'VER' && estado == 'A'){
+            pnlBono.show();
+        }
+
+        if(pantalla == 'CAMBIO_CARGO' && acc == 'VER' && estado == 'A'){
+            pnlCargo.show();
+        }
+
+        if(pantalla == 'CAMBIO_DEPOSITO' && acc == 'VER' && estado == 'A'){
+            pnlDeposito.show();
+        }
+
+        if(pantalla == 'CAMBIO_OTROS' && acc == 'VER' && estado == 'A'){
+            pnlOtros.show();
+        }
+
+        if(pantalla == 'CAMBIO_SALUD' && acc == 'VER' && estado == 'A'){
+            pnlSalud.show();
+        }
+
+        if(pantalla == 'CAMBIO_SINDICATO' && acc == 'VER' && estado == 'A'){
+            pnlSindicato.show();
+        }
+
+        if(pantalla == 'FINIQUITO' && acc == 'VER' && estado == 'A'){
+            pnlFiniquito.show();
+        }
+
+        if(pantalla == 'INGRESO_DESCUENTO_RRLL' && acc == 'VER' && estado == 'A'){
+            pnlDesRRLL.show();
+        }
+
+        if(pantalla == 'INGRESO_HABER_RRLL' && acc == 'VER' && estado == 'A'){
+            pnlHaberRRLL.show();
+        }
+
+        if(pantalla == 'INGRESO_PERSONAL' && acc == 'VER' && estado == 'A'){
+            pnlIngreso.show();
+        }
+    });
+}
 
 var cargarConteoMensualHomeAdmin = function() {
     var pnlFecha = Ext.ComponentQuery.query('#homeAdmin #pnlFecha')[0];
@@ -591,6 +763,8 @@ var cargarConteoMensualHomeAdmin = function() {
                         p_anho: records[0].data.ANHO,
                         p_mes: records[0].data.MES,
                         p_tipo: records[0].data.PK_TIPO,
+                        p_rol: ROL,
+                        p_usuario: NOMBRE
                     },
                     callback: function(records, operation, success) {
                         console.log(records);
@@ -629,6 +803,13 @@ var pnlProcesoItems = function (ccEsp, ccTer, traEsp, traTer){
     margin: '10px',
     padding: '10px',
     border: false,
+    style: 'cursor: pointer;',
+    listeners: {
+        dblclick: function() {
+            ventanaDinamica("HomeAdministradorCC", "Detalle Centro de Costos (EN ESPERA)", "600", "", "HomeAdministradorCC", 1, 0, null, 'EN ESPERA');
+        },
+        element: 'body'
+    },
     items:[{
         itemId: 'titCcEsp',
         html: '<h2 style="color: #e74c3c;">CC En Espera</h2>',
@@ -662,6 +843,13 @@ var pnlProcesoItems = function (ccEsp, ccTer, traEsp, traTer){
     margin: '10px',
     padding: '10px',
     border: false,
+    style: 'cursor: pointer;',
+    listeners: {
+        dblclick: function() {
+            ventanaDinamica("HomeAdministradorCC", "Detalle Centro de Costos (TERMINADO)", "600", "", "HomeAdministradorCC", 1, 0, null, 'TERMINADO');
+        },
+        element: 'body'
+    },
     items:[{
         html: '<h2 style="color: #4cd385;">CC Terminados</h2>',
         border: false
@@ -694,6 +882,13 @@ var pnlProcesoItems = function (ccEsp, ccTer, traEsp, traTer){
     margin: '10px',
     padding: '10px',
     border: false,
+    style: 'cursor: pointer;',
+    listeners: {
+        dblclick: function() {
+            ventanaDinamica("HomeAdministradorPerson", "Detalle Trabajadores (EN ESPERA)", "1000", "", "HomeAdministradorPerson", 1, 0, null, 'EN ESPERA');
+        },
+        element: 'body'
+    },
     items:[{
         html: '<h2 style="color: #e74c3c;">Trabajadores En Espera</h2>',
         border: false
@@ -726,6 +921,13 @@ var pnlProcesoItems = function (ccEsp, ccTer, traEsp, traTer){
     margin: '10px',
     padding: '10px',
     border: false,
+    style: 'cursor: pointer;',
+    listeners: {
+        dblclick: function() {
+            ventanaDinamica("HomeAdministradorPerson", "Detalle Trabajadores (TERMINADO)", "1000", "", "HomeAdministradorPerson", 1, 0, null, 'TERMINADO');
+        },
+        element: 'body'
+    },
     items:[{
         html: '<h2 style="color: #4cd385;">Trabajadores Terminados</h2>',
         border: false

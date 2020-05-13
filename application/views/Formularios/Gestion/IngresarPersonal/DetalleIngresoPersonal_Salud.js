@@ -78,11 +78,9 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtPlanSalud',
                     name: 'txtPlanSalud',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Plan Salud (UF-$-%)',
@@ -113,11 +111,9 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;' 
 
                 },{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtPlanColectivoSalud',
                     name: 'txtPlanColectivoSalud',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Plan Colectivo Salud (UF-$-%)',
@@ -153,11 +149,9 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtAdiTra',
                     name: 'txtAdiTra',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Adicional Trabajador (UF-$-%)',
@@ -187,11 +181,9 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'  
                 },{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtAdiEmp',
                     name: 'txtAdiEmp',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Adicional Empleador (UF-$-%)',
@@ -227,11 +219,9 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtGes',
                     name: 'txtGes',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'GES (UF-$-%)',

@@ -42,7 +42,13 @@ class CentroCostoController extends CI_Controller {
         $p_nombre = $this->input->get('p_nombre');  
         $p_usuario = $this->input->get('p_usuario');  
         $p_estado = $this->input->get('p_estado');  
-        $query = $this->CentroCostoModel->crearCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado);
+        $p_cod_ger = $this->input->get('p_cod_ger');  
+        $p_nom_ger = $this->input->get('p_nom_ger');  
+        $p_cod_dep = $this->input->get('p_cod_dep');  
+        $p_nom_dep = $this->input->get('p_nom_dep'); 
+         
+        $query = $this->CentroCostoModel->crearCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado,
+            $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
@@ -53,8 +59,14 @@ class CentroCostoController extends CI_Controller {
         $p_cod_emp = $this->input->get('p_cod_emp');  
         $p_nombre = $this->input->get('p_nombre');  
         $p_usuario = $this->input->get('p_usuario');  
-        $p_estado = $this->input->get('p_estado');  
-        $query = $this->CentroCostoModel->modificarCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado);
+        $p_estado = $this->input->get('p_estado'); 
+        $p_cod_ger = $this->input->get('p_cod_ger');  
+        $p_nom_ger = $this->input->get('p_nom_ger');  
+        $p_cod_dep = $this->input->get('p_cod_dep');  
+        $p_nom_dep = $this->input->get('p_nom_dep'); 
+
+        $query = $this->CentroCostoModel->modificarCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado,
+            $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

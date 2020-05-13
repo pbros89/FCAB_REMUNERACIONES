@@ -101,6 +101,18 @@ Ext.define('fcab.store.menu.admin', {
             cerrable: 1,
             cls: 'x-hidden'
             //disabled: true
+        }, {
+            name: "Filtro1", //Items a Filtrar
+            text: "Maestro Calendario",
+            tipo: "tab",
+            tituloTab: "Maestro Calendario",
+            id: "menu_calendario",
+            formulario: "MasterCalendario",
+            icon: "icon-listaTab", leaf: true,
+            iconCls: "icon-prototipo",
+            cerrable: 1,
+            cls: 'x-hidden'
+            //disabled: true
         }]
     },
     noCache: false,

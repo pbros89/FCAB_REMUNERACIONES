@@ -23,6 +23,7 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
         cbAnho.getStore().loadData(years);
 
         storeCargarParam_TIPO_DESCUENTO_RRLL.load();
+        storeExtras_cargarPeriodos.load();
     },
     items: [{
         xtype: 'form',
@@ -54,7 +55,7 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -241,6 +242,30 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbTipoDescuento',
                     itemId: 'cbTipoDescuento',
                     displayField: 'NOMBRE',
@@ -325,7 +350,7 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtCantidadCuota',
                     name: 'txtCantidadCuota',
                     forcePrecision: true,
@@ -360,11 +385,9 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtValorCuota',
                     name: 'txtValorCuota',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Valor Cuota',
@@ -395,11 +418,9 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtMontoTotal',
                     name: 'txtMontoTotal',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Monto Total',
@@ -479,7 +500,6 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
             //scale: 'large',
             text: 'Ingresar',
             handler: function () {
-                //Ext.getCmp('cemp').getRawValue();
                 
                 var txtRutOld =  Ext.ComponentQuery.query('#CrearIngDescuentoRRLL #txtRutOld')[0];
                 var cbDescuento =  Ext.ComponentQuery.query('#CrearIngDescuentoRRLL #cbDescuento')[0];
@@ -511,6 +531,7 @@ Ext.define("fcab.Container.CrearIngDescuentoRRLL", {
                                 , P_FORMATO_VALOR : values.cbFormato
                                 , P_OBSERVACION : values.txtObs
                                 , P_ANHO_DESCUENTO : values.cbAnho
+                                , P_PERIODO: values.cbPeriodo
                             },
                             callback: function(records, operation, success) {
                                 if(records != null) {

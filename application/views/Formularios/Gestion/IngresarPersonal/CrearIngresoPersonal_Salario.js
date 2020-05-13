@@ -104,11 +104,9 @@ Ext.define("fcab.Container.CrearIngresoPersonalSalario", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtSueldo',
                     name: 'txtSueldo',
-                    forcePrecision: true,
-                    decimalPrecision: 0,
                     allowDecimals: false,
                     labelAlign:'top',
                     fieldLabel: 'Sueldo Base',
@@ -124,11 +122,9 @@ Ext.define("fcab.Container.CrearIngresoPersonalSalario", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtRentaContrato',
                     name: 'txtRentaContrato',
-                    forcePrecision: true,
-                    decimalPrecision: 0,
                     allowDecimals: false,
                     labelAlign:'top',
                     fieldLabel: 'Renta Contrato',
@@ -175,6 +171,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalSalario", {
                     var txtNumero = Ext.ComponentQuery.query('#CrearIngresoPersonalInfo #txtNumero')[0];
                     var txtRut = Ext.ComponentQuery.query('#CrearIngresoPersonalInfo #txtRut')[0];
                     var cbSexo = Ext.ComponentQuery.query('#CrearIngresoPersonalInfo #cbSexo')[0];
+                    var cbPeriodo = Ext.ComponentQuery.query('#CrearIngresoPersonalInfo #cbPeriodo')[0];
 
                     //CARGO
                     var formCargo = Ext.ComponentQuery.query('#CrearIngresoPersonalCargo #formCargo')[0];
@@ -243,10 +240,10 @@ Ext.define("fcab.Container.CrearIngresoPersonalSalario", {
                             , P_CELULAR  : '' //txtCelular.value
                             , P_CORREO : txtCorreo.value
                             , P_COD_CC : cbCC.value
-                            , P_NOM_CC : cbCC.getRawValue()
+                            , P_NOM_CC : cbCC.selection.data.NOMBRE
                             , P_FECHA_VENCIMIENTO : dtVencimientoString
                             , P_COD_CARGO : cbCargo.value
-                            , P_NOM_CARGO : cbCargo.getRawValue() 
+                            , P_NOM_CARGO : cbCargo.selection.data.NOMBRE 
                             , P_INE : cbIne.getRawValue()
                             , P_RUT_JEFE : txtRutJefatura.value
                             , P_DV_JEFE : txtDVJefatura.value
@@ -290,6 +287,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalSalario", {
                             , P_MONTO_ADI_EMP : txtAdiEmp.value
                             , P_FORMATO_ADI_EMP : cbAdiEmp.value
                             , P_COD_TIPO_CONTRATO : cbTipoContrato.value
+                            , P_PERIODO: cbPeriodo.value
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {

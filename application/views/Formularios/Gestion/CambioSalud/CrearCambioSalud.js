@@ -9,9 +9,14 @@ Ext.define("fcab.Container.CrearCambioSalud", {
     style: "margin: 0px auto 0px auto;",
     
     constructor: function (config) {
-        this.callParent([config]);
-        storeCargarParam_SALUD.load();
-        storeCargarParam_TIPO_CAMBIO_SALUD.load();
+        this.callParent([config]); 
+    },
+    listeners: {
+        afterrender: function() {
+            storeCargarParam_SALUD.load();
+            storeCargarParam_TIPO_CAMBIO_SALUD.load();
+            storeExtras_cargarPeriodos.load();
+        }
     },
     items: [{
         xtype: 'form',
@@ -42,7 +47,7 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -115,15 +120,20 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                                         txtIngreso.setValue(records[0].data.FECHA_INGRESO_FORMAT);
                                         txtSalud.setValue(records[0].data.NOM_SALUD);
                                         txtValorPlan.setValue(records[0].data.VALOR_SALUD != null ? 
-                                            (records[0].data.TIPO_VALOR_SALUD + " " + records[0].data.VALOR_SALUD) : '');
+                                            (records[0].data.TIPO_VALOR_SALUD + " " + 
+                                            Ext.util.Format.number(records[0].data.VALOR_SALUD, '0.0,0')) : '');
                                         txtValorGes.setValue(records[0].data.VALOR_GES != null ? 
-                                            (records[0].data.TIPO_GES + " " + records[0].data.VALOR_GES) : '');
+                                            (records[0].data.TIPO_GES + " " + 
+                                            Ext.util.Format.number(records[0].data.VALOR_GES, '0.0,0')) : '');
                                         txtValorAdiTra.setValue(records[0].data.VALOR_ADI_TRA != null ? 
-                                            (records[0].data.TIPO_ADI_TRA + " " + records[0].data.VALOR_ADI_TRA) : '');
+                                            (records[0].data.TIPO_ADI_TRA + " " + 
+                                            Ext.util.Format.number(records[0].data.VALOR_ADI_TRA, '0.0,0')) : '');
                                         txtValorAdiEmp.setValue(records[0].data.VALOR_ADI_EMP != null ? 
-                                            (records[0].data.TIPO_ADI_EMP + " " + records[0].data.VALOR_ADI_EMP) : '');
+                                            (records[0].data.TIPO_ADI_EMP + " " + 
+                                            Ext.util.Format.number(records[0].data.VALOR_ADI_EMP, '0.0,0')) : '');
                                         txtValorConvenio.setValue(records[0].data.VALOR_CONVENIO != null ? 
-                                            (records[0].data.TIPO_CONVENIO + " " + records[0].data.VALOR_CONVENIO) : '');
+                                            (records[0].data.TIPO_CONVENIO + " " + 
+                                            Ext.util.Format.number(records[0].data.VALOR_CONVENIO, '0.0,0')) : '');
 
                                         cbSalud.setValue(records[0].data.COD_SALUD);
                                         txtPlan.setValue(records[0].data.VALOR_SALUD);
@@ -386,6 +396,30 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbTipoCambio',
                     itemId: 'cbTipoCambio',
                     displayField: 'NOMBRE',
@@ -433,11 +467,9 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtPlan',
                     name: 'txtPlan',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Valor Plan',
@@ -478,11 +510,9 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtGes',
                     name: 'txtGes',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'GES',
@@ -523,11 +553,9 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtAdiTra',
                     name: 'txtAdiTra',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Adicional Trabajador',
@@ -568,11 +596,9 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtAdiEmp',
                     name: 'txtAdiEmp',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Adicional Empleador',
@@ -613,11 +639,9 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtConvenio',
                     name: 'txtConvenio',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Convenio Colectivo',
@@ -716,6 +740,7 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                                 , P_VALOR_CONVENIO : txtConvenio
                                 , P_TIPO_CONVENIO : values.cbConvenio
                                 , P_OBSERVACION: values.txtObs
+                                , P_PERIODO: values.cbPeriodo
 
                             },
                             callback: function(records, operation, success) {

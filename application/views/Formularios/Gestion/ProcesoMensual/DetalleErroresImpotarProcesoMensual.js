@@ -33,22 +33,36 @@ Ext.define('fcab.Container.DetalleErroresImpotarProcesoMensual', {
                 var param = Ext.getCmp('DetalleErroresImpotarProcesoMensual').myExtraParams.param2.data;
                 var ewin = Ext.WindowManager.getActive();
                 if(ewin){
-                    Ext.MessageBox.confirm('Importar Proceso Mensual', '¿Esta seguro de importar el proceso mensual?', function(btn) {
+                    Ext.MessageBox.confirm('Importar Proceso Mensual', '¿Esta seguro de importar los valores?', function(btn) {
                         if (btn === 'yes') {
+                            Ext.MessageBox.show({
+                                msg: 'Cargando',
+                                progressText: 'Espere por favor...',
+                                width: 300,
+                                wait: {
+                                    interval: 200
+                                }
+                            });
+                            storeGuardarValoresImportacion.proxy.setTimeout(300000);
                             storeGuardarValoresImportacion.load({
                                 params : {
                                     p_cod_emp: EMPRESA,
                                     p_proceso: param.PK_PROCESO,
                                     p_tipo: param.PK_TIPO,
-                                    p_usuario: NOMBRE
+                                    p_usuario: NOMBRE,
+                                    p_cod_cc : param.p_cod_cc
                                 },
                                 callback: function(records, operation, success) {
+                                    Ext.MessageBox.hide();
                                     if(records != null) {
                                         if(records[0].data.r_msg == 'OK'){
                                             showToast('Proceso mensual modificado correctamente.');
-                                            cargarMainProcesoMensual(null);
-                                            cargarDetalleProcesoMensual();
-                                            cargarCCPersonasProcesoMensualDetalle();
+                                            if(Ext.getCmp('MainProcesoMensualDetalle') != null) {
+                                                cargarMainProcesoMensual(null);
+                                                cargarDetalleProcesoMensual();
+                                                cargarCCPersonasProcesoMensualDetalle();
+                                            }
+                                            
                                             ewin.destroy();
                                         }else{
                                             Ext.MessageBox.show({
@@ -296,6 +310,8 @@ var cargarErroresImportarProcesoMensual = function() {
             p_cod_emp: EMPRESA,
             p_proceso: param.PK_PROCESO,
             p_tipo: param.PK_TIPO,
+            p_usuario: NOMBRE,
+            p_cod_cc: param.p_cod_cc
         },
         callback: function(records, operation, success) {
             console.log(records);
@@ -310,6 +326,8 @@ var cargarErroresImportarProcesoMensual = function() {
             p_cod_emp: EMPRESA,
             p_proceso: param.PK_PROCESO,
             p_tipo: param.PK_TIPO,
+            p_usuario: NOMBRE,
+            p_cod_cc: param.p_cod_cc
         },
         callback: function(records, operation, success) {
             console.log(records);

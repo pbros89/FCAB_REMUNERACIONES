@@ -26,6 +26,7 @@ Ext.define("fcab.Container.MainIngHaberRRLL.Editar", {
             var dtInicio = Ext.ComponentQuery.query('#EditarIngHaberRRLL #dtInicio')[0];
             var dtTermino = Ext.ComponentQuery.query('#EditarIngHaberRRLL #dtTermino')[0];
             var txtObs = Ext.ComponentQuery.query('#EditarIngHaberRRLL #txtObs')[0];
+            var txtPeriodo = Ext.ComponentQuery.query('#EditarIngHaberRRLL #txtPeriodo')[0];
 
             storeCargarParam_TIPO_HABER_RRLL.load();
 
@@ -42,7 +43,7 @@ Ext.define("fcab.Container.MainIngHaberRRLL.Editar", {
             txtObs.setValue(param.OBSERVACION);
             dtInicio.setValue(param.INICIO);
             dtTermino.setValue(param.TERMINO);
-
+            txtPeriodo.setValue(param.PERIODO);
         }
     },
     items: [{
@@ -65,11 +66,11 @@ Ext.define("fcab.Container.MainIngHaberRRLL.Editar", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtId',
                     name: 'txtId',
                     forcePrecision: true,
-                    decimalPrecision: 5,
+                    decimalPrecision: 0,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'ID',
@@ -124,6 +125,22 @@ Ext.define("fcab.Container.MainIngHaberRRLL.Editar", {
                     labelAlign:'top',
                     fieldLabel: 'Centro de Costo',
                     anchor: '100%',
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtPeriodo',
+                    name: 'txtPeriodo',
+                    labelAlign:'top',
+                    fieldLabel: 'Periodo',
+                    anchor: '50%',
                     allowBlank: false,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
@@ -318,11 +335,9 @@ Ext.define("fcab.Container.MainIngHaberRRLL.Editar", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtMonto',
                     name: 'txtMonto',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Monto Total',
@@ -384,6 +399,7 @@ Ext.define("fcab.Container.MainIngHaberRRLL.Editar", {
                                     , P_USA_FECHA : values.txtUsaFecha == 'SI'? '1': '0'
                                     , P_FORMATO_VALOR : values.cbFormato
                                     , P_OBSERVACION : values.txtObs
+                                    , P_PERIODO: param.PERIODO
                                 },
                                 callback: function(records, operation, success) {
                                     if(records != null) {

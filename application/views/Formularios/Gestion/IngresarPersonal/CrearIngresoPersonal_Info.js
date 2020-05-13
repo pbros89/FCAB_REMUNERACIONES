@@ -38,14 +38,14 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
     
             items: [{
                 xtype: 'container',
-                columnWidth: 1,
+                columnWidth: 0.5,
                 layout: {
                     type: 'hbox',
-                    align: 'center'
+                    align: 'bottom',
+                    //pack: 'end',
                 },
-                style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -54,7 +54,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                     allowDecimals: false,
                     labelAlign:'top',
                     fieldLabel: 'Rut',
-                    width: '20%',
+                    width: '40%',
                     allowBlank: false,
                     maxValue: 999999999,
                     minValue: 0
@@ -65,13 +65,13 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                     name: 'txtDV',
                     labelAlign:'top',
                     fieldLabel: 'DV',
-                    width: '5%',
+                    width: '10%',
                     typeAhead: true,
                     maxLength: 1,
                     allowBlank: false
                 },{
                     xtype: 'button',
-                    width: '10%',
+                    width: '20%',
                     style: 'margin: 0 10px 5px 0',
                     text:'Validar',
                     handler: function() {
@@ -111,7 +111,36 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                     itemId:'txtValidar',
                     border: false,
                     style: 'margin: 0 10px 5px 0',
+                    width: '20%',
                     html: '<span><b>Falta Validar</b></span>'
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: {
+                    type: 'hbox',
+                    align: 'bottom',
+                    pack: 'end',
+                },
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    style: 'margin: 0 10px 5px 0',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    width: '30%',  
+                    allowBlank: false,  
+                    readOnly: false,  
                 }]
             },{
                 xtype: 'container',
@@ -139,7 +168,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                     itemId: 'txtApePat',
                     name: 'txtApePat',
                     labelAlign:'top',
-                    fieldLabel: 'Apellido',
+                    fieldLabel: 'Apellido Paterno',
                     anchor: '100%',
                     typeAhead: true,
                     maxLength: 100,
@@ -355,7 +384,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtFono',
                     name: 'txtFono',
                     forcePrecision: true,

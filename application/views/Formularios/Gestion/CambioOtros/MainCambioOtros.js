@@ -26,6 +26,12 @@
                     case 'ELIMINAR':
                         Ext.ComponentQuery.query('#MainCambioOtrosGrilla #btnEliminar')[0].setHidden(false);
                         break;
+                    case 'ANULAR':
+                        Ext.ComponentQuery.query('#MainCambioOtrosGrilla #btnAnular')[0].setHidden(false);
+                        break;
+                    case 'DOCUMENTO':
+                        Ext.ComponentQuery.query('#MainCambioOtrosGrilla #btnDoc')[0].setHidden(false);
+                        break;
                 }
             }
         });
@@ -72,8 +78,12 @@ Ext.define('fcab.Container.MainCambioOtros.Grilla', {
             renderer : function(value, meta) {
                 if(value === 'EN ESPERA')
                 {
-                    meta.style = 'color:red;';
+                    meta.style = 'color:orange;';
                     return 'EN ESPERA';
+                }else if(value === 'ANULADO')
+                {
+                    meta.style = 'color:red;';
+                    return 'ANULADO';
                 }else if(value === 'TERMINADO'){
                     meta.style = 'color:green;';
                     return 'TERMINADO';
@@ -86,6 +96,13 @@ Ext.define('fcab.Container.MainCambioOtros.Grilla', {
             text     : 'ID',
             sortable : true,
             dataIndex: 'PK_ID',
+            //align: 'center',
+            width: 100
+        },
+        {
+            text     : 'Periodo',
+            sortable : true,
+            dataIndex: 'PERIODO',
             //align: 'center',
             width: 100
         },
@@ -115,6 +132,55 @@ Ext.define('fcab.Container.MainCambioOtros.Grilla', {
             text     : 'Tipo Cambio',
             sortable : true,
             dataIndex: 'NOM_TIPO_CAMBIO',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Estado Civil',
+            sortable : true,
+            dataIndex: 'NOM_EST_CIVIL',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Nvl Educacional',
+            sortable : true,
+            dataIndex: 'NOM_ESCOLARIDAD',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Calle',
+            sortable : true,
+            dataIndex: 'CALLE',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Numero',
+            sortable : true,
+            dataIndex: 'NUMERO',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Depto',
+            sortable : true,
+            dataIndex: 'DEPARTAMENTO',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Ciudad',
+            sortable : true,
+            dataIndex: 'CIUDAD',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Comuna',
+            sortable : true,
+            dataIndex: 'COMUNA',
             //align: 'center',
             width: 200
         },
@@ -209,6 +275,61 @@ Ext.define('fcab.Container.MainCambioOtros.Grilla', {
             }
 
         },{
+            text: 'Anular',
+            itemId: 'btnAnular',
+            hidden: true,
+            tooltip: 'Anular Item seleccionado',
+            iconCls: 'icon-form-suspend',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickAnularCambioOtros(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione el item que desea anular", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+
+        },{
+            text: "Documentos",
+            itemId: "btnDoc",
+            hidden: true,
+            tooltip: "Ver documentos",
+            iconCls: "icon-form-folder",
+            handler: function() {
+              var grid = this.up("grid"); //Recuperamos la grilla
+              try {
+                //Obtenemos el index del item seleccionado
+                var rowIndex = grid.getSelectionModel().getCurrentPosition()
+                  .rowIdx;
+                var rec = grid.getStore();
+                var recRow = rec.getAt(rowIndex);
+                if (ROL == "ADMIN" || ROL == "SUPER_ADMIN" || recRow.data.ESTADO == 'EN ESPERA') 
+                {
+                  modalAdjuntosAdmin(
+                    recRow.data.PK_ID,
+                    "cambio_otros",
+                    "Cambio Otros " + recRow.data.PK_ID
+                  );
+                } else {
+                  modalAdjuntosBasic(
+                    recRow.data.PK_ID,
+                    "cambio_otros",
+                    "Cambio Otros " + recRow.data.PK_ID
+                  );
+                }
+              } catch (e) {
+                msg(
+                  "Nada seleccionado",
+                  "Por favor, seleccione el item",
+                  Ext.Msg.ERROR,
+                  Ext.Msg.OK
+                );
+                console.debug(e);
+              }
+            }
+        },{
             text: 'Refrescar',
             tooltip: 'Refrescar Pantalla',
             iconCls: 'icon-form-refresh',
@@ -269,7 +390,7 @@ var clickCrearCambioOtros = function (grid) {
     var width = Ext.getBody().getViewSize().width*.80;
     var height = Ext.getBody().getViewSize().height*.90;
 
-    ventanaDinamica("CrearCambioOtros", "Cambiar Otros ("+NOM_EMPRESA+")", width, height, "CrearCambioOtros", 1, 0, rec);
+    ventanaDinamica("CrearCambioOtros", "Cambiar Otros ("+NOM_EMPRESA+")", width, "", "CrearCambioOtros", 1, 0, rec);
 };
 
 
@@ -334,6 +455,45 @@ var clickTerminarCambioOtros = function(grid, rowIndex) {
                         
                     }
                 });
+            
+        }
+    });
+}
+
+var clickAnularCambioOtros = function(grid, rowIndex) {
+    var rec = grid.getStore();
+    var recRow = rec.getAt(rowIndex);
+    Ext.MessageBox.confirm(
+        'Anular cambio otros', 
+        '¿Esta seguro de anular el cambio otros?<br>'+
+        '<b>-Los registros anulados no seran considerados para reportes.<br>'+
+        '-El trabajador vuelve a su información de otros anterior.</b>', 
+    function(btn) {
+        if (btn === 'yes') {
+            storeAnularCambioOtros.load({
+                params:{
+                    p_cod: recRow.data.PK_ID,
+                    p_obs: '',
+                    p_usuario: NOMBRE
+                },
+                callback: function(records, operation, success) {
+                    if(records != null) {
+                        if(records[0].data.r_msg == 'OK'){
+                            showToast('Cambio otros anulado correctamente.');
+                            cargarMainCambioOtros(null);
+                            
+                        }else{
+                            Ext.MessageBox.show({
+                                title: 'ADVERTENCIA',
+                                msg: records[0].data.r_msg,
+                                icon: Ext.MessageBox.WARNING,
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                    }
+                    
+                }
+            });
             
         }
     });

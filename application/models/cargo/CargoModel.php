@@ -60,7 +60,8 @@ class CargoModel extends CI_Model {
     public function cargarCargosFiltro($p_cod_emp) {
         $sql = "SELECT 
                     CAR.PK_COD_CARGO CODIGO, 
-                    CAR.PK_COD_CARGO || ' - ' || CAR.NOMBRE NOMBRE, 
+                    CAR.NOMBRE,
+                    CAR.PK_COD_CARGO || ' - ' || CAR.NOMBRE NOMBRE_FULL, 
                     CAR.FK_ROL
                 FROM NOV_CARGOS CAR  
                 WHERE 1 = 1 ";

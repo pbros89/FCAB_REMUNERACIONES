@@ -20,6 +20,7 @@ var ventanaDinamica = function (id, nombre, width, height, formulario, modal, mi
             title: nombre,
             id: id,
             width: parseInt(width),
+            height: height,
             layout: 'anchor',
             modal: modal,
             border: 0,
@@ -27,50 +28,12 @@ var ventanaDinamica = function (id, nombre, width, height, formulario, modal, mi
             minimizable: minimize,
             resizable: false,
             constrainHeader: true,
+            //scrollable: true,
+            //autoScroll: true,
             items: [{
                 xtype: formulario
             }],
-            tools: [{
-                type: 'issues',
-                tooltip: 'Reportar Error',
-                itemId: 'reporteserrores',
-                hidden: true,
-                handler: function (event, toolEl, panel) {
-                    ventanaDinamica('e' + id, 'Informar de posible contratiempo en Plataforma SSO', 600, 600, 'FormIssues', 1, 0);
-                }
-            }, {
-                type: 'help',
-                tooltip: 'Ayuda para el usuario',
-                itemId: 'tourHelpReportes',
-                hidden: true,
-                handler: function (event, toolEl, panel) {
-                    ReportesTour();
-                }
-            }, {
-                type: 'help',
-                tooltip: 'Ayuda para el usuario',
-                itemId: 'tourHelpReportes2',
-                hidden: true,
-                handler: function (event, toolEl, panel) {
-                    ReportesTour2();
-                }
-            }, {
-                type: 'help',
-                tooltip: 'Ayuda para el usuario',
-                itemId: 'tourHelpReportesTrab',
-                hidden: true,
-                handler: function (event, toolEl, panel) {
-                    ReportesTourTrab();
-                }
-            }, {
-                type: 'help',
-                tooltip: 'Ayuda para el usuario',
-                itemId: 'tourHelpReportesRetro',
-                hidden: true,
-                handler: function (event, toolEl, panel) {
-                    ReportesTourRetro();
-                }
-            }],
+            tools: [],
             listeners: {
                 "show" : function(window) {
                     if(formulario === 'FormIssues') {

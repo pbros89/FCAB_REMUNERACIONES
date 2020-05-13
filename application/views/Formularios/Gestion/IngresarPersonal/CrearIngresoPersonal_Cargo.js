@@ -41,7 +41,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalCargo", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRutJefatura',
                     name: 'txtRutJefatura',

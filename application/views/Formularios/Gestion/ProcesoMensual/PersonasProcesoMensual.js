@@ -17,7 +17,9 @@
     items: [{
         xtype: 'panel',
         layout: 'hbox',
-        defaults: { margin:'15 10 15 10' },
+        padding: '10',
+        border: false,
+        defaults: { margin:'0 10 0 0' },
         items:[{
             xtype: 'textfield',
             fieldLabel: 'Periodo',
@@ -89,6 +91,9 @@ Ext.define('fcab.Container.PersonasProcesoMensual.Grilla', {
     columnLines: true,
     emptyText: 'Sin datos para mostrar',
     filtros: null,
+    border: false,
+    height: Ext.getBody().getViewSize().height - 210, 
+    width : '100%',
     plugins: pluginFactory(),
     listeners: {
         itemdblclick: function( view, rec, node, index, e, options ) {
@@ -198,6 +203,11 @@ Ext.define('fcab.Container.PersonasProcesoMensual.Grilla', {
     ],
     dockedItems: [{
         xtype: 'toolbar',
+        padding: '10',
+        layout: {
+            align: 'bottom',
+            //pack: 'bottom'
+        },
         items: [{
             xtype: 'combo',
             name: 'cbCc',
@@ -327,15 +337,21 @@ Ext.define('fcab.Container.PersonasProcesoMensual.Grilla', {
                     
                 }
             }
-            
-            
-        
-    },{
+        },{
+            text: 'Documento',
+            tooltip: 'Exportar e Importar Documentos',
+            iconCls: 'icon-form-detail',
+            scale: 'medium',
+            handler: function () {
+                var rec = storeCargarProcesosMensualPersonas.getAt(0);
+                ventanaDinamica("ImportarExportarPersonasProcesoMensual", "Administrar Documentos", "1000", "600", "ImportarExportarPersonasProcesoMensual", 1, 0, null, rec); 
+            }
+
+        },{
             text: 'Terminar CC',
             tooltip: 'El centro de costo pasa a estado TERMINADO.',
             iconCls: 'icon-form-ok',
             scale: 'medium',
-            margin: '0 0 0 50',
             handler: function () {
                 Ext.MessageBox.confirm('Terminar Centro de Costo', '¿Esta seguro de terminar el centro de costo? <br><b>Los trabajadores pasaran a estado TERMINADO y no podran ser modificados.</b>', function(btn) {
                     if (btn === 'yes') {
@@ -386,11 +402,13 @@ Ext.define('fcab.Container.PersonasProcesoMensual.Grilla', {
 
         },]
     }],
-    height: Ext.getBody().getViewSize().height - 230, 
-    width : '100%',
     //title: 'Conceptos de Trabajadores ('+NOM_EMPRESA+')',
 });
 
+
+var clickImportarPlanillaPersonasProcesoMensual = function() {
+    ventanaDinamica("MainProcesoMensualDetalleImportarExportar", "Administración de Documento", "1000", "600", "MainProcesoMensualDetalleImportarExportar", 1, 0, rec, recRow);
+}
 
 var clickConceptosPersonasProcesoMensual= function (grid, rowIndex) {
     var rec = grid.getStore();

@@ -10,7 +10,11 @@ Ext.define("fcab.Container.CrearAusentismo", {
     
     constructor: function (config) {
         this.callParent([config]);
-        
+    },
+    listeners: {
+        afterrender: function() {
+            storeExtras_cargarPeriodos.load();
+        }
     },
     items: [{
         xtype: 'form',
@@ -42,7 +46,7 @@ Ext.define("fcab.Container.CrearAusentismo", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -228,6 +232,30 @@ Ext.define("fcab.Container.CrearAusentismo", {
                 xtype: 'container',
                 columnWidth: 1,
                 layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
                 style: 'margin: 0 5 5 5',
                 items: [{
                     xtype: 'combobox',
@@ -342,6 +370,29 @@ Ext.define("fcab.Container.CrearAusentismo", {
                     }
                 ]
             },{
+                xtype: 'checkbox',
+                columnWidth: 1,
+                boxLabel: 'Contar Lunes a Viernes',
+                name: 'chLunVie',
+                checked: true,
+                inputValue: '1'
+            },
+            {
+                xtype: 'checkbox',
+                columnWidth: 1,
+                boxLabel: 'Contar Sabado y Domingo',
+                name: 'chSabDom',
+                checked: true,
+                inputValue: '1'
+            },
+            {
+                xtype: 'checkbox',
+                columnWidth: 1,
+                boxLabel: 'No contar feriados',
+                name: 'chFeriado',
+                checked: true,
+                inputValue: '1'
+            },{
                 xtype: 'container',
                 columnWidth: 1,
                 layout: 'anchor',
@@ -371,6 +422,25 @@ Ext.define("fcab.Container.CrearAusentismo", {
                 var form = this.up('form').getForm();
                 var values = form.getValues();
 
+                if(values.chFeriado){
+                    values.chFeriado = '1';
+                }else {
+                    values.chFeriado = '0';
+                }
+
+                if(values.chSabDom){
+                    values.chSabDom = '1';
+                }else {
+                    values.chSabDom = '0';
+                }
+
+                if(values.chLunVie){
+                    values.chLunVie = '1';
+                }else {
+                    values.chLunVie = '0';
+                }
+
+                //console.log(values);
                 if(form.isValid()) {
                     var ewin = Ext.WindowManager.getActive();
                     if (ewin) {
@@ -386,11 +456,20 @@ Ext.define("fcab.Container.CrearAusentismo", {
                                 , P_COD_EMP : EMPRESA
                                 , P_USUARIO : NOMBRE
                                 , P_TIPO :  values.cbTipo
-                                , P_COD_AUSENTISMO : cbAusentismo.getRawValue()
+                                , P_COD_AUSENTISMO : values.cbAusentismo
                                 , P_NOMBRE_AUSENTISMO : cbAusentismo.getRawValue()
                                 , P_FECHA_INI : values.dtFec1
                                 , P_FECHA_FIN : values.dtFec2
                                 , P_OBSERVACION : values.txtObservacion
+                                , P_LUN: values.chLunVie
+                                , P_MAR: values.chLunVie
+                                , P_MIE: values.chLunVie
+                                , P_JUE: values.chLunVie
+                                , P_VIE: values.chLunVie
+                                , P_SAB: values.chSabDom
+                                , P_DOM: values.chSabDom
+                                , P_NO_FERIADO: values.chFeriado
+                                , P_PERIODO: values.cbPeriodo
 
                             },
                             callback: function(records, operation, success) {

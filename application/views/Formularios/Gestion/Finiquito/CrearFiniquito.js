@@ -10,7 +10,12 @@ Ext.define("fcab.Container.MainFiniquitoCrear", {
     
     constructor: function (config) {
         this.callParent([config]);
-        storeCargarParam_CAUSAL_DESPIDO.load();
+    },
+    listeners: {
+        afterrender: function() {
+            storeCargarParam_CAUSAL_DESPIDO.load();
+            storeExtras_cargarPeriodos.load();
+        }
     },
     items: [{
         xtype: 'form',
@@ -42,7 +47,7 @@ Ext.define("fcab.Container.MainFiniquitoCrear", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -200,6 +205,30 @@ Ext.define("fcab.Container.MainFiniquitoCrear", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbCausal',
                     itemId: 'cbCausal',
                     displayField: 'NOMBRE',
@@ -280,6 +309,7 @@ Ext.define("fcab.Container.MainFiniquitoCrear", {
                                 , p_usuario : NOMBRE
                                 , p_cod_emp: EMPRESA
                                 , p_obs: values.txtObs
+                                , P_PERIODO: values.cbPeriodo
                                 
                             },
                             callback: function(records, operation, success) {

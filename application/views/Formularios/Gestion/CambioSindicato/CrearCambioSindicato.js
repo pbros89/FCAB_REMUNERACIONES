@@ -10,9 +10,14 @@ Ext.define("fcab.Container.CrearCambioSindicato", {
     
     constructor: function (config) {
         this.callParent([config]);
-        storeCargarParam_SINDICATO.load();
-        storeCargarParam_ADHERIDO.load();
-        storeCargarParam_TIPO_CAMBIO_SINDICATO.load();
+    },
+    listeners: {
+        afterrender: function() {
+            storeCargarParam_SINDICATO.load();
+            storeCargarParam_ADHERIDO.load();
+            storeCargarParam_TIPO_CAMBIO_SINDICATO.load();
+            storeExtras_cargarPeriodos.load();
+        }
     },
     items: [{
         xtype: 'form',
@@ -43,7 +48,7 @@ Ext.define("fcab.Container.CrearCambioSindicato", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -275,6 +280,30 @@ Ext.define("fcab.Container.CrearCambioSindicato", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbTipoCambio',
                     itemId: 'cbTipoCambio',
                     displayField: 'NOMBRE',
@@ -392,7 +421,7 @@ Ext.define("fcab.Container.CrearCambioSindicato", {
                                 , P_COD_ADHERENCIA : values.cbAdherido
                                 , P_NOM_ADHERENCIA : cbAdherido.getRawValue()
                                 , P_OBSERVACION: values.txtObs
-
+                                , P_PERIODO: values.cbPeriodo
                             },
                             callback: function(records, operation, success) {
                                 if(records != null) {

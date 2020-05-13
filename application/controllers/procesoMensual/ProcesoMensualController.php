@@ -64,8 +64,10 @@ class ProcesoMensualController extends CI_Controller {
         $p_mes = $this->input->get('p_mes');  
         $p_tipo = $this->input->get('p_tipo'); 
         $p_cod_emp = $this->input->get('p_cod_emp'); 
-        $p_estado = $this->input->get('p_estado');  
-        $query = $this->ProcesoMensualModel->cargarDetalleProcesoMensual($p_anho, $p_mes, $p_cod_emp, $p_estado, $p_tipo);
+        $p_estado = $this->input->get('p_estado'); 
+        $p_rol = $this->input->get('p_rol');   
+        $p_usuario = $this->input->get('p_usuario'); 
+        $query = $this->ProcesoMensualModel->cargarDetalleProcesoMensual($p_anho, $p_mes, $p_cod_emp, $p_estado, $p_tipo, $p_rol, $p_usuario);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
@@ -230,15 +232,22 @@ class ProcesoMensualController extends CI_Controller {
             $p_cod_emp = '0';
         }  
 
+        if(!empty($_POST['p_cod_cc']))
+        {
+            $p_cod_cc = $_POST['p_cod_cc'];
+        }else{
+            $p_cod_cc = '0';
+        } 
+
         //load our new PHPExcel library
         $this->load->library('excel');
         //activate worksheet number 1
         $this->excel->setActiveSheetIndex(0);
 
         // get all data
-        $query = $this->ProcesoMensualModel->exportarProcesoMensualRRHH($p_proceso, $p_tipo, $p_cod_emp);
+        $query = $this->ProcesoMensualModel->exportarProcesoMensualRRHH($p_proceso, $p_tipo, $p_cod_emp, $p_cod_cc);
         //print_r($query);
-        $filename=$p_cod_emp.'-'.$p_tipo."-".time().".xls"; //save our workbook as this file name
+        $filename=$p_cod_emp.'-'.$p_cod_cc.'-'.$p_tipo.'-'.time().".xls"; //save our workbook as this file name
         if(count($query) > 0){
             //Cargamos la librería de excel.
             $this->load->library('excel'); 
@@ -343,6 +352,13 @@ class ProcesoMensualController extends CI_Controller {
             $p_cod_emp = '0';
         }
 
+        if(!empty($_POST['p_usuario']))
+        {
+            $p_usuario = $_POST['p_usuario'];
+        }else{
+            $p_usuario = '0';
+        }
+
         //echo $p_proceso;
 
         if ($_FILES["file"]["error"] > 0)
@@ -400,12 +416,146 @@ class ProcesoMensualController extends CI_Controller {
                         $inserdata[$i]['PROCESO'] = $p_proceso;
                         $inserdata[$i]['TIPO_PROCESO'] = $p_tipo;
                         $inserdata[$i]['COD_EMP'] = $p_cod_emp;
+                        $inserdata[$i]['USUARIO'] = $p_usuario;
                         $i++;
                     }
                     
                     //print_r($inserdata);
                 }               
-                $result = $this->ProcesoMensualModel->importarProcesoMensual($p_proceso, $p_tipo, $p_cod_emp, $inserdata);   
+                $result = $this->ProcesoMensualModel->importarProcesoMensual($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $inserdata);   
+                if($result){
+                    $result = '{"success":"true", "items": {"r_msg": "OK"}}';
+                }else{
+                    $result = '{"success":"false", "items":{"r_msg": "Error al cargar documento"}';
+                }  
+                
+
+            } catch (Exception $e) {
+                $result = '{"success":"false", "items":{"r_msg": "Error al cargar documento"}';
+            }
+
+        }
+        $this->output->set_output($result);
+    }
+
+    public function exportarProcesoMensualPersonalizado() {
+
+        set_time_limit(300);
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '2048M');
+
+        //load our new PHPExcel library
+        $this->load->library('excel');
+        //activate worksheet number 1
+        $this->excel->setActiveSheetIndex(0);
+
+        //print_r($query);
+        $filename='proc_personalizado-'.time().".xls"; //save our workbook as this file name
+      
+        //Cargamos la librería de excel.
+        $this->load->library('excel'); 
+        $this->excel->setActiveSheetIndex(0);
+        $this->excel->getActiveSheet()->setTitle("Datos a cargar");
+        //Contador de filas
+        $contador = 1;
+        
+        $this->excel->getActiveSheet()->setCellValue("A{$contador}", "RUT");
+        $this->excel->getActiveSheet()->setCellValue("B{$contador}", "COD_CONCEPTO");
+        $this->excel->getActiveSheet()->setCellValue("C{$contador}", "VALOR");
+
+        //Le ponemos un nombre al archivo que se va a generar.
+        header('Content-Type: application/vnd.ms-excel');
+        //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+        //Hacemos una salida al navegador con el archivo Excel.
+        $objWriter->save('php://output');
+         
+    }
+
+    public function importarProcesoMensualPersonalizado(){
+
+        set_time_limit(300);
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '2048M');
+        ini_set('upload_max_filesize', '2048M');
+        ini_set('post_max_size', '2048M');
+        
+        if(!empty($_POST['p_proceso']))
+        {
+            $p_proceso = $_POST['p_proceso'];
+        }else{
+            $p_proceso = '0';
+        }  
+        
+        if(!empty($_POST['p_tipo']))
+        {
+            $p_tipo = $_POST['p_tipo'];
+        }else{
+            $p_tipo = '0';
+        }  
+
+        if(!empty($_POST['p_cod_emp']))
+        {
+            $p_cod_emp = $_POST['p_cod_emp'];
+        }else{
+            $p_cod_emp = '0';
+        }
+
+        if(!empty($_POST['p_usuario']))
+        {
+            $p_usuario = $_POST['p_usuario'];
+        }else{
+            $p_usuario = '0';
+        }
+
+        //echo $p_proceso;
+
+        if ($_FILES["file"]["error"] > 0)
+        {
+            $error  = $_FILES["file"]["error"];
+            $response = array('success' => false, 'msg' => $error);
+
+            
+            $result = '{"success":"false", "items":{"r_msg": "'.$error.'"}';
+        }
+        else
+        {
+            require_once APPPATH . "/third_party/PHPExcel.php";
+
+            $file_name = $_FILES["file"]["name"];
+            $file_type = $_FILES["file"]["type"];
+            $file_path = $_FILES["file"]["tmp_name"];
+            $file_size = round($_FILES["file"]["size"] / 1024, 2) . "  Kilo Bytes";
+            $response = array('success' => true,
+                'data' => array('name' => $file_name, 'size' => $file_size),
+                'msg' => 'File Uploaded successfully'
+            );
+
+            try {
+                $object = PHPExcel_IOFactory::load($file_path);
+
+                $i = 0;
+                foreach ($object->getWorksheetIterator() as $worksheet) {
+                    
+                    $highestRow = $worksheet->getHighestRow();
+                    $highestColumn = $worksheet->getHighestColumn();
+                    
+                    for($row = 2; $row <= $highestRow; $row++) {
+                        $inserdata[$i]['RUT'] = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+                        $inserdata[$i]['COD_CONCEPTO'] = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+                        $inserdata[$i]['VALOR'] =$worksheet->getCellByColumnAndRow(2, $row)->getValue();
+                        $inserdata[$i]['PROCESO'] = $p_proceso;
+                        $inserdata[$i]['TIPO_PROCESO'] = $p_tipo;
+                        $inserdata[$i]['COD_EMP'] = $p_cod_emp;
+                        $inserdata[$i]['USUARIO'] = $p_usuario;
+                        $i++;
+                    }
+                    
+                    //print_r($inserdata);
+                }               
+                $result = $this->ProcesoMensualModel->importarProcesoMensualPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $inserdata);   
                 if($result){
                     $result = '{"success":"true", "items": {"r_msg": "OK"}}';
                 }else{
@@ -426,7 +576,9 @@ class ProcesoMensualController extends CI_Controller {
         $p_proceso = $this->input->get('p_proceso');  
         $p_cod_emp = $this->input->get('p_cod_emp');  
         $p_tipo = $this->input->get('p_tipo');   
-        $query = $this->ProcesoMensualModel->validarImportarProceso($p_proceso, $p_tipo, $p_cod_emp);
+        $p_usuario = $this->input->get('p_usuario'); 
+        $p_cod_cc = $this->input->get('p_cod_cc');  
+        $query = $this->ProcesoMensualModel->validarImportarProceso($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_cod_cc);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
@@ -435,17 +587,58 @@ class ProcesoMensualController extends CI_Controller {
         $p_proceso = $this->input->get('p_proceso');  
         $p_cod_emp = $this->input->get('p_cod_emp');  
         $p_tipo = $this->input->get('p_tipo');   
-        $query = $this->ProcesoMensualModel->resumenValidarImportarProceso($p_proceso, $p_tipo, $p_cod_emp);
+        $p_usuario = $this->input->get('p_usuario'); 
+        $p_cod_cc = $this->input->get('p_cod_cc');    
+        $query = $this->ProcesoMensualModel->resumenValidarImportarProceso($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_cod_cc);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
 
     public function guardarValoresImportacion(){
+        set_time_limit(300);
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '2048M');
+
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $p_usuario = $this->input->get('p_usuario');  
+        $p_cod_cc = $this->input->get('p_cod_cc');   
+        $query = $this->ProcesoMensualModel->guardarValoresImportacion($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_cod_cc);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function validarImportarProcesoPersonalizado(){
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $p_usuario = $this->input->get('p_usuario'); 
+        $query = $this->ProcesoMensualModel->validarImportarProcesoPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function resumenValidarImportarProcesoPersonalizado(){
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $p_usuario = $this->input->get('p_usuario');  
+        $query = $this->ProcesoMensualModel->resumenValidarImportarProcesoPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function guardarValoresImportacionPersonalizada(){
+        set_time_limit(300);
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '2048M');
+
         $p_proceso = $this->input->get('p_proceso');  
         $p_cod_emp = $this->input->get('p_cod_emp');  
         $p_tipo = $this->input->get('p_tipo');   
         $p_usuario = $this->input->get('p_usuario');   
-        $query = $this->ProcesoMensualModel->guardarValoresImportacion($p_proceso, $p_tipo, $p_cod_emp, $p_usuario);
+        $query = $this->ProcesoMensualModel->guardarValoresImportacionPersonalizada($p_proceso, $p_tipo, $p_cod_emp, $p_usuario);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
@@ -464,6 +657,77 @@ class ProcesoMensualController extends CI_Controller {
         $p_proceso = $this->input->get('p_proceso');  
         $p_cod_emp = $this->input->get('p_cod_emp');   
         $query = $this->ProcesoMensualModel->cargarValidacionCC($p_proceso, $p_cod_emp);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function terminarAllCC(){
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $p_usuario = $this->input->get('p_usuario');  
+        $query = $this->ProcesoMensualModel->terminarAllCC($p_proceso, $p_tipo, $p_cod_emp, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function agregarFaltantesProcMensual(){
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $p_usuario = $this->input->get('p_usuario');  
+        $query = $this->ProcesoMensualModel->agregarFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarTrabajadoresFaltantesProcMensual(){
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $query = $this->ProcesoMensualModel->cargarTrabajadoresFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarConceptosFaltantesProcMensual(){
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $query = $this->ProcesoMensualModel->cargarConceptosFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function refrescarTrabajadorProcMensual(){
+        $p_proceso = $this->input->get('p_proceso');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_tipo = $this->input->get('p_tipo');   
+        $p_usuario = $this->input->get('p_usuario');  
+        $p_rut = $this->input->get('p_rut');  
+        $query = $this->ProcesoMensualModel->refrescarTrabajadorProcMensual($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_rut);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarCCProcesoMensualPorUsuarioEstado(){
+
+        $p_usuario = $this->input->get('p_usuario');  
+        $p_rol = $this->input->get('p_rol');  
+        $p_cod_emp = $this->input->get('p_cod_emp'); 
+        $p_estado = $this->input->get('p_estado');   
+        $query = $this->ProcesoMensualModel->cargarCCProcesoMensualPorUsuarioEstado($p_usuario, $p_rol, $p_cod_emp, $p_estado);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarPersonasProcesoMensualPorUsuarioEstado(){
+
+        $p_usuario = $this->input->get('p_usuario');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_rol = $this->input->get('p_rol');  
+        $p_estado = $this->input->get('p_estado');  
+        $query = $this->ProcesoMensualModel->cargarPersonasProcesoMensualPorUsuarioEstado($p_usuario, $p_rol, $p_cod_emp, $p_estado);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

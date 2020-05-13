@@ -22,7 +22,7 @@ class Main extends CI_Controller
         $this->load->helper('url');
 
         $var = array();
-        $var['titulo'] = 'FCAB Remuneraciones';                      // Titulo de la ventana html
+        $var['titulo'] = 'FCAB Recursos Humanos';                      // Titulo de la ventana html
         $var['style'] = 'triton';                               // style de ExtJss (gray, classic, crisp o neptune)
         $var['logeado'] = $this->session->userdata('logeado');  //Verifica si el usuario ya esta logeado
         $var['externo'] = $this->input->post('externo'); 

@@ -27,6 +27,7 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
             var txtValorCuota = Ext.ComponentQuery.query('#EditarIngDescuentoRRLL #txtValorCuota')[0];
             var cbMes = Ext.ComponentQuery.query('#EditarIngDescuentoRRLL #cbMes')[0];
             var txtObs = Ext.ComponentQuery.query('#EditarIngDescuentoRRLL #txtObs')[0];
+            var txtPeriodo = Ext.ComponentQuery.query('#EditarIngHaberRRLL #txtPeriodo')[0];
 
             var years = [];
             var date = new Date();
@@ -56,6 +57,7 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
             txtValorCuota.setValue(param.VALOR_CUOTA);
             cbMes.setValue(param.MES_DESCUENTO);
             txtObs.setValue(param.OBSERVACION);
+            txtPeriodo.setValue(param.PERIODO);
 
         }
     },
@@ -79,11 +81,11 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtId',
                     name: 'txtId',
                     forcePrecision: true,
-                    decimalPrecision: 5,
+                    decimalPrecision: 0,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'ID',
@@ -138,6 +140,22 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                     labelAlign:'top',
                     fieldLabel: 'Centro de Costo',
                     anchor: '100%',
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtPeriodo',
+                    name: 'txtPeriodo',
+                    labelAlign:'top',
+                    fieldLabel: 'Periodo',
+                    anchor: '50%',
                     allowBlank: false,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
@@ -241,7 +259,7 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtCantidadCuota',
                     name: 'txtCantidadCuota',
                     forcePrecision: true,
@@ -276,11 +294,9 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtValorCuota',
                     name: 'txtValorCuota',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Valor Cuota',
@@ -311,11 +327,9 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtMontoTotal',
                     name: 'txtMontoTotal',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Monto Total',
@@ -421,6 +435,7 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                                     , P_FORMATO_VALOR : values.cbFormato
                                     , P_OBSERVACION : values.txtObs
                                     , P_ANHO_DESCUENTO : values.cbAnho
+                                    , P_PERIODO: param.PERIODO
                                 },
                                 callback: function(records, operation, success) {
                                     if(records != null) {

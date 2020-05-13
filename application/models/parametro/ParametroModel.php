@@ -59,7 +59,8 @@ class ParametroModel extends CI_Model {
     public function cargarParametrosFiltro($p_cod_emp, $p_tipo) {
         $sql = "SELECT 
                     PAR.PK_PARAM CODIGO,
-                    PAR.PK_PARAM || ' - ' || PAR.NOMBRE NOMBRE, 
+                    PAR.NOMBRE,
+                    PAR.PK_PARAM || ' - ' || PAR.NOMBRE NOMBRE_FULL, 
                     PAR.PFK_TIPO_PARAM TIPO_PARAM
                 FROM NOV_PARAMETROS PAR 
                 WHERE PAR.ESTADO = 'A' ";

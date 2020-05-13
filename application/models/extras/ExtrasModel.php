@@ -47,4 +47,16 @@ class ExtrasModel extends CI_Model{
         $query = $this->db->query($sql);
         return $query->result();
     }
+
+    public function cargarPeriodos() 
+    {
+        $sql = "select to_char(sysdate, 'yyyy/mm') PERIODO
+                from dual
+                union
+                select to_char(ADD_MONTHS(sysdate, 1), 'yyyy/mm') PERIODO
+                from dual";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
 }

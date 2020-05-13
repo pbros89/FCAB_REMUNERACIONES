@@ -86,7 +86,7 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
                             record.get('TIPO_CONCEPTO') === 'CANTIDAD' ||
                             record.get('TIPO_CONCEPTO') === 'MONTO' ||
                             record.get('TIPO_CONCEPTO') === 'RANGO' 
-                    ? 'numberfield' : 'combobox';
+                    ? 'thousandnumber' : 'combobox';
                 
                 if(fieldType === 'combobox' && record.get('TIPO_CONCEPTO') === 'BOOLEANO')
                 {
@@ -125,6 +125,50 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
                                 },
                                 {
                                     "NOMBRE": "0 = SI",
+                                    "VALOR": "0"
+                                }
+                            ]
+                        })
+                    };
+                }
+
+                if(fieldType === 'combobox' && record.get('TIPO_CONCEPTO') === 'BOOLEANO2' )
+                {
+                    return {
+                        xtype: fieldType,
+                        allowBlank: false,
+                        displayField: 'NOMBRE',
+                        valueField: 'VALOR',
+                        editable: true,
+                        readOnly: false,
+                        triggerAction: 'all',
+                        typeAhead: true,
+                        queryMode: 'local',
+                        forceSelection: true,
+                        selectOnFocus: true,
+                        listeners:{
+                            change: function(obj, newValue, oldValue){
+                                storeModificarCambioBonoConcepto.load({
+                                    params:{
+                                        p_bono : record.get('PFK_BONO'),
+                                        p_cod_concepto: record.get('PFK_COD_CONCEPTO'),
+                                        p_usuario: NOMBRE,
+                                        p_valor: newValue,
+                                    },
+                                    callback: function(records, operation, success) {
+                                        //cargarConceptosPersonaProcesoMensual();
+                                    }
+                                });
+                            }
+                        },
+                        store: Ext.create('Ext.data.Store', {
+                            data: [
+                                {
+                                    "NOMBRE": "1 = SI",
+                                    "VALOR": "1"
+                                },
+                                {
+                                    "NOMBRE": "0 = NO",
                                     "VALOR": "0"
                                 }
                             ]
@@ -202,7 +246,7 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
                     };
                 }
                 
-                if(fieldType === 'numberfield'){
+                if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
                     var rangoFin = 999999999;
 
@@ -218,8 +262,6 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
 
                     return {
                         xtype: fieldType,
-                        forcePrecision: true,
-                        decimalPrecision: 5,
                         maxValue: rangoFin,
                         minValue: rangoIni,
                         allowBlank: false,
@@ -250,16 +292,7 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
                 }
                 
             },
-            renderer : function(value, meta, record) {
-                /*if(record.data.TIPO_META === "BOOL" && record.data.VALOR_FINAL === record.data.META_FINAL ||
-                        record.data.TIPO_META === "NUMBER" && parseInt(record.data.VALOR_FINAL) === parseInt(record.data.META_FINAL))
-                {
-                    meta.style = "color:GREEN; font-weight: bold;"; //verde
-                }else{
-                    meta.style = "color:RED; font-weight: bold;"; //rojo
-                } */
-                return value;
-            }
+            renderer : Ext.util.Format.numberRenderer('0.0,0')
         },
     ],
     minHeight: 500,

@@ -38,7 +38,7 @@ Ext.define('fcab.Container.MainCambioCargoRenta.Filtro', {
         layout: 'anchor',
         style: 'margin:0 5 5 5',
         items: [{
-            xtype: 'numberfield',
+            xtype: 'thousandnumber',
             style: 'margin: 0 10px 5px 0',
             itemId: 'txtRut',
             name: 'txtRut',

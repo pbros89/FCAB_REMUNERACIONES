@@ -70,12 +70,6 @@ var storeCargarProcesosMensualHome=  Ext.create('Ext.data.Store', {
                 console.log(proxy);
                 console.log(response);
                 console.log(operation);
-                Ext.MessageBox.show({
-                    title: 'EXCEPCION',
-                    msg: 'Problemas al cargar procesos mensual',
-                    icon: Ext.MessageBox.ERROR,
-                    buttons: Ext.Msg.OK
-                });
             }
             
             
@@ -573,6 +567,7 @@ var storeGuardarValoresImportacion=  Ext.create('Ext.data.Store', {
     proxy: {
         type:   'ajax',
         url:    JsonHost + 'procesoMensual/ProcesoMensualController/guardarValoresImportacion',
+        timeout: 300000,
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -653,5 +648,341 @@ var storeCargarValidacionCC =  Ext.create('Ext.data.Store', {
     autoLoad: false
 });
 
+var storeTerminarAllCC =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/terminarAllCC',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al terminar los centros de costos',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
 
+var storeAgregarFaltantesProcMensual =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/agregarFaltantesProcMensual',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al agregar faltantes',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeCargarTrabajadoresFaltantesProcMensual =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/cargarTrabajadoresFaltantesProcMensual',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar faltantes',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeCargarConceptosFaltantesProcMensual =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/cargarConceptosFaltantesProcMensual',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar faltantes',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeRefrescarTrabajadorProcMensual =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/refrescarTrabajadorProcMensual',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al refrescar trabajador',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeCargarCCProcesoMensualPorUsuarioEstado =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/cargarCCProcesoMensualPorUsuarioEstado',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeCargarPersonasProcesoMensualPorUsuarioEstado =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/cargarPersonasProcesoMensualPorUsuarioEstado',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeResumenValidarImportarProcesoPersonalizado=  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/resumenValidarImportarProceso',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar resumen',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+var storeResumenValidarImportarProceso=  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/resumenValidarImportarProceso',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar resumen',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+var storeResumenValidarImportarProcesoPersonalizado=  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/resumenValidarImportarProcesoPersonalizado',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar resumen',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+var storeValidarImportarProcesoPersonalizado=  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/validarImportarProcesoPersonalizado',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar resumen',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+var storeGuardarValoresImportacionPersonalizada=  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'procesoMensual/ProcesoMensualController/guardarValoresImportacionPersonalizada',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al guardar',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
 

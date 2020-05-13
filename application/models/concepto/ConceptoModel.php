@@ -28,7 +28,8 @@ class ConceptoModel extends CI_Model {
                     CON.RANGO_FIN,
                     CON.INICIAL,
                     CON.ESTADO,
-                    CON.FK_GRUPO_CONCEPTO
+                    CON.FK_GRUPO_CONCEPTO,
+                    CON.COPIAR_ANTERIOR
                 FROM NOV_CONCEPTOS CON, NOV_EMPRESAS EMP
                 WHERE CON.PFK_COD_EMP = EMP.PK_COD_EMP ";
                 if(!empty($p_cod_concepto))
@@ -116,7 +117,8 @@ class ConceptoModel extends CI_Model {
         $p_rango_ini,
         $p_rango_fin,
         $p_estado,
-        $p_inicial)
+        $p_inicial,
+        $p_copiar)
     {
         $r_est = 0;
         $r_msg = "";
@@ -136,6 +138,7 @@ class ConceptoModel extends CI_Model {
                             :p_rango_fin,
                             :p_estado,
                             :p_inicial,
+                            :p_copiar,
                             :r_est,
                             :r_msg);END;");
         
@@ -151,6 +154,7 @@ class ConceptoModel extends CI_Model {
         oci_bind_by_name($proc,"p_rango_ini", $p_rango_ini);
         oci_bind_by_name($proc,"p_rango_fin", $p_rango_fin);
         oci_bind_by_name($proc,"p_inicial", $p_inicial);
+        oci_bind_by_name($proc,"p_copiar", $p_copiar, 1, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
@@ -174,7 +178,8 @@ class ConceptoModel extends CI_Model {
         $p_rango_ini,
         $p_rango_fin,
         $p_estado,
-        $p_inicial)
+        $p_inicial,
+        $p_copiar)
     {
         $r_est = 0;
         $r_msg = "";
@@ -194,6 +199,7 @@ class ConceptoModel extends CI_Model {
                             :p_rango_fin,
                             :p_estado,
                             :p_inicial,
+                            :p_copiar,
                             :r_est,
                             :r_msg);END;");
         
@@ -209,6 +215,7 @@ class ConceptoModel extends CI_Model {
         oci_bind_by_name($proc,"p_rango_ini", $p_rango_ini);
         oci_bind_by_name($proc,"p_rango_fin", $p_rango_fin);
         oci_bind_by_name($proc,"p_inicial", $p_inicial);
+        oci_bind_by_name($proc,"p_copiar", $p_copiar, 1, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);

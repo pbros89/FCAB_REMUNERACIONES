@@ -48,7 +48,8 @@ class CambiarSaludController extends CI_Controller {
         $P_VALOR_ADI_EMP = $this->input->get('P_VALOR_ADI_EMP');  
         $P_TIPO_ADI_EMP = $this->input->get('P_TIPO_ADI_EMP');  
         $P_VALOR_CONVENIO = $this->input->get('P_VALOR_CONVENIO');  
-        $P_TIPO_CONVENIO = $this->input->get('P_TIPO_CONVENIO');          
+        $P_TIPO_CONVENIO = $this->input->get('P_TIPO_CONVENIO');  
+        $P_PERIODO = $this->input->get('P_PERIODO');          
 
         $query = $this->CambiarSaludModel->crearCambioSalud(
             $P_RUT  
@@ -69,7 +70,9 @@ class CambiarSaludController extends CI_Controller {
           , $P_TIPO_ADI_EMP  
           , $P_VALOR_CONVENIO 
           , $P_TIPO_CONVENIO  
-          , $P_OBSERVACION    );
+          , $P_OBSERVACION  
+          , $P_PERIODO  
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -102,6 +105,23 @@ class CambiarSaludController extends CI_Controller {
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
 
+    }
+
+    public function anularCambioSalud()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->CambiarSaludModel->anularCambioSalud(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
     }
     
 }

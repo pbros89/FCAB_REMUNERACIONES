@@ -40,7 +40,8 @@ class CambiarSindicatoController extends CI_Controller {
         $P_NOM_SINDICATO = $this->input->get('P_NOM_SINDICATO');  
         $P_COD_ADHERENCIA = $this->input->get('P_COD_ADHERENCIA');  
         $P_NOM_ADHERENCIA = $this->input->get('P_NOM_ADHERENCIA');  
-        $P_OBSERVACION = $this->input->get('P_OBSERVACION');       
+        $P_OBSERVACION = $this->input->get('P_OBSERVACION');    
+        $P_PERIODO = $this->input->get('P_PERIODO');    
 
         $query = $this->CambiarSindicatoModel->crearCambioSindicato(
               $P_RUT  
@@ -53,7 +54,9 @@ class CambiarSindicatoController extends CI_Controller {
             , $P_NOM_SINDICATO 
             , $P_COD_ADHERENCIA 
             , $P_NOM_ADHERENCIA 
-            , $P_OBSERVACION   );
+            , $P_OBSERVACION 
+            , $P_PERIODO  
+        );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -86,6 +89,23 @@ class CambiarSindicatoController extends CI_Controller {
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
 
+    }
+
+    public function anularCambioSindicato()
+    {
+        $p_cod = $this->input->get('p_cod');
+        $p_usuario = $this->input->get('p_usuario');
+        $p_obs = $this->input->get('p_obs');
+
+
+        $query = $this->CambiarSindicatoModel->anularCambioSindicato(
+            $p_cod,
+            $p_usuario,
+            $p_obs
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
     }
     
 }

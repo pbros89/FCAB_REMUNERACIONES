@@ -67,6 +67,7 @@ class ConceptoController extends CI_Controller {
         $p_rango_fin = $this->input->get('p_rango_fin'); 
         $p_estado = $this->input->get('p_estado'); 
         $p_inicial = $this->input->get('p_inicial'); 
+        $p_copiar = $this->input->get('p_copiar'); 
 
         $query = $this->ConceptoModel->crearConcepto(
             $p_cod_concepto, 
@@ -81,7 +82,8 @@ class ConceptoController extends CI_Controller {
             $p_rango_ini,
             $p_rango_fin,
             $p_estado,
-            $p_inicial);
+            $p_inicial,
+            $p_copiar);
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -102,7 +104,8 @@ class ConceptoController extends CI_Controller {
         $p_rango_fin = $this->input->get('p_rango_fin'); 
         $p_estado = $this->input->get('p_estado'); 
         $p_inicial = $this->input->get('p_inicial'); 
-
+        $p_copiar = $this->input->get('p_copiar'); 
+        
         $query = $this->ConceptoModel->modificarConcepto(
             $p_cod_concepto, 
             $p_cod_emp, 
@@ -116,7 +119,8 @@ class ConceptoController extends CI_Controller {
             $p_rango_ini,
             $p_rango_fin,
             $p_estado,
-            $p_inicial);
+            $p_inicial,
+            $p_copiar);
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);

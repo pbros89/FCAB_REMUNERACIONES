@@ -160,4 +160,26 @@ var storeExtras_cargarMeses = Ext.create('Ext.data.Store', {
     }
 });
 
+var storeExtras_cargarPeriodos = Ext.create('Ext.data.Store', {
+    proxy: {
+        type: 'ajax',
+        url: JsonHost + 'extras/ExtrasController/cargarPeriodos',
+        remoteSort: true,
+        reader: {
+            type: 'json',
+            rootProperty: 'items',
+            totalProperty: 'total'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                
+            }
+        }
+        
+    },
+    autoLoad: false
+});
 

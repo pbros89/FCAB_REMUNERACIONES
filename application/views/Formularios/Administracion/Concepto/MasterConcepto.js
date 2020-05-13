@@ -127,7 +127,8 @@ Ext.define('fcab.Container.MasterConcepto.Grilla', {
             dataIndex: 'RANGO_INI',
             //align: 'center',
             hidden: true,
-            flex: 1
+            flex: 1,
+            renderer: Ext.util.Format.numberRenderer('0.0,0')
         },
         {
             text     : 'Rango Final',
@@ -135,7 +136,8 @@ Ext.define('fcab.Container.MasterConcepto.Grilla', {
             dataIndex: 'RANGO_FIN',
             //align: 'center',
             hidden: true,
-            flex: 1
+            flex: 1,
+            renderer: Ext.util.Format.numberRenderer('0.0,0')
         },
         {
             text     : 'Creación',

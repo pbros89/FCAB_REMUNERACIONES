@@ -75,4 +75,10 @@ class ExtrasController extends CI_Controller{
         $result = '{"success":"true", "items":' . json_encode($query) .'}';
         $this->output->set_output($result);
     }
+
+    public function cargarPeriodos() {
+        $query = $this->ExtrasModel->cargarPeriodos();
+        $result = '{"success":"true", "items":' . json_encode($query) .'}';
+        $this->output->set_output($result);
+    }
 }

@@ -26,7 +26,8 @@ class AusentismoModel extends CI_Model {
                     OBSERVACION,
                     USR_CREADOR,
                     TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') FECHA_CREACION,
-                    ESTADO
+                    ESTADO,
+                    PERIODO
                 FROM NOV_AUSENTISMO AUS 
                 WHERE 1 = 1 ";
 
@@ -50,6 +51,8 @@ class AusentismoModel extends CI_Model {
                     $sql .= "AND TO_DATE('$p_fec2', 'YYYY/MM/DD') ";
                 }elseif (!empty($p_fec1)) {
                     $sql .= "AND TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') = '$p_fec1' ";
+                }else{
+                    $sql .= "AND TRUNC(FECHA_CREACION, 'MM') = TRUNC(SYSDATE, 'MM') ";
                 }
 
                 $sql .= "ORDER BY PK_ID DESC";
@@ -70,7 +73,17 @@ class AusentismoModel extends CI_Model {
         , $P_NOMBRE_AUSENTISMO 
         , $P_FECHA_INI 
         , $P_FECHA_FIN
-        , $P_OBSERVACION    )
+        , $P_OBSERVACION  
+        , $P_LUN 
+        , $P_MAR 
+        , $P_MIE 
+        , $P_JUE 
+        , $P_VIE 
+        , $P_SAB 
+        , $P_DOM 
+        , $P_NO_FERIADO 
+        , $P_PERIODO 
+        )
     
     {
         $r_est = 0;
@@ -88,6 +101,15 @@ class AusentismoModel extends CI_Model {
                         , :P_FECHA_INI 
                         , :P_FECHA_FIN 
                         , :P_OBSERVACION
+                        , :P_LUN 
+                        , :P_MAR 
+                        , :P_MIE 
+                        , :P_JUE 
+                        , :P_VIE 
+                        , :P_SAB 
+                        , :P_DOM 
+                        , :P_NO_FERIADO 
+                        , :P_PERIODO
                         , :r_est
                         , :r_msg);END;");
         
@@ -101,6 +123,15 @@ class AusentismoModel extends CI_Model {
         oci_bind_by_name($proc,"P_FECHA_INI", $P_FECHA_INI, 50, SQLT_CHR);
         oci_bind_by_name($proc,"P_FECHA_FIN", $P_FECHA_FIN, 50, SQLT_CHR);
         oci_bind_by_name($proc,"P_OBSERVACION", $P_OBSERVACION, 1000, SQLT_CHR);
+        oci_bind_by_name($proc,"P_LUN", $P_LUN, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_MAR", $P_MAR, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_MIE", $P_MIE, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_JUE", $P_JUE, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_VIE", $P_VIE, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_SAB", $P_SAB, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_DOM", $P_DOM, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_NO_FERIADO", $P_NO_FERIADO, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -154,6 +185,35 @@ class AusentismoModel extends CI_Model {
         
         oci_bind_by_name($proc,"P_COD", $P_COD, -1, OCI_B_INT);
         oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
+    public function anularAusentismo(
+        $P_COD 
+      , $P_USUARIO 
+      , $P_OBS)
+
+    {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+                $this->db->conn_id,
+                    "BEGIN NOV_ANU_AUSENTISMO(
+                          :P_COD  
+                        , :P_USUARIO
+                        , :P_OBS
+                        , :r_est
+                        , :r_msg);END;");
+        
+        oci_bind_by_name($proc,"P_COD", $P_COD, -1, OCI_B_INT);
+        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"P_OBS", $P_OBS, 1000, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 

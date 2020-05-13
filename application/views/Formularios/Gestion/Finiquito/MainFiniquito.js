@@ -33,6 +33,12 @@
                     case 'ELIMINAR':
                         Ext.ComponentQuery.query('#MainFiniquitoGrilla #btnEliminar')[0].setHidden(false);
                         break;
+                    case 'ANULAR':
+                        Ext.ComponentQuery.query('#MainFiniquitoGrilla #btnAnular')[0].setHidden(false);
+                        break;
+                    case 'DOCUMENTO':
+                        Ext.ComponentQuery.query('#MainFiniquitoGrilla #btnDoc')[0].setHidden(false);
+                        break;
                 }
             }else if(pantalla == 'FINIQUITO' && estado != 'A' && acc == 'EDITAR'){
                 //SUSPENDE EVENTOS DE LA GRILLA (DOBLECLICK)
@@ -70,29 +76,36 @@ Ext.define('fcab.Container.MainFiniquito.Grilla', {
             dataIndex: 'FK_COD_EMP',
             //align: 'center',
             hidden: true,
-            flex: 1
+            width: 100
         },
         {
-            text     : 'ID Finiquito',
+            text     : 'ID',
             sortable : true,
             dataIndex: 'PK_FINIQUITO',
             //align: 'center',
-            hidden: true,
-            flex: 1
+            hidden: false,
+            width: 100
+        },
+        {
+            text     : 'Periodo',
+            sortable : true,
+            dataIndex: 'PERIODO',
+            //align: 'center',
+            width: 100
         },
         {
             text     : 'Rut',
             sortable : true,
             dataIndex: 'RUT',
             //align: 'center',
-            flex: 1
+            width: 100
         },
         {
             text     : 'Nombre',
             sortable : true,
             dataIndex: 'NOMBRE',
             //align: 'center',
-            flex: 3
+            width: 250
         },
 
         {
@@ -100,7 +113,7 @@ Ext.define('fcab.Container.MainFiniquito.Grilla', {
             sortable : true,
             dataIndex: 'COD_CAUSAL',
             //align: 'center',
-            flex: 1
+            width: 100
         },
 
         {
@@ -108,52 +121,56 @@ Ext.define('fcab.Container.MainFiniquito.Grilla', {
             sortable : true,
             dataIndex: 'NOM_CAUSAL',
             //align: 'center',
-            flex: 2
+            width: 200
         },
         {
             text     : 'Fecha Baja',
             sortable : true,
             dataIndex: 'FECHA_BAJA',
-            flex: 1
+            width: 100
             //hidden: true
         },
         {
             text     : 'Creación',
             sortable : true,
             dataIndex: 'FECHA_CREACION',
-            flex: 1
+            width: 100
             //hidden: true
         },
         {
             text     : 'Creador',
             sortable : true,
             dataIndex: 'USR_CREADOR',
-            flex: 2
+            width: 200
         },
         {
             text     : 'Modificación',
             sortable : true,
             dataIndex: 'FECHA_MODIFICO',
-            flex: 1,
+            width: 100,
             hidden: true
         },
         {
             text     : 'Modificador',
             sortable : true,
             dataIndex: 'USR_MODIFICO',
-            flex: 2,
+            width: 200,
             hidden: true
         },
         {
             text     : 'Estado',
             sortable : true,
             dataIndex: 'ESTADO',
-            flex: 1,
+            width: 100,
             renderer : function(value, meta) {
                 if(value === 'EN ESPERA')
                 {
-                    meta.style = 'color:red;';
+                    meta.style = 'color:orange;';
                     return 'EN ESPERA';
+                }else if(value === 'ANULADO')
+                {
+                    meta.style = 'color:red;';
+                    return 'ANULADO';
                 }else if(value === 'TERMINADO'){
                     meta.style = 'color:green;';
                     return 'TERMINADO';
@@ -241,6 +258,61 @@ Ext.define('fcab.Container.MainFiniquito.Grilla', {
                 }
             }
 
+        },{
+            text: 'Anular',
+            itemId: 'btnAnular',
+            hidden: true,
+            tooltip: 'Anular Item seleccionado',
+            iconCls: 'icon-form-suspend',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickAnularFiniquito(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione el item que desea anular", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+
+        },{
+            text: "Documentos",
+            itemId: "btnDoc",
+            hidden: true,
+            tooltip: "Ver documentos",
+            iconCls: "icon-form-folder",
+            handler: function() {
+              var grid = this.up("grid"); //Recuperamos la grilla
+              try {
+                //Obtenemos el index del item seleccionado
+                var rowIndex = grid.getSelectionModel().getCurrentPosition()
+                  .rowIdx;
+                var rec = grid.getStore();
+                var recRow = rec.getAt(rowIndex);
+                if (ROL == "ADMIN" || ROL == "SUPER_ADMIN" || recRow.data.ESTADO == 'EN ESPERA') 
+                {
+                  modalAdjuntosAdmin(
+                    recRow.data.PK_FINIQUITO,
+                    "finiquito",
+                    "Finiquito " + recRow.data.PK_FINIQUITO
+                  );
+                } else {
+                  modalAdjuntosBasic(
+                    recRow.data.PK_FINIQUITO,
+                    "finiquito",
+                    "Finiquito " + recRow.data.PK_FINIQUITO
+                  );
+                }
+              } catch (e) {
+                msg(
+                  "Nada seleccionado",
+                  "Por favor, seleccione el item",
+                  Ext.Msg.ERROR,
+                  Ext.Msg.OK
+                );
+                console.debug(e);
+              }
+            }
         },{
             text: 'Refrescar',
             tooltip: 'Refrescar Pantalla',
@@ -350,6 +422,45 @@ var clickTerminarFiniquito = function(grid, rowIndex) {
         }
     });
 }
+
+var clickAnularFiniquito = function(grid, rowIndex) {
+    var rec = grid.getStore();
+    var recRow = rec.getAt(rowIndex);
+    Ext.MessageBox.confirm(
+        'Anular finiquito', 
+        '¿Esta seguro de anular el finiquito?<br>'+
+        '<b>-Los registros anulados no seran considerados para reportes.<br>'+
+        '-El trabajador volvera a estar vigente.</b>', 
+    function(btn) {
+        if (btn === 'yes') {
+            storeAnularFiniquito.load({
+                params:{
+                    p_cod: recRow.data.PK_FINIQUITO,
+                    p_obs: '',
+                    p_usuario: NOMBRE
+                },
+                callback: function(records, operation, success) {
+                    if(records != null) {
+                        if(records[0].data.r_msg == 'OK'){
+                            showToast('Finiquito anulado correctamente.');
+                            cargarMainFiniquito(null);
+                            
+                        }else{
+                            Ext.MessageBox.show({
+                                title: 'ADVERTENCIA',
+                                msg: records[0].data.r_msg,
+                                icon: Ext.MessageBox.WARNING,
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                    }
+                    
+                }
+            });
+            
+        }
+    });
+};
 
 var clickEliminarFiniquito= function (grid, rowIndex) {
     var rec = grid.getStore();

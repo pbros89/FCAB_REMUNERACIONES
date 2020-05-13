@@ -112,11 +112,9 @@ Ext.define("fcab.Container.CrearIngresoPersonalAFP", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtMontoAPV',
                     name: 'txtMontoAPV',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Monto APV (UF-$-%)',

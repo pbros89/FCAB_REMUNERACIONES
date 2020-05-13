@@ -15,7 +15,7 @@
             var estado = accion.ESTADO;
             var acc = accion.PFK_ACCION;
             var pantalla = accion.PFK_PANTALLA;
-
+            console.log(acc + " " + estado);
             if(pantalla == 'INGRESO_PERSONAL' && estado == 'A'){
                 switch(acc){
                     case 'DETALLE':
@@ -32,6 +32,12 @@
                         break;
                     case 'ELIMINAR':
                         Ext.ComponentQuery.query('#MainIngresoPersonalGrilla #btnEliminar')[0].setHidden(false);
+                        break;
+                    case 'ANULAR':
+                        Ext.ComponentQuery.query('#MainIngresoPersonalGrilla #btnAnular')[0].setHidden(false);
+                        break;
+                    case 'DOCUMENTO':
+                        Ext.ComponentQuery.query('#MainIngresoPersonalGrilla #btnDoc')[0].setHidden(false);
                         break;
                 }
             }else if(pantalla == 'INGRESO_PERSONAL' && estado != 'A' && acc == 'EDITAR'){
@@ -81,8 +87,12 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             renderer : function(value, meta) {
                 if(value === 'EN ESPERA')
                 {
-                    meta.style = 'color:red;';
+                    meta.style = 'color:orange;';
                     return 'EN ESPERA';
+                }else if(value === 'ANULADO')
+                {
+                    meta.style = 'color:red;';
+                    return 'ANULADO';
                 }else if(value === 'TERMINADO'){
                     meta.style = 'color:green;';
                     return 'TERMINADO';
@@ -103,6 +113,13 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             text     : 'ID',
             sortable : true,
             dataIndex: 'PK_ID',
+            //align: 'center',
+            width: 100
+        },
+        {
+            text     : 'Periodo',
+            sortable : true,
+            dataIndex: 'PERIODO',
             //align: 'center',
             width: 100
         },
@@ -608,6 +625,61 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             }
 
         },{
+            text: 'Anular',
+            itemId: 'btnAnular',
+            hidden: true,
+            tooltip: 'Anular Item seleccionado',
+            iconCls: 'icon-form-suspend',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickAnularIngresoPersonal(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione el item que desea anular", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+
+        },{
+            text: "Documentos",
+            itemId: "btnDoc",
+            hidden: true,
+            tooltip: "Ver documentos",
+            iconCls: "icon-form-folder",
+            handler: function() {
+              var grid = this.up("grid"); //Recuperamos la grilla
+              try {
+                //Obtenemos el index del item seleccionado
+                var rowIndex = grid.getSelectionModel().getCurrentPosition()
+                  .rowIdx;
+                var rec = grid.getStore();
+                var recRow = rec.getAt(rowIndex);
+                if (ROL == "ADMIN" || ROL == "SUPER_ADMIN" || recRow.data.ESTADO == 'EN ESPERA') 
+                {
+                  modalAdjuntosAdmin(
+                    recRow.data.PK_ID,
+                    "ingreso_personal",
+                    "Ingreso Personal " + recRow.data.PK_ID
+                  );
+                } else {
+                  modalAdjuntosBasic(
+                    recRow.data.PK_ID,
+                    "ingreso_personal",
+                    "Ingreso Personal " + recRow.data.PK_ID
+                  );
+                }
+              } catch (e) {
+                msg(
+                  "Nada seleccionado",
+                  "Por favor, seleccione el item",
+                  Ext.Msg.ERROR,
+                  Ext.Msg.OK
+                );
+                console.debug(e);
+              }
+            }
+        },{
             text: 'Refrescar',
             tooltip: 'Refrescar Pantalla',
             iconCls: 'icon-form-refresh',
@@ -779,4 +851,43 @@ var cargarMainIngresoPersonal = function(filtros){
             }
         });
     }
+};
+
+var clickAnularIngresoPersonal= function(grid, rowIndex) {
+    var rec = grid.getStore();
+    var recRow = rec.getAt(rowIndex);
+    Ext.MessageBox.confirm(
+        'Anular Ingreso de Personal', 
+        '¿Esta seguro de anular el ingreso de personal?<br>'+
+        '<b>-Los registros anulados no seran considerados para reportes.<br>'+
+        '-El trabajador será quedara como no vigente con motivo "INGRESO_ANULADO".</b>', 
+    function(btn) {
+        if (btn === 'yes') {
+            storeAnularIngresoPersonal.load({
+                params:{
+                    p_cod: recRow.data.PK_ID,
+                    p_obs: '',
+                    p_usuario: NOMBRE
+                },
+                callback: function(records, operation, success) {
+                    if(records != null) {
+                        if(records[0].data.r_msg == 'OK'){
+                            showToast('Ingreso anulado correctamente.');
+                            cargarMainIngresoPersonal(null);
+                            
+                        }else{
+                            Ext.MessageBox.show({
+                                title: 'ADVERTENCIA',
+                                msg: records[0].data.r_msg,
+                                icon: Ext.MessageBox.WARNING,
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                    }
+                    
+                }
+            });
+            
+        }
+    });
 };

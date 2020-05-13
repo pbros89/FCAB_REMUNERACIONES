@@ -239,6 +239,40 @@ Ext.define('fcab.Container.MainProcesoMensual.Grilla', {
             }
 
         },{
+            text: 'Faltantes',
+            itemId: 'btnFaltantes',
+            hidden: false,
+            tooltip: 'Agregar trabajadores y conceptos faltantes.',
+            iconCls: 'icon-form-suspend',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickFaltanteProcesoMensual(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione el item que desea agregar faltante.", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+
+        },{
+            text: 'Importar',
+            itemId: 'btnImportar',
+            hidden: false,
+            tooltip: 'Importar planilla de conceptos personalizada.',
+            iconCls: 'icon-form-edit',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickImportarProcesoMensual(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione el item que desea agregar faltante.", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+
+        },{
             text: 'Refrescar',
             tooltip: 'Refrescar Pantalla',
             iconCls: 'icon-form-refresh',
@@ -315,6 +349,24 @@ var clickDetalleProcesoMensual = function (grid, rowIndex) {
     ventanaDinamica("MainProcesoMensualDetalle", "Detalle Proceso Mensual ("+NOM_EMPRESA+")", "1000", "", "MainProcesoMensualDetalle", 1, 0, rec, recRow);
 };
 
+var clickFaltanteProcesoMensual = function (grid, rowIndex) {
+    var rec = grid.getStore();
+    var recRow = rec.getAt(rowIndex);
+    ventanaDinamica(
+        "MainProcesoMensualFaltante", 
+        "Faltantes "+ recRow.data.PK_TIPO + " " + recRow.data.PK_PROCESO , 
+        "1000", "", "MainProcesoMensualFaltante", 1, 0, rec, recRow);
+};
+
+var clickImportarProcesoMensual = function (grid, rowIndex) {
+    var rec = grid.getStore();
+    var recRow = rec.getAt(rowIndex);
+    ventanaDinamica(
+        "ImportarExportarProcesoMensualPersonalizado", 
+        "Importar Personalizado "+ recRow.data.PK_TIPO + " " + recRow.data.PK_PROCESO , 
+        "800", "", "ImportarExportarProcesoMensualPersonalizado", 1, 0, rec, recRow);
+};
+
 var clickEditarProcesoMensual= function (grid, rowIndex) {
     var rec = grid.getStore();
     var recRow = rec.getAt(rowIndex);
@@ -366,6 +418,14 @@ var clickEliminarProcesoMensual= function (grid, rowIndex) {
     var recRow = rec.getAt(rowIndex);
     Ext.MessageBox.confirm('Eliminar Proceso Mensual', '¿Esta seguro de eliminar el proceso mensual?', function(btn) {
         if (btn === 'yes') {
+            Ext.MessageBox.show({
+                msg: 'Cargando',
+                progressText: 'Espere por favor...',
+                width: 300,
+                wait: {
+                    interval: 200
+                }
+            });
             storeBorrarProcesoMensual.load({
                 params : {
                     p_cod_emp: EMPRESA,
@@ -374,6 +434,7 @@ var clickEliminarProcesoMensual= function (grid, rowIndex) {
                     p_usuario: NOMBRE
                 },
                 callback: function(records, operation, success) {
+                    Ext.MessageBox.hide();
                     if(records != null) {
                         if(records[0].data.r_msg == 'OK'){
                             showToast('Proceso mensual eliminado correctamente.');

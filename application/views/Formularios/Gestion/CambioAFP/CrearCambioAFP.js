@@ -7,13 +7,17 @@ Ext.define("fcab.Container.CrearCambioAFP", {
     border: false,
     frame: false,
     style: "margin: 0px auto 0px auto;",
-    
     constructor: function (config) {
         this.callParent([config]);
-        storeCargarParam_AFP.load();
-        storeCargarParam_INSTITUCION_APV.load();
-        storeCargarParam_TIPO_CAMBIO_AFP.load();
-        storeCargarParam_REGIMEN_APV.load();
+    },
+    listeners: {
+        afterrender: function() {
+            storeCargarParam_AFP.load();
+            storeCargarParam_INSTITUCION_APV.load();
+            storeCargarParam_TIPO_CAMBIO_AFP.load();
+            storeCargarParam_REGIMEN_APV.load();
+            storeExtras_cargarPeriodos.load();
+        }
     },
     items: [{
         xtype: 'form',
@@ -45,7 +49,7 @@ Ext.define("fcab.Container.CrearCambioAFP", {
                 layout: 'hbox',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     style: 'margin: 0 10px 5px 0',
                     itemId: 'txtRut',
                     name: 'txtRut',
@@ -114,14 +118,14 @@ Ext.define("fcab.Container.CrearCambioAFP", {
                                         txtAPV.setValue(records[0].data.NOM_APV);
                                         txtRegAPV.setValue(records[0].data.NOM_REG_APV);
                                         txtMonto.setValue(records[0].data.MONTO_APV != null ? 
-                                            (records[0].data.TIPO_MONTO_APV + " " + records[0].data.MONTO_APV) : '');
+                                            (records[0].data.TIPO_MONTO_APV + " " + 
+                                            Ext.util.Format.number(records[0].data.MONTO_APV, '0.0,0')) : '');
 
                                         cbAFP.setValue(records[0].data.COD_AFP);
                                         cbAPV.setValue(records[0].data.COD_APV);
                                         cbRegAPV.setValue(records[0].data.COD_REG_APV);
                                         txtMontoAPV.setValue(records[0].data.MONTO_APV);
                                         cbTipoMonto.setValue(records[0].data.TIPO_MONTO_APV);
-
 
                                     }else{
                                         txtRutOld.reset();
@@ -331,6 +335,30 @@ Ext.define("fcab.Container.CrearCambioAFP", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbPeriodo',
+                    itemId: 'cbPeriodo',
+                    displayField: 'PERIODO',
+                    valueField: 'PERIODO',
+                    store: storeExtras_cargarPeriodos,
+                    fieldLabel: 'Periodo',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbTipoCambio',
                     itemId: 'cbTipoCambio',
                     displayField: 'NOMBRE',
@@ -426,11 +454,9 @@ Ext.define("fcab.Container.CrearCambioAFP", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'numberfield',
+                    xtype: 'thousandnumber',
                     itemId: 'txtMontoAPV',
                     name: 'txtMontoAPV',
-                    forcePrecision: true,
-                    decimalPrecision: 5,
                     allowDecimals: true,
                     labelAlign:'top',
                     fieldLabel: 'Monto APV',
@@ -527,6 +553,7 @@ Ext.define("fcab.Container.CrearCambioAFP", {
                                 , P_MONTO : txtMontoAPV
                                 , P_TIPO_MONTO : values.cbTipoMonto
                                 , P_OBSERVACION: values.txtObs
+                                , P_PERIODO: values.cbPeriodo
 
                             },
                             callback: function(records, operation, success) {

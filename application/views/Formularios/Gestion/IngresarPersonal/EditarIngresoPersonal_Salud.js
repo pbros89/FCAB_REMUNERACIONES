@@ -86,7 +86,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 },{
                     xtype: 'combo',
@@ -115,7 +115,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 },{
                     xtype: 'combo',
@@ -150,7 +150,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 },{
                     xtype: 'combo',
@@ -179,7 +179,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 },{
                     xtype: 'combo',
@@ -214,7 +214,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 },{
                     xtype: 'combo',

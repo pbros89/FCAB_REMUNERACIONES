@@ -59,7 +59,7 @@ Ext.define('fcab.Container.DetalleCambioBonoBonoActual.Grilla', {
             dataIndex: 'VALOR' ,
             align: 'center',
             flex: 1,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
     ],
     minHeight: 500,

@@ -59,7 +59,6 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     fieldLabel: 'Rut',
                     width: '50%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',
@@ -506,7 +505,6 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     fieldLabel: 'Telefono',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 99999999999,
                     minValue: 0
                 }]
             },{

@@ -128,7 +128,7 @@ Ext.define('fcab.Container.MasterConcepto.Grilla', {
             //align: 'center',
             hidden: true,
             flex: 1,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Rango Final',
@@ -137,7 +137,7 @@ Ext.define('fcab.Container.MasterConcepto.Grilla', {
             //align: 'center',
             hidden: true,
             flex: 1,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Creación',

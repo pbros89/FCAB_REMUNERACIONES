@@ -239,7 +239,7 @@ Ext.define('fcab.Container.MainFiniquitoDetalleDescuento.Grilla', {
                 
                 if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
-                    var rangoFin = 999999999;
+                    var rangoFin = 9999999999999;
 
                     if(record.get('TIPO_CONCEPTO') === 'RANGO'){
                         rangoIni = record.get('RANGO_INI');
@@ -256,7 +256,7 @@ Ext.define('fcab.Container.MainFiniquitoDetalleDescuento.Grilla', {
                         maxValue: rangoFin,
                         minValue: rangoIni,
                         allowBlank: false,
-                        
+                        decimalPrecision: 4,
                         listeners:{
                             change: function(obj, newValue, oldValue){
 
@@ -282,7 +282,7 @@ Ext.define('fcab.Container.MainFiniquitoDetalleDescuento.Grilla', {
                 }
                 
             },
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
     ],
     minHeight: 500,

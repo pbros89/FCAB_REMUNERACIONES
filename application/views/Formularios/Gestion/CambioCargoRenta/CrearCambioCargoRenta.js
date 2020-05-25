@@ -61,7 +61,6 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     fieldLabel: 'Rut',
                     width: '50%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',
@@ -317,6 +316,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     anchor: '100%',
                     typeAhead: true,
                     allowBlank: true,
+                    decimalPrecision: 4,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
@@ -525,7 +525,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     fieldLabel: 'Sueldo Base',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 }]
             },{

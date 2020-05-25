@@ -248,7 +248,7 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
                 
                 if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
-                    var rangoFin = 999999999;
+                    var rangoFin = 9999999999999;
 
                     if(record.get('TIPO_CONCEPTO') === 'RANGO'){
                         rangoIni = record.get('RANGO_INI');
@@ -264,6 +264,7 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
                         xtype: fieldType,
                         maxValue: rangoFin,
                         minValue: rangoIni,
+                        decimalPrecision: 4,
                         allowBlank: false,
                         tooltip:'PROBLEMA',
                         
@@ -292,7 +293,7 @@ Ext.define('fcab.Container.DetalleCambioBonoBono.Grilla', {
                 }
                 
             },
-            renderer : Ext.util.Format.numberRenderer('0.0,0')
+            renderer : Ext.util.Format.numberRenderer('0.0,000')
         },
     ],
     minHeight: 500,

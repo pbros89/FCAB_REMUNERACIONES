@@ -65,7 +65,6 @@ Ext.define("fcab.Container.EditarIngresoPersonalCargo", {
                     fieldLabel: 'Rut Jefatura',
                     width: '20%',
                     allowBlank: true,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',

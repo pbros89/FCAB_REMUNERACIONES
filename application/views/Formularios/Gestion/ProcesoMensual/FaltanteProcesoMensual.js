@@ -7,7 +7,7 @@ Ext.define('fcab.Container.MainProcesoMensual.Faltante', {
     height: 600,
     
     listeners: {
-        beforerender: function(){
+        afterrender: function(){
             cargarFaltanteProcesoMensual();
         }
     },
@@ -242,7 +242,15 @@ var cargarFaltanteProcesoMensual = function() {
     var param = Ext.getCmp('MainProcesoMensualFaltante').myExtraParams.param2.data;
     var txtTraFaltante = Ext.ComponentQuery.query('#MainProcesoMensualFaltante #txtTraFaltante')[0];
     var txtConFaltante = Ext.ComponentQuery.query('#MainProcesoMensualFaltante #txtConFaltante')[0];
-    
+    var count = 0;
+    Ext.MessageBox.show({
+        msg: 'Cargando Faltantes',
+        progressText: 'Espere por favor...',
+        width: 300,
+        wait: {
+            interval: 200
+        }
+    });
     storeCargarTrabajadoresFaltantesProcMensual.load({
         params: {
             p_cod_emp: EMPRESA,
@@ -250,6 +258,10 @@ var cargarFaltanteProcesoMensual = function() {
             p_tipo: param.PK_TIPO,
         },
         callback: function(records, operation, success) {
+            count++;
+            if(count == 2) {
+                Ext.MessageBox.hide();
+            }
             if(records != null) {
                 if(records.length > 0) {
                     txtTraFaltante.setValue(records.length);
@@ -269,6 +281,10 @@ var cargarFaltanteProcesoMensual = function() {
             p_tipo: param.PK_TIPO,
         },
         callback: function(records, operation, success) {
+            count++;
+            if(count == 2) {
+                Ext.MessageBox.hide();
+            }
             if(records != null) {
                 if(records.length > 0) {
                     txtConFaltante.setValue(records.length);

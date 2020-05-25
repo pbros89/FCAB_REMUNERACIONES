@@ -330,8 +330,8 @@ Ext.define('fcab.Container.MainFiniquito.Grilla', {
             handler: function () {
                 this.ownerCt.ownerCt.saveDocumentAs({
                   type: 'excel',
-                  title: "Procesos Mensual " + NOM_EMPRESA,
-                  fileName: 'Procesos Mensual '+NOM_EMPRESA+' ' + new Date().getTime() +'.xls'
+                  title: "Finiquitos " + NOM_EMPRESA,
+                  fileName: 'Finiquitos '+NOM_EMPRESA+' ' + new Date().getTime() +'.xls'
                 });
             }
 

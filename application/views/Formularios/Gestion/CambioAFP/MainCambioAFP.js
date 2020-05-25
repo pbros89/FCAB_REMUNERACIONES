@@ -189,7 +189,7 @@ Ext.define('fcab.Container.MainCambioAFP.Grilla', {
             dataIndex: 'MONTO',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Creador',

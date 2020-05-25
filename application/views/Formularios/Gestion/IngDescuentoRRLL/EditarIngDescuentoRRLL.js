@@ -269,7 +269,6 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                     fieldLabel: 'Cantidad de Cuotas',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0,
                     listeners: {
                         change: function(obj, newValue, oldValue) {
@@ -302,7 +301,7 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                     fieldLabel: 'Valor Cuota',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     listeners: {
                         change: function(obj, newValue, oldValue) {
@@ -335,7 +334,7 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
                     fieldLabel: 'Monto Total',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',

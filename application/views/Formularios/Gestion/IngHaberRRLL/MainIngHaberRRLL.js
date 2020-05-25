@@ -199,7 +199,7 @@ Ext.define('fcab.Container.MainIngHaberRRLL.Grilla', {
             dataIndex: 'MONTO',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
 
         {

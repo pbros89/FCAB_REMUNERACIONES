@@ -123,7 +123,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalario", {
                     fieldLabel: 'Sueldo Base',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
@@ -142,7 +142,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalario", {
                     fieldLabel: 'Renta Contrato',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'

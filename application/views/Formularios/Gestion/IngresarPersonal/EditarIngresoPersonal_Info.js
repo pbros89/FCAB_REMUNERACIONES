@@ -75,7 +75,6 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
                     width: '40%',
                     readOnly : true,
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
                 },{
@@ -364,7 +363,6 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
                     fieldLabel: 'Teléfono',
                     anchor: '100%',
                     allowBlank: true,
-                    maxValue: 999999999999,
                     minValue: 0
                 }]
             },{

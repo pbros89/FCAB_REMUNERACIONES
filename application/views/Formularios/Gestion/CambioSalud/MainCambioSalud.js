@@ -165,7 +165,7 @@ Ext.define('fcab.Container.MainCambioSalud.Grilla', {
             dataIndex: 'VALOR_PLAN',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Tipo Valor Ges',
@@ -180,7 +180,7 @@ Ext.define('fcab.Container.MainCambioSalud.Grilla', {
             dataIndex: 'VALOR_GES',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Tipo Valor Adi Tra',
@@ -195,7 +195,7 @@ Ext.define('fcab.Container.MainCambioSalud.Grilla', {
             dataIndex: 'VALOR_ADI_TRA',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
 
         {
@@ -211,7 +211,7 @@ Ext.define('fcab.Container.MainCambioSalud.Grilla', {
             dataIndex: 'VALOR_ADI_EMP',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
 
         {
@@ -227,7 +227,7 @@ Ext.define('fcab.Container.MainCambioSalud.Grilla', {
             dataIndex: 'VALOR_CONVENIO',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Creador',

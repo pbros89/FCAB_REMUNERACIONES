@@ -87,7 +87,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
@@ -120,7 +120,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
@@ -158,7 +158,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
@@ -190,7 +190,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
@@ -228,7 +228,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalSalud", {
                     width: '40%',
                     style: 'margin: 0 10px 0 0',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'

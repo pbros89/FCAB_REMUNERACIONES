@@ -209,7 +209,7 @@ Ext.define('fcab.Container.MainCambioCargoRenta.Grilla', {
             dataIndex: 'SUELDO_BASE',
             //align: 'center',
             width: 150,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
 
         {

@@ -171,7 +171,7 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             dataIndex: 'MONTO_TOTAL',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Cuotas',
@@ -186,7 +186,7 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             dataIndex: 'VALOR_CUOTA',
             //align: 'center',
             width: 100,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
         {
             text     : 'Año Descuento',

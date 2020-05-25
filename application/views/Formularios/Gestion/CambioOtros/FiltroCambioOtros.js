@@ -49,7 +49,6 @@ Ext.define('fcab.Container.MainCambioOtros.Filtro', {
             fieldLabel: 'Rut',
             width: '100%',
             allowBlank: true,
-            maxValue: 999999999,
             minValue: 0
         }]
     },{

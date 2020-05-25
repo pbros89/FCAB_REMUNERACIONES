@@ -57,7 +57,6 @@ Ext.define("fcab.Container.CrearCambioBono", {
                     fieldLabel: 'Rut',
                     width: '50%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',

@@ -295,11 +295,11 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                     name: 'txtInicial',
                     labelAlign:'top',
                     fieldLabel: 'Valor Inicial',
+                    decimalPrecision: 4,
                     anchor: '100%',
                     allowDecimals: true,
                     allowBlank: false,
                     minValue: 0,
-                    maxValue: 999999999,
                     value: 0,
                 }]
             },{
@@ -312,12 +312,12 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                     itemId: 'txtRangoIni',
                     name: 'txtRangoIni',
                     allowDecimals: true,
+                    decimalPrecision: 4,
                     labelAlign:'top',
                     fieldLabel: 'Rango Inicial',
                     anchor: '100%',
                     allowBlank: false,
                     minValue: 0,
-                    maxValue: 999999999
                 }]
             },{
                 xtype: 'container',
@@ -329,12 +329,12 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                     itemId: 'txtRangoFin',
                     name: 'txtRangoFin',
                     allowDecimals: true,
+                    decimalPrecision: 4,
                     labelAlign:'top',
                     fieldLabel: 'Rango Final',
                     anchor: '100%',
                     allowBlank: false,
                     minValue: 0,
-                    maxValue: 999999999
                 }]
             },{
                 xtype: 'container',
@@ -577,7 +577,7 @@ Ext.define('fcab.Container.MasterConcepto.CrearSeleccionGrilla', {
             dataIndex: 'VALOR',
             //align: 'center',
             flex: 1,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
 
         {
@@ -607,10 +607,10 @@ Ext.define('fcab.Container.MasterConcepto.CrearSeleccionGrilla', {
             fieldLabel: 'Valor',
             anchor: '100%',
             allowBlank: true,
+            decimalPrecision: 4,
             currencySymbol: null,
             decimalSeparator: ',',
             thousandSeparator: '.',
-            maxValue: 999999999,
             minValue: 0
         },{
             text: 'Agregar',

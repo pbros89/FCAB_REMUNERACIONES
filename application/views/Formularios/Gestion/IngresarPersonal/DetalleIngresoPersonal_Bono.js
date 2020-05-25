@@ -60,6 +60,7 @@ Ext.define('fcab.Container.DetalleIngresoPersonalBono.Grilla', {
             align: 'center',
             flex: 1,
             editable: true,
+            renderer: Ext.util.Format.numberRenderer('0.0,000'),
             getEditor: function(record) {
                 var param = Ext.getCmp('DetalleIngresoPersonal').myExtraParams.param2.data;
                 var grid = this.up('grid'),
@@ -229,7 +230,6 @@ Ext.define('fcab.Container.DetalleIngresoPersonalBono.Grilla', {
                         listeners:{
                             change: function(obj, newValue, oldValue){
                                 
-                                
                                 storeModificarIngPerConcepto.load({
                                     params:{
                                         p_ingreso : record.get('PFK_INGRESO'),
@@ -249,7 +249,7 @@ Ext.define('fcab.Container.DetalleIngresoPersonalBono.Grilla', {
                 
                 if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
-                    var rangoFin = 999999999;
+                    var rangoFin = 99999999999999;
 
                     if(record.get('TIPO_CONCEPTO') === 'RANGO'){
                         rangoIni = record.get('RANGO_INI');
@@ -266,7 +266,7 @@ Ext.define('fcab.Container.DetalleIngresoPersonalBono.Grilla', {
                         maxValue: rangoFin,
                         minValue: rangoIni,
                         allowBlank: false,
-                        tooltip:'PROBLEMA',
+                        decimalPrecision: 4,
                         
                         listeners:{
                             change: function(obj, newValue, oldValue){

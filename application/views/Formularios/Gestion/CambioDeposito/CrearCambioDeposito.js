@@ -61,7 +61,6 @@ Ext.define("fcab.Container.CrearCambioDeposito", {
                     fieldLabel: 'Rut',
                     width: '50%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',

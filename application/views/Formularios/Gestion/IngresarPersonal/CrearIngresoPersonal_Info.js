@@ -56,7 +56,6 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                     fieldLabel: 'Rut',
                     width: '40%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',
@@ -394,7 +393,6 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                     fieldLabel: 'Teléfono',
                     anchor: '100%',
                     allowBlank: true,
-                    maxValue: 999999999999,
                     minValue: 0
                 }]
             },{

@@ -1012,42 +1012,206 @@ class ProcesoMensualModel extends CI_Model {
 
 
     public function cargarTrabajadoresFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp){
-        $sql = "SELECT 
-                    PER.COD_CC PFK_COD_CC, 
-                    CC.NOMBRE NOM_CC,
-                    PER.RUT PK_RUT,
-                    PER.NOMBRE NOMBRE,
-                    PER.COD_CARGO COD_CARGO,
-                    PER.NOM_CARGO NOM_CARGO,
-                    PER.TIPO_CONTRATO,
-                    PER.JORNADA,
-                    per.cod_sindicato,
-                    per.nom_sindicato,
-                    per.cod_adh_sindicador,
-                    per.nom_adh_sindicato,
-                    per.fecha_ingreso
-                FROM 
-                    NOV_PERSONAL PER, 
-                    NOV_CENTRO_COSTOS CC,   
-                    (
-                        select pk_rut
-                        from nov_proc_mensual_persons
-                        where pfk_proceso = '$p_proceso'
-                        AND pfk_cod_emp = '$p_cod_emp'
-                        and pfk_tipo= '$p_tipo'
-                    ) PROPER
-                WHERE PER.COD_CC = CC.PK_COD_CC
-                AND PER.COD_EMP = CC.PFK_COD_EMP
-                AND PER.RUT = PROPER.PK_RUT(+)
-                AND PER.COD_EMP = '$p_cod_emp'
-                AND CC.ESTADO = 'A'
-                AND (
-                    PER.FECHA_BAJA IS NULL 
-                    OR TO_CHAR(PER.FECHA_BAJA, 'YYYY/MM') = '$p_proceso'
+
+    $sql = "SELECT
+        '$p_proceso' PFK_PROCESO, 
+        '$p_cod_emp' PFK_COD_EMP, 
+        PER1.COD_CC PFK_COD_CC, 
+        PER1.RUT PK_RUT,
+        '$p_tipo' PFK_TIPO,
+        CC1.NOMBRE NOM_CC,
+        PER1.NOMBRE NOMBRE,
+        PER1.COD_CARGO COD_CARGO,
+        PER1.NOM_CARGO NOM_CARGO,
+        'EN ESPERA' ESTADO,
+        PER1.TIPO_CONTRATO,
+        PER1.JORNADA,
+        per1.cod_sindicato,
+        per1.nom_sindicato,
+        per1.cod_adh_sindicador COD_ADHERIDO,
+        per1.nom_adh_sindicato NOM_ADHERIDO,
+        per1.fecha_ingreso,
+        CC1.COD_GERENCIA,
+        CC1.NOM_GERENCIA,
+        CC1.COD_DEPARTAMENTO,
+        CC1.NOM_DEPARTAMENTO
+    FROM(
+        SELECT 
+            PK_RUT,
+            COUNT(*) CONTAR
+        FROM(
+            SELECT 
+                PER.RUT PK_RUT
+            FROM 
+                NOV_PERSONAL PER, 
+                NOV_CENTRO_COSTOS CC
+            WHERE PER.COD_CC = CC.PK_COD_CC
+            AND PER.COD_EMP = CC.PFK_COD_EMP
+            AND PER.COD_EMP = '$p_cod_emp'
+            AND CC.ESTADO = 'A'
+            AND (
+                PER.FECHA_BAJA IS NULL 
+                OR TO_CHAR(PER.FECHA_BAJA, 'YYYY/MM') = '$p_proceso'
+            )
+            AND upper(PER.ROL) NOT IN(upper('ROL PRIVADO'))
+            UNION ALL
+            SELECT 
+                PK_RUT
+                
+            FROM nov_proc_mensual_persons
+            WHERE PFK_PROCESO = '$p_proceso'
+            AND PFK_COD_EMP = '$p_cod_emp'
+            AND PFK_TIPO = 'PROCESO'
+        )
+        GROUP BY 
+            PK_RUT
+            
+    ),
+    NOV_PERSONAL PER1, 
+                NOV_CENTRO_COSTOS CC1
+            WHERE PER1.COD_CC = CC1.PK_COD_CC
+            AND PER1.COD_EMP = CC1.PFK_COD_EMP
+            AND PER1.RUT = PK_RUT
+            AND PER1.COD_EMP = '$p_cod_emp'
+            AND CC1.ESTADO = 'A'
+            AND (
+                PER1.FECHA_BAJA IS NULL 
+                OR TO_CHAR(PER1.FECHA_BAJA, 'YYYY/MM') = '$p_proceso'
+            )
+            AND upper(PER1.ROL) NOT IN(upper('ROL PRIVADO'))
+    AND CONTAR = 1
+    ORDER BY PFK_COD_CC, PK_RUT";
+
+       /* $sql = "SELECT PFK_PROCESO,
+                    PFK_COD_EMP,
+                    PFK_COD_CC,
+                    PK_RUT,
+                    PFK_TIPO,
+                    NOM_CC,
+                    NOMBRE,
+                    COD_CARGO,
+                    NOM_CARGO,
+                    ESTADO,
+                    tipo_contrato,
+                    JORNADA,
+                    COD_SINDICATO,
+                    NOM_SINDICATO,
+                    COD_ADHERIDO,
+                    NOM_ADHERIDO,
+                    FECHA_INGRESO,
+                    COD_GERENCIA,
+                    NOM_GERENCIA,
+                    COD_DEPARTAMENTO,
+                    NOM_DEPARTAMENTO 
+                FROM(
+                    SELECT PFK_PROCESO,
+                        PFK_COD_EMP,
+                        PFK_COD_CC,
+                        PK_RUT,
+                        PFK_TIPO,
+                        NOM_CC,
+                        NOMBRE,
+                        COD_CARGO,
+                        NOM_CARGO,
+                        ESTADO,
+                        tipo_contrato,
+                        JORNADA,
+                        COD_SINDICATO,
+                        NOM_SINDICATO,
+                        COD_ADHERIDO,
+                        NOM_ADHERIDO,
+                        FECHA_INGRESO,
+                        COD_GERENCIA,
+                        NOM_GERENCIA,
+                        COD_DEPARTAMENTO,
+                        NOM_DEPARTAMENTO, COUNT(*) CONTAR
+                    FROM(
+                        SELECT 
+                            '$p_proceso' PFK_PROCESO, 
+                            '$p_cod_emp' PFK_COD_EMP, 
+                            PER.COD_CC PFK_COD_CC, 
+                            PER.RUT PK_RUT,
+                            '$p_tipo' PFK_TIPO,
+                            CC.NOMBRE NOM_CC,
+                            PER.NOMBRE NOMBRE,
+                            PER.COD_CARGO COD_CARGO,
+                            PER.NOM_CARGO NOM_CARGO,
+                            'EN ESPERA' ESTADO,
+                            PER.TIPO_CONTRATO,
+                            PER.JORNADA,
+                            per.cod_sindicato,
+                            per.nom_sindicato,
+                            per.cod_adh_sindicador COD_ADHERIDO,
+                            per.nom_adh_sindicato NOM_ADHERIDO,
+                            per.fecha_ingreso,
+                            CC.COD_GERENCIA,
+                            CC.NOM_GERENCIA,
+                            CC.COD_DEPARTAMENTO,
+                            CC.NOM_DEPARTAMENTO
+                        FROM 
+                            NOV_PERSONAL PER, 
+                            NOV_CENTRO_COSTOS CC
+                        WHERE PER.COD_CC = CC.PK_COD_CC
+                        AND PER.COD_EMP = CC.PFK_COD_EMP
+                        AND PER.COD_EMP = '$p_cod_emp'
+                        AND CC.ESTADO = 'A'
+                        AND (
+                            PER.FECHA_BAJA IS NULL 
+                            OR TO_CHAR(PER.FECHA_BAJA, 'YYYY/MM') = '$p_proceso'
+                        )
+                        AND upper(PER.ROL) NOT IN(upper('ROL PRIVADO'))
+                        UNION ALL
+                        SELECT 
+                            PFK_PROCESO,
+                            PFK_COD_EMP,
+                            PFK_COD_CC,
+                            PK_RUT,
+                            PFK_TIPO,
+                            NOM_CC,
+                            NOMBRE,
+                            COD_CARGO,
+                            NOM_CARGO,
+                            ESTADO,
+                            tipo_contrato,
+                            JORNADA,
+                            COD_SINDICATO,
+                            NOM_SINDICATO,
+                            COD_ADHERIDO,
+                            NOM_ADHERIDO,
+                            FECHA_INGRESO,
+                            COD_GERENCIA,
+                            NOM_GERENCIA,
+                            COD_DEPARTAMENTO,
+                            NOM_DEPARTAMENTO
+                        FROM nov_proc_mensual_persons
+                        WHERE PFK_PROCESO = '$p_proceso'
+                        AND PFK_COD_EMP = '$p_cod_emp'
+                        AND PFK_TIPO = '$p_tipo'
+                    )
+                    GROUP BY PFK_PROCESO,
+                        PFK_COD_EMP,
+                        PFK_COD_CC,
+                        PK_RUT,
+                        PFK_TIPO,
+                        NOM_CC,
+                        NOMBRE,
+                        COD_CARGO,
+                        NOM_CARGO,
+                        ESTADO,
+                        tipo_contrato,
+                        JORNADA,
+                        COD_SINDICATO,
+                        NOM_SINDICATO,
+                        COD_ADHERIDO,
+                        NOM_ADHERIDO,
+                        FECHA_INGRESO,
+                        COD_GERENCIA,
+                        NOM_GERENCIA,
+                        COD_DEPARTAMENTO,
+                        NOM_DEPARTAMENTO
                 )
-                AND upper(PER.ROL) NOT IN(upper('ROL PRIVADO'))
-                AND PROPER.PK_RUT IS NULL 
-                ORDER BY PER.COD_CC, PER.RUT";
+                WHERE CONTAR = 1
+                ORDER BY PFK_COD_CC, PK_RUT";*/
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -1064,42 +1228,66 @@ class ProcesoMensualModel extends CI_Model {
         }
 
         $sql = "SELECT 
-                    PER.PFK_COD_CC PFK_COD_CC, 
-                    PER.PK_RUT PFK_RUT, 
-                    con.pk_cod_concepto PFK_COD_CONCEPTO, 
-                    con.nombre NOM_CONCEPTO,  
-                    con.inicial VALOR_INICIAL, 
-                    con.FK_TIPO TIPO,
-                    con.FK_GRUPO_CONCEPTO GRUPO,
-                    con.RANGO_INI,
-                    con.RANGO_FIN,
-                    con.MESES,
-                    con.FK_TIPO_MES TIPO_MES,
-                    tip.observacion OBS_TIPO_CONCEPTO
-                FROM 
-                    nov_proc_mensual_persons PER, 
-                    NOV_CONCEPTOS CON, 
-                    nov_conceptos_cc CC, 
-                    NOV_TIPO_CONCEPTOS TIP, 
-                    nov_proc_mensual_conceptos PROCON
-                WHERE PER.PFK_COD_EMP = CC.PFK_COD_EMP
-                AND PER.PFK_COD_EMP = con.pfk_cod_emp
-                AND PER.PFK_COD_CC = CC.PFK_COD_CC
-                AND con.pk_cod_concepto = cc.pfk_cod_concepto
-                AND con.fk_tipo = tip.pk_tipo_concepto
-                AND PER.PFK_COD_EMP = PROCON.PFK_COD_EMP
-                AND PER.pfk_proceso = PROCON.pfk_proceso
-                AND PER.pfk_tipo = PROCON.pfk_tipo
-                AND PER.PFK_COD_EMP = '$p_cod_emp'
-                AND per.pfk_proceso = '$p_proceso'
-                AND per.pfk_tipo = '$p_tipo'
-                AND CON.ESTADO = 'A'
-                AND CC.PFK_COD_CONCEPTO = procon.pfk_cod_concepto(+)
-                AND CC.PFK_COD_CC = procon.PFK_COD_CC(+)
-                AND con.fk_grupo_concepto IN (".$grupos.")
-                AND procon.pfk_cod_concepto IS NULL
-                AND VAL_TIPO_MES_CONCEPTO(CON.FK_TIPO_MES, CON.MESES) = 0
-                ORDER BY PER.PFK_COD_CC, PER.PK_RUT, con.pk_cod_concepto ";
+                    '$p_proceso' PFK_PROCESO, 
+                    '$p_cod_emp' PFK_COD_EMP, 
+                    '$p_tipo' PFK_TIPO,  
+                    PFK_RUT,
+                    PFK_COD_CC,
+                    PFK_COD_CONCEPTO,
+                    con1.nombre nom_concepto,  
+                    con1.inicial valor,
+                    con1.fk_tipo tipo_concepto,
+                    con1.fk_grupo_concepto GRUPO_CONCEPTO,
+                    con1.RANGO_INI,
+                    con1.RANGO_FIN,
+                    con1.MESES,
+                    con1.fk_tipo_mes TIPO_MES,
+                    tip1.observacion OBS_TIPO_CONCEPTO
+                FROM(
+                    select PFK_RUT,
+                        PFK_COD_CC,
+                        PFK_COD_CONCEPTO,
+                        count(*) CONTAR
+                    FROM (
+                        SELECT
+                            per.PK_RUT pfk_rut,
+                            per.PFK_COD_CC,
+                            con.PK_COD_CONCEPTO PfK_COD_CONCEPTO
+                        FROM
+                            nov_proc_mensual_persons PER,
+                            NOV_CONCEPTOS CON,
+                            nov_conceptos_cc CC
+                            
+                        WHERE PER.PFK_COD_EMP = CC.PFK_COD_EMP
+                        AND PER.PFK_COD_EMP = con.pfk_cod_emp
+                        AND PER.PFK_COD_CC = CC.PFK_COD_CC
+                        AND con.pk_cod_concepto = cc.pfk_cod_concepto
+                        AND PER.PFK_COD_EMP = '$p_cod_emp'
+                        AND per.pfk_proceso = '$p_proceso'
+                        AND per.pfk_tipo = '$p_tipo'
+                        AND CON.ESTADO = 'A'
+                        AND con.fk_grupo_concepto IN ($grupos)
+                        AND VAL_TIPO_MES_CONCEPTO(CON.FK_TIPO_MES, CON.MESES) = 0
+                        UNION ALL
+                        SELECT 
+                            PFK_RUT,
+                            PFK_COD_CC,
+                            PFK_COD_CONCEPTO
+                            
+                        FROM nov_proc_mensual_conceptos procon
+                        where procon.PFK_COD_EMP = '$p_cod_emp'
+                        AND procon.pfk_proceso = '$p_proceso'
+                        AND procon.pfk_tipo = '$p_tipo')
+                    GROUP BY  PFK_RUT,
+                            PFK_COD_CC,
+                            PFK_COD_CONCEPTO) RES1, 
+                    NOV_CONCEPTOS CON1, 
+                    nov_tipo_conceptos TIP1 
+                WHERE con1.pk_cod_concepto = res1.pfk_cod_concepto
+                AND con1.fk_tipo = tip1.pk_tipo_concepto
+                AND CON1.PFK_COD_EMP = '$p_cod_emp'
+                AND CONTAR = 1
+                ORDER BY PFK_COD_CC, PfK_RUT, PFk_cod_concepto ";
 
         $query = $this->db->query($sql);
         return $query->result();

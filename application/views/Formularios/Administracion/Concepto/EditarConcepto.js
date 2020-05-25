@@ -17,6 +17,8 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
             Ext.ComponentQuery.query('#MasterConceptoEditar #txtNombre')[0].setValue(param.NOMBRE);
             Ext.ComponentQuery.query('#MasterConceptoEditar #cbTipoMes')[0].setValue(param.FK_TIPO_MES);
             Ext.ComponentQuery.query('#MasterConceptoEditar #cbMes')[0].setValue(param.MESES);
+            Ext.ComponentQuery.query('#MasterConceptoEditar #txtInicial')[0].setValue(param.INICIAL);
+            
             Ext.ComponentQuery.query('#MasterConceptoEditar #cbTipo')[0].setValue(param.FK_TIPO);
             Ext.ComponentQuery.query('#MasterConceptoEditar #txtRangoIni')[0].setValue(param.RANGO_INI);
             Ext.ComponentQuery.query('#MasterConceptoEditar #txtRangoFin')[0].setValue(param.RANGO_FIN);
@@ -300,10 +302,10 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                     name: 'txtInicial',
                     allowDecimals: true,
                     labelAlign:'top',
+                    decimalPrecision: 4,
                     fieldLabel: 'Valor Inicial',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0,
                     value: 0
                 }]
@@ -320,7 +322,7 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                     fieldLabel: 'Rango Inicial',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                     //value: recRow.data["DURACION"]
                 }]
@@ -337,7 +339,7 @@ Ext.define('fcab.Container.MasterConcepto.Editar', {
                     fieldLabel: 'Rango Final',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                     //value: recRow.data["DURACION"]
                 }]
@@ -568,7 +570,7 @@ Ext.define('fcab.Container.MasterConcepto.EditarSeleccionGrilla', {
             dataIndex: 'VALOR',
             //align: 'center',
             flex: 1,
-            renderer: Ext.util.Format.numberRenderer('0.0,0')
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
         },
 
         {
@@ -628,7 +630,7 @@ Ext.define('fcab.Container.MasterConcepto.EditarSeleccionGrilla', {
             fieldLabel: 'Valor',
             anchor: '100%',
             allowBlank: true,
-            maxValue: 999999999,
+            decimalPrecision: 4,
             minValue: 0
         },{
             text: 'Agregar',

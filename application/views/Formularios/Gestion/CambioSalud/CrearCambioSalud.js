@@ -58,7 +58,6 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                     fieldLabel: 'Rut',
                     width: '50%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',
@@ -471,11 +470,11 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                     itemId: 'txtPlan',
                     name: 'txtPlan',
                     allowDecimals: true,
+                    decimalPrecision: 4,
                     labelAlign:'top',
                     fieldLabel: 'Valor Plan',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0,
                     value: '0'
                 }]
@@ -518,7 +517,7 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                     fieldLabel: 'GES',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     value: 0
                 }]
@@ -561,7 +560,7 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                     fieldLabel: 'Adicional Trabajador',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     value: 0
                 }]
@@ -604,7 +603,7 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                     fieldLabel: 'Adicional Empleador',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     value: 0
                 }]
@@ -647,7 +646,7 @@ Ext.define("fcab.Container.CrearCambioSalud", {
                     fieldLabel: 'Convenio Colectivo',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     value: 0
                 }]

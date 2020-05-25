@@ -64,7 +64,6 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                     fieldLabel: 'Rut Jefatura',
                     width: '20%',
                     allowBlank: true,
-                    maxValue: 999999999,
                     minValue: 0,
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'

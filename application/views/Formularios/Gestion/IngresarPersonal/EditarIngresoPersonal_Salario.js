@@ -119,7 +119,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                     fieldLabel: 'Sueldo Base',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 }]
             },{
@@ -136,7 +136,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                     fieldLabel: 'Renta Contrato',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0
                 }]
             },],

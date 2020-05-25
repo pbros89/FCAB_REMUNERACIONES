@@ -321,6 +321,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarFiniquitoConsolidadoVertical($p_cod_emp, $p_desde, $p_hasta, $p_grupo_concepto, $p_tipo_concepto){
         $sql = "SELECT 
                 FIN.PERIODO,
+                FIN.PK_FINIQUITO CODIGO,
                 FIN.RUT,
                 FIN.NOMBRE,
                 FIN.COD_CAUSAL,
@@ -345,6 +346,7 @@ class ExcelExportModel extends CI_Model {
         }
 
         $sql .= "group by FIN.PERIODO,
+        FIN.PK_FINIQUITO,
         FIN.RUT,
         FIN.NOMBRE,
         FIN.COD_CAUSAL,
@@ -381,7 +383,7 @@ class ExcelExportModel extends CI_Model {
             WHERE CON.PFK_INGRESO = ING.PK_ID
             AND ING.COD_EMP = '$p_cod_emp'
             AND ING.FECHA_INGRESO BETWEEN TO_DATE('$p_desde', 'YYYY/MM/DD') AND TO_DATE('$p_hasta 23:59', 'YYYY/MM/DD HH24:MI') 
-            AND ESTADO = 'TERMINADO' ";
+            AND ING.ESTADO = 'TERMINADO' ";
 
         $sql1 .= "ORDER BY PFK_COD_CONCEPTO ASC";
 
@@ -396,6 +398,7 @@ class ExcelExportModel extends CI_Model {
         FROM (
             SELECT 
                 ING.PERIODO,
+                ING.PK_ID CODIGO,
                 ING.RUT || '-' || ING.DV AS RUT,
                 ING.NOMBRES,
                 ING.APE_PAT,
@@ -410,7 +413,7 @@ class ExcelExportModel extends CI_Model {
                 ING.NIVEL_EDUCACION,
                 ING.CALLE,
                 ING.NUMERO,
-                ING.DEPARTAMENTO,
+                ING.DEPARTAMENTO NUM_DEP,
                 ING.COMUNA,
                 ING.CIUDAD,
                 ING.TELEFONO,
@@ -458,10 +461,10 @@ class ExcelExportModel extends CI_Model {
             WHERE ING.PK_ID = CON.PFK_INGRESO 
             AND ING.COD_EMP = '$p_cod_emp'
             AND ING.FECHA_INGRESO BETWEEN TO_DATE('$p_desde', 'YYYY/MM/DD') AND TO_DATE('$p_hasta 23:59', 'YYYY/MM/DD HH24:MI') 
-            AND ESTADO = 'TERMINADO' ";
+            AND ING.ESTADO = 'TERMINADO' ";
 
         
-        $sql2 .= "group by ING.PERIODO, ING.RUT, ING.DV,
+        $sql2 .= "group by ING.PERIODO, ING.RUT, ING.PK_ID, ING.DV,
         ING.NOMBRES,
         ING.APE_PAT,
         ING.APE_MAT,
@@ -530,6 +533,7 @@ class ExcelExportModel extends CI_Model {
     public function cagarIngresosPersonalConsolidado($p_cod_emp, $p_desde, $p_hasta){
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     RUT || '-' || DV AS RUT,
                     NOMBRES,
                     APE_PAT,
@@ -544,7 +548,7 @@ class ExcelExportModel extends CI_Model {
                     NIVEL_EDUCACION,
                     CALLE,
                     NUMERO,
-                    DEPARTAMENTO NUM_DEPARTAMENTO,
+                    DEPARTAMENTO NUM_DEP,
                     COMUNA,
                     CIUDAD,
                     TELEFONO,
@@ -599,6 +603,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarCambiarAFPConsolidado($p_cod_emp, $p_desde, $p_hasta) {
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     FECHA_CREACION,
                     RUT,
                     NOMBRE,
@@ -626,6 +631,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarCambiarSaludConsolidado($p_cod_emp, $p_desde, $p_hasta) {
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     FECHA_CREACION,
                     RUT,
                     NOMBRE,
@@ -659,6 +665,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarCambiarSindicatoConsolidado($p_cod_emp, $p_desde, $p_hasta) {
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     FECHA_CREACION,
                     RUT,
                     NOMBRE,
@@ -685,6 +692,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarCambiarDepositoConsolidado($p_cod_emp, $p_desde, $p_hasta) {
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     FECHA_CREACION,
                     RUT,
                     NOMBRE,
@@ -710,6 +718,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarCambiarCargoRentaConsolidado($p_cod_emp, $p_desde, $p_hasta) {
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     FECHA_CREACION,
                     RUT,
                     NOMBRE,
@@ -743,6 +752,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarCambiarOtrosConsolidado($p_cod_emp, $p_desde, $p_hasta) {
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     FECHA_CREACION,
                     RUT,
                     NOMBRE,
@@ -777,6 +787,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarCambiarBonosConsolidado($p_cod_emp, $p_desde, $p_hasta){
         $sql = "SELECT 
                 BON.PERIODO,
+                BON.PK_ID CODIGO,
                 BON.FECHA_CREACION,
                 BON.RUT,
                 BON.NOMBRE,
@@ -790,6 +801,7 @@ class ExcelExportModel extends CI_Model {
             AND ESTADO = 'TERMINADO'";
 
         $sql .= "group by BON.PERIODO, 
+                        BON.PK_ID,
                         BON.FECHA_CREACION,
                         BON.RUT,
                         BON.NOMBRE,
@@ -803,6 +815,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarIngDescuentoRRLLConsolidado($p_cod_emp, $p_desde, $p_hasta){
         $sql = "SELECT 
                 ING.PERIODO,
+                ING.PK_COD CODIGO,
                 ING.FECHA_CREACION,
                 ING.RUT,
                 ING.NOMBRE,
@@ -833,6 +846,7 @@ class ExcelExportModel extends CI_Model {
 
         $sql = "SELECT 
                 ING.PERIODO,
+                ING.PK_COD CODIGO,
                 ING.FECHA_CREACION,
                 ING.RUT,
                 ING.NOMBRE,
@@ -861,6 +875,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarPersonal($p_cod_emp, $p_cod_cc, $p_cod_cargo, $p_no_vig, $p_fec_no_vig1, $p_fec_no_vig2, $p_rol){
 
         $sql = "SELECT 
+                PK_PERSONAL CODIGO,
                 RUT,
                 NOMBRE,
                 ROL,
@@ -971,6 +986,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarAusentismoConsolidado($p_cod_emp, $p_desde, $p_hasta) {
         $sql = "SELECT 
                     PERIODO,
+                    PK_ID CODIGO,
                     FECHA_CREACION,
                     RUT,
                     NOMBRE,

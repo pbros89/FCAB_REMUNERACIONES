@@ -270,7 +270,7 @@ Ext.define('fcab.Container.ConceptosPersonaProcesoMensualBDI.Grilla', {
                 
                 if(fieldType === 'thousandnumber'){
                     var rangoIni = 0;
-                    var rangoFin = 999999999;
+                    var rangoFin = 9999999999999;
 
                     if(record.get('TIPO_CONCEPTO') === 'RANGO'){
                         rangoIni = record.get('RANGO_INI');
@@ -287,7 +287,7 @@ Ext.define('fcab.Container.ConceptosPersonaProcesoMensualBDI.Grilla', {
                         maxValue: rangoFin,
                         minValue: rangoIni,
                         allowBlank: false,
-                        tooltip:'PROBLEMA',
+                        decimalPrecision: 4,
                         
                         listeners:{
                             change: function(obj, newValue, oldValue){

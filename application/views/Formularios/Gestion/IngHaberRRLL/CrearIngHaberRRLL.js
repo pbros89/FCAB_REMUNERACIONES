@@ -55,7 +55,6 @@ Ext.define("fcab.Container.CrearIngHaberRRLL", {
                     fieldLabel: 'Rut',
                     width: '50%',
                     allowBlank: false,
-                    maxValue: 999999999,
                     minValue: 0
                 },{
                     xtype: 'textfield',
@@ -440,7 +439,7 @@ Ext.define("fcab.Container.CrearIngHaberRRLL", {
                     fieldLabel: 'Monto Total',
                     anchor: '100%',
                     allowBlank: false,
-                    maxValue: 999999999,
+                    decimalPrecision: 4,
                     minValue: 0,
                     listeners: {
                         change: function(obj, newValue, oldValue) {

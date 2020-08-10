@@ -191,6 +191,12 @@ background: #cccccc;
     background-size: 22px 22px;
     background-repeat: no-repeat;
 }
+
+.icon-form-upload {
+    background-image:url('../images/form/icon-upload.png') !important;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+}
 /**************/
 
 .Titulo{

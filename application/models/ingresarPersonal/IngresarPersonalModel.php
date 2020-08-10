@@ -86,7 +86,9 @@ class IngresarPersonalModel extends CI_Model
                     MONTO_ADI_EMP,
                     FORMATO_ADI_EMP,
                     COD_TIPO_CONTRATO,
-                    PERIODO
+                    PERIODO,
+                    SISTEMA_ORIGEN,
+                    COD_ORIGEN
                 FROM NOV_INGRESAR_PERSONAL PER 
                 WHERE 1 = 1 ";
 
@@ -188,6 +190,9 @@ class IngresarPersonalModel extends CI_Model
 
         $r_est = 0;
         $r_msg = "";
+        $P_SISTEMA_ORIGEN = "FCAB_RRHH";
+        $P_COD_ORIGEN = "0";
+
         $proc = oci_parse(
             $this->db->conn_id,
             "BEGIN NOV_INS_INGRESAR_PERSONAL(
@@ -259,6 +264,8 @@ class IngresarPersonalModel extends CI_Model
                         , :P_FORMATO_ADI_EMP
                         , :P_COD_TIPO_CONTRATO
                         , :P_PERIODO
+                        , :P_SISTEMA_ORIGEN
+                        , :P_COD_ORIGEN
                         , :r_est
                         , :r_msg);END;"
         );
@@ -332,6 +339,8 @@ class IngresarPersonalModel extends CI_Model
         oci_bind_by_name($proc, "P_FORMATO_ADI_EMP", $P_FORMATO_ADI_EMP, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_COD_TIPO_CONTRATO", $P_COD_TIPO_CONTRATO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_SISTEMA_ORIGEN", $P_SISTEMA_ORIGEN, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_ORIGEN", $P_COD_ORIGEN, 100, SQLT_CHR);
         oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 

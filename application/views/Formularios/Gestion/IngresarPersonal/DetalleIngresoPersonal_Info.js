@@ -25,7 +25,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtDepartamento')[0].setValue(param.DEPARTAMENTO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtFono')[0].setValue(param.TELEFONO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtNacionalidad')[0].setValue(param.NACIONALIDAD);
-            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtApePat')[0].setValue(param.NACIONALIDAD);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtApePat')[0].setValue(param.APE_PAT);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtNombre')[0].setValue(param.NOMBRES);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtNumero')[0].setValue(param.NUMERO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtRut')[0].setValue(param.RUT);
@@ -72,7 +72,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                     allowDecimals: false,
                     labelAlign:'top',
                     fieldLabel: 'Rut',
-                    width: '20%',
+                    width: '40%',
                     readOnly : true,
                     allowBlank: false,
                     minValue: 0,
@@ -84,7 +84,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                     name: 'txtDV',
                     labelAlign:'top',
                     fieldLabel: 'DV',
-                    width: '5%',
+                    width: '10%',
                     typeAhead: true,
                     readOnly : true,
                     maxLength: 1,

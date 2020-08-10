@@ -109,6 +109,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalInfo", {
                     typeAhead: true,
                     maxLength: 100,
                     allowBlank: false,   
+                    readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
                 },]
             },{

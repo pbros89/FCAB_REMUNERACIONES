@@ -130,33 +130,6 @@ class ExcelExportController extends CI_Controller {
         $this->excel->getActiveSheet()->setCellValue("A10", 'Rol');
         $this->excel->getActiveSheet()->setCellValue("B10", $p_rol);
 
-        /*$this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 1)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 1)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 2)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 2)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 3)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 3)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 4)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 4)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 5)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 5)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 6)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 6)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 7)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 7)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 8)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 8)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 9)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 9)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 10)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 10)->applyFromArray($styleThinBlackBorderOutline);
-*/
-
-
-        /*foreach(range('A','B') as $columnID) {
-            $this->excel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
-        }*/
-
         $names = [];
         if($cbAlineacion == 'HORIZONTAL') {
             $query = $this->ExcelExportModel->cargarProcesoConsolidadoHorizontal($p_cod_emp, $p_proceso, $p_tipo_proceso, $p_grupo_concepto, $p_tipo_concepto, $p_rol, $p_usuario);
@@ -330,29 +303,6 @@ class ExcelExportController extends CI_Controller {
         $this->excel->getActiveSheet()->setCellValue("A9", 'Empresa');
         $this->excel->getActiveSheet()->setCellValue("B9", $p_cod_emp);
 
-        /*$this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 1)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 1)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 2)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 2)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 3)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 3)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 4)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 4)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 5)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 5)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 6)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 6)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 7)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 7)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 8)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 8)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(0, 9)->applyFromArray($styleThinBlackBorderOutline);
-        $this->excel->getActiveSheet()->getStyleByColumnAndRow(1, 9)->applyFromArray($styleThinBlackBorderOutline);
-*/
-        /*foreach(range('A','B') as $columnID) {
-            $this->excel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
-        }*/
-
         $names = [];
         
         
@@ -470,10 +420,14 @@ class ExcelExportController extends CI_Controller {
         
         
         if($cbAlineacion == 'HORIZONTAL') {
-            $query = $this->ExcelExportModel->cagarIngresosPersonalConsolidadoHorizontal($p_cod_emp, $dtFec1, $dtFec2);
             $queryConcepto = $this->ExcelExportModel->cargarConceptosIngresoPersonal($p_cod_emp, $dtFec1, $dtFec2);
+            if(count($queryConcepto) > 0) {
+                $query = $this->ExcelExportModel->cagarIngresosPersonalConsolidadoHorizontal($p_cod_emp, $dtFec1, $dtFec2);
+            }else{
+                $query = $this->ExcelExportModel->cagarIngresosPersonalConsolidado($p_cod_emp, $dtFec1, $dtFec2);
+            }
         }else{
-            $query = $this->ExcelExportModel->cagarIngresosPersonalConsolidadoHorizontal($p_cod_emp, $dtFec1, $dtFec2);
+            $query = $this->ExcelExportModel->cagarIngresosPersonalConsolidado($p_cod_emp, $dtFec1, $dtFec2);
         }
 
         if(count($query) > 0){
@@ -496,7 +450,7 @@ class ExcelExportController extends CI_Controller {
             //HEADER
             foreach($names as $name) {
                 $concepto = "";
-                if($cbAlineacion == 'HORIZONTAL') {
+                if($cbAlineacion == 'HORIZONTAL' && count($queryConcepto) > 0) {
                     foreach($queryConcepto as $obj) {
                         $con = get_object_vars($obj);
                         if($name == $con["PFK_COD_CONCEPTO"]) {

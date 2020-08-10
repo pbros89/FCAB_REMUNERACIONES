@@ -27,7 +27,7 @@ Ext.define("fcab.Container.MainIngDescuentoRRLL.Editar", {
             var txtValorCuota = Ext.ComponentQuery.query('#EditarIngDescuentoRRLL #txtValorCuota')[0];
             var cbMes = Ext.ComponentQuery.query('#EditarIngDescuentoRRLL #cbMes')[0];
             var txtObs = Ext.ComponentQuery.query('#EditarIngDescuentoRRLL #txtObs')[0];
-            var txtPeriodo = Ext.ComponentQuery.query('#EditarIngHaberRRLL #txtPeriodo')[0];
+            var txtPeriodo = Ext.ComponentQuery.query('#EditarIngDescuentoRRLL #txtPeriodo')[0];
 
             var years = [];
             var date = new Date();

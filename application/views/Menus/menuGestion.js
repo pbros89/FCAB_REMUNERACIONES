@@ -177,6 +177,18 @@ Ext.define('fcab.store.menu.gestion', {
             cerrable: 1,
             cls: 'x-hidden'
             //disabled: true
+        },{
+            name: "Filtro1", //Items a Filtrar
+            text: "Seguimiento ISSA",
+            tipo: "tab",
+            tituloTab: "Seguimiento ISSA",
+            id: "menu_issa",
+            formulario: "SeguimientoISSA",
+            icon: "icon-listaTab", leaf: true,
+            iconCls: "icon-prototipo",
+            cerrable: 1,
+            cls: 'x-hidden'
+            //disabled: true
         }]
         
     },

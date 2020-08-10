@@ -86,7 +86,7 @@ $bdgeneral = '(DESCRIPTION=
 $bd_novedades = '(DESCRIPTION=
     (ADDRESS=
       (PROTOCOL=TCP)
-      (HOST=89.168.89.106)
+      (HOST=172.27.110.30)
       (PORT=1521)
     )
     (CONNECT_DATA=

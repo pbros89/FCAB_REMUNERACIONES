@@ -1061,7 +1061,7 @@ class ProcesoMensualModel extends CI_Model {
             FROM nov_proc_mensual_persons
             WHERE PFK_PROCESO = '$p_proceso'
             AND PFK_COD_EMP = '$p_cod_emp'
-            AND PFK_TIPO = 'PROCESO'
+            AND PFK_TIPO = '$p_tipo'
         )
         GROUP BY 
             PK_RUT
@@ -1267,7 +1267,8 @@ class ProcesoMensualModel extends CI_Model {
                         AND per.pfk_tipo = '$p_tipo'
                         AND CON.ESTADO = 'A'
                         AND con.fk_grupo_concepto IN ($grupos)
-                        AND VAL_TIPO_MES_CONCEPTO(CON.FK_TIPO_MES, CON.MESES) = 0
+                        AND VAL_TIPO_MES_CONCEPTO(CON.FK_TIPO_MES, CON.MESES, 
+                        TO_CHAR(TO_DATE('$p_proceso', 'YYYY/MM'), 'MM')) = 0
                         UNION ALL
                         SELECT 
                             PFK_RUT,

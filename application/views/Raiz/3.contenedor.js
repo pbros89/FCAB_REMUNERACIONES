@@ -201,6 +201,14 @@ Ext.define('fcab.view.MyViewport', {
                                 countGestion++;
                             }
                             break;
+                    
+                        case 'SEGUIMIENTO_ISSA':
+                            if(estado == 'A') {
+                                var p = rootGestion.items.items[0].store.getById('menu_issa');
+                                p.data.cls = '';
+                                countGestion++;
+                            }
+                            break;
 
                         /**************** MENUS REPORTE *******************/
                         case 'REPORT_CAMBIO_AFP':

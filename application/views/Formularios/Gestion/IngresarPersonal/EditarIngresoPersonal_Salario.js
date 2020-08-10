@@ -178,7 +178,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                     var txtNumero = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtNumero')[0];
                     var txtRut = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtRut')[0];
                     var cbSexo = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #cbSexo')[0];
-                    var cbPeriodo = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #cbPeriodo')[0];
+                    var txtPeriodo = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtPeriodo')[0];
 
                     //CARGO
                     var formCargo = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #formCargo')[0];
@@ -254,7 +254,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                             , P_INE : cbIne.getRawValue()
                             , P_RUT_JEFE : txtRutJefatura.value
                             , P_DV_JEFE : txtDVJefatura.value
-                            , P_TIPO_CONTRATO : cbTipoContrato.value
+                            , P_TIPO_CONTRATO : cbTipoContrato.getRawValue()
                             , P_ROL_CARGO : cbRolCargo.value
                             , P_SUELDO_BASE : txtSueldo.value
                             , P_RENTA_CONTRATO : txtRentaContrato.value
@@ -277,7 +277,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                             , P_COD_ESTADO_CIVIL : cbEstadoCivil.value
                             , P_COD_JORNADA : cbJornada.value
                             , P_COD_EMP : EMPRESA
-                            , P_NOM_EMP : ""
+                            , P_NOM_EMP : NOM_EMPRESA
                             , P_USUARIO : NOMBRE
                             , P_ESTADO : 'EN ESPERA'
                             , P_COD_INE : cbIne.value
@@ -295,7 +295,7 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                             , P_FORMATO_ADI_EMP : cbAdiEmp.value
                             , P_COD_TIPO_CONTRATO : cbTipoContrato.value
                             , P_PK_ID : param.PK_ID
-                            , P_PERIODO: cbPeriodo.value
+                            , P_PERIODO: txtPeriodo.value
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {

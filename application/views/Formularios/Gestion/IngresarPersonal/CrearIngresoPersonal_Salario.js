@@ -247,7 +247,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalSalario", {
                             , P_INE : cbIne.getRawValue()
                             , P_RUT_JEFE : txtRutJefatura.value
                             , P_DV_JEFE : txtDVJefatura.value
-                            , P_TIPO_CONTRATO : cbTipoContrato.value
+                            , P_TIPO_CONTRATO : cbTipoContrato.getRawValue()
                             , P_ROL_CARGO : cbRolCargo.value
                             , P_SUELDO_BASE : txtSueldo.value
                             , P_RENTA_CONTRATO : txtRentaContrato.value
@@ -270,7 +270,7 @@ Ext.define("fcab.Container.CrearIngresoPersonalSalario", {
                             , P_COD_ESTADO_CIVIL : cbEstadoCivil.value
                             , P_COD_JORNADA : cbJornada.value
                             , P_COD_EMP : EMPRESA
-                            , P_NOM_EMP : ""
+                            , P_NOM_EMP : NOM_EMPRESA
                             , P_USUARIO : NOMBRE
                             , P_ESTADO : 'EN ESPERA'
                             , P_COD_INE : cbIne.value

@@ -177,7 +177,6 @@ class ExcelExportModel extends CI_Model {
                     PER.NOM_ADHERIDO,
                     CON.pfk_cod_concepto COD_CONCEPTO,   
                     CON.NOM_CONCEPTO NOM_CONCEPTO,  
-
                     sum(CON.valor) valor
 
             FROM NOV_PROC_MENSUAl_conceptos con, NOV_PROC_MENSUAL_PERSONS PER
@@ -433,6 +432,7 @@ class ExcelExportModel extends CI_Model {
                 ING.INE,
                 ING.RUT_JEFE,
                 ING.DV_JEFE,
+                ING.COD_TIPO_CONTRATO,
                 ING.TIPO_CONTRATO,
                 ING.ROL_CARGO,
                 ING.SUELDO_BASE,
@@ -450,15 +450,24 @@ class ExcelExportModel extends CI_Model {
                 ING.INSTITUCION_APV,
                 ING.COD_REGIMEN_APV,
                 ING.REGIMEN_APV,
+                ING.FORMATO_MONTO_APV,
+                ING.MONTO_GES,
+                ING.FORMATO_GES,
+                ING.MONTO_ADI_TRA,
+                ING.FORMATO_ADI_TRA,
+                ING.MONTO_ADI_EMP,
+                ING.FORMATO_ADI_EMP,
                 ING.COD_FORMA_PAGO,
                 ING.FORMA_PAGO,
                 ING.COD_BANCO,
                 ING.BANCO,
                 ING.CUENTA,
+                ING.SISTEMA_ORIGEN,
+                ING.COD_ORIGEN,
                 sum(CON.valor) valor, 
                 CON.pfk_cod_concepto 
             FROM NOV_INGRESAR_PERSONAL ING, NOV_ING_PER_CONCEPTOS con
-            WHERE ING.PK_ID = CON.PFK_INGRESO 
+            WHERE ING.PK_ID = CON.PFK_INGRESO
             AND ING.COD_EMP = '$p_cod_emp'
             AND ING.FECHA_INGRESO BETWEEN TO_DATE('$p_desde', 'YYYY/MM/DD') AND TO_DATE('$p_hasta 23:59', 'YYYY/MM/DD HH24:MI') 
             AND ING.ESTADO = 'TERMINADO' ";
@@ -498,6 +507,7 @@ class ExcelExportModel extends CI_Model {
         ING.INE,
         ING.RUT_JEFE,
         ING.DV_JEFE,
+        ING.COD_TIPO_CONTRATO,
         ING.TIPO_CONTRATO,
         ING.ROL_CARGO,
         ING.SUELDO_BASE,
@@ -515,11 +525,20 @@ class ExcelExportModel extends CI_Model {
         ING.INSTITUCION_APV,
         ING.COD_REGIMEN_APV,
         ING.REGIMEN_APV,
+        ING.FORMATO_MONTO_APV,
+        ING.MONTO_GES,
+        ING.FORMATO_GES,
+        ING.MONTO_ADI_TRA,
+        ING.FORMATO_ADI_TRA,
+        ING.MONTO_ADI_EMP,
+        ING.FORMATO_ADI_EMP,
         ING.COD_FORMA_PAGO,
         ING.FORMA_PAGO,
         ING.COD_BANCO,
         ING.BANCO,
         ING.CUENTA,
+        ING.SISTEMA_ORIGEN,
+        ING.COD_ORIGEN,
         CON.pfk_cod_concepto )
         pivot (sum(valor) for pfk_cod_concepto in ($conceptos))";
 
@@ -589,7 +608,9 @@ class ExcelExportModel extends CI_Model {
                     FORMA_PAGO,
                     COD_BANCO,
                     BANCO,
-                    CUENTA
+                    CUENTA,
+                    SISTEMA_ORIGEN,
+                    COD_ORIGEN
             FROM NOV_INGRESAR_PERSONAL
             WHERE COD_EMP = '$p_cod_emp'
             AND FECHA_INGRESO BETWEEN TO_DATE('$p_desde', 'YYYY/MM/DD') AND TO_DATE('$p_hasta 23:59', 'YYYY/MM/DD HH24:MI') 
@@ -826,6 +847,7 @@ class ExcelExportModel extends CI_Model {
                 ING.FK_TIPO TIPO,
                 ING.FK_DESCUENTO COD_DESCUENTO,
                 ING.NOM_DESCUENTO,
+                ING.FORMATO_VALOR FORMATO,
                 ING.MONTO_TOTAL,
                 ING.CUOTAS,
                 ING.VALOR_CUOTA,
@@ -860,6 +882,7 @@ class ExcelExportModel extends CI_Model {
                 ING.USA_FECHA,
                 ING.INICIO,
                 ING.TERMINO,
+                ING.FORMATO_VALOR FORMATO,
                 ING.MONTO,
                 ING.OBSERVACION
             FROM NOV_ING_HABERES_RRLL ING

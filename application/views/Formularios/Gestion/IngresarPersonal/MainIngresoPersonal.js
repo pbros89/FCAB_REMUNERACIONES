@@ -209,7 +209,7 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             width: 100
         },
         {
-            text     : 'Departamento',
+            text     : 'Nº Depto',
             sortable : true,
             dataIndex: 'DEPARTAMENTO',
             //align: 'center',
@@ -248,6 +248,19 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             sortable : true,
             dataIndex: 'CORREO',
             //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Gerencia',
+            sortable : true,
+            dataIndex: 'NOM_GERENCIA',
+            //align: 'center',
+            width: 100
+        },
+        {
+            text     : 'Departamento',
+            sortable : true,
+            dataIndex: 'NOM_DEPARTAMENTO',
             width: 200
         },
         {
@@ -334,24 +347,6 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             width: 150
         },
         {
-            text     : 'Bono Asistencia',
-            sortable : true,
-            dataIndex: 'BONO_ASISTENCIA',
-            width: 150
-        },
-        {
-            text     : 'Bono Faena',
-            sortable : true,
-            dataIndex: 'BONO_FAENA',
-            width: 150
-        },
-        {
-            text     : 'Bono 3',
-            sortable : true,
-            dataIndex: 'BONO3',
-            width: 150
-        },
-        {
             text     : 'Renta Contrato',
             sortable : true,
             dataIndex: 'RENTA_CONTRATO',
@@ -361,12 +356,6 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             text     : 'AFP',
             sortable : true,
             dataIndex: 'AFP',
-            width: 200
-        },
-        {
-            text     : 'Ahorro Cuenta2',
-            sortable : true,
-            dataIndex: 'AHORRO_CUENTA2',
             width: 200
         },
         {
@@ -538,10 +527,17 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             hidden: true
         },
         {
-            text     : 'ID Cuenta Ahorro2',
+            text     : 'Origen',
             sortable : true,
-            dataIndex: 'COD_CUENTA_AHORRO2',
-            width:100,
+            dataIndex: 'SISTEMA_ORIGEN',
+            width: 150,
+            hidden: false
+        },
+        {
+            text     : 'Codigo Origen',
+            sortable : true,
+            dataIndex: 'COD_ORIGEN',
+            width: 100,
             hidden: true
         },
         
@@ -746,14 +742,16 @@ var clickDetalleIngresoPersonal = function (grid, rowIndex) {
     var rec = grid.getStore();
     var recRow = rec.getAt(rowIndex);
     var estado = recRow.data.ESTADO;
-    ventanaDinamica("DetalleIngresoPersonal", "Detalle Ingreso Personal ("+NOM_EMPRESA+") - "+estado, "1000", "", "DetalleIngresoPersonal", 1, 0, rec, recRow);
+    var origen = recRow.data.SISTEMA_ORIGEN != null ? " - " +recRow.data.SISTEMA_ORIGEN :"";
+    ventanaDinamica("DetalleIngresoPersonal", "Detalle Ingreso Personal ("+NOM_EMPRESA+") - "+estado + origen, "1000", "", "DetalleIngresoPersonal", 1, 0, rec, recRow);
 };
 
 var clickEditarIngresoPersonal= function (grid, rowIndex) {
     var rec = grid.getStore();
     var recRow = rec.getAt(rowIndex);
     var estado = recRow.data.ESTADO;
-    ventanaDinamica("EditarIngresoPersonal", "Editar Ingreso Personal ("+NOM_EMPRESA+") - " + estado, "1000", "", "EditarIngresoPersonal", 1, 0, rec, recRow);
+    var origen = recRow.data.SISTEMA_ORIGEN != null ? " - " +recRow.data.SISTEMA_ORIGEN :"";
+    ventanaDinamica("EditarIngresoPersonal", "Editar Ingreso Personal ("+NOM_EMPRESA+") - " + estado + origen, "1000", "", "EditarIngresoPersonal", 1, 0, rec, recRow);
 };
 
 var clickTerminarIngresoPersonal = function(grid, rowIndex) {

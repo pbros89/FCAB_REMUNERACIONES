@@ -273,3 +273,143 @@ var storeCargarCCUsuario=  Ext.create('Ext.data.Store', {
 });
 
 
+var storeCargarRolesWF =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'usuario/UsuarioController/cargarRolesWf',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar roles wf',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+    },
+    autoLoad: false
+});
+
+var storeCargarRolesWfUsuario =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'usuario/UsuarioController/cargarRolesWfUsuario',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar roles wf',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+    },
+    autoLoad: false
+});
+
+var storeCargarRolesWfUsuarioNo =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'usuario/UsuarioController/cargarRolesWfUsuarioNo',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar roles wf',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+    },
+    autoLoad: false
+});
+
+var storeEliminarUsuarioRolWF =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'usuario/UsuarioController/eliminarUsuarioRolWF',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al eliminar rol',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+    },
+    autoLoad: false
+});
+
+var storeCrearUsuarioRolWF =  Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'usuario/UsuarioController/crearUsuarioRolWF',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al asociar rol',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+    },
+    autoLoad: false
+});
+
+
+
+
+
+
+
+
+
+
+

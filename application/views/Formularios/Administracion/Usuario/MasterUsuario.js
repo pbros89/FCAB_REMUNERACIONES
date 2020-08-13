@@ -25,6 +25,10 @@ Ext.define("fcab.Container.MasterUsuario", {
                     case 'ASOCIAR_CC':
                         Ext.ComponentQuery.query('#MasterUsuarioGrilla #btnAsoCC')[0].setHidden(false);
                         break;
+                    
+                    case 'ASOCIAR_ROL_WF':
+                        Ext.ComponentQuery.query('#MasterUsuarioGrilla #btnAsoRolWF')[0].setHidden(false);
+                        break;
                 }
             }else if(pantalla == 'MAESTRO_USUARIO' && estado != 'A' && acc == 'EDITAR'){
                 //SUSPENDE EVENTOS DE LA GRILLA (DOBLECLICK)
@@ -182,6 +186,23 @@ Ext.define('fcab.Container.MasterUsuario.Grilla', {
             }
 
         },{
+            text: 'Asociar Roles WF',
+            itemId: 'btnAsoRolWF',
+            hidden: true,
+            tooltip: 'Asociar Roles de Workflow para item seleccionado',
+            iconCls: 'icon-form-user',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickAsociarRolWFUsuario(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione el item que desea Editar", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+
+        },{
             text: 'Refrescar',
             tooltip: 'Refrescar Pantalla',
             iconCls: 'icon-form-refresh',
@@ -274,6 +295,12 @@ var clickAsociarCCUsuario= function (grid, rowIndex) {
     var rec = grid.getStore();
     var recRow = rec.getAt(rowIndex);
     ventanaDinamica("MasterUsuarioCC", "Asociar Centros de Costos ("+NOM_EMPRESA+ " - " + recRow.data.PK_USUARIO +")", "1000", "", "MasterUsuarioCC", 1, 0, rec, recRow);
+};
+
+var clickAsociarRolWFUsuario= function (grid, rowIndex) {
+    var rec = grid.getStore();
+    var recRow = rec.getAt(rowIndex);
+    ventanaDinamica("MasterUsuarioRolWF", "Asociar Roles Workflow ("+NOM_EMPRESA+ " - " + recRow.data.PK_USUARIO +")", "1000", "", "MasterUsuarioRolWF", 1, 0, rec, recRow);
 };
 
 var clickFiltrarUsuario = function (grid) {

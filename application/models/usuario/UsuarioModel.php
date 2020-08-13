@@ -15,7 +15,7 @@ class UsuarioModel extends CI_Model {
                     USR.PK_USUARIO, 
                     USR.PFK_COD_EMP, 
                     EMP.NOMBRE NOM_EMP,
-                    USR.ROL, 
+                    USR.ROL,
                     USR.CORREO, 
                     USR.ESTADO, 
                     TO_CHAR(USR.FECHA_CREACION, 'YYYY/MM/DD HH24:MI') FECHA_CREACION, 
@@ -135,6 +135,7 @@ class UsuarioModel extends CI_Model {
         oci_bind_by_name($proc,"p_correo", $p_correo, 500, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"p_rol_wf", $p_rol_wf, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -166,6 +167,7 @@ class UsuarioModel extends CI_Model {
         oci_bind_by_name($proc,"p_correo", $p_correo, 500, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
+        oci_bind_by_name($proc,"p_rol_wf", $p_rol_wf, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -282,6 +284,126 @@ class UsuarioModel extends CI_Model {
         oci_bind_by_name($proc,"p_login", $p_login, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
         oci_bind_by_name($proc,"p_cod_cc", $p_cod_cc, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
+    public function cargarRolesWf() {
+        $sql = "SELECT  
+                    PK_ROL_WF,
+                    NOMBRE,
+                    OBSERVACION
+                FROM NOV_ROLES_WF 
+                ORDER BY PK_ROL_WF ASC";
+                
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarRolesWfUsuario($p_usuario, $p_cod_emp, $p_rol_wf) {
+        $sql = "SELECT  
+                    rol.PK_ROL_WF,
+                    rol.NOMBRE,
+                    rol.OBSERVACION
+                FROM NOV_ROLES_WF rol, NOV_USUARIOS_ROLES_WF usrrol
+                WHERE rol.pk_rol_wf = usrrol.pfk_rol_wf ";
+        if(!empty($p_usuario))
+        {
+            $sql .= "AND UPPER(usrrol.PFK_USUARIO) = UPPER('$p_usuario') ";
+        }
+
+        if(!empty($p_cod_emp))
+        {
+            $sql .= "AND usrrol.PFK_COD_EMP = '$p_cod_emp' ";
+        }
+
+        if(!empty($p_rol))
+        {
+            $sql .= "AND usrrol.PFK_ROL_WF = '$p_rol_wf' ";
+        }
+
+        $sql .= "ORDER BY PK_ROL_WF ASC";
+                
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+
+    public function cargarRolesWfUsuarioNo($p_usuario, $p_cod_emp) {
+
+        $sql = "SELECT  
+                    rol.PK_ROL_WF,
+                    rol.NOMBRE,
+                    rol.OBSERVACION
+                FROM NOV_ROLES_WF rol, 
+                    (
+                        SELECT *
+                        FROM NOV_USUARIOS_ROLES_WF 
+                        WHERE PFK_COD_EMP = '$p_cod_emp'
+                        AND PFK_USUARIO = '$p_usuario'
+                    ) usrrol
+                WHERE rol.pk_rol_wf = usrrol.pfk_rol_wf(+) 
+                AND usrrol.PFK_USUARIO IS NULL ";
+        $sql .= "ORDER BY PK_ROL_WF ASC";
+                
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    
+    public function crearUsuarioRolWF($p_login, $p_cod_emp, $p_rol_wf, $p_usuario)
+    {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+                $this->db->conn_id,
+                    "BEGIN NOV_INS_USUARIO_ROL_WF(
+                            :p_login,
+                            :p_cod_emp,
+                            :p_rol_wf,
+                            :p_usuario,
+                            :r_est,
+                            :r_msg);END;");
+        
+        oci_bind_by_name($proc,"p_login", $p_login, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
+        oci_bind_by_name($proc,"p_rol_wf", $p_rol_wf, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
+    public function eliminarUsuarioRolWF($p_login, $p_cod_emp, $p_rol_wf, $p_usuario)
+    {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+                $this->db->conn_id,
+                    "BEGIN NOV_DEL_USUARIO_ROL_WF(
+                            :p_login,
+                            :p_cod_emp,
+                            :p_rol_wf,
+                            :p_usuario,
+                            :r_est,
+                            :r_msg);END;");
+        
+        oci_bind_by_name($proc,"p_login", $p_login, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
+        oci_bind_by_name($proc,"p_rol_wf", $p_rol_wf, 20, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);

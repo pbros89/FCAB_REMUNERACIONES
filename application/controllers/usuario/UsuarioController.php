@@ -119,6 +119,49 @@ class UsuarioController extends CI_Controller {
         $this->output->set_output($result);
     }
 
+    public function cargarRolesWf() {
+  
+        $query = $this->UsuarioModel->cargarRolesWf();
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
 
+
+    public function cargarRolesWfUsuario() {
+        $p_usuario = $this->input->get('p_usuario');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_rol_wf = $this->input->get('p_rol_wf');       
+        $query = $this->UsuarioModel->cargarRolesWfUsuario($p_usuario, $p_cod_emp, $p_rol_wf);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarRolesWfUsuarioNo() {
+        $p_usuario = $this->input->get('p_usuario');  
+        $p_cod_emp = $this->input->get('p_cod_emp');     
+        $query = $this->UsuarioModel->cargarRolesWfUsuarioNo($p_usuario, $p_cod_emp);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function crearUsuarioRolWF() {
+        $p_login = $this->input->get('p_login');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_rol_wf = $this->input->get('p_rol_wf');   
+        $p_usuario = $this->input->get('p_usuario');    
+        $query = $this->UsuarioModel->crearUsuarioRolWF($p_login, $p_cod_emp, $p_rol_wf, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function eliminarUsuarioRolWF() {
+        $p_login = $this->input->get('p_login');  
+        $p_cod_emp = $this->input->get('p_cod_emp');  
+        $p_rol_wf = $this->input->get('p_rol_wf');   
+        $p_usuario = $this->input->get('p_usuario');    
+        $query = $this->UsuarioModel->eliminarUsuarioRolWF($p_login, $p_cod_emp, $p_rol_wf, $p_usuario);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
 
 }

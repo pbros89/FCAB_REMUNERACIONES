@@ -158,14 +158,24 @@ class ExcelExportController extends CI_Controller {
             //HEADER
             foreach($names as $name) {
                 $concepto = "";
-                if($cbAlineacion == 'HORIZONTAL') {
+
+                if($cbAlineacion == 'HORIZONTAL' && count($queryConcepto) > 0) {
+                    foreach($queryConcepto as $obj) {
+                        $con = get_object_vars($obj);
+                        if($name == 'RES_'.$con["PFK_COD_CONCEPTO"]) {
+                            $name = $con["PFK_COD_CONCEPTO"];
+                            $concepto = $con["NOM_CONCEPTO"];
+                        }
+                    }
+                }
+                /*if($cbAlineacion == 'HORIZONTAL') {
                     foreach($queryConcepto as $obj) {
                         $con = get_object_vars($obj);
                         if($name == $con["PFK_COD_CONCEPTO"]) {
                             $concepto = $con["NOM_CONCEPTO"];
                         }
                     }
-                }
+                }*/
                 if(empty($concepto)){
                     $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
                 }else{
@@ -333,14 +343,24 @@ class ExcelExportController extends CI_Controller {
             //HEADER
             foreach($names as $name) {
                 $concepto = "";
-                if($cbAlineacion == 'HORIZONTAL') {
+               
+                if($cbAlineacion == 'HORIZONTAL' && count($queryConcepto) > 0) {
+                    foreach($queryConcepto as $obj) {
+                        $con = get_object_vars($obj);
+                        if($name == 'RES_'.$con["PFK_COD_CONCEPTO"]) {
+                            $name = $con["PFK_COD_CONCEPTO"];
+                            $concepto = $con["NOM_CONCEPTO"];
+                        }
+                    }
+                }
+                /*if($cbAlineacion == 'HORIZONTAL') {
                     foreach($queryConcepto as $obj) {
                         $con = get_object_vars($obj);
                         if($name == $con["PFK_COD_CONCEPTO"]) {
                             $concepto = $con["NOM_CONCEPTO"];
                         }
                     }
-                }
+                }*/
                 if(empty($concepto)){
                     $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
                 }else{
@@ -453,7 +473,8 @@ class ExcelExportController extends CI_Controller {
                 if($cbAlineacion == 'HORIZONTAL' && count($queryConcepto) > 0) {
                     foreach($queryConcepto as $obj) {
                         $con = get_object_vars($obj);
-                        if($name == $con["PFK_COD_CONCEPTO"]) {
+                        if($name == 'RES_'.$con["PFK_COD_CONCEPTO"]) {
+                            $name = $con["PFK_COD_CONCEPTO"];
                             $concepto = $con["NOM_CONCEPTO"];
                         }
                     }

@@ -52,7 +52,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarProcesoConsolidadoHorizontal($p_cod_emp, $p_proceso, $p_tipo_proceso, $p_grupo_concepto, $p_tipo_concepto, $p_rol, $p_usuario) {
         $sql1 = "SELECT listagg('''' || pfk_cod_concepto || ''' as ' || pfk_cod_concepto, ',') within group (order by PFK_COD_CONCEPTO) as CONCEPTOS
         FROM   (
-            SELECT DISTINCT pfk_cod_concepto 
+            SELECT DISTINCT 'RES_'||pfk_cod_concepto pfk_cod_concepto
             FROM NOV_PROC_MENSUAl_conceptos
             WHERE 1 = 1
             AND PFK_COD_EMP = '$p_cod_emp'
@@ -110,7 +110,7 @@ class ExcelExportModel extends CI_Model {
                 PER.NOM_ADHERIDO,
                 
                 sum(CON.valor) valor, 
-                CON.pfk_cod_concepto 
+                'RES_'|| CON.pfk_cod_concepto pfk_cod_concepto
             FROM NOV_PROC_MENSUAl_conceptos con, NOV_PROC_MENSUAL_PERSONS PER
             WHERE CON.PFK_PROCESO = PER.PFK_PROCESO
             AND CON.PFK_TIPO = PER.PFK_TIPO
@@ -149,7 +149,8 @@ class ExcelExportModel extends CI_Model {
         PER.NOM_CC, PER.COD_CARGO, PER.NOM_CARGO, PER.FECHA_INGRESO, 
         PER.TIPO_CONTRATO, PER.JORNADA, PER.COD_SINDICATO, PER.NOM_SINDICATO, PER.COD_ADHERIDO, PER.NOM_ADHERIDO, 
         CON.pfk_cod_concepto 
-        ORDER BY PER.PFK_COD_CC, CON.pfk_rut, CON.pfk_cod_concepto)
+        ORDER BY PER.PFK_COD_CC, CON.pfk_rut, 
+        'RES_'||CON.pfk_cod_concepto)
         pivot (sum(valor) for pfk_cod_concepto in ($conceptos))";
 
         $query2 = $this->db->query($sql2);
@@ -249,7 +250,7 @@ class ExcelExportModel extends CI_Model {
     public function cargarFiniquitoConsolidadoHorizontal($p_cod_emp, $p_desde, $p_hasta, $p_grupo_concepto, $p_tipo_concepto) {
         $sql1 = "SELECT listagg('''' || pfk_cod_concepto || ''' as ' || pfk_cod_concepto, ',') within group (order by PFK_COD_CONCEPTO) as CONCEPTOS
         FROM   (
-            SELECT DISTINCT pfk_cod_concepto 
+            SELECT DISTINCT 'RES_'|| pfk_cod_concepto  pfk_cod_concepto
             FROM NOV_FINIQUITO_CONCEPTOS con, NOV_FINIQUITOS FIN
             WHERE CON.PFK_FINIQUITO = FIN.PK_FINIQUITO
             AND FIN.FK_COD_EMP = '$p_cod_emp'
@@ -285,7 +286,7 @@ class ExcelExportModel extends CI_Model {
                 FIN.NOM_CAUSAL,
                 FIN.FECHA_BAJA,
                 sum(CASE WHEN con.grupo_concepto = 'FINIQUITO_DESC' THEN (CON.valor*-1) ELSE CON.VALOR END) valor, 
-                CON.pfk_cod_concepto
+                'RES_'|| CON.pfk_cod_concepto pfk_cod_concepto
                 
             FROM NOV_FINIQUITOS FIN, NOV_FINIQUITO_CONCEPTOS con
             WHERE FIN.PK_FINIQUITO = CON.PFK_FINIQUITO 
@@ -307,7 +308,7 @@ class ExcelExportModel extends CI_Model {
         FIN.COD_CAUSAL,
         FIN.NOM_CAUSAL,
         FIN.FECHA_BAJA,
-        CON.pfk_cod_concepto)
+        'RES_'||CON.pfk_cod_concepto)
         pivot (sum(valor) for pfk_cod_concepto in ($conceptos))) Q1";
 
         $query2 = $this->db->query($sql2);
@@ -377,7 +378,7 @@ class ExcelExportModel extends CI_Model {
     public function cagarIngresosPersonalConsolidadoHorizontal($p_cod_emp, $p_desde, $p_hasta) {
         $sql1 = "SELECT listagg('''' || pfk_cod_concepto || ''' as ' || pfk_cod_concepto, ',') within group (order by PFK_COD_CONCEPTO) as CONCEPTOS
         FROM   (
-            SELECT DISTINCT pfk_cod_concepto 
+            SELECT DISTINCT 'RES_'||pfk_cod_concepto pfk_cod_concepto
             FROM NOV_ING_PER_CONCEPTOS con, NOV_INGRESAR_PERSONAL ING
             WHERE CON.PFK_INGRESO = ING.PK_ID
             AND ING.COD_EMP = '$p_cod_emp'
@@ -465,7 +466,7 @@ class ExcelExportModel extends CI_Model {
                 ING.SISTEMA_ORIGEN,
                 ING.COD_ORIGEN,
                 sum(CON.valor) valor, 
-                CON.pfk_cod_concepto 
+                'RES_'|| CON.pfk_cod_concepto pfk_cod_concepto
             FROM NOV_INGRESAR_PERSONAL ING, NOV_ING_PER_CONCEPTOS con
             WHERE ING.PK_ID = CON.PFK_INGRESO
             AND ING.COD_EMP = '$p_cod_emp'
@@ -539,7 +540,7 @@ class ExcelExportModel extends CI_Model {
         ING.CUENTA,
         ING.SISTEMA_ORIGEN,
         ING.COD_ORIGEN,
-        CON.pfk_cod_concepto )
+        'RES_'||CON.pfk_cod_concepto )
         pivot (sum(valor) for pfk_cod_concepto in ($conceptos))";
 
         $query2 = $this->db->query($sql2);

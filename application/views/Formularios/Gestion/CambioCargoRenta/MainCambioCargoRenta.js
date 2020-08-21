@@ -167,6 +167,21 @@ Ext.define('fcab.Container.MainCambioCargoRenta.Grilla', {
             width: 150
         },
         {
+            text     : 'ID Lugar Trabajo',
+            sortable : true,
+            dataIndex: 'COD_LUGAR_TRABAJO',
+            hidden: true,
+            //align: 'center',
+            width: 100
+        },
+        {
+            text     : 'Lugar Trabajo',
+            sortable : true,
+            dataIndex: 'NOM_LUGAR_TRABAJO',
+            //align: 'center',
+            width: 150
+        },
+        {
             text     : 'ID Jornada',
             sortable : true,
             dataIndex: 'COD_JORNADA',

@@ -50,9 +50,10 @@ rutas[28] = "Formularios/Gestion/Adjunto";
 rutas[29] = "Formularios/Gestion/ISSA";
 rutas[30] = "Formularios/WF/Desvinculacion";
 rutas[31] = "Formularios/WF/ModificarFicha";
+rutas[32] = "Formularios/Gestion/ContactoEmergencia";
 
 //TODO: Al Final cargar la raiz del sitio.
-rutas[32] = "Raiz";
+rutas[33] = "Raiz";
 
 Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
@@ -95,6 +96,7 @@ var promises = [
   sortec.async.PrometoSyncArchivos(rutas[30]),
   sortec.async.PrometoSyncArchivos(rutas[31]),
   sortec.async.PrometoSyncArchivos(rutas[32]),
+  sortec.async.PrometoSyncArchivos(rutas[33]),
 ];
 
 Ext.Promise.all(promises).then(function (values) {

@@ -27,6 +27,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonal", {
             storeCargarCentroCostosFiltro.load();
             storeCargarCargosFiltro.load();
             storeCargarParam_CUENTA_AHORRO2.load();
+            storeCargarParam_LUGAR_TRABAJO.load();
         },
     },
     //buttonAlign: 'center',

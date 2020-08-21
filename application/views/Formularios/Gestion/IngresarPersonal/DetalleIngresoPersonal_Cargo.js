@@ -21,6 +21,10 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #dtVencimiento')[0].setValue(param.FECHA_VENCIMIENTO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtDVJefatura')[0].setValue(param.RUT_JEFE);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtRutJefatura')[0].setValue(param.DV_JEFE);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtDepto')[0].setValue(param.NOM_DEPARTAMENTO);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtGer')[0].setValue(param.NOM_GERENCIA);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtCorreoEmp')[0].setValue(param.CORREO_EMP);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #cbLugar')[0].setValue(param.COD_LUGAR_TRABAJO);
     
         },
     },
@@ -150,6 +154,40 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtGer',
+                    name: 'txtGer',
+                    labelAlign:'top',
+                    fieldLabel: 'Gerencia',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: true,
+                    readOnly : true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'    
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtDepto',
+                    name: 'txtDepto',
+                    labelAlign:'top',
+                    fieldLabel: 'Departamento',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: true,
+                    readOnly : true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'    
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.25,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
                     xtype: 'combo',
                     name: 'cbRolCargo',
                     itemId: 'cbRolCargo',
@@ -171,7 +209,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                 }]
             },{
                 xtype: 'container',
-                columnWidth: 0.5,
+                columnWidth: 0.25,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
@@ -196,7 +234,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                 }]
             },{
                 xtype: 'container',
-                columnWidth: 0.5,
+                columnWidth: 0.25,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
@@ -221,7 +259,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                 }]
             },{
                 xtype: 'container',
-                columnWidth: 0.5,
+                columnWidth: 0.25,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
@@ -232,6 +270,31 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                     valueField: 'CODIGO',
                     store: storeCargarParam_JORNADA,
                     fieldLabel: 'Jornada',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly : true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.25,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbLugar',
+                    itemId: 'cbLugar',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_LUGAR_TRABAJO,
+                    fieldLabel: 'Lugar de Trabajo',
                     labelAlign:'top',
                     queryMode: 'local',
                     triggerAction: 'all',
@@ -286,6 +349,25 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
                 },]
                 
+            },{
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    vtype: 'email',
+                    itemId: 'txtCorreoEmp',
+                    name: 'txtCorreoEmp',
+                    labelAlign:'top',
+                    fieldLabel: 'Correo Empresa',
+                    anchor: '100%',
+                    typeAhead: true,
+                    maxLength: 500,
+                    allowBlank: true,
+                    readOnly : true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'    
+                }]
             },]
         },],
         

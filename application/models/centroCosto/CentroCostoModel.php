@@ -58,7 +58,11 @@ class CentroCostoModel extends CI_Model {
         $sql = "SELECT 
                     CC.PK_COD_CC CODIGO, 
                     CC.NOMBRE,
-                    CC.PK_COD_CC || ' - ' || CC.NOMBRE NOMBRE_FULL
+                    CC.PK_COD_CC || ' - ' || CC.NOMBRE NOMBRE_FULL,
+                    COD_GERENCIA,
+                    NOM_GERENCIA,
+                    COD_DEPARTAMENTO,
+                    NOM_DEPARTAMENTO
                 FROM NOV_CENTRO_COSTOS CC  
                 WHERE CC.ESTADO = 'A' ";
 

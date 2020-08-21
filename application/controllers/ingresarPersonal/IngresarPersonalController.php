@@ -99,6 +99,9 @@ class IngresarPersonalController extends CI_Controller {
         $P_FORMATO_ADI_EMP = $this->input->get('P_FORMATO_ADI_EMP');  
         $P_COD_TIPO_CONTRATO = $this->input->get('P_COD_TIPO_CONTRATO');  
         $P_PERIODO = $this->input->get('P_PERIODO');  
+        $P_CORREO_EMP = $this->input->get('P_CORREO_EMP');  
+        $P_COD_LUGAR_TRABAJO = $this->input->get('P_COD_LUGAR_TRABAJO');  
+        $P_NOM_LUGAR_TRABAJO = $this->input->get('P_NOM_LUGAR_TRABAJO');  
 
         $query = $this->IngresarPersonalModel->crearIngresarPersonal( 
               $P_RUT  
@@ -169,6 +172,9 @@ class IngresarPersonalController extends CI_Controller {
             , $P_FORMATO_ADI_EMP
             , $P_COD_TIPO_CONTRATO 
             , $P_PERIODO
+            , $P_CORREO_EMP
+            , $P_COD_LUGAR_TRABAJO
+            , $P_NOM_LUGAR_TRABAJO
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
@@ -250,6 +256,11 @@ class IngresarPersonalController extends CI_Controller {
 
         $P_PERIODO = $this->input->get('P_PERIODO');  
 
+        $P_CORREO_EMP = $this->input->get('P_CORREO_EMP');  
+        $P_COD_LUGAR_TRABAJO = $this->input->get('P_COD_LUGAR_TRABAJO');  
+        $P_NOM_LUGAR_TRABAJO = $this->input->get('P_NOM_LUGAR_TRABAJO');  
+
+
 
         $query = $this->IngresarPersonalModel->modificarIngresarPersonal( 
               $P_RUT  
@@ -321,6 +332,9 @@ class IngresarPersonalController extends CI_Controller {
             , $P_COD_TIPO_CONTRATO 
             , $P_PK_ID 
             , $P_PERIODO
+            , $P_CORREO_EMP
+            , $P_COD_LUGAR_TRABAJO
+            , $P_NOM_LUGAR_TRABAJO
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';

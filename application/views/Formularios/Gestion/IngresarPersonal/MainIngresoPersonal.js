@@ -449,6 +449,27 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             width: 150
         },
         {
+            text     : 'Correo Emp',
+            sortable : true,
+            dataIndex: 'CORREO_EMP',
+            width: 150,
+            hidden: true
+        },
+        {
+            text     : 'ID Lugar Trabajo',
+            sortable : true,
+            dataIndex: 'COD_LUGAR_TRABAJO',
+            width: 150,
+            hidden: true
+        },
+        {
+            text     : 'Lugar Trabajo',
+            sortable : true,
+            dataIndex: 'NOM_LUGAR_TRABAJO',
+            width: 150,
+            hidden: true
+        },
+        {
             text     : 'ID AFP',
             sortable : true,
             dataIndex: 'COD_AFP',

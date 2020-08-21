@@ -222,6 +222,20 @@ Ext.define("fcab.store.menu.gestion", {
       },
       {
         name: "Filtro1", //Items a Filtrar
+        text: "Contacto Emergencia",
+        tipo: "tab",
+        tituloTab: "Contacto Emergencia",
+        id: "menu_contacto_emergencia",
+        formulario: "MainContactoEmergencia",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        //cls: "x-hidden",
+        //disabled: true
+      },
+      {
+        name: "Filtro1", //Items a Filtrar
         text: "Seguimiento ISSA",
         tipo: "tab",
         tituloTab: "Seguimiento ISSA",

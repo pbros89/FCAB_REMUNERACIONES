@@ -47,7 +47,9 @@ class CambiarCargoRentaController extends CI_Controller {
         $P_OBSERVACION = $this->input->get('P_OBSERVACION');  
         $P_FECHA_FIN_CONTRATO = $this->input->get('P_FECHA_FIN_CONTRATO');  
         $P_SUELDO_BASE = $this->input->get('P_SUELDO_BASE');  
-        $P_PERIODO = $this->input->get('P_PERIODO');        
+        $P_PERIODO = $this->input->get('P_PERIODO'); 
+        $P_COD_LUGAR_TRABAJO = $this->input->get('P_COD_LUGAR_TRABAJO'); 
+        $P_NOM_LUGAR_TRABAJO = $this->input->get('P_NOM_LUGAR_TRABAJO');        
 
         $query = $this->CambiarCargoRentaModel->crearCambioCargoRenta(
               $P_RUT  
@@ -68,6 +70,8 @@ class CambiarCargoRentaController extends CI_Controller {
             , $P_COD_TIPO_CAMBIO
             , $P_NOM_TIPO_CAMBIO  
             , $P_PERIODO 
+            , $P_COD_LUGAR_TRABAJO
+            , $P_NOM_LUGAR_TRABAJO
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';

@@ -26,6 +26,9 @@ Ext.define("fcab.Container.EditarIngresoPersonal", {
             storeCargarCentroCostosFiltro.load();
             storeCargarCargosFiltro.load();
             storeCargarParam_CUENTA_AHORRO2.load();
+            storeCargarParam_LUGAR_TRABAJO.load();
+            storeCargarParam_GERENCIA.load();
+            storeCargarParam_DEPARTAMENTO.load();
         },
         'tabchange': function (tabPanel, tab) {
             var tabPer = Ext.ComponentQuery.query('#EditarIngresoPersonal #tabPer')[0];

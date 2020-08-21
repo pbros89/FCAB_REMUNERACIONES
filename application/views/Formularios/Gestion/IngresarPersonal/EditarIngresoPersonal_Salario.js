@@ -192,6 +192,8 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                     var dtVencimiento = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #dtVencimiento')[0];
                     var txtDVJefatura = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtDVJefatura')[0];
                     var txtRutJefatura = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtRutJefatura')[0];
+                    var txtCorreoEmp = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtCorreoEmp')[0];
+                    var cbLugar = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #cbLugar')[0];
 
                     //SALUD
                     var cbAdiEmp = Ext.ComponentQuery.query('#EditarIngresoPersonalSalud #cbAdiEmp')[0];
@@ -296,6 +298,9 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                             , P_COD_TIPO_CONTRATO : cbTipoContrato.value
                             , P_PK_ID : param.PK_ID
                             , P_PERIODO: txtPeriodo.value
+                            , P_CORREO_EMP: txtCorreoEmp.value
+                            , P_COD_LUGAR_TRABAJO: cbLugar.value
+                            , P_NOM_LUGAR_TRABAJO: cbLugar.getRawValue()
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {

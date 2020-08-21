@@ -88,7 +88,14 @@ class IngresarPersonalModel extends CI_Model
                     COD_TIPO_CONTRATO,
                     PERIODO,
                     SISTEMA_ORIGEN,
-                    COD_ORIGEN
+                    COD_ORIGEN,
+                    COD_GERENCIA,
+                    NOM_GERENCIA,
+                    COD_DEPARTAMENTO,
+                    NOM_DEPARTAMENTO,
+                    CORREO_EMP,
+                    COD_LUGAR_TRABAJO,
+                    NOM_LUGAR_TRABAJO
                 FROM NOV_INGRESAR_PERSONAL PER 
                 WHERE 1 = 1 ";
 
@@ -184,7 +191,10 @@ class IngresarPersonalModel extends CI_Model
         $P_MONTO_ADI_EMP,
         $P_FORMATO_ADI_EMP,
         $P_COD_TIPO_CONTRATO,
-        $P_PERIODO
+        $P_PERIODO,
+        $P_CORREO_EMP,
+        $P_COD_LUGAR_TRABAJO,
+        $P_NOM_LUGAR_TRABAJO
     ) {
 
 
@@ -266,6 +276,9 @@ class IngresarPersonalModel extends CI_Model
                         , :P_PERIODO
                         , :P_SISTEMA_ORIGEN
                         , :P_COD_ORIGEN
+                        , :P_CORREO_EMP
+                        , :P_COD_LUGAR_TRABAJO
+                        , :P_NOM_LUGAR_TRABAJO
                         , :r_est
                         , :r_msg);END;"
         );
@@ -341,6 +354,9 @@ class IngresarPersonalModel extends CI_Model
         oci_bind_by_name($proc, "P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_SISTEMA_ORIGEN", $P_SISTEMA_ORIGEN, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_COD_ORIGEN", $P_COD_ORIGEN, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_CORREO_EMP", $P_CORREO_EMP, 500, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_LUGAR_TRABAJO", $P_COD_LUGAR_TRABAJO, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_NOM_LUGAR_TRABAJO", $P_NOM_LUGAR_TRABAJO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
@@ -419,7 +435,10 @@ class IngresarPersonalModel extends CI_Model
         $P_FORMATO_ADI_EMP,
         $P_COD_TIPO_CONTRATO,
         $P_PK_ID,
-        $P_PERIODO
+        $P_PERIODO,
+        $P_CORREO_EMP,
+        $P_COD_LUGAR_TRABAJO,
+        $P_NOM_LUGAR_TRABAJO
     ) {
 
 
@@ -497,6 +516,9 @@ class IngresarPersonalModel extends CI_Model
                       , :P_COD_TIPO_CONTRATO
                       , :P_PK_ID 
                       , :P_PERIODO
+                      , :P_CORREO_EMP
+                      , :P_COD_LUGAR_TRABAJO
+                      , :P_NOM_LUGAR_TRABAJO
                       , :r_est
                       , :r_msg);END;"
         );
@@ -571,6 +593,9 @@ class IngresarPersonalModel extends CI_Model
         oci_bind_by_name($proc, "P_COD_TIPO_CONTRATO", $P_COD_TIPO_CONTRATO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_PK_ID", $P_PK_ID);
         oci_bind_by_name($proc, "P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_CORREO_EMP", $P_CORREO_EMP, 500, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_LUGAR_TRABAJO", $P_COD_LUGAR_TRABAJO, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_NOM_LUGAR_TRABAJO", $P_NOM_LUGAR_TRABAJO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 

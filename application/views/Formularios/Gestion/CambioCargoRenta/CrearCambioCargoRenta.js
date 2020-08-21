@@ -662,6 +662,8 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                                 , P_SUELDO_BASE : txtSueldo
                                 , P_OBSERVACION: values.txtObs
                                 , P_PERIODO: values.cbPeriodo
+                                , P_COD_LUGAR_TRABAJO: values.cbLugar
+                                , P_NOM_LUGAR_TRABAJO: cbLugar.selection.data.NOMBRE
 
                             },
                             callback: function(records, operation, success) {

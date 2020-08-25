@@ -1,3 +1,5 @@
+var carta = '';
+
 var ModalFormDesvinculacion= function(){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación',
@@ -78,13 +80,13 @@ var ModalFormDesvinculacion= function(){
                             change: function(combo){
                                 
                                 var seleccion = combo.getStore().find('RUTNOM',combo.getValue());
-                                var rut = combo.getStore().getAt(seleccion).get('RUT');
+                                var personal = combo.getStore().getAt(seleccion).get('PK_PERSONAL');
 
                                 var form = this.up('form').getForm();
 
                                 storeDesv_datosPersonal.load({
                                     params:{
-                                        p_rut:rut
+                                        p_id:personal
                                     },
                                     callback: function() {
                                         func_llenarDatosPersonal(form, storeDesv_datosPersonal);
@@ -216,12 +218,16 @@ var ModalFormDesvinculacion= function(){
                         xtype: 'radiogroup',
                         fieldLabel: '¿Carta aviso 30 días?',
                         labelWidth: 150,
-                        cls: 'x-check-group-alt',
                         allowBlank: false,
                         items: [
-                            {boxLabel: 'Si', name: 'rb-auto', inputValue: 1, margin: '0 10 0 0',},
-                            {boxLabel: 'No', name: 'rb-auto', inputValue: 2, margin: '0 10 0 0',}
-                        ]
+                            {boxLabel: 'Si', name: 'rbCarta', inputValue: 'Si', margin: '0 10 0 0'},
+                            {boxLabel: 'No', name: 'rbCarta', inputValue: 'No', margin: '0 10 0 0'}
+                        ],
+                        listeners:{
+                            change: function(field, newValue, oldValue){
+                                carta = newValue['rbCarta'];
+                            }
+                        }
                     }]
                 }]// Fin Items Panel
             }],//Fin Items Form
@@ -233,11 +239,19 @@ var ModalFormDesvinculacion= function(){
                 handler: function(){
 
                     var form = this.up('form').getForm();
+                    
+                    var combo_rut = form.findField('cb_rut');
+                    var seleccion = combo_rut.getStore().find('RUTNOM',combo_rut.getValue());
+                    
+                    var personal = combo_rut.getStore().getAt(seleccion).get('PK_PERSONAL');
+                    var combo_fecha = form.findField('date_fecha').value;
+                    var finiquito = Ext.Date.format(combo_fecha,'d/m/Y');
+                    var causal = form.findField('cb_causal').value;
 
                     if(!form.isValid()){
                         alert('Debe completar los campos del formulario.');
                     }else{
-                        ModalFormDesvinculacion_2(form);
+                        ModalFormDesvinculacion_2(personal, finiquito, causal, carta);
                         this.up('window').close();
                     }
 

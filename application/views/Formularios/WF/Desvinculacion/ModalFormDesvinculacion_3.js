@@ -1,4 +1,9 @@
-var ModalFormDesvinculacion_3= function(form1, form2){
+var equipos = '';
+var celu = '';
+var docs = '';
+var caja = '';
+
+var ModalFormDesvinculacion_3= function(personal, finiquito, causal, carta, hechos, motivo){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación - parte 3',
         modal: true,
@@ -109,9 +114,14 @@ var ModalFormDesvinculacion_3= function(form1, form2){
                         flex: 1,
                         allowBlank: false,
                         items: [
-                            {boxLabel: 'Si', name: 'rb-comp', inputValue: 1, margin: '0 10 0 0',},
-                            {boxLabel: 'No', name: 'rb-comp', inputValue: 2, margin: '0 10 0 0',}
-                        ]
+                            {boxLabel: 'Si', name: 'rb_comp', inputValue: 1, margin: '0 10 0 0',},
+                            {boxLabel: 'No', name: 'rb_comp', inputValue: 2, margin: '0 10 0 0',}
+                        ],
+                        listeners:{
+                            change: function(field, newValue, oldValue){
+                                equipos = newValue['rb_comp'];
+                            }
+                        }
                     },{
                         xtype: 'radiogroup',
                         fieldLabel: 'Celular',
@@ -120,9 +130,14 @@ var ModalFormDesvinculacion_3= function(form1, form2){
                         flex: 1,
                         allowBlank: false,
                         items: [
-                            {boxLabel: 'Si', name: 'rb-celu', inputValue: 1, margin: '0 10 0 0',},
-                            {boxLabel: 'No', name: 'rb-celu', inputValue: 2, margin: '0 10 0 0',}
-                        ]
+                            {boxLabel: 'Si', name: 'rb_celu', inputValue: 'Si', margin: '0 10 0 0',},
+                            {boxLabel: 'No', name: 'rb_celu', inputValue: 'No', margin: '0 10 0 0',}
+                        ],
+                        listeners:{
+                            change: function(field, newValue, oldValue){
+                                celu = newValue['rb_celu'];
+                            }
+                        }
                     },{
                         xtype: 'radiogroup',
                         fieldLabel: 'Información, Archivos y Otros',
@@ -131,9 +146,14 @@ var ModalFormDesvinculacion_3= function(form1, form2){
                         flex: 1,
                         allowBlank: false,
                         items: [
-                            {boxLabel: 'Si', name: 'rb-docs', inputValue: 1, margin: '0 10 0 0',},
-                            {boxLabel: 'No', name: 'rb-docs', inputValue: 2, margin: '0 10 0 0',}
-                        ]
+                            {boxLabel: 'Si', name: 'rb_docs', inputValue: 'Si', margin: '0 10 0 0',},
+                            {boxLabel: 'No', name: 'rb_docs', inputValue: 'No', margin: '0 10 0 0',}
+                        ],
+                        listeners:{
+                            change: function(field, newValue, oldValue){
+                                docs = newValue['rb_docs'];
+                            }
+                        }
                     },{
                         xtype: 'radiogroup',
                         fieldLabel: 'Caja Chica',
@@ -142,9 +162,14 @@ var ModalFormDesvinculacion_3= function(form1, form2){
                         flex: 1,
                         allowBlank: false,
                         items: [
-                            {boxLabel: 'Si', name: 'rb-caja', inputValue: 1, margin: '0 10 0 0',},
-                            {boxLabel: 'No', name: 'rb-caja', inputValue: 2, margin: '0 10 0 0',}
-                        ]
+                            {boxLabel: 'Si', name: 'rb_caja', inputValue: 'Si', margin: '0 10 0 0',},
+                            {boxLabel: 'No', name: 'rb_caja', inputValue: 'No', margin: '0 10 0 0',}
+                        ],
+                        listeners:{
+                            change: function(field, newValue, oldValue){
+                                caja = newValue['rb_caja'];
+                            }
+                        }
                     },{
                         xtype: 'textfield',
                         fieldLabel: 'Vehículos u otros (Especificar)',
@@ -164,18 +189,29 @@ var ModalFormDesvinculacion_3= function(form1, form2){
                 margin: '0 10 0 0',
                 handler: function(){
 
-                    var form3 = this.up('form').getForm();
+                    var form = this.up('form').getForm();
+                    var modal = this;
 
-                    if(!form3.isValid()){
+                    if(!form.isValid()){
                         alert('Debe completar los campos del formulario.');
                     }else{
-                        
+                        Ext.MessageBox.confirm('GUARDAR', '¿Está seguro que desea crear la solicitud?', function (btn) {
+                            if (btn === 'yes'){
+
+                                var horasextras = form.findField('numb_horasExtras').value;
+                                var viaticos = form.findField('numb_viatico').value;
+                                var haberes = form.findField('txt_haberes').value;
+                                var descuentos = form.findField('txt_descuentos').value;
+                                var vehiculo = form.findField('txt_vehiculo').value;
+
+                                func_guardarSolDesvinculacion(personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal);
+                            }
+                        });
                     }
 
                 }
             },{
                 xtype: 'button',
-                //iconCls: 'iconMD-save',
                 text: 'Cancelar',
                 margin: '0 10 0 0',
                 handler: function(){
@@ -185,3 +221,54 @@ var ModalFormDesvinculacion_3= function(form1, form2){
         }]//Fin Items Modal
     }).show();
 };
+
+function func_guardarSolDesvinculacion(personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal){
+
+    var array_lineas = [];
+
+    var usuario = NOMBRE;
+    var estado = 'ACTIVO';
+
+    array_lineas.push({
+        personal,
+        usuario,
+        finiquito,
+        causal,
+        carta,
+        hechos,
+        motivo,
+        horasextras,
+        viaticos,
+        haberes,
+        descuentos,
+        equipos,
+        celu,
+        docs,
+        caja,
+        vehiculo,
+        estado
+    });
+
+    var arrayToJson = JSON.stringify(array_lineas);
+
+    storeDesv_guardarSolDesvinculacion.load({
+        params: {
+            listado_lineas: arrayToJson
+        },
+        callback: function() {
+            var estado = storeDesv_guardarSolDesvinculacion.getAt(0).get("ESTADO");
+            var mensaje = storeDesv_guardarSolDesvinculacion.getAt(0).get("MENSAJE");
+          
+            if (estado < 0) {
+                msg("Error", mensaje, Ext.Msg.ERROR, Ext.Msg.OK);
+            }else{
+                msg(
+                "Éxito",
+                "Solicitud creada exitosamente",
+                Ext.Msg.INFO,Ext.Msg.OK);
+    
+                modal.up('window').close();
+            }
+        }
+    });
+}

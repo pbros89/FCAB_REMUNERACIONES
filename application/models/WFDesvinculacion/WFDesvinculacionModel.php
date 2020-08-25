@@ -13,7 +13,8 @@ class WFDesvinculacionModel extends CI_Model {
                     ( rut
                     || ' | '
                     || nombre ) rutNom,
-                    rut
+                    rut,
+                    pk_personal
                 FROM
                     nov_personal
                 WHERE
@@ -27,7 +28,7 @@ class WFDesvinculacionModel extends CI_Model {
 
     }
 
-    public function datosPersonal($rut){
+    public function datosPersonal($p_id){
 
         $sql = "SELECT
                     p.rut,
@@ -40,7 +41,7 @@ class WFDesvinculacionModel extends CI_Model {
                 FROM
                     nov_personal p
                 WHERE
-                    p.rut = '$rut'
+                    p.pk_personal = '$p_id'
                     AND p.fecha_baja IS NULL
                     AND ROWNUM = 1";
 
@@ -60,6 +61,112 @@ class WFDesvinculacionModel extends CI_Model {
                     AND pfk_cod_emp = '$cod_emp'
                 ORDER BY 
                     nombre";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+
+    }
+
+    public function guardarSolDesvinculacion($listado_lineas){
+
+        $detalle = json_decode($listado_lineas,true);
+        
+        $r_estado = 0;
+        $r_mensaje = "OK"; 
+
+        foreach ($detalle as $alerta) {
+
+            $personal = $alerta['personal'];
+            $usuario = $alerta['usuario'];
+            $finiquito = $alerta['finiquito'];
+            $causal = $alerta['causal'];
+            $carta = $alerta['carta'];
+            $hechos = $alerta['hechos'];
+            $motivo = $alerta['motivo'];
+            $horasextras = $alerta['horasextras'];
+            $viaticos = $alerta['viaticos'];
+            $haberes = $alerta['haberes'];
+            $descuentos = $alerta['descuentos'];
+            $equipos = $alerta['equipos'];
+            $celu = $alerta['celu'];
+            $docs = $alerta['docs'];
+            $caja = $alerta['caja'];
+            $vehiculo = $alerta['vehiculo'];
+            $estado = $alerta['estado'];
+
+            $proc = oci_parse($this->db->conn_id, "
+
+                                                BEGIN
+
+                                                NOV_INS_SOL_DESVINCULACION(
+                                                        :P_PERSONAL,
+                                                        :P_USUARIO,
+                                                        :P_FINIQUITO,
+                                                        :P_CAUSAL,
+                                                        :P_CARTA,
+                                                        :P_HECHOS,
+                                                        :P_MOTIVO,
+                                                        :P_HORASEXTRAS,
+                                                        :P_VIATICOS,
+                                                        :P_HABERES,
+                                                        :P_DESCUENTOS,
+                                                        :P_EQUIPOS,
+                                                        :P_CELU,
+                                                        :P_DOCS,
+                                                        :P_CAJA,
+                                                        :P_VEHICULO,
+                                                        :P_ESTADO,
+                                                        :ESTADO,
+                                                        :MENSAJE
+                                                );
+                                                END;");
+
+            oci_bind_by_name($proc,"P_PERSONAL",$personal, -1, OCI_B_INT);
+            oci_bind_by_name($proc,"P_USUARIO",$usuario, 40, SQLT_CHR); 
+            oci_bind_by_name($proc,"P_FINIQUITO",$finiquito, 40, SQLT_CHR);
+            oci_bind_by_name($proc,"P_CAUSAL",$causal, 40, SQLT_CHR);
+            oci_bind_by_name($proc,"P_CARTA",$carta, 2, SQLT_CHR);
+            oci_bind_by_name($proc,"P_HECHOS",$hechos, 500, SQLT_CHR);
+            oci_bind_by_name($proc,"P_MOTIVO",$motivo, 500, SQLT_CHR);
+            oci_bind_by_name($proc,"P_HORASEXTRAS",$horasextras, -1, OCI_B_INT);
+            oci_bind_by_name($proc,"P_VIATICOS",$viaticos, -1, OCI_B_INT);
+            oci_bind_by_name($proc,"P_HABERES",$haberes, 100, SQLT_CHR);
+            oci_bind_by_name($proc,"P_DESCUENTOS",$descuentos, 100, SQLT_CHR); 
+            oci_bind_by_name($proc,"P_EQUIPOS",$equipos, 2, SQLT_CHR); 
+            oci_bind_by_name($proc,"P_CELU",$celu, 2, SQLT_CHR); 
+            oci_bind_by_name($proc,"P_DOCS",$docs, 2, SQLT_CHR); 
+            oci_bind_by_name($proc,"P_CAJA",$caja, 2, SQLT_CHR); 
+            oci_bind_by_name($proc,"P_VEHICULO",$vehiculo, 100, SQLT_CHR); 
+            oci_bind_by_name($proc,"P_ESTADO",$estado, 20, SQLT_CHR); 
+            oci_bind_by_name($proc,"ESTADO",$r_estado,  -1, OCI_B_INT); 
+            oci_bind_by_name($proc,"MENSAJE",$r_mensaje, 1100, SQLT_CHR);
+
+            oci_execute($proc);
+
+            if($estado < 0){
+                $result = array('ESTADO' => $r_estado, 'MENSAJE' => $r_mensaje);    
+                return $result;      
+            }
+
+        }
+
+        $result = array('ESTADO' => $r_estado, 'MENSAJE' => $r_mensaje);    
+        return $result; 
+    }
+
+    public function listaDesvinculaciones($cod_emp){
+
+        $sql = "SELECT
+                    d.pk_num_desv numero,
+                    d.estado,
+                    p.rut,
+                    p.nombre
+                FROM
+                    nov_sol_desvinculacion   d,
+                    nov_personal             p
+                WHERE
+                    d.pfk_personal = p.pk_personal
+                    AND p.cod_emp = $cod_emp";
 
         $query = $this->db->query($sql);
         return $query->result();

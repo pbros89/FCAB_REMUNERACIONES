@@ -1,4 +1,4 @@
-var ModalFormDesvinculacion_2= function(form1){
+var ModalFormDesvinculacion_2= function(personal, finiquito, causal, carta){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación - parte 2',
         modal: true,
@@ -9,7 +9,6 @@ var ModalFormDesvinculacion_2= function(form1){
 
                 var form2 = this.down('form').getForm();
 
-                var causal = form1.findField('cb_causal').value;
                 var campoHechos = form2.findField('txt_hechos');
                 campoHechos.labelEl.update('Los hechos en que se funda la causal invocada ('+causal+') consisten en:') ;
 
@@ -83,12 +82,15 @@ var ModalFormDesvinculacion_2= function(form1){
                 margin: '0 10 0 0',
                 handler: function(){
 
-                    var form2 = this.up('form').getForm();
+                    var form = this.up('form').getForm();
 
-                    if(!form2.isValid()){
+                    if(!form.isValid()){
                         alert('Debe completar los campos del formulario.');
                     }else{
-                        ModalFormDesvinculacion_3(form1, form2);
+                        
+                        var hechos = form.findField('txt_hechos').value;
+                        var motivo = form.findField('txt_motivo').value;
+                        ModalFormDesvinculacion_3(personal, finiquito, causal, carta, hechos, motivo);
                         this.up('window').close();
                     }
 

@@ -32,9 +32,9 @@ class WFDesvinculacionController extends CI_Controller
 
     public function datosPersonal()
     {
-        $rut = $this->input->get('p_rut');
+        $p_id = $this->input->get('p_id');
 
-        $query = $this->WFDesvinculacionModel->datosPersonal($rut);
+        $query = $this->WFDesvinculacionModel->datosPersonal($p_id);
 
         $result = "{'success':true, 'items':" . json_encode($query) . "}";
 
@@ -47,6 +47,30 @@ class WFDesvinculacionController extends CI_Controller
         $cod_emp = $this->input->get('cod_emp');
 
         $query = $this->WFDesvinculacionModel->listCausalesDespido($cod_emp);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
+    public function guardarSolDesvinculacion()
+    {
+        $listado_lineas = $this->input->get('listado_lineas');
+
+        $query = $this->WFDesvinculacionModel->guardarSolDesvinculacion($listado_lineas);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
+    public function listaDesvinculaciones()
+    {
+        $cod_emp = $this->input->get('cod_emp');
+
+        $query = $this->WFDesvinculacionModel->listaDesvinculaciones($cod_emp);
 
         $result = "{'success':true, 'items':" . json_encode($query) . "}";
 

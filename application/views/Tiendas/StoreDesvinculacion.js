@@ -42,3 +42,33 @@ var storeDesv_listCausalesDespido = new Ext.data.Store({
   },
   autoLoad: false
 });
+
+var storeDesv_guardarSolDesvinculacion = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/guardarSolDesvinculacion",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});
+
+var storeDesv_listaDesvinculaciones = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/listaDesvinculaciones",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});

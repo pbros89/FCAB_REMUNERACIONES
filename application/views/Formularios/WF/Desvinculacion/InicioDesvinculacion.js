@@ -69,7 +69,7 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
                 var grid = this.up('grid'); //Recuperamos la grilla
                 try { //Obtenemos el index del item seleccionado
                     var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
-                    //clickDetalleIngresoPersonal(grid, rowIndex);
+                    clickDetalleSolDesvinculacion(grid, rowIndex);
                 } catch (e) {
                     msg("Nada seleccionado", "Por favor, seleccione el item que desea ver el Detalle", Ext.Msg.ERROR, Ext.Msg.OK);
                     console.debug(e);
@@ -106,3 +106,10 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
         }
     ]
 });
+
+function clickDetalleSolDesvinculacion(grid, rowIndex){
+
+    var records = grid.getStore().getRange();
+    var num_sol = records[rowIndex].get('NUMERO');
+    ModalDetalleDesvinculacion(num_sol);
+}

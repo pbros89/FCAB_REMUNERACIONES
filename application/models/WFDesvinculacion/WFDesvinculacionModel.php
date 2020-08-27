@@ -173,4 +173,37 @@ class WFDesvinculacionModel extends CI_Model {
 
     }
 
+    public function detalleDesvinculacion($numero){
+
+        $sql = "SELECT
+                    pk_num_desv     numero,
+                    pfk_personal    personal,
+                    fecha_solicitud fecha,
+                    usr_creador     creador,
+                    fecha_finiquito finiquito,
+                    causal_desp     causal,
+                    carta_aviso     carta,
+                    det_hechos      hechos,
+                    det_motivo      motivo,
+                    horas_extras,
+                    viaticos,
+                    det_haberes     haberes,
+                    det_descuentos  descuentos,
+                    equip_comp      equipos,
+                    celular,
+                    documentos,
+                    caja_chica,
+                    det_vehiculos   vehiculos,
+                    estado,
+                    etapa
+                FROM
+                    nov_sol_desvinculacion
+                WHERE
+                    pk_num_desv = $numero";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+
+    }
+
 }

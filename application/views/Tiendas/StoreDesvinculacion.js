@@ -72,3 +72,18 @@ var storeDesv_listaDesvinculaciones = new Ext.data.Store({
   },
   autoLoad: false
 });
+
+var storeDesv_detalleDesvinculacion = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/detalleDesvinculacion",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});

@@ -78,4 +78,16 @@ class WFDesvinculacionController extends CI_Controller
 
     }
 
+    public function detalleDesvinculacion()
+    {
+        $numero = $this->input->get('p_numero');
+
+        $query = $this->WFDesvinculacionModel->detalleDesvinculacion($numero);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
 }

@@ -1,4 +1,3 @@
-var carta = '';
 
 var ModalDetalleDesvinculacion= function(p_numero){
     Ext.create('Ext.window.Window', {
@@ -15,9 +14,7 @@ var ModalDetalleDesvinculacion= function(p_numero){
                 var form = this.down('form').getForm();
                 //Traemos el detalle de la solicitud:
                 storeDesv_detalleDesvinculacion.load({
-                    params:{
-                        p_numero: p_numero
-                    },
+                    params:{p_numero: p_numero},
                     callback: function(){
                         var records = storeDesv_detalleDesvinculacion.getRange();
                         //Traemos el detalle de la persona:
@@ -408,14 +405,41 @@ var ModalDetalleDesvinculacion= function(p_numero){
                             autoEl:{//Un CANVAS para dibujar en él el flujo de aprobación:
                                 tag: 'canvas',
                                 height: 250,
-                                width: 900,
+                                width: 1000,
                             },
                             listeners:{
                                 render:{
                                     scope:this,
                                     fn:function(){
+
+                                        var canvas = Ext.getCmp('mypanelflow').items.items[1].el.dom;
+                                        var records = storeDesv_detalleDesvinculacion.getRange();
+                                        var caso = records[0].get('CASO');
+
+                                        //Traemos el detalle del Caso del wf:
+                                        storeDesv_detalleCasoWF.load({
+                                            params:{
+                                                p_wf: 'DESVINCULACION',
+                                                p_caso: caso
+                                            },
+                                            callback: function(){
+                                                //Traemos el detalle de aprobacion de la solicitud:
+                                                storeDesv_detalleAprobacionWF.load({
+                                                    params:{
+                                                        p_numero: p_numero
+                                                    },
+                                                    callback: function(){
+                                                        var recordCaso = storeDesv_detalleCasoWF.getRange();
+                                                        var recordAprob = storeDesv_detalleAprobacionWF.getRange();
+                                                        //Dibujamos el flujo:
+                                                        func_drawFlow(canvas, recordCaso, recordAprob);
+                                                    }
+                                                });
+                                            }
+                                        });
                                         //Dibujar Linea:
-                                        func_drawFlow(Ext.getCmp('mypanelflow').items.items[1].el.dom);
+                                        //func_drawFlow(Ext.getCmp('mypanelflow').items.items[1].el.dom);
+
                                     }
                                 }
                             }
@@ -489,35 +513,42 @@ function func_llenarDetalleDesvinculacion(form, recordsSol, recordsPer){
     form.findField('txt_docs').setValue(recordsSol[0].get('DOCUMENTOS'));
     form.findField('txt_cajachica').setValue(recordsSol[0].get('CAJA_CHICA'));
     form.findField('txt_vehiculo').setValue(recordsSol[0].get('VEHICULOS'));
+
 }
 
 //Función para dibujar el flujo de aprobacion:
-function func_drawFlow(el) {
+function func_drawFlow(el , recordCaso, recordAprob) {
     
     var canvas = el;
     var lapiz = canvas.getContext("2d");
 
     //Estilo del lapiz:
-    lapiz.strokeStyle = "#5fa2dd";
-    lapiz.fillStyle = "#5fa2dd";
-    lapiz.font = "10pt Verdana";
+    var azul = "#5fa2dd";
+    var verde = "#00c853";
+    var rojo = "#E74C3C";
+
+    lapiz.strokeStyle = azul;
+    lapiz.fillStyle = azul;
+    lapiz.font = "8pt Verdana";
     lapiz.textAlign = "center";
 
     //Limpiamos cualquier dibujo previo sobre el canvas:
     lapiz.clearRect(0, 0, canvas.width, canvas.height);
 
-    var margen = 100;
+    //Setting:
+    var margen = 50;
 
     var alto_line = 20;
-    var largo_line = 800;
+    var largo_line = canvas.width-margen*2;
 
-    var cant_box = 5;
+    var cant_box = recordCaso.length;
 
     var alto_box = 80;
     var largo_box = largo_line / (cant_box+1);
     var distacia = (largo_line - largo_box*cant_box) /(cant_box-1);
 
-    var name_y = margen + alto_line/2;
+    var nameEtapa = '';
+    var nameRol = '';
 
     //Dibujar Linea de flujo:
     lapiz.fillRect(margen,margen,largo_line,alto_line);
@@ -525,21 +556,34 @@ function func_drawFlow(el) {
     //Colocar Box de Aprobación:
     for (i=0; i<cant_box; i++){
 
+        if(i<recordAprob.length){
+            if(recordAprob[i].get('ESTADO') == 'APROBADO'){
+                lapiz.fillStyle = verde;
+            }else{//Rechazado
+                lapiz.fillStyle = rojo;
+            }
+            nameRol = recordAprob[i].get('USUARIO');
+        }else{
+            lapiz.fillStyle = azul;
+            nameRol = recordCaso[i].get('ROL');
+        }
+        
         x = margen + i*largo_box + i*distacia;
         y = margen - alto_box/2 + alto_line/2;
 
-        lapiz.fillStyle = "#5fa2dd";
         roundedRect(lapiz,x,y,largo_box,alto_box,5,false,true);
 
         //Textos:
         lapiz.fillStyle = "white";
         //Etapa:
-        name = 'ETAPA '+(i+1);
-        lapiz.fillText(name,x+largo_box/2,y+30);
+        nameEtapa = 'ETAPA '+(i+1);
+        lapiz.fillText(nameEtapa,x+largo_box/2,y+30);
         //Responsable:
-        name = 'RESPONSABLE';
-        lapiz.fillText(name,x+largo_box/2,y+60);
+        lapiz.fillText(nameRol,x+largo_box/2,y+60);
     }
+    //Colocamos el Caso:
+    lapiz.fillStyle = azul;
+    lapiz.fillText('CASO: '+recordCaso[0].get('CASO'),canvas.width/2,margen+alto_box+20);
 
   }
 

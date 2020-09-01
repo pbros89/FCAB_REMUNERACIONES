@@ -7,6 +7,23 @@ class WFDesvinculacionModel extends CI_Model {
         $this->load->database("BD_NOVEDADES");
     }
 
+    public function misRoles($usaurio){
+
+        $sql = "SELECT
+        u.pfk_rol_wf rol,
+        r.nombre
+    FROM
+        nov_usuarios_roles_wf   u,
+        nov_roles_wf            r
+    WHERE
+        u.pfk_usuario = '$usaurio'
+        AND u.pfk_rol_wf = r.pk_rol_wf";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+
+    }
+
     public function listRutNombre($cod_emp){
 
         $sql = "SELECT DISTINCT
@@ -76,6 +93,7 @@ class WFDesvinculacionModel extends CI_Model {
 
         foreach ($detalle as $alerta) {
 
+            $rol = $alerta['rol'];
             $personal = $alerta['personal'];
             $usuario = $alerta['usuario'];
             $finiquito = $alerta['finiquito'];
@@ -99,6 +117,7 @@ class WFDesvinculacionModel extends CI_Model {
                                                 BEGIN
 
                                                 NOV_INS_SOL_DESVINCULACION(
+                                                        :P_ROL,
                                                         :P_PERSONAL,
                                                         :P_USUARIO,
                                                         :P_FINIQUITO,
@@ -121,6 +140,7 @@ class WFDesvinculacionModel extends CI_Model {
                                                 );
                                                 END;");
 
+            oci_bind_by_name($proc,"P_ROL",$rol, 40, SQLT_CHR);
             oci_bind_by_name($proc,"P_PERSONAL",$personal, -1, OCI_B_INT);
             oci_bind_by_name($proc,"P_USUARIO",$usuario, 40, SQLT_CHR); 
             oci_bind_by_name($proc,"P_FINIQUITO",$finiquito, 40, SQLT_CHR);
@@ -195,11 +215,44 @@ class WFDesvinculacionModel extends CI_Model {
                     caja_chica,
                     det_vehiculos   vehiculos,
                     estado,
-                    etapa
+                    caso
                 FROM
                     nov_sol_desvinculacion
                 WHERE
                     pk_num_desv = $numero";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+
+    }
+
+    public function detalleCasoWF($wf, $caso){
+
+        $sql = "SELECT
+                    caso,
+                    etapa,
+                    rol
+                FROM
+                    nov_proc_wf
+                WHERE
+                    nombre_wf = '$wf'
+                    and caso =$caso";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+
+    }
+
+    public function detalleAprobacionWF($numero){
+
+        $sql = "SELECT
+                    pfk_etapa etapa,
+                    usr_aprob usuario,
+                    estado
+                FROM
+                    nov_aprobaciones_wf
+                WHERE
+                    pfk_solicitud =$numero";
 
         $query = $this->db->query($sql);
         return $query->result();

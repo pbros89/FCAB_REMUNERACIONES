@@ -1,3 +1,18 @@
+var storeDesv_misRoles = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/misRoles",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});
+
 var storeDesv_listRutNombre = new Ext.data.Store({
   proxy: {
     type: "ajax",
@@ -79,6 +94,36 @@ var storeDesv_detalleDesvinculacion = new Ext.data.Store({
     url:
       JsonHost +
       "WFDesvinculacion/WFDesvinculacionController/detalleDesvinculacion",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});
+
+var storeDesv_detalleCasoWF = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/detalleCasoWF",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});
+
+var storeDesv_detalleAprobacionWF = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/detalleAprobacionWF",
     reader: {
       type: "json",
       rootProperty: "items",

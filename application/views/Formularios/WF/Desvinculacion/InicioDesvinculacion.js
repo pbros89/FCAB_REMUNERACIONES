@@ -51,13 +51,47 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
     dockedItems: [{
         xtype: 'toolbar',
         items: [{
+            xtype: 'combo',
+            fieldLabel: 'Rol atuador',
+            //labelAlign: 'top',
+            name:'cb_rol',
+            margin: '0 30 0 0',
+            width: 300,
+            store: storeDesv_misRoles,
+            queryMode: 'local',
+            displayField: 'NOMBRE',
+            valueField: 'ROL',
+            emptyText: 'Seleccione',
+            forceSelection: true,
+            allowBlank: false,
+            listeners:{
+                afterrender: function(combo){
+                    var store = combo.getStore();
+                    store.load({
+                        params:{
+                            p_usuario: NOMBRE
+                        }
+                    });
+                },
+                change: function(combo){
+                    
+                }
+            }
+        },{
             text: 'Ingresar',
             //itemId: 'btnIngresar',
             //hidden: true,
             tooltip: 'Ingresar nueva solicitud',
             iconCls: 'icon-form-add',
             handler: function () {
-                ModalFormDesvinculacion();
+                var form = this.up('form').getForm();
+                var rol = form.findField('cb_rol').value;
+                if(form.isValid()){
+                    ModalFormDesvinculacion(rol);
+                }else{
+                    alert('Debe seleccionar un Rol Actuador.');
+                }
+                
             }
         },{
             text: 'Detalle',
@@ -74,6 +108,21 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
                     msg("Nada seleccionado", "Por favor, seleccione el item que desea ver el Detalle", Ext.Msg.ERROR, Ext.Msg.OK);
                     console.debug(e);
                 }
+            }
+        },{
+            text: 'Refrescar',
+            tooltip: 'Refrescar Pantalla',
+            iconCls: 'icon-form-refresh',
+            handler: function () {
+                var grid = this.up('grid');
+                var storeGrid = grid.getStore();
+             
+                storeGrid.load({
+                    params:{
+                        cod_emp: EMPRESA
+                    }
+                });
+                
             }
         }]
     }],

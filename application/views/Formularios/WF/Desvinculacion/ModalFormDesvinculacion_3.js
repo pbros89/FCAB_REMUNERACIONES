@@ -3,7 +3,7 @@ var celu = '';
 var docs = '';
 var caja = '';
 
-var ModalFormDesvinculacion_3= function(personal, finiquito, causal, carta, hechos, motivo){
+var ModalFormDesvinculacion_3= function(rol, personal, finiquito, causal, carta, hechos, motivo){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación - parte 3',
         modal: true,
@@ -114,8 +114,8 @@ var ModalFormDesvinculacion_3= function(personal, finiquito, causal, carta, hech
                         flex: 1,
                         allowBlank: false,
                         items: [
-                            {boxLabel: 'Si', name: 'rb_comp', inputValue: 1, margin: '0 10 0 0',},
-                            {boxLabel: 'No', name: 'rb_comp', inputValue: 2, margin: '0 10 0 0',}
+                            {boxLabel: 'Si', name: 'rb_comp', inputValue: 'Si', margin: '0 10 0 0',},
+                            {boxLabel: 'No', name: 'rb_comp', inputValue: 'No', margin: '0 10 0 0',}
                         ],
                         listeners:{
                             change: function(field, newValue, oldValue){
@@ -204,7 +204,7 @@ var ModalFormDesvinculacion_3= function(personal, finiquito, causal, carta, hech
                                 var descuentos = form.findField('txt_descuentos').value;
                                 var vehiculo = form.findField('txt_vehiculo').value;
 
-                                func_guardarSolDesvinculacion(personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal);
+                                func_guardarSolDesvinculacion(rol, personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal);
                             }
                         });
                     }
@@ -222,7 +222,7 @@ var ModalFormDesvinculacion_3= function(personal, finiquito, causal, carta, hech
     }).show();
 };
 
-function func_guardarSolDesvinculacion(personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal){
+function func_guardarSolDesvinculacion(rol, personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal){
 
     var array_lineas = [];
 
@@ -230,6 +230,7 @@ function func_guardarSolDesvinculacion(personal, finiquito, causal, carta, hecho
     var estado = 'ACTIVO';
 
     array_lineas.push({
+        rol,
         personal,
         usuario,
         finiquito,

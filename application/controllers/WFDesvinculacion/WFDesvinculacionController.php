@@ -18,6 +18,18 @@ class WFDesvinculacionController extends CI_Controller
             ->set_header("Content-Type: application/json; charset=UTF-8");
     }
 
+    public function misRoles()
+    {
+        $usaurio = $this->input->get('p_usuario');
+
+        $query = $this->WFDesvinculacionModel->misRoles($usaurio);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
     public function listRutNombre()
     {
         $cod_emp = $this->input->get('cod_emp');
@@ -83,6 +95,31 @@ class WFDesvinculacionController extends CI_Controller
         $numero = $this->input->get('p_numero');
 
         $query = $this->WFDesvinculacionModel->detalleDesvinculacion($numero);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
+    public function detalleCasoWF()
+    {
+        $wf = $this->input->get('p_wf');
+        $caso = $this->input->get('p_caso');
+
+        $query = $this->WFDesvinculacionModel->detalleCasoWF($wf, $caso);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
+    public function detalleAprobacionWF()
+    {
+        $numero = $this->input->get('p_numero');
+
+        $query = $this->WFDesvinculacionModel->detalleAprobacionWF($numero);
 
         $result = "{'success':true, 'items':" . json_encode($query) . "}";
 

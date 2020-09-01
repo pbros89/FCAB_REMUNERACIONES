@@ -1,6 +1,6 @@
 var carta = '';
 
-var ModalFormDesvinculacion= function(){
+var ModalFormDesvinculacion= function(rol){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación',
         modal: true,
@@ -251,7 +251,7 @@ var ModalFormDesvinculacion= function(){
                     if(!form.isValid()){
                         alert('Debe completar los campos del formulario.');
                     }else{
-                        ModalFormDesvinculacion_2(personal, finiquito, causal, carta);
+                        ModalFormDesvinculacion_2(rol, personal, finiquito, causal, carta);
                         this.up('window').close();
                     }
 

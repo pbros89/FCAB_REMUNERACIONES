@@ -62,7 +62,6 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
             displayField: 'NOMBRE',
             valueField: 'ROL',
             emptyText: 'Seleccione',
-            forceSelection: true,
             allowBlank: false,
             listeners:{
                 afterrender: function(combo){
@@ -70,6 +69,10 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
                     store.load({
                         params:{
                             p_usuario: NOMBRE
+                        },
+                        callback: function(){
+                            var primero = combo.getStore().getAt(0).get('NOMBRE');
+                            combo.setValue(primero);
                         }
                     });
                 },
@@ -85,11 +88,14 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
             iconCls: 'icon-form-add',
             handler: function () {
                 var form = this.up('form').getForm();
-                var rol = form.findField('cb_rol').value;
+                var combo = form.findField('cb_rol');
+                var seleccion = combo.getStore().find('NOMBRE',combo.getValue());
+                var rol = combo.getStore().getAt(seleccion).get('ROL');
+
                 if(form.isValid()){
                     ModalFormDesvinculacion(rol);
                 }else{
-                    alert('Debe seleccionar un Rol Actuador.');
+                    showToast('Debe seleccionar un Rol Actuador.');
                 }
                 
             }
@@ -101,13 +107,70 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
             iconCls: 'icon-form-detail',
             handler: function () {
                 var grid = this.up('grid'); //Recuperamos la grilla
+                var form = this.up('form').getForm();
                 try { //Obtenemos el index del item seleccionado
                     var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
-                    clickDetalleSolDesvinculacion(grid, rowIndex);
+                    clickDetalleSolDesvinculacion(grid, rowIndex, form);                   
                 } catch (e) {
                     msg("Nada seleccionado", "Por favor, seleccione el item que desea ver el Detalle", Ext.Msg.ERROR, Ext.Msg.OK);
                     console.debug(e);
                 }
+            }
+        },{
+            text: 'Anular',
+            //itemId: 'btnAnular',
+            //hidden: true,
+            tooltip: 'Anular Item seleccionado',
+            iconCls: 'icon-form-suspend',
+            handler: function () {
+                var grid = this.up('grid'); //Recuperamos la grilla
+                try { //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
+                    clickAnularSolDesvinculacion(grid, rowIndex);
+                } catch (e) {
+                    msg("Nada seleccionado", "Por favor, seleccione la solicitud que desea anular.", Ext.Msg.ERROR, Ext.Msg.OK);
+                    console.debug(e);
+                }
+            }
+        },{
+            text: "Documentos",
+            itemId: "btnDoc",
+            //hidden: true,
+            tooltip: "Ver documentos",
+            iconCls: "icon-form-folder",
+            handler: function() {
+                var grid = this.up("grid"); //Recuperamos la grilla
+                try {
+                    //Obtenemos el index del item seleccionado
+                    var rowIndex = grid.getSelectionModel().getCurrentPosition()
+                    .rowIdx;
+                    var rec = grid.getStore();
+                    var recRow = rec.getAt(rowIndex);
+                    
+                    modalAdjuntosAdmin(
+                        recRow.data.PERSONAL,
+                        "ingreso_personal",
+                        "Ingreso Personal " + recRow.data.PERSONAL
+                    );
+                    
+                } catch (e) {
+                    msg(
+                    "Nada seleccionado",
+                    "Por favor, seleccione el item",
+                    Ext.Msg.ERROR,
+                    Ext.Msg.OK
+                    );
+                    console.debug(e);
+                }
+            }
+        },{
+            text: 'Matriz de causales',
+            //itemId: 'btnDetalle',
+            //hidden: true,
+            tooltip: 'Descargar manual de usuario.',
+            iconCls: 'icon-form-detail',
+            handler: function () {
+                window.open('resources/docs/Matriz_Causales_Desvinculacion.pdf');
             }
         },{
             text: 'Refrescar',
@@ -156,9 +219,51 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
     ]
 });
 
-function clickDetalleSolDesvinculacion(grid, rowIndex){
+function clickDetalleSolDesvinculacion(grid, rowIndex, form){
+
+    var rol = form.findField('cb_rol').value;
 
     var records = grid.getStore().getRange();
     var num_sol = records[rowIndex].get('NUMERO');
-    ModalDetalleDesvinculacion(num_sol);
+
+    if(form.isValid()){
+        ModalDetalleDesvinculacion(num_sol, rol);            
+    }else{
+        showToast('Debe seleccionar un Rol Actuador.');
+    }
+    
 }
+
+var clickAnularSolDesvinculacion = function(grid, rowIndex) {
+    var records = grid.getStore().getRange();
+    var num_sol = records[rowIndex].get('NUMERO');
+    Ext.MessageBox.confirm(
+        'Anular Solicitud de Desvinculación.', 
+        '¿Esta seguro de anular la solicitud de desvinculación?<br>', 
+    function(btn) {
+        if (btn === 'yes') {
+            storeAnularSolDesvinculacion.load({
+                params:{
+                    p_numero:num_sol,
+                    p_usuario: NOMBRE
+                },
+                callback: function(records, operation, success) {
+                    if(records != null) {
+                        if(records[0].data.r_msg == 'OK'){
+                            showToast('Solicitud Anulada Correctamente.');
+                        }else{
+                            Ext.MessageBox.show({
+                                title: 'ADVERTENCIA',
+                                msg: records[0].data.r_msg,
+                                icon: Ext.MessageBox.WARNING,
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                    }
+                    
+                }
+            });
+            
+        }
+    });
+};

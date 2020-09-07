@@ -189,12 +189,37 @@ var ModalFormDesvinculacion= function(rol){
                         }
                         
                     },{
+                        xtype: 'radiogroup',
+                        fieldLabel: '¿Carta aviso 30 días?',
+                        labelAlign: 'top',
+                        flex: 1,
+                        allowBlank: false,
+                        items: [
+                            {boxLabel: 'Si', name: 'rbCarta', inputValue: 'Si', margin: '0 10 0 0'},
+                            {boxLabel: 'No', name: 'rbCarta', inputValue: 'No', margin: '0 10 0 0'}
+                        ],
+                        listeners:{
+                            change: function(field, newValue, oldValue){
+                                carta = newValue['rbCarta'];
+                            }
+                        }
+                    },{
+                        xtype: 'label',
+                        flex: 1
+                    }]
+                },{
+                    xtype: 'container',
+                    layout: {
+                        type: 'hbox',
+                        align: 'left',
+                    },
+                    items: [{
                         xtype: 'combo',
                         fieldLabel: 'Seleccione causal de Despido',
                         labelAlign: 'top',
                         name:'cb_causal',
                         margin: '0 10 0 0',
-                        flex: 2,
+                        flex: 1,
                         store: storeDesv_listCausalesDespido,
                         queryMode: 'local',
                         displayField: 'NOMBRE',
@@ -204,28 +229,35 @@ var ModalFormDesvinculacion= function(rol){
                         allowBlank: false,
                         listeners:{
                             change: function(combo){
-                                
+                                var form = this.up('form').getForm();
+                                var causal_2 = form.findField('cb_causal2').value;
+                                if(combo.value == causal_2){
+                                    showToast('No puede ser las dos causales iguales.');
+                                    combo.reset();
+                                }
                             }
                         }
-                    }]
-                },{
-                    xtype: 'container',
-                    layout: {
-                        type: 'hbox',
-                        align: 'left',
-                    },
-                    items: [{
-                        xtype: 'radiogroup',
-                        fieldLabel: '¿Carta aviso 30 días?',
-                        labelWidth: 150,
-                        allowBlank: false,
-                        items: [
-                            {boxLabel: 'Si', name: 'rbCarta', inputValue: 'Si', margin: '0 10 0 0'},
-                            {boxLabel: 'No', name: 'rbCarta', inputValue: 'No', margin: '0 10 0 0'}
-                        ],
+                    },{
+                        xtype: 'combo',
+                        fieldLabel: 'Seleccione segunda causal de Despido (opcional)',
+                        labelAlign: 'top',
+                        name:'cb_causal2',
+                        margin: '0 10 0 0',
+                        flex: 1,
+                        store: storeDesv_listCausalesDespido,
+                        queryMode: 'local',
+                        displayField: 'NOMBRE',
+                        valueField: 'NOMBRE',
+                        emptyText: 'Seleccione',
+                        forceSelection: false,
                         listeners:{
-                            change: function(field, newValue, oldValue){
-                                carta = newValue['rbCarta'];
+                            change: function(combo){
+                                var form = this.up('form').getForm();
+                                var causal_1 = form.findField('cb_causal').value;
+                                if(combo.value == causal_1){
+                                    showToast('No puede ser las dos causales iguales.');
+                                    combo.reset();
+                                }
                             }
                         }
                     }]
@@ -247,11 +279,12 @@ var ModalFormDesvinculacion= function(rol){
                     var combo_fecha = form.findField('date_fecha').value;
                     var finiquito = Ext.Date.format(combo_fecha,'d/m/Y');
                     var causal = form.findField('cb_causal').value;
+                    var causal2 = form.findField('cb_causal2').value;
 
                     if(!form.isValid()){
-                        alert('Debe completar los campos del formulario.');
+                        showToast('Debe completar los campos del formulario.');
                     }else{
-                        ModalFormDesvinculacion_2(rol, personal, finiquito, causal, carta);
+                        ModalFormDesvinculacion_2(rol, personal, finiquito, carta, causal, causal2);
                         this.up('window').close();
                     }
 

@@ -3,7 +3,7 @@ var celu = '';
 var docs = '';
 var caja = '';
 
-var ModalFormDesvinculacion_3= function(rol, personal, finiquito, causal, carta, hechos, motivo){
+var ModalFormDesvinculacion_3= function(rol, personal, finiquito, carta, causal, causal2, hechos, motivo){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación - parte 3',
         modal: true,
@@ -193,7 +193,7 @@ var ModalFormDesvinculacion_3= function(rol, personal, finiquito, causal, carta,
                     var modal = this;
 
                     if(!form.isValid()){
-                        alert('Debe completar los campos del formulario.');
+                        showToast('Debe completar los campos del formulario.');
                     }else{
                         Ext.MessageBox.confirm('GUARDAR', '¿Está seguro que desea crear la solicitud?', function (btn) {
                             if (btn === 'yes'){
@@ -204,7 +204,7 @@ var ModalFormDesvinculacion_3= function(rol, personal, finiquito, causal, carta,
                                 var descuentos = form.findField('txt_descuentos').value;
                                 var vehiculo = form.findField('txt_vehiculo').value;
 
-                                func_guardarSolDesvinculacion(rol, personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal);
+                                func_guardarSolDesvinculacion(rol, personal, finiquito, carta, causal, causal2, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal);
                             }
                         });
                     }
@@ -222,7 +222,7 @@ var ModalFormDesvinculacion_3= function(rol, personal, finiquito, causal, carta,
     }).show();
 };
 
-function func_guardarSolDesvinculacion(rol, personal, finiquito, causal, carta, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal){
+function func_guardarSolDesvinculacion(rol, personal, finiquito, carta, causal, causal2, hechos, motivo, horasextras, viaticos, haberes, descuentos, vehiculo, modal){
 
     var array_lineas = [];
 
@@ -234,8 +234,9 @@ function func_guardarSolDesvinculacion(rol, personal, finiquito, causal, carta, 
         personal,
         usuario,
         finiquito,
-        causal,
         carta,
+        causal,
+        causal2,
         hechos,
         motivo,
         horasextras,
@@ -256,19 +257,23 @@ function func_guardarSolDesvinculacion(rol, personal, finiquito, causal, carta, 
         params: {
             listado_lineas: arrayToJson
         },
-        callback: function() {
-            var estado = storeDesv_guardarSolDesvinculacion.getAt(0).get("ESTADO");
-            var mensaje = storeDesv_guardarSolDesvinculacion.getAt(0).get("MENSAJE");
-          
-            if (estado < 0) {
-                msg("Error", mensaje, Ext.Msg.ERROR, Ext.Msg.OK);
-            }else{
-                msg(
-                "Éxito",
-                "Solicitud creada exitosamente",
-                Ext.Msg.INFO,Ext.Msg.OK);
-    
-                modal.up('window').close();
+        callback: function(records) {
+            if(records != null){
+                var estado = records[0].data.r_est;
+                var mensaje = records[0].data.r_msg;
+                
+                if (estado == 0) {
+                    showToast('Solicitud creada exitosamente.');
+                    modal.up('window').close();
+                    
+                }else{
+                    Ext.MessageBox.show({
+                        title: 'ADVERTENCIA',
+                        msg: mensaje,
+                        icon: Ext.MessageBox.WARNING,
+                        buttons: Ext.Msg.OK
+                    });
+                }
             }
         }
     });

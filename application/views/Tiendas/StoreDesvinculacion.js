@@ -132,3 +132,33 @@ var storeDesv_detalleAprobacionWF = new Ext.data.Store({
   },
   autoLoad: false
 });
+
+var storeAnularSolDesvinculacion = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/anularSolDesvinculacion",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});
+
+var storeDesv_aprobarDesvinculacion = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/aprobarDesvinculacion",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});

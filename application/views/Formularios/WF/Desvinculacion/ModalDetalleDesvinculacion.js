@@ -1,5 +1,5 @@
 
-var ModalDetalleDesvinculacion= function(p_numero){
+var ModalDetalleDesvinculacion= function(p_numero, p_rol){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación (Nº'+p_numero+')',
         //modal: true,
@@ -158,13 +158,17 @@ var ModalDetalleDesvinculacion= function(p_numero){
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
                             },{
                                 xtype: 'textfield',
-                                fieldLabel: 'Causal de Despido',
+                                fieldLabel: '¿Carta aviso 30 días?',
                                 labelAlign: 'top',
-                                name:'txt_causal',
+                                name:'txt_carta',
                                 margin: '0 10 0 0',
-                                flex: 2,
+                                flex: 1,
                                 readOnly: true,
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
+                            },{
+                                xtype: 'label',
+                                margin: '0 10 0 0',
+                                flex: 1,
                             }]
                         },{
                             xtype: 'container',
@@ -174,19 +178,24 @@ var ModalDetalleDesvinculacion= function(p_numero){
                             },
                             items: [{
                                 xtype: 'textfield',
-                                fieldLabel: '¿Carta aviso 30 días?',
+                                fieldLabel: 'Causal de Despido',
                                 labelAlign: 'top',
-                                name:'txt_carta',
+                                name:'txt_causal',
                                 margin: '0 10 0 0',
-                                flex: 2,
+                                flex: 1,
                                 readOnly: true,
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
                             },{
-                                xtype: 'label',
+                                xtype: 'textfield',
+                                fieldLabel: 'Causal de Despido',
+                                labelAlign: 'top',
+                                name:'txt_causal_2',
                                 margin: '0 10 0 0',
-                                flex: 4,
+                                flex: 1,
+                                readOnly: true,
+                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
                             }]
-                        }]
+                        },]
                     }]
                 },{// PARTE 2 DEL FORMULARIO
                     title: 'Detalle de la desvinculación',
@@ -415,6 +424,7 @@ var ModalDetalleDesvinculacion= function(p_numero){
                                         var canvas = Ext.getCmp('mypanelflow').items.items[1].el.dom;
                                         var records = storeDesv_detalleDesvinculacion.getRange();
                                         var caso = records[0].get('CASO');
+                                        var estado = records[0].get('ESTADO');
 
                                         //Traemos el detalle del Caso del wf:
                                         storeDesv_detalleCasoWF.load({
@@ -432,7 +442,7 @@ var ModalDetalleDesvinculacion= function(p_numero){
                                                         var recordCaso = storeDesv_detalleCasoWF.getRange();
                                                         var recordAprob = storeDesv_detalleAprobacionWF.getRange();
                                                         //Dibujamos el flujo:
-                                                        func_drawFlow(canvas, recordCaso, recordAprob);
+                                                        func_drawFlow(canvas, estado, recordCaso, recordAprob);
                                                     }
                                                 });
                                             }
@@ -451,6 +461,7 @@ var ModalDetalleDesvinculacion= function(p_numero){
                             },
                             items: [{
                                 xtype: 'button',
+                                id: 'btn_aprobarSolDesv',
                                 text: 'Aprobar Solicitud',
                                 margin: '0 10 0 20',
                                 flex: 1,
@@ -459,10 +470,15 @@ var ModalDetalleDesvinculacion= function(p_numero){
                                     'border':'1px solid #00c853;'
                                 },
                                 handler: function(){
-                                   //
+
+                                   var estado = 'A';
+                                   var modal = this;
+                                   func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, modal);
+
                                 }
                             },{
                                 xtype: 'button',
+                                id: 'btn_rechazarSolDesv',
                                 text: 'Rechazar Solicitud',
                                 margin: '0 20 0 0',
                                 flex: 1,
@@ -471,7 +487,11 @@ var ModalDetalleDesvinculacion= function(p_numero){
                                     'border':'1px solid #E74C3C;'
                                 },
                                 handler: function(){
-                                    //
+                                    
+                                    var estado = 'R';
+                                    var modal = this;
+                                    func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, modal);
+
                                 }
                             }]
                         }]
@@ -501,8 +521,21 @@ function func_llenarDetalleDesvinculacion(form, recordsSol, recordsPer){
 
     form.findField('txt_fecha').setValue(recordsSol[0].get('FINIQUITO'));
     form.findField('txt_causal').setValue(recordsSol[0].get('CAUSAL'));
+    form.findField('txt_causal_2').setValue(recordsSol[0].get('CAUSAL_2'));
     form.findField('txt_carta').setValue(recordsSol[0].get('CARTA'));
     form.findField('txt_hechos').setValue(recordsSol[0].get('HECHOS'));
+    if(recordsSol[0].get('CAUSAL_2') != null) {
+        form.findField('txt_hechos').setFieldLabel('Los hechos en que se funda la causal invocada ('
+        +recordsSol[0].get('CAUSAL') 
+        +' - '
+        +recordsSol[0].get('CAUSAL_2') 
+        +') consisten en');
+    }else{
+        form.findField('txt_hechos').setFieldLabel('Los hechos en que se funda la causal invocada ('
+        +recordsSol[0].get('CAUSAL')
+        +') consisten en');
+    }
+    
     form.findField('txt_motivo').setValue(recordsSol[0].get('MOTIVO'));
     form.findField('txt_horasExtras').setValue(recordsSol[0].get('HORAS_EXTRAS'));
     form.findField('txt_viatico').setValue(recordsSol[0].get('VIATICOS'));
@@ -514,10 +547,42 @@ function func_llenarDetalleDesvinculacion(form, recordsSol, recordsPer){
     form.findField('txt_cajachica').setValue(recordsSol[0].get('CAJA_CHICA'));
     form.findField('txt_vehiculo').setValue(recordsSol[0].get('VEHICULOS'));
 
+    if(recordsSol[0].get('ESTADO') != 'ACTIVO'){
+        Ext.getCmp('btn_aprobarSolDesv').hide();
+        Ext.getCmp('btn_rechazarSolDesv').hide();
+    }
+
+}
+
+function func_aprobar_desvinculacion(p_numero, p_rol, p_estado, p_usuario, modal){
+    storeDesv_aprobarDesvinculacion.load({
+        params:{
+            p_numero: p_numero,
+            p_rol: p_rol,
+            p_estado: p_estado,
+            p_usuario: p_usuario
+        },
+        callback : function(records){
+            if(records != null){
+                var estado = records[0].data.r_est;
+                if (estado < 0) {
+                    Ext.MessageBox.show({
+                        title: 'ADVERTENCIA',
+                        msg: records[0].data.r_msg,
+                        icon: Ext.MessageBox.WARNING,
+                        buttons: Ext.Msg.OK
+                    });
+                }else{
+                    showToast('Se cambió el etado de la solicitud exitosamente.');
+                    modal.up('window').close();
+                }
+            }
+        }
+    });
 }
 
 //Función para dibujar el flujo de aprobacion:
-function func_drawFlow(el , recordCaso, recordAprob) {
+function func_drawFlow(el , estado, recordCaso, recordAprob) {
     
     var canvas = el;
     var lapiz = canvas.getContext("2d");
@@ -526,6 +591,7 @@ function func_drawFlow(el , recordCaso, recordAprob) {
     var azul = "#5fa2dd";
     var verde = "#00c853";
     var rojo = "#E74C3C";
+    var gris = "#b0bec5";
 
     lapiz.strokeStyle = azul;
     lapiz.fillStyle = azul;
@@ -567,6 +633,9 @@ function func_drawFlow(el , recordCaso, recordAprob) {
             lapiz.fillStyle = azul;
             nameRol = recordCaso[i].get('ROL');
         }
+        if(estado == 'ANULADO'){
+            lapiz.fillStyle = gris;
+        }
         
         x = margen + i*largo_box + i*distacia;
         y = margen - alto_box/2 + alto_line/2;
@@ -586,23 +655,3 @@ function func_drawFlow(el , recordCaso, recordAprob) {
     lapiz.fillText('CASO: '+recordCaso[0].get('CASO'),canvas.width/2,margen+alto_box+20);
 
   }
-
-  //Función que dibuja un rectangulo redondeado:
-  function roundedRect(ctx,x,y,width,height,radius,stroke,fill){
-    ctx.beginPath();
-    ctx.moveTo(x,y+radius);
-    ctx.lineTo(x,y+height-radius);
-    ctx.quadraticCurveTo(x,y+height,x+radius,y+height);
-    ctx.lineTo(x+width-radius,y+height);
-    ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
-    ctx.lineTo(x+width,y+radius);
-    ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
-    ctx.lineTo(x+radius,y);
-    ctx.quadraticCurveTo(x,y,x,y+radius);
-    if(stroke){
-        ctx.stroke();
-    }
-    if (fill){
-        ctx.fill();
-    }
- }

@@ -88,8 +88,8 @@ class WFDesvinculacionModel extends CI_Model {
 
         $detalle = json_decode($listado_lineas,true);
         
-        $r_estado = 0;
-        $r_mensaje = "OK"; 
+        $r_est = 0;
+        $r_msg = "OK"; 
 
         foreach ($detalle as $alerta) {
 
@@ -99,6 +99,7 @@ class WFDesvinculacionModel extends CI_Model {
             $finiquito = $alerta['finiquito'];
             $causal = $alerta['causal'];
             $carta = $alerta['carta'];
+            $causal2 = $alerta['causal2'];
             $hechos = $alerta['hechos'];
             $motivo = $alerta['motivo'];
             $horasextras = $alerta['horasextras'];
@@ -121,8 +122,9 @@ class WFDesvinculacionModel extends CI_Model {
                                                         :P_PERSONAL,
                                                         :P_USUARIO,
                                                         :P_FINIQUITO,
-                                                        :P_CAUSAL,
                                                         :P_CARTA,
+                                                        :P_CAUSAL,
+                                                        :P_CAUSAL2,
                                                         :P_HECHOS,
                                                         :P_MOTIVO,
                                                         :P_HORASEXTRAS,
@@ -144,8 +146,9 @@ class WFDesvinculacionModel extends CI_Model {
             oci_bind_by_name($proc,"P_PERSONAL",$personal, -1, OCI_B_INT);
             oci_bind_by_name($proc,"P_USUARIO",$usuario, 40, SQLT_CHR); 
             oci_bind_by_name($proc,"P_FINIQUITO",$finiquito, 40, SQLT_CHR);
-            oci_bind_by_name($proc,"P_CAUSAL",$causal, 40, SQLT_CHR);
             oci_bind_by_name($proc,"P_CARTA",$carta, 2, SQLT_CHR);
+            oci_bind_by_name($proc,"P_CAUSAL",$causal, 40, SQLT_CHR);
+            oci_bind_by_name($proc,"P_CAUSAL2",$causal, 40, SQLT_CHR);
             oci_bind_by_name($proc,"P_HECHOS",$hechos, 500, SQLT_CHR);
             oci_bind_by_name($proc,"P_MOTIVO",$motivo, 500, SQLT_CHR);
             oci_bind_by_name($proc,"P_HORASEXTRAS",$horasextras, -1, OCI_B_INT);
@@ -158,19 +161,19 @@ class WFDesvinculacionModel extends CI_Model {
             oci_bind_by_name($proc,"P_CAJA",$caja, 2, SQLT_CHR); 
             oci_bind_by_name($proc,"P_VEHICULO",$vehiculo, 100, SQLT_CHR); 
             oci_bind_by_name($proc,"P_ESTADO",$estado, 20, SQLT_CHR); 
-            oci_bind_by_name($proc,"ESTADO",$r_estado,  -1, OCI_B_INT); 
-            oci_bind_by_name($proc,"MENSAJE",$r_mensaje, 1100, SQLT_CHR);
+            oci_bind_by_name($proc,"ESTADO",$r_est,  -1, OCI_B_INT); 
+            oci_bind_by_name($proc,"MENSAJE",$r_msg, 1100, SQLT_CHR);
 
             oci_execute($proc);
 
-            if($estado < 0){
-                $result = array('ESTADO' => $r_estado, 'MENSAJE' => $r_mensaje);    
+            if($r_est < 0){
+                $result = array('r_est' => $r_est, 'r_msg' => $r_msg);   
                 return $result;      
             }
 
         }
 
-        $result = array('ESTADO' => $r_estado, 'MENSAJE' => $r_mensaje);    
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);    
         return $result; 
     }
 
@@ -202,6 +205,7 @@ class WFDesvinculacionModel extends CI_Model {
                     usr_creador     creador,
                     fecha_finiquito finiquito,
                     causal_desp     causal,
+                    causal_desp_2     causal_2,
                     carta_aviso     carta,
                     det_hechos      hechos,
                     det_motivo      motivo,
@@ -256,6 +260,62 @@ class WFDesvinculacionModel extends CI_Model {
 
         $query = $this->db->query($sql);
         return $query->result();
+
+    }
+
+    public function anularSolDesvinculacion($P_NUMERO, $P_USUARIO) {
+
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+            $this->db->conn_id,
+            "BEGIN NOV_ANU_SOL_DESVINCULACION(
+                :P_NUMERO,
+                :P_USUARIO,
+                :r_est,
+                :r_msg);
+            END;"
+        );
+
+        oci_bind_by_name($proc, "P_NUMERO", $P_NUMERO, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 40, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
+    public function aprobarDesvinculacion($numero, $rol, $estado, $usuario){
+
+        $r_est = 0;
+        $r_msg = "";
+
+        $proc = oci_parse(
+            $this->db->conn_id,
+            "BEGIN NOV_APROBAR_DESVINCULACION(
+                :P_NUMERO,
+                :P_ROL,
+                :P_ESTADO,
+                :P_USUARIO,
+                :r_est,
+                :r_msg);
+            END;"
+        );
+
+        oci_bind_by_name($proc, "P_NUMERO", $numero, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_ROL", $rol, 40, SQLT_CHR);
+        oci_bind_by_name($proc, "P_ESTADO", $estado, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_USUARIO", $usuario, 40, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
 
     }
 

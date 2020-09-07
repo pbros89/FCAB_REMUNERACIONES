@@ -127,4 +127,32 @@ class WFDesvinculacionController extends CI_Controller
 
     }
 
+    public function anularSolDesvinculacion()
+    {
+        $numero = $this->input->get('p_numero');
+        $usuario = $this->input->get('p_usuario');
+
+        $query = $this->WFDesvinculacionModel->anularSolDesvinculacion($numero, $usuario);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
+    public function aprobarDesvinculacion()
+    {
+        $numero = $this->input->get('p_numero');
+        $rol = $this->input->get('p_rol');
+        $estado = $this->input->get('p_estado');
+        $usuario = $this->input->get('p_usuario');
+
+        $query = $this->WFDesvinculacionModel->aprobarDesvinculacion($numero, $rol, $estado, $usuario);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
 }

@@ -44,7 +44,7 @@ Ext.define("fcab.store.menu.wf", {
         tipo: "tab",
         tituloTab: "Solicitud Desvinculación",
         id: "menu_wf_desvinculacion",
-        formulario: "MasterUsuario", //xtype
+        formulario: "InicioDesvinculacion", //xtype
         icon: "icon-listaTab",
         leaf: true,
         iconCls: "icon-prototipo",

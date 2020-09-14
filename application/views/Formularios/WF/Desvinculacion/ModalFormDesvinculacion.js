@@ -192,8 +192,15 @@ var ModalFormDesvinculacion= function(rol){
                         format: 'd/m/Y',
                         allowBlank: false,
                         listeners:{
-                            change: function(){
+                            select: function(){
                                 var form = this.up('form').getForm();
+                                var combo_fecha = form.findField('date_fecha');
+                                var myfecha = Ext.Date.format(combo_fecha.value,'Y/m/d');
+                                var hoy = Ext.Date.format(new Date(),'Y/m/d');
+                                if(myfecha<hoy){
+                                    showToast('La fecha no puede ser inferior a Hoy.');
+                                    combo_fecha.reset();
+                                }
                             }	
                         }
                     },{

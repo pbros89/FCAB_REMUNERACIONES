@@ -1,6 +1,6 @@
-var ModalFormDesvinculacion= function(rol){
+var ModalNotificacionCorreo= function(rol){
     Ext.create('Ext.window.Window', {
-        title: 'Solicitud de Desvinculación',
+        title: 'Notificación por correo',
         modal: true,
         width: 1000,
         autoScroll : true,

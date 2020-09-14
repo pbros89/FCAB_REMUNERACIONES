@@ -512,8 +512,15 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 format: 'd/m/Y',
                                 allowBlank: false,
                                 listeners:{
-                                    change: function(){
+                                    select: function(){
                                         var form = this.up('form').getForm();
+                                        var combo_fecha = form.findField('date_fechaCorreo');
+                                        var myfecha = Ext.Date.format(combo_fecha.value,'Y/m/d');
+                                        var hoy = Ext.Date.format(new Date(),'Y/m/d');
+                                        if(myfecha<hoy){
+                                            showToast('La fecha no puede ser inferior a Hoy.');
+                                            combo_fecha.reset();
+                                        }
                                     }	
                                 }
                             },{
@@ -568,7 +575,8 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                     var modal = this;
                                     if(ultimo_paso){
                                         if(form.isValid()){
-                                            var fecha_correo = form.findField('date_fechaCorreo').value;
+                                            var combo_fecha = form.findField('date_fechaCorreo');
+                                            var fecha_correo = Ext.Date.format(combo_fecha.value,'d/m/Y');
                                             var horario_correo = form.findField('cb_horarioCorreo').value;
                                             func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, fecha_correo, horario_correo, modal);
                                         }else{
@@ -593,7 +601,7 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                     
                                     var estado = 'R';
                                     var modal = this;
-                                    func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, modal);
+                                    func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, null, null, modal);
 
                                 }
                             }]

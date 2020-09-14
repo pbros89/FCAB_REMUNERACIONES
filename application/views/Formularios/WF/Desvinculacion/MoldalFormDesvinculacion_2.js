@@ -1,4 +1,4 @@
-var ModalFormDesvinculacion_2= function(rol, personal, finiquito, carta, causal, causal2){
+var ModalFormDesvinculacion_2= function(rol, personal, finiquito, carta, cod_causal, cod_causal2, causal, causal2){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación - parte 2',
         modal: true,
@@ -96,7 +96,8 @@ var ModalFormDesvinculacion_2= function(rol, personal, finiquito, carta, causal,
                         
                         var hechos = form.findField('txt_hechos').value;
                         var motivo = form.findField('txt_motivo').value;
-                        ModalFormDesvinculacion_3(rol, personal, finiquito, carta, causal, causal2, hechos, motivo);
+                        
+                        ModalFormDesvinculacion_3(rol, personal, finiquito, carta, cod_causal, cod_causal2, hechos, motivo);
                         this.up('window').close();
                     }
 

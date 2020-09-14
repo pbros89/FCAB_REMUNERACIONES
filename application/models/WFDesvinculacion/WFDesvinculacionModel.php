@@ -7,37 +7,63 @@ class WFDesvinculacionModel extends CI_Model {
         $this->load->database("BD_NOVEDADES");
     }
 
-    public function misRoles($usaurio){
+    public function misRoles($usuario){
 
         $sql = "SELECT
-        u.pfk_rol_wf rol,
-        r.nombre
-    FROM
-        nov_usuarios_roles_wf   u,
-        nov_roles_wf            r
-    WHERE
-        u.pfk_usuario = '$usaurio'
-        AND u.pfk_rol_wf = r.pk_rol_wf";
+                    u.pfk_rol_wf rol,
+                    r.nombre,
+                    (
+                        SELECT
+                            MIN(etapa)
+                        FROM
+                            nov_proc_wf
+                        WHERE
+                            nombre_wf = 'DESVINCULACION'
+                            AND rol = u.pfk_rol_wf
+                    ) etapa
+                FROM
+                    nov_usuarios_roles_wf   u,
+                    nov_roles_wf            r
+                WHERE
+                    u.pfk_usuario = '$usuario'
+                    AND u.pfk_rol_wf = r.pk_rol_wf";
 
         $query = $this->db->query($sql);
         return $query->result();
 
     }
 
-    public function listRutNombre($cod_emp){
+    public function listRutNombre($cod_emp, $cod_usr){
 
-        $sql = "SELECT DISTINCT
-                    ( rut
+        $sql = "SELECT 
+                    ( p.rut
                     || ' | '
-                    || nombre ) rutNom,
-                    rut,
-                    pk_personal
+                    || p.nombre ) rutnom,
+                    p.rut,
+                    p.pk_personal
                 FROM
-                    nov_personal
+                    nov_personal p
                 WHERE
-                    fecha_baja IS NULL
-                    AND cod_emp = '$cod_emp'
-                ORDER BY
+                    p.fecha_baja IS NULL
+                    AND p.cod_emp = '$cod_emp'
+                    AND p.pk_personal = ( SELECT
+                                            max (pk_personal)
+                                        FROM
+                                            nov_personal
+                                        WHERE
+                                            rut = p.rut
+                                            AND cod_emp = '$cod_emp'
+                                        )";
+
+        if(!empty($rol_usr) && $rol_usr!='ADMIN' && $rol_usr!='SUPER_ADMIN' && $rol_usr!= 'ANALISTA_RRHH'){
+            $sql .= "AND cod_cc IN(
+                        SELECT pfk_cod_cc
+                        FROM nov_usuarios_cc
+                        WHERE pfk_usuario = '$cod_usr'
+                        AND pfk_cod_emp = '$cod_emp')";
+        }
+
+        $sql .= "ORDER BY
                     rutNom";
 
         $query = $this->db->query($sql);
@@ -70,14 +96,15 @@ class WFDesvinculacionModel extends CI_Model {
     public function listCausalesDespido($cod_emp){
 
         $sql = "SELECT 
-                    nombre
+                    nombre,
+                    pk_param codigo
                 FROM 
                     nov_parametros
                 WHERE 
                     pfk_tipo_param = 'CAUSAL_DESPIDO'
                     AND pfk_cod_emp = '$cod_emp'
                 ORDER BY 
-                    nombre";
+                    pk_param";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -97,8 +124,8 @@ class WFDesvinculacionModel extends CI_Model {
             $personal = $alerta['personal'];
             $usuario = $alerta['usuario'];
             $finiquito = $alerta['finiquito'];
-            $causal = $alerta['causal'];
             $carta = $alerta['carta'];
+            $causal = $alerta['causal'];
             $causal2 = $alerta['causal2'];
             $hechos = $alerta['hechos'];
             $motivo = $alerta['motivo'];
@@ -148,7 +175,7 @@ class WFDesvinculacionModel extends CI_Model {
             oci_bind_by_name($proc,"P_FINIQUITO",$finiquito, 40, SQLT_CHR);
             oci_bind_by_name($proc,"P_CARTA",$carta, 2, SQLT_CHR);
             oci_bind_by_name($proc,"P_CAUSAL",$causal, 40, SQLT_CHR);
-            oci_bind_by_name($proc,"P_CAUSAL2",$causal, 40, SQLT_CHR);
+            oci_bind_by_name($proc,"P_CAUSAL2",$causal2, 40, SQLT_CHR);
             oci_bind_by_name($proc,"P_HECHOS",$hechos, 500, SQLT_CHR);
             oci_bind_by_name($proc,"P_MOTIVO",$motivo, 500, SQLT_CHR);
             oci_bind_by_name($proc,"P_HORASEXTRAS",$horasextras, -1, OCI_B_INT);
@@ -177,53 +204,89 @@ class WFDesvinculacionModel extends CI_Model {
         return $result; 
     }
 
-    public function listaDesvinculaciones($cod_emp){
+    public function listaDesvinculaciones($cod_emp, $cod_usr, $rol_usr){
 
         $sql = "SELECT
-                    d.pk_num_desv numero,
-                    d.estado,
                     p.rut,
-                    p.nombre
+                    p.nombre,
+                    d.pk_num_desv     numero,
+                    d.pfk_personal    personal,
+                    d.fecha_solicitud fecha,
+                    d.usr_creador     creador,
+                    d.fecha_finiquito finiquito,
+                    d.causal_desp     causal,
+                    d.causal_desp_2     causal_2,
+                    d.carta_aviso     carta,
+                    d.det_hechos      hechos,
+                    d.det_motivo      motivo,
+                    d.horas_extras,
+                    d.viaticos,
+                    d.det_haberes     haberes,
+                    d.det_descuentos  descuentos,
+                    d.equip_comp      equipos,
+                    d.celular,
+                    d.documentos,
+                    d.caja_chica,
+                    d.det_vehiculos   vehiculos,
+                    d.estado,
+                    d.caso
                 FROM
                     nov_sol_desvinculacion   d,
                     nov_personal             p
                 WHERE
                     d.pfk_personal = p.pk_personal
-                    AND p.cod_emp = $cod_emp";
+                    AND p.cod_emp = '$cod_emp'";
+        if(!empty($rol_usr) && $rol_usr!='ADMIN' && $rol_usr!='SUPER_ADMIN' && $rol_usr!= 'ANALISTA_RRHH'){
+            $sql .= "AND d.cod_cc IN(
+                        SELECT pfk_cod_cc
+                        FROM nov_usuarios_cc
+                        WHERE pfk_usuario = '$cod_usr'
+                        AND pfk_cod_emp = '$cod_emp')";
+        }
+        $sql .= "ORDER BY
+                        d.estado,
+                        d.pk_num_desv";
 
         $query = $this->db->query($sql);
         return $query->result();
 
     }
 
-    public function detalleDesvinculacion($numero){
+    public function detalleDesvinculacion($numero, $cod_emp){
 
         $sql = "SELECT
-                    pk_num_desv     numero,
-                    pfk_personal    personal,
-                    fecha_solicitud fecha,
-                    usr_creador     creador,
-                    fecha_finiquito finiquito,
-                    causal_desp     causal,
-                    causal_desp_2     causal_2,
-                    carta_aviso     carta,
-                    det_hechos      hechos,
-                    det_motivo      motivo,
-                    horas_extras,
-                    viaticos,
-                    det_haberes     haberes,
-                    det_descuentos  descuentos,
-                    equip_comp      equipos,
-                    celular,
-                    documentos,
-                    caja_chica,
-                    det_vehiculos   vehiculos,
-                    estado,
-                    caso
+                    d.pk_num_desv     numero,
+                    d.pfk_personal    personal,
+                    d.fecha_solicitud fecha,
+                    d.usr_creador     creador,
+                    d.fecha_finiquito finiquito,
+                    d.carta_aviso     carta,
+                    d.det_hechos      hechos,
+                    d.det_motivo      motivo,
+                    d.horas_extras,
+                    d.viaticos,
+                    d.det_haberes     haberes,
+                    d.det_descuentos  descuentos,
+                    d.equip_comp      equipos,
+                    d.celular,
+                    d.documentos,
+                    d.caja_chica,
+                    d.det_vehiculos   vehiculos,
+                    d.estado,
+                    d.caso,
+                    p1.nombre causal,
+                    CASE
+                        WHEN d.causal_desp_2 IS NULL THEN null
+                        ELSE (SELECT NOMBRE FROM NOV_PARAMETROS WHERE pk_param = d.causal_desp_2 AND pfk_cod_emp = '$cod_emp'  AND pfk_tipo_param = 'CAUSAL_DESPIDO')
+                    END causal_2
                 FROM
-                    nov_sol_desvinculacion
+                    nov_sol_desvinculacion d,
+                    nov_parametros p1
                 WHERE
-                    pk_num_desv = $numero";
+                    d.pk_num_desv = '$numero'
+                    AND p1.pk_param = d.causal_desp
+                    AND p1.pfk_cod_emp = '$cod_emp'
+                    AND p1.pfk_tipo_param = 'CAUSAL_DESPIDO'";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -256,7 +319,8 @@ class WFDesvinculacionModel extends CI_Model {
                 FROM
                     nov_aprobaciones_wf
                 WHERE
-                    pfk_solicitud =$numero";
+                    pfk_solicitud ='$numero'
+                    AND pfk_nombre_wf = 'DESVINCULACION'";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -288,7 +352,7 @@ class WFDesvinculacionModel extends CI_Model {
         return $result;
     }
 
-    public function aprobarDesvinculacion($numero, $rol, $estado, $usuario){
+    public function aprobarDesvinculacion($numero, $rol, $estado, $usuario, $fecha, $horario){
 
         $r_est = 0;
         $r_msg = "";
@@ -300,6 +364,8 @@ class WFDesvinculacionModel extends CI_Model {
                 :P_ROL,
                 :P_ESTADO,
                 :P_USUARIO,
+                :P_FECHA,
+                :P_HORARIO,
                 :r_est,
                 :r_msg);
             END;"
@@ -309,6 +375,8 @@ class WFDesvinculacionModel extends CI_Model {
         oci_bind_by_name($proc, "P_ROL", $rol, 40, SQLT_CHR);
         oci_bind_by_name($proc, "P_ESTADO", $estado, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_USUARIO", $usuario, 40, SQLT_CHR);
+        oci_bind_by_name($proc, "P_FECHA", $fecha, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_HORARIO", $horario, 20, SQLT_CHR);
         oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
@@ -316,6 +384,21 @@ class WFDesvinculacionModel extends CI_Model {
 
         $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
         return $result;
+
+    }
+
+    public function existeSolicitud($p_personal){
+
+        $sql = "SELECT
+                    COUNT(*) existe
+                FROM
+                    nov_sol_desvinculacion
+                WHERE
+                    pfk_personal = $p_personal
+                    AND estado = 'ACTIVO'";
+
+        $query = $this->db->query($sql);
+        return $query->result();
 
     }
 

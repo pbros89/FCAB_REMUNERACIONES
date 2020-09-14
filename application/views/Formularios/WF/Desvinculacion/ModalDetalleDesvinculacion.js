@@ -1,4 +1,6 @@
 
+var ultimo_paso = false;
+
 var ModalDetalleDesvinculacion= function(p_numero, p_rol){
     Ext.create('Ext.window.Window', {
         title: 'Solicitud de Desvinculación (Nº'+p_numero+')',
@@ -12,26 +14,45 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
             afterrender: function(){
 
                 var form = this.down('form').getForm();
+
+                //Reiniciamos el valor de la variable:
+                ultimo_paso = false;
+
                 //Traemos el detalle de la solicitud:
                 storeDesv_detalleDesvinculacion.load({
-                    params:{p_numero: p_numero},
-                    callback: function(){
-                        var records = storeDesv_detalleDesvinculacion.getRange();
-                        //Traemos el detalle de la persona:
-                        var personal = records[0].get('PERSONAL');
-                        storeDesv_datosPersonal.load({
-                            params:{
-                                p_id:personal
-                            },
-                            callback: function() {
-                                var recordsPer = storeDesv_datosPersonal.getRange();
-                                //Llenamos el formulario:
-                                func_llenarDetalleDesvinculacion(form, records,recordsPer);
-                            }
-                        });
+                    params:{
+                        p_numero: p_numero,
+                        p_emp: EMPRESA
+                    },
+                    callback: function(records){
+                        if(records != null){
+                            //Traemos el detalle de la persona:
+                            var personal = records[0].data.PERSONAL;
+                            
+                            storeDesv_datosPersonal.load({
+                                params:{
+                                    p_id:personal
+                                },
+                                callback: function() {
+                                    var recordsPer = storeDesv_datosPersonal.getRange();
+                                    //Llenamos el formulario:
+                                    func_llenarDetalleDesvinculacion(form, records,recordsPer);
+                                }
+                            });
+                        }
                     }
                 });
 
+            },
+            beforedestroy: function(){
+                var store = Ext.getCmp('InicioDesvinculacionGrilla').getStore();
+                store.load({
+                    params:{
+                        cod_emp: EMPRESA,
+                        cod_usr: NOMBRE,
+                        rol_usr: ROL
+                    }
+                });
             }
         },
         items:[{
@@ -187,7 +208,7 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
                             },{
                                 xtype: 'textfield',
-                                fieldLabel: 'Causal de Despido',
+                                fieldLabel: 'Causal de Despido 2',
                                 labelAlign: 'top',
                                 name:'txt_causal_2',
                                 margin: '0 10 0 0',
@@ -397,6 +418,7 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                         id:'mypanelflow',
                         width: 1000,
                         height: 460,
+                        bodyPadding: '10 10 10 10',
                         items:[{
                             xtype: 'container',
                             layout: {
@@ -413,8 +435,8 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                             xtype: 'box',
                             autoEl:{//Un CANVAS para dibujar en él el flujo de aprobación:
                                 tag: 'canvas',
-                                height: 250,
-                                width: 1000,
+                                height: 200,
+                                width: 980,
                             },
                             listeners:{
                                 render:{
@@ -443,6 +465,12 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                                         var recordAprob = storeDesv_detalleAprobacionWF.getRange();
                                                         //Dibujamos el flujo:
                                                         func_drawFlow(canvas, estado, recordCaso, recordAprob);
+                                                        //Comprobamos si es ultima etapa:
+                                                        if(recordAprob.length == recordCaso.length-1){
+                                                            ultimo_paso = true;
+                                                            Ext.getCmp('id_labelCorreo').show();
+                                                            Ext.getCmp('id_itemsCorreo').show();
+                                                        }
                                                     }
                                                 });
                                             }
@@ -455,6 +483,71 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                             }
                         },{
                             xtype: 'container',
+                            id:'id_labelCorreo',
+                            hidden: true,
+                            layout: {
+                                type: 'hbox',
+                                align: 'left',
+                            },
+                            items: [{
+                                xtype: 'label',
+                                text: '*En caso de Aprobar la solicitud:',
+                                margin: '0 10 0 0'
+                            }]
+                        },{
+                            xtype: 'container',
+                            id:'id_itemsCorreo',
+                            hidden: true,
+                            layout: {
+                                type: 'hbox',
+                                align: 'left',
+                            },
+                            items: [{
+                                xtype: 'datefield',
+                                fieldLabel: 'Fecha de notificación por correos',
+                                margin: '0 10 0 0',
+                                labelAlign: 'top',
+                                flex: 1,
+                                name: 'date_fechaCorreo',
+                                format: 'd/m/Y',
+                                allowBlank: false,
+                                listeners:{
+                                    change: function(){
+                                        var form = this.up('form').getForm();
+                                    }	
+                                }
+                            },{
+                                xtype: 'combo',
+                                fieldLabel: 'Horario en que se notificará',
+                                labelAlign: 'top',
+                                name:'cb_horarioCorreo',
+                                margin: '0 35 0 0',
+                                flex: 1,
+                                store: storeDesv_horarioCorreo,
+                                displayField: 'HORARIO',
+                                allowBlank: false,
+                                listeners:{
+                                    afterrender: function(combo){
+                                        var store = combo.getStore();
+                                        store.load({
+                                            callback: function (records){
+                                                if(records!=null){
+                                                    var primero = records[0].data.HORARIO;
+                                                    combo.setValue(primero);
+                                                }
+                                            }
+                                        });
+                                    },
+                                    change: function(combo){
+                                        
+                                    }
+                                }
+                            },{
+                                xtype: 'label',
+                                flex: 2
+                            }]
+                        },{
+                            xtype: 'container',
                             layout: {
                                 type: 'hbox',
                                 align: 'left',
@@ -463,24 +556,34 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 xtype: 'button',
                                 id: 'btn_aprobarSolDesv',
                                 text: 'Aprobar Solicitud',
-                                margin: '0 10 0 20',
+                                margin: '20 10 0 0',
                                 flex: 1,
                                 style:{
                                     'background-color':'#00c853;',
                                     'border':'1px solid #00c853;'
                                 },
                                 handler: function(){
-
-                                   var estado = 'A';
-                                   var modal = this;
-                                   func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, modal);
-
+                                    var form = this.up('form').getForm();
+                                    var estado = 'A';
+                                    var modal = this;
+                                    if(ultimo_paso){
+                                        if(form.isValid()){
+                                            var fecha_correo = form.findField('date_fechaCorreo').value;
+                                            var horario_correo = form.findField('cb_horarioCorreo').value;
+                                            func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, fecha_correo, horario_correo, modal);
+                                        }else{
+                                            showToast('Debe seleccionar una fecha y un horario para la notificación por correos.');
+                                        }
+                                    }else{
+                                        func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, null, null, modal);
+                                    }
+                                   
                                 }
                             },{
                                 xtype: 'button',
                                 id: 'btn_rechazarSolDesv',
                                 text: 'Rechazar Solicitud',
-                                margin: '0 20 0 0',
+                                margin: '20 10 0 0',
                                 flex: 1,
                                 style:{
                                     'background-color':'#E74C3C;',
@@ -554,13 +657,15 @@ function func_llenarDetalleDesvinculacion(form, recordsSol, recordsPer){
 
 }
 
-function func_aprobar_desvinculacion(p_numero, p_rol, p_estado, p_usuario, modal){
+function func_aprobar_desvinculacion(p_numero, p_rol, p_estado, p_usuario, p_fecha, p_horario, modal){
     storeDesv_aprobarDesvinculacion.load({
         params:{
             p_numero: p_numero,
             p_rol: p_rol,
             p_estado: p_estado,
-            p_usuario: p_usuario
+            p_usuario: p_usuario,
+            p_fecha: p_fecha,
+            p_horario: p_horario
         },
         callback : function(records){
             if(records != null){

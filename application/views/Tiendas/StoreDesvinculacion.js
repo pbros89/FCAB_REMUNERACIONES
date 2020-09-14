@@ -162,3 +162,26 @@ var storeDesv_aprobarDesvinculacion = new Ext.data.Store({
   },
   autoLoad: false
 });
+
+var storeDesv_existeSolicitud = new Ext.data.Store({
+  proxy: {
+    type: "ajax",
+    url:
+      JsonHost +
+      "WFDesvinculacion/WFDesvinculacionController/existeSolicitud",
+    reader: {
+      type: "json",
+      rootProperty: "items",
+      totalProperty: "total"
+    }
+  },
+  autoLoad: false
+});
+
+var storeDesv_horarioCorreo = new Ext.data.Store({
+  data:[
+    {"HORARIO":'Mañana'},
+    {"HORARIO":'Tarde'}
+  ],
+autoload: false,
+});

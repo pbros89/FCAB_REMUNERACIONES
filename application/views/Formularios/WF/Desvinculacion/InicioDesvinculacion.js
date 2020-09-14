@@ -25,7 +25,7 @@ Ext.define('fcab.Container.InicioDesvinculacion', {
 Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
     extend: 'Ext.grid.Panel',
     xtype: 'InicioDesvinculacionGrilla',
-    itemId: 'InicioDesvinculacionGrilla',
+    id: 'InicioDesvinculacionGrilla',
     title: 'Solicitud de Desvinculación ('+NOM_EMPRESA+')',
     store: storeDesv_listaDesvinculaciones,
     height: Ext.getBody().getViewSize().height - 130, 
@@ -43,7 +43,9 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
              
             storeGrid.load({
                 params:{
-                    cod_emp: EMPRESA
+                    cod_emp: EMPRESA,
+                    cod_usr: NOMBRE,
+                    rol_usr: ROL
                 }
             });
         }
@@ -53,15 +55,14 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
         items: [{
             xtype: 'combo',
             fieldLabel: 'Rol atuador',
-            //labelAlign: 'top',
             name:'cb_rol',
             margin: '0 30 0 0',
-            width: 300,
+            width: 400,
             store: storeDesv_misRoles,
             queryMode: 'local',
             displayField: 'NOMBRE',
             valueField: 'ROL',
-            emptyText: 'Seleccione',
+            emptyText: 'No tiene un rol asociado al workflow.',
             allowBlank: false,
             listeners:{
                 afterrender: function(combo){
@@ -70,28 +71,38 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
                         params:{
                             p_usuario: NOMBRE
                         },
-                        callback: function(){
-                            var primero = combo.getStore().getAt(0).get('NOMBRE');
-                            combo.setValue(primero);
+                        callback: function(records){
+                            if(records!=null){
+                                var primero = records[0].data.NOMBRE;
+                                combo.setValue(primero);
+                            }
                         }
                     });
                 },
                 change: function(combo){
-                    
+                
+                    var seleccion = combo.getStore().find('NOMBRE',combo.rawValue);
+                    var etapa = combo.getStore().getAt(seleccion).get('ETAPA');
+
+                    if(etapa == 1){
+                        Ext.ComponentQuery.query('#InicioDesvinculacionGrilla #btnIngresar')[0].setHidden(false);
+                    }else{
+                        Ext.ComponentQuery.query('#InicioDesvinculacionGrilla #btnIngresar')[0].setHidden(true);
+                    }
                 }
             }
         },{
             text: 'Ingresar',
-            //itemId: 'btnIngresar',
-            //hidden: true,
+            itemId: 'btnIngresar',
+            hidden: true,
             tooltip: 'Ingresar nueva solicitud',
             iconCls: 'icon-form-add',
             handler: function () {
                 var form = this.up('form').getForm();
                 var combo = form.findField('cb_rol');
-                var seleccion = combo.getStore().find('NOMBRE',combo.getValue());
+                var seleccion = combo.getStore().find('NOMBRE',combo.rawValue);
                 var rol = combo.getStore().getAt(seleccion).get('ROL');
-
+                
                 if(form.isValid()){
                     ModalFormDesvinculacion(rol);
                 }else{
@@ -146,12 +157,22 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
                     .rowIdx;
                     var rec = grid.getStore();
                     var recRow = rec.getAt(rowIndex);
+
+                    if(recRow.data.ESTADO == 'ACTIVO'){
+                        modalAdjuntosAdmin(
+                            recRow.data.NUMERO,
+                            "solicitud_desvinculacion",
+                            "Solicitud de Desvinculacion Nº " + recRow.data.NUMERO +'('+recRow.data.RUT +')'
+                        );
+                    }else{
+                        modalAdjuntosBasic(
+                            recRow.data.NUMERO,
+                            "solicitud_desvinculacion",
+                            "Solicitud de Desvinculacion Nº " + recRow.data.NUMERO +'('+recRow.data.RUT +')'
+                        );
+                    }
                     
-                    modalAdjuntosAdmin(
-                        recRow.data.PERSONAL,
-                        "ingreso_personal",
-                        "Ingreso Personal " + recRow.data.PERSONAL
-                    );
+                    
                     
                 } catch (e) {
                     msg(
@@ -182,46 +203,79 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
              
                 storeGrid.load({
                     params:{
-                        cod_emp: EMPRESA
+                        cod_emp: EMPRESA,
+                        cod_usr: NOMBRE,
+                        rol_usr: ROL
                     }
                 });
                 
             }
         }]
     }],
-    columns: [
-        {
-            text     : 'Nro Solicitud',
-            sortable : true,
-            dataIndex: 'NUMERO',
-            flex: 1
-        },{
-            text     : 'Estado',
-            sortable : true,
-            dataIndex: 'ESTADO',
-            flex: 1
-        },{
-            text     : 'Etapa',
-            sortable : true,
-            dataIndex: 'ETAPA',
-            flex: 1
-        },{
-            text     : 'Rut',
-            sortable : true,
-            dataIndex: 'RUT',
-            flex: 2
-        },{
-            text     : 'Nombre',
-            sortable : true,
-            dataIndex: 'NOMBRE',
-            flex: 2
-        }
-    ]
+    columns: [{
+        text     : 'Estado',
+        style:'text-align:center;',
+        sortable : true,
+        dataIndex: 'ESTADO',
+        flex: 1,
+        renderer : function(val) {
+            if (val == 'ACTIVO') {
+                return '<span style="color:' + 'blue' + ';">' + val + '</span>';
+            } else if (val == 'APROBADO') {
+                return '<span style="color:' + 'green' + ';">' + val + '</span>';
+            }
+            else if (val == 'RECHAZADO') {
+                return '<span style="color:' + 'red' + ';">' + val + '</span>';
+            }
+            else if (val == 'ANULADO') {
+                return '<span style="color:' + 'gray' + ';">' + val + '</span>';
+            }
+            return val;
+        },
+    },{
+        text     : 'Nro Solicitud',
+        style:'text-align:center;',
+        sortable : true,
+        dataIndex: 'NUMERO',
+        flex: 1
+    },{
+        text     : 'Rut',
+        style:'text-align:center;',
+        sortable : true,
+        dataIndex: 'RUT',
+        flex: 1
+    },{
+        text     : 'Nombre',
+        style:'text-align:center;',
+        sortable : true,
+        dataIndex: 'NOMBRE',
+        flex: 2
+    },{
+        text     : 'Usuario Creador',
+        style:'text-align:center;',
+        sortable : true,
+        dataIndex: 'CREADOR',
+        flex: 1
+    },{
+        text     : 'Fecha Creación',
+        style:'text-align:center;',
+        sortable : true,
+        dataIndex: 'FECHA',
+        flex: 1
+    },{
+        text     : 'Caso de WF',
+        style:'text-align:center;',
+        sortable : true,
+        dataIndex: 'CASO',
+        flex: 1
+    }]
 });
 
 function clickDetalleSolDesvinculacion(grid, rowIndex, form){
 
-    var rol = form.findField('cb_rol').value;
+    var combo_rol = form.findField('cb_rol');
+    var seleccion = combo_rol.getStore().find('NOMBRE',combo_rol.rawValue);
+    var rol = combo_rol.getStore().getAt(seleccion).get('ROL');
 
     var records = grid.getStore().getRange();
     var num_sol = records[rowIndex].get('NUMERO');
@@ -251,6 +305,14 @@ var clickAnularSolDesvinculacion = function(grid, rowIndex) {
                     if(records != null) {
                         if(records[0].data.r_msg == 'OK'){
                             showToast('Solicitud Anulada Correctamente.');
+                            var store = Ext.getCmp('InicioDesvinculacionGrilla').getStore();
+                            store.load({
+                                params:{
+                                    cod_emp: EMPRESA,
+                                    cod_usr: NOMBRE,
+                                    rol_usr: ROL
+                                }
+                            });
                         }else{
                             Ext.MessageBox.show({
                                 title: 'ADVERTENCIA',

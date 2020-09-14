@@ -12,8 +12,16 @@ var ModalFormDesvinculacion_3= function(rol, personal, finiquito, carta, causal,
         listeners:{
             afterrender: function(){
 
-                var form3 = this.down('form').getForm();
-
+            },
+            beforedestroy: function(){
+                var store = Ext.getCmp('InicioDesvinculacionGrilla').getStore();
+                store.load({
+                    params:{
+                        cod_emp: EMPRESA,
+                        cod_usr: NOMBRE,
+                        rol_usr: ROL
+                    }
+                });
             }
         },
         items:[{

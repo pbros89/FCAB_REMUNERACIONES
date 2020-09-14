@@ -10,20 +10,6 @@ var ModalFormDesvinculacion= function(rol){
             afterrender: function(){
 
                 var form = this.down('form').getForm();
-                var storeRut = form.findField('cb_rut').getStore();
-                var storeCausal = form.findField('cb_causal').getStore();
-
-                storeRut.load({
-                    params:{
-                        cod_emp: EMPRESA
-                    }
-                });
-
-                storeCausal.load({
-                    params:{
-                        cod_emp: EMPRESA
-                    }
-                });
 
             }
         },
@@ -68,30 +54,53 @@ var ModalFormDesvinculacion= function(rol){
                         displayField: 'RUTNOM',
                         valueField: 'RUT',
                         emptyText: 'Seleccione',
-                        forceSelection: true,
                         allowBlank: false,
-                        hideTrigger: true,
-                        typeAhead: true,
-                        typeAheadDelay: 100,
-                        minChars: 2,
-                        queryMode: 'local',
-                        lastQuery: '',
+                        //hideTrigger: true,
+                        //typeAhead: true,
+                        //typeAheadDelay: 100,
+                        //minChars: 2,
+                        //lastQuery: '',
                         listeners:{
-                            change: function(combo){
+                            afterrender: function(combo){
+                                var store = combo.getStore();
+                                store.load({
+                                    params:{
+                                        cod_emp: EMPRESA,
+                                        cod_usr: NOMBRE
+                                    }
+                                });
+                            },
+                            select: function(combo){
                                 
-                                var seleccion = combo.getStore().find('RUTNOM',combo.getValue());
+                                var seleccion = combo.getStore().find('RUT', combo.getValue());
                                 var personal = combo.getStore().getAt(seleccion).get('PK_PERSONAL');
 
                                 var form = this.up('form').getForm();
 
-                                storeDesv_datosPersonal.load({
-                                    params:{
-                                        p_id:personal
+                                storeDesv_existeSolicitud.load({
+                                    params:{ 
+                                        p_personal: personal 
                                     },
-                                    callback: function() {
-                                        func_llenarDatosPersonal(form, storeDesv_datosPersonal);
+                                    callback: function(records) {
+                                        if(records!=null){
+                                            if(records[0].data.EXISTE > 0){
+                                                showToast('Ya existe una solicitud ACTIVA para la persona.');
+                                                func_llenarDatosPersonal(form, null);
+                                                combo.reset();
+                                            }else{
+                                                storeDesv_datosPersonal.load({
+                                                    params:{
+                                                        p_id:personal
+                                                    },
+                                                    callback: function() {
+                                                        func_llenarDatosPersonal(form, storeDesv_datosPersonal);
+                                                    }
+                                                });
+                                            }
+                                        }
                                     }
                                 });
+                                
                             }
                         }
                     },{
@@ -187,7 +196,6 @@ var ModalFormDesvinculacion= function(rol){
                                 var form = this.up('form').getForm();
                             }	
                         }
-                        
                     },{
                         xtype: 'radiogroup',
                         fieldLabel: '¿Carta aviso 30 días?',
@@ -223,11 +231,19 @@ var ModalFormDesvinculacion= function(rol){
                         store: storeDesv_listCausalesDespido,
                         queryMode: 'local',
                         displayField: 'NOMBRE',
-                        valueField: 'NOMBRE',
+                        valueField: 'CODIGO',
                         emptyText: 'Seleccione',
                         forceSelection: true,
                         allowBlank: false,
                         listeners:{
+                            afterrender: function(combo){
+                                var store = combo.getStore();
+                                store.load({
+                                    params:{
+                                        cod_emp: EMPRESA
+                                    }
+                                });
+                            },
                             change: function(combo){
                                 var form = this.up('form').getForm();
                                 var causal_2 = form.findField('cb_causal2').value;
@@ -247,7 +263,7 @@ var ModalFormDesvinculacion= function(rol){
                         store: storeDesv_listCausalesDespido,
                         queryMode: 'local',
                         displayField: 'NOMBRE',
-                        valueField: 'NOMBRE',
+                        valueField: 'CODIGO',
                         emptyText: 'Seleccione',
                         forceSelection: false,
                         listeners:{
@@ -278,13 +294,15 @@ var ModalFormDesvinculacion= function(rol){
                     var personal = combo_rut.getStore().getAt(seleccion).get('PK_PERSONAL');
                     var combo_fecha = form.findField('date_fecha').value;
                     var finiquito = Ext.Date.format(combo_fecha,'d/m/Y');
-                    var causal = form.findField('cb_causal').value;
-                    var causal2 = form.findField('cb_causal2').value;
+                    var cod_causal = form.findField('cb_causal').value;
+                    var cod_causal2 = form.findField('cb_causal2').value;
+                    var causal = form.findField('cb_causal').rawValue;
+                    var causal2 = form.findField('cb_causal2').rawValue;
 
                     if(!form.isValid()){
                         showToast('Debe completar los campos del formulario.');
                     }else{
-                        ModalFormDesvinculacion_2(rol, personal, finiquito, carta, causal, causal2);
+                        ModalFormDesvinculacion_2(rol, personal, finiquito, carta, cod_causal, cod_causal2, causal, causal2);
                         this.up('window').close();
                     }
 
@@ -304,11 +322,21 @@ var ModalFormDesvinculacion= function(rol){
 
 function func_llenarDatosPersonal(form, store){
 
-    var records = store.getRange();
-    form.findField('txt_apellidos').setValue(records[0].get('APELLIDOS'));
-    form.findField('txt_nombres').setValue(records[0].get('NOMBRES'));
-    form.findField('txt_empresa').setValue(records[0].get('EMPRESA'));
-    form.findField('txt_departamento').setValue(records[0].get('DEPARTAMENTO'));
-    form.findField('txt_gerencia').setValue(records[0].get('GERENCIA'));
-    form.findField('txt_rol').setValue(records[0].get('ROL'));
+    if(store!=null){
+        var records = store.getRange();
+        form.findField('txt_apellidos').setValue(records[0].get('APELLIDOS'));
+        form.findField('txt_nombres').setValue(records[0].get('NOMBRES'));
+        form.findField('txt_empresa').setValue(records[0].get('EMPRESA'));
+        form.findField('txt_departamento').setValue(records[0].get('DEPARTAMENTO'));
+        form.findField('txt_gerencia').setValue(records[0].get('GERENCIA'));
+        form.findField('txt_rol').setValue(records[0].get('ROL'));
+    }else{
+        form.findField('txt_apellidos').reset();
+        form.findField('txt_nombres').reset();
+        form.findField('txt_empresa').reset();
+        form.findField('txt_departamento').reset();
+        form.findField('txt_gerencia').reset();
+        form.findField('txt_rol').reset();
+    }
+    
 }

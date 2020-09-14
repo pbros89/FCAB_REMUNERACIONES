@@ -33,8 +33,9 @@ class WFDesvinculacionController extends CI_Controller
     public function listRutNombre()
     {
         $cod_emp = $this->input->get('cod_emp');
+        $cod_usr = $this->input->get('cod_usr');
 
-        $query = $this->WFDesvinculacionModel->listRutNombre($cod_emp);
+        $query = $this->WFDesvinculacionModel->listRutNombre($cod_emp, $cod_usr);
 
         $result = "{'success':true, 'items':" . json_encode($query) . "}";
 
@@ -81,8 +82,10 @@ class WFDesvinculacionController extends CI_Controller
     public function listaDesvinculaciones()
     {
         $cod_emp = $this->input->get('cod_emp');
+        $cod_usr = $this->input->get('cod_usr');
+        $rol_usr = $this->input->get('rol_usr');
 
-        $query = $this->WFDesvinculacionModel->listaDesvinculaciones($cod_emp);
+        $query = $this->WFDesvinculacionModel->listaDesvinculaciones($cod_emp, $cod_usr, $rol_usr);
 
         $result = "{'success':true, 'items':" . json_encode($query) . "}";
 
@@ -93,8 +96,9 @@ class WFDesvinculacionController extends CI_Controller
     public function detalleDesvinculacion()
     {
         $numero = $this->input->get('p_numero');
+        $cod_emp = $this->input->get('p_emp');
 
-        $query = $this->WFDesvinculacionModel->detalleDesvinculacion($numero);
+        $query = $this->WFDesvinculacionModel->detalleDesvinculacion($numero, $cod_emp);
 
         $result = "{'success':true, 'items':" . json_encode($query) . "}";
 
@@ -146,8 +150,22 @@ class WFDesvinculacionController extends CI_Controller
         $rol = $this->input->get('p_rol');
         $estado = $this->input->get('p_estado');
         $usuario = $this->input->get('p_usuario');
+        $fecha = $this->input->get('p_fecha');
+        $horario = $this->input->get('p_horario');
 
-        $query = $this->WFDesvinculacionModel->aprobarDesvinculacion($numero, $rol, $estado, $usuario);
+        $query = $this->WFDesvinculacionModel->aprobarDesvinculacion($numero, $rol, $estado, $usuario, $fecha, $horario);
+
+        $result = "{'success':true, 'items':" . json_encode($query) . "}";
+
+        $this->output->set_output($result);
+
+    }
+
+    public function existeSolicitud()
+    {
+        $p_personal = $this->input->get('p_personal');
+
+        $query = $this->WFDesvinculacionModel->existeSolicitud($p_personal);
 
         $result = "{'success':true, 'items':" . json_encode($query) . "}";
 

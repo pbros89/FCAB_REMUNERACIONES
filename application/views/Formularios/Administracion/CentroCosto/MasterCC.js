@@ -60,81 +60,10 @@ Ext.define('fcab.Container.MasterCC.Grilla', {
     },
     columns: [
         {
-            text     : 'ID Empresa',
-            sortable : true,
-            dataIndex: 'PK_COD_EMP',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'Empresa',
-            sortable : true,
-            dataIndex: 'NOM_EMP',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'Gerencia',
-            sortable : true,
-            dataIndex: 'NOM_GERENCIA',
-            //align: 'center',
-            hidden: false,
-            flex: 1
-        },
-        {
-            text     : 'Departamento',
-            sortable : true,
-            dataIndex: 'NOM_DEPARTAMENTO',
-            //align: 'center',
-            hidden: false,
-            flex: 1
-        },
-        {
-            text     : 'ID CC',
-            sortable : true,
-            dataIndex: 'PK_COD_CC',
-            //align: 'center',
-            flex: 1
-        },
-        {
-            text     : 'Nombre',
-            sortable : true,
-            dataIndex: 'NOM_CC',
-            flex:2
-        },
-        {
-            text     : 'Creación',
-            sortable : true,
-            dataIndex: 'FECHA_CREACION',
-            flex:2,
-            //hidden: true
-        },
-        {
-            text     : 'Creador',
-            sortable : true,
-            dataIndex: 'USR_CREADOR',
-            flex:2,
-        },
-        {
-            text     : 'Modificación',
-            sortable : true,
-            dataIndex: 'FECHA_MODIFICO',
-            flex:2,
-            //hidden: true
-        },
-        {
-            text     : 'Modificador',
-            sortable : true,
-            dataIndex: 'USR_MODIFICO',
-            flex: 2,
-        },
-        {
             text     : 'Estado',
             sortable : true,
             dataIndex: 'ESTADO',
-            flex: 1,
+            width: 100,
             renderer : function(value, meta) {
                 if(value === 'A')
                 {
@@ -147,7 +76,92 @@ Ext.define('fcab.Container.MasterCC.Grilla', {
                     return value;
                 }
             }
-        }
+        },
+        {
+            text     : 'ID Empresa',
+            sortable : true,
+            dataIndex: 'PK_COD_EMP',
+            //align: 'center',
+            hidden: true,
+            width: 100
+        },
+        {
+            text     : 'Empresa',
+            sortable : true,
+            dataIndex: 'NOM_EMP',
+            //align: 'center',
+            hidden: true,
+            width: 100
+        },
+        {
+            text     : 'Gerencia',
+            sortable : true,
+            dataIndex: 'NOM_GERENCIA',
+            //align: 'center',
+            hidden: false,
+            width: 150
+        },
+        {
+            text     : 'Departamento',
+            sortable : true,
+            dataIndex: 'NOM_DEPARTAMENTO',
+            //align: 'center',
+            hidden: false,
+            width: 150
+        },
+        {
+            text     : 'ID CC',
+            sortable : true,
+            dataIndex: 'PK_COD_CC',
+            //align: 'center',
+            width: 100
+        },
+        {
+            text     : 'Nombre',
+            sortable : true,
+            dataIndex: 'NOM_CC',
+            width: 150
+        },
+        {
+            text     : 'Rut Jefatura',
+            sortable : true,
+            dataIndex: 'RUT_JEFE',
+            //align: 'center',
+            width: 100
+        },
+        {
+            text     : 'Jefatura',
+            sortable : true,
+            dataIndex: 'NOM_JEFE',
+            width: 150
+        },
+        {
+            text     : 'Creación',
+            sortable : true,
+            dataIndex: 'FECHA_CREACION',
+            width: 150
+            //hidden: true
+        },
+        {
+            text     : 'Creador',
+            sortable : true,
+            dataIndex: 'USR_CREADOR',
+            width: 150
+        },
+        {
+            text     : 'Modificación',
+            sortable : true,
+            dataIndex: 'FECHA_MODIFICO',
+            width: 150
+            //hidden: true
+        },
+        {
+            text     : 'Modificador',
+            sortable : true,
+            dataIndex: 'USR_MODIFICO',
+            width: 150
+        },
+        
     ],
     dockedItems: [{
         xtype: 'toolbar',

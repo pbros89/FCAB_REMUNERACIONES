@@ -57,6 +57,24 @@ Ext.define('fcab.Container.MasterHaberRRLL.Grilla', {
     },
     columns: [
         {
+            text     : 'Estado',
+            sortable : true,
+            dataIndex: 'ESTADO',
+            flex: 1,
+            renderer : function(value, meta) {
+                if(value === 'A')
+                {
+                    meta.style = 'color:green;';
+                    return 'ACTIVO'
+                }else if(value === 'I'){
+                    meta.style = 'color:red;';
+                    return 'INACTIVO';
+                }else{
+                    return value;
+                }
+            }
+        },
+        {
             text     : 'ID Empresa',
             sortable : true,
             dataIndex: 'PK_COD_EMP',
@@ -141,24 +159,7 @@ Ext.define('fcab.Container.MasterHaberRRLL.Grilla', {
             dataIndex: 'USR_MODIFICO',
             flex: 2,
         },
-        {
-            text     : 'Estado',
-            sortable : true,
-            dataIndex: 'ESTADO',
-            flex: 1,
-            renderer : function(value, meta) {
-                if(value === 'A')
-                {
-                    meta.style = 'color:green;';
-                    return 'ACTIVO'
-                }else if(value === 'I'){
-                    meta.style = 'color:red;';
-                    return 'INACTIVO';
-                }else{
-                    return value;
-                }
-            }
-        }
+        
     ],
     dockedItems: [{
         xtype: 'toolbar',

@@ -12,11 +12,19 @@ Ext.define('fcab.Container.MasterCC.Editar', {
             var param = Ext.getCmp('MasterCCEditar').myExtraParams.param2.data;
             storeCargarParam_GERENCIA.load();
             storeCargarParam_DEPARTAMENTO.load();
+            storeCargarPersonalVigentePorPrivilegioUsuario.load({
+                params: {
+                    p_cod_emp: EMPRESA,
+                    p_rol: 'ADMIN',
+                    p_usuario: NOMBRE
+                }
+            });
             Ext.ComponentQuery.query('#MasterCCEditar #txtId')[0].setValue(param.PK_COD_CC);
             Ext.ComponentQuery.query('#MasterCCEditar #txtNombre')[0].setValue(param.NOM_CC);
             Ext.ComponentQuery.query('#MasterCCEditar #cbEstado')[0].setValue(param.ESTADO);
             Ext.ComponentQuery.query('#MasterCCEditar #cbGerencia')[0].setValue(param.COD_GERENCIA);
             Ext.ComponentQuery.query('#MasterCCEditar #cbDepartamento')[0].setValue(param.COD_DEPARTAMENTO);
+            Ext.ComponentQuery.query('#MasterCCEditar #cbJefe')[0].setValue(param.RUT_JEFE);
             
         }
     },
@@ -119,6 +127,30 @@ Ext.define('fcab.Container.MasterCC.Editar', {
                 style: 'margin-bottom: 5px',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbJefe',
+                    itemId: 'cbJefe',
+                    displayField: 'INFO',
+                    valueField: 'RUT_FINAL',
+                    store: storeCargarPersonalVigentePorPrivilegioUsuario,
+                    fieldLabel: 'Jefatura',
+                    labelAlign:'left',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin-bottom: 5px',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbEstado',
                     itemId: 'cbEstado',
                     store: [['A','ACTIVO'],['I','INACTIVO']],
@@ -140,6 +172,7 @@ Ext.define('fcab.Container.MasterCC.Editar', {
                 var form = this.up('form').getForm();
                 var cbGerencia = Ext.ComponentQuery.query('#MasterCCEditar #cbGerencia')[0];
                 var cbDepartamento = Ext.ComponentQuery.query('#MasterCCEditar #cbDepartamento')[0];
+                var cbJefe = Ext.ComponentQuery.query('#MasterCCEditar #cbJefe')[0];
                 if (!ValidarFormulario(form)) return;
                 //TODO: Solo actualizara si es llamado desde una ventana (modal), en caso contrario no hara nada.
                 var ewin = Ext.WindowManager.getActive();
@@ -159,6 +192,8 @@ Ext.define('fcab.Container.MasterCC.Editar', {
                             p_nom_ger: cbGerencia.getRawValue(),
                             p_cod_dep: values.cbDepartamento,
                             p_nom_dep: cbDepartamento.getRawValue(),
+                            p_rut_jefe: cbJefe.selection.data.RUT_FINAL,
+                            p_nom_jefe: cbJefe.selection.data.NOMBRE,
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {

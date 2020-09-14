@@ -352,6 +352,13 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                 checked: false,
                 inputValue: '1'
             },{
+                xtype: 'checkbox',
+                columnWidth: 1,
+                boxLabel: 'No tomar cuando es cero en envios a ISSA',
+                name: 'chNoCero',
+                checked: false,
+                inputValue: '1'
+            },{
                 xtype: 'container',
                 columnWidth: 1,
                 layout: 'anchor',
@@ -409,6 +416,12 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                     values.chCopiar = '1';
                 }else {
                     values.chCopiar = '0';
+                }
+
+                if(values.chNoCero){
+                    values.chNoCero = '1';
+                }else {
+                    values.chNoCero = '0';
                 }
 
 
@@ -521,7 +534,8 @@ Ext.define('fcab.Container.MasterConcepto.Crear', {
                             p_inicial: txtInicial,
                             p_usuario: NOMBRE,
                             p_estado: values.cbEstado,
-                            p_copiar: values.chCopiar
+                            p_copiar: values.chCopiar,
+                            p_no_cero: values.chNoCero
                         },
                         callback: function(records, operation, success) {
                             

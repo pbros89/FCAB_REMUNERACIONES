@@ -11,6 +11,13 @@ Ext.define('fcab.Container.MasterCC.Crear', {
         afterrender: function() {
             storeCargarParam_GERENCIA.load();
             storeCargarParam_DEPARTAMENTO.load();
+            storeCargarPersonalVigentePorPrivilegioUsuario.load({
+                params: {
+                    p_cod_emp: EMPRESA,
+                    p_rol: 'ADMIN',
+                    p_usuario: NOMBRE
+                }
+            });
         }
     },
     items: [{
@@ -111,6 +118,30 @@ Ext.define('fcab.Container.MasterCC.Crear', {
                 style: 'margin-bottom: 5px',
                 items: [{
                     xtype: 'combo',
+                    name: 'cbJefe',
+                    itemId: 'cbJefe',
+                    displayField: 'INFO',
+                    valueField: 'RUT_FINAL',
+                    store: storeCargarPersonalVigentePorPrivilegioUsuario,
+                    fieldLabel: 'Jefatura',
+                    labelAlign:'left',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin-bottom: 5px',
+                items: [{
+                    xtype: 'combo',
                     name: 'cbEstado',
                     itemId: 'cbEstado',
                     store: [['A','ACTIVO'],['I','INACTIVO']],
@@ -133,6 +164,7 @@ Ext.define('fcab.Container.MasterCC.Crear', {
                 var form = this.up('form').getForm();
                 var cbGerencia = Ext.ComponentQuery.query('#MasterCCCrear #cbGerencia')[0];
                 var cbDepartamento = Ext.ComponentQuery.query('#MasterCCCrear #cbDepartamento')[0];
+                var cbJefe = Ext.ComponentQuery.query('#MasterCCCrear #cbJefe')[0];
                 if (!ValidarFormulario(form)) return;
                 //TODO: Solo actualizara si es llamado desde una ventana (modal), en caso contrario no hara nada.
                 var ewin = Ext.WindowManager.getActive();
@@ -150,6 +182,8 @@ Ext.define('fcab.Container.MasterCC.Crear', {
                             p_nom_ger: cbGerencia.getRawValue(),
                             p_cod_dep: values.cbDepartamento,
                             p_nom_dep: cbDepartamento.getRawValue(),
+                            p_rut_jefe: cbJefe.selection.data.RUT_FINAL,
+                            p_nom_jefe: cbJefe.selection.data.NOMBRE,
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {

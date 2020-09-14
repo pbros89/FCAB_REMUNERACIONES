@@ -264,7 +264,7 @@ Ext.define('fcab.Container.HomeAdministrador', {
                 element: 'body'
             },
             items:[{
-                html: '<h3 style="color: #25709e;">Cargo Renta</h3>',
+                html: '<h3 style="color: #25709e;">Laboral</h3>',
                 border: false
             },{
                 layout: {

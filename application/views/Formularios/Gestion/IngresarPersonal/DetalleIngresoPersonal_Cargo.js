@@ -11,6 +11,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
     listeners: {
         beforerender: function(){
             var param = Ext.getCmp('DetalleIngresoPersonal').myExtraParams.param2.data;
+            
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #cbCC')[0].setValue(param.COD_CC);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #cbCargo')[0].setValue(param.COD_CARGO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #cbIne')[0].setValue(param.COD_INE);
@@ -20,7 +21,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #dtIngreso')[0].setValue(param.FECHA_INGRESO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #dtVencimiento')[0].setValue(param.FECHA_VENCIMIENTO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtDVJefatura')[0].setValue(param.RUT_JEFE);
-            Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtRutJefatura')[0].setValue(param.DV_JEFE);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtJefatura')[0].setValue(param.RUT_JEFE + "-" + param.DV_JEFE + " " +param.NOM_JEFE);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtDepto')[0].setValue(param.NOM_DEPARTAMENTO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtGer')[0].setValue(param.NOM_GERENCIA);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtCorreoEmp')[0].setValue(param.CORREO_EMP);
@@ -52,40 +53,6 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
             },
     
             items: [{
-                xtype: 'container',
-                columnWidth: 1,
-                layout: 'hbox',
-                style: 'margin: 0 10px 5px 0',
-                items: [{
-                    xtype: 'thousandnumber',
-                    style: 'margin: 0 10px 5px 0',
-                    itemId: 'txtRutJefatura',
-                    name: 'txtRutJefatura',
-                    forcePrecision: true,
-                    decimalPrecision: 0,
-                    allowDecimals: false,
-                    labelAlign:'top',
-                    fieldLabel: 'Rut Jefatura',
-                    width: '20%',
-                    allowBlank: true,
-                    minValue: 0,
-                    readOnly : true,
-                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'
-                },{
-                    xtype: 'textfield',
-                    style: 'margin: 0 10px 5px 0',
-                    itemId: 'txtDVJefatura',
-                    name: 'txtDVJefatura',
-                    labelAlign:'top',
-                    fieldLabel: 'DV',
-                    width: '5%',
-                    typeAhead: true,
-                    maxLength: 1,
-                    allowBlank: true,
-                    readOnly : true,
-                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'
-                }]
-            },{
                 xtype: 'container',
                 columnWidth: .5,
                 layout: 'anchor',
@@ -147,6 +114,23 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
                             }
                         }
                     }
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtJefatura',
+                    name: 'txtJefatura',
+                    labelAlign:'top',
+                    fieldLabel: 'Jefatura',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
             },{
                 xtype: 'container',

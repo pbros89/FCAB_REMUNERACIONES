@@ -220,72 +220,143 @@ class IssaModel extends CI_Model {
     }
 
     public function cargarCambioBonoIssa(){
-        $sql = 'SELECT 
-                    BON.PK_ID as "codigo",'.
-                    "to_char(to_date(BON.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
-                    "to_char(BON.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
-                    'case SUBSTR(rut,0,1) when '."'0'".' then SUBSTR(rut,2,LENGTH(rut)) else rut end as "rut",
-                    BON.NOMBRE as "nombre",
-                    CON.pfk_cod_concepto as "cod_concepto",   
-                    CON.NOM_CONCEPTO as "nom_concepto",   
-                    CON.valor as "valor",
-                    nvl(bon.FK_COD_EMP, '."'%null%'".') as "cod_emp"
-                FROM NOV_CAMBIO_BONO BON, NOV_CAMBIO_BONO_CONCEPTOS CON
-                WHERE BON.PK_ID = CON.PFK_BONO
-                AND BON.periodo is not null
-                AND (CON.estado_enviado is null
-                OR CON.estado_enviado <>'." 'OK')
-                AND BON.estado = 'TERMINADO' 
-                AND ROWNUM <= 200
-                ORDER BY BON.FECHA_CREACION asc";
+        $sql = ' SELECT * FROM (
+                    SELECT 
+                        BON.PK_ID as "codigo",'.
+                        "to_char(to_date(BON.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
+                        "to_char(BON.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
+                        'case SUBSTR(rut,0,1) when '."'0'".' then SUBSTR(rut,2,LENGTH(rut)) else rut end as "rut",
+                        BON.NOMBRE as "nombre",
+                        CON.pfk_cod_concepto as "cod_concepto",   
+                        CON.NOM_CONCEPTO as "nom_concepto",   
+                        CON.valor as "valor",
+                        nvl(bon.FK_COD_EMP, '."'%null%'".') as "cod_emp"
+                    FROM NOV_CAMBIO_BONO BON, NOV_CAMBIO_BONO_CONCEPTOS CON
+                    WHERE BON.PK_ID = CON.PFK_BONO
+                    AND BON.periodo is not null
+                    AND (CON.estado_enviado is null
+                    OR CON.estado_enviado <>'." 'OK')
+                    AND BON.estado = 'TERMINADO' 
+                    AND CON.valor <> 0 
+                    UNION ".
+                    'SELECT 
+                        BON.PK_ID as "codigo",'.
+                        "to_char(to_date(BON.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
+                        "to_char(BON.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
+                        'case SUBSTR(rut,0,1) when '."'0'".' then SUBSTR(rut,2,LENGTH(rut)) else rut end as "rut",
+                        BON.NOMBRE as "nombre",
+                        CON.pfk_cod_concepto as "cod_concepto",   
+                        CON.NOM_CONCEPTO as "nom_concepto",   
+                        CON.valor as "valor",
+                        nvl(bon.FK_COD_EMP, '."'%null%'".') as "cod_emp"
+                    FROM NOV_CAMBIO_BONO BON, NOV_CAMBIO_BONO_CONCEPTOS CON, NOV_CONCEPTOS CO
+                    WHERE BON.PK_ID = CON.PFK_BONO
+                    AND con.pfk_cod_concepto = co.pk_cod_concepto
+                    AND CON.PFK_COD_EMP = CO.PFK_COD_EMP
+                    AND BON.periodo is not null
+                    AND (CON.estado_enviado is null
+                    OR CON.estado_enviado <>'." 'OK')
+                    AND BON.estado = 'TERMINADO' 
+                    AND CON.VALOR = 0
+                    AND CO.NO_CERO = '0' 
+                )
+                WHERE ROWNUM <= 200";
 
         $query = $this->db->query($sql);
         return $query->result_array();
     }
 
     public function cargarConceptosFiniquitoIssa(){
-        $sql = 'SELECT 
-                    FIN.PK_FINIQUITO as "codigo",'.
-                    "to_char(to_date(FIN.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
-                    "to_char(FIN.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
-                    'case SUBSTR(rut,0,1) when '."'0'".' then SUBSTR(rut,2,LENGTH(rut)) else rut end as "rut",
-                    FIN.NOMBRE as "nombre",
-                    CON.pfk_cod_concepto as "cod_concepto",   
-                    CON.NOM_CONCEPTO as "nom_concepto",   
-                    CON.valor as "valor",
-                    nvl(FIN.FK_COD_EMP, '."'%null%'".') as "cod_emp"
-                FROM NOV_FINIQUITO_CONCEPTOS con, NOV_FINIQUITOS FIN
-                WHERE CON.PFK_FINIQUITO = FIN.PK_FINIQUITO
-                AND FIN.periodo is not null
-                AND (CON.estado_enviado is null
-                OR CON.estado_enviado <>'." 'OK')
-                AND FIN.estado = 'TERMINADO' 
-                AND ROWNUM <= 200
-                ORDER BY FIN.FECHA_CREACION asc";
+        $sql = 'SELECT *
+                FROM (
+                    SELECT 
+                        FIN.PK_FINIQUITO as "codigo",'.
+                        "to_char(to_date(FIN.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
+                        "to_char(FIN.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
+                        'case SUBSTR(rut,0,1) when '."'0'".' then SUBSTR(rut,2,LENGTH(rut)) else rut end as "rut",
+                        FIN.NOMBRE as "nombre",
+                        CON.pfk_cod_concepto as "cod_concepto",   
+                        CON.NOM_CONCEPTO as "nom_concepto",   
+                        CON.valor as "valor",
+                        nvl(FIN.FK_COD_EMP, '."'%null%'".') as "cod_emp"
+                    FROM NOV_FINIQUITO_CONCEPTOS con, NOV_FINIQUITOS FIN
+                    WHERE CON.PFK_FINIQUITO = FIN.PK_FINIQUITO
+                    AND FIN.periodo is not null
+                    AND (CON.estado_enviado is null
+                    OR CON.estado_enviado <>'." 'OK')
+                    AND FIN.estado = 'TERMINADO' 
+                    AND CON.valor <> 0 
+                    UNION ".
+                    'SELECT 
+                        FIN.PK_FINIQUITO as "codigo",'.
+                        "to_char(to_date(FIN.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
+                        "to_char(FIN.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
+                        'case SUBSTR(rut,0,1) when '."'0'".' then SUBSTR(rut,2,LENGTH(rut)) else rut end as "rut",
+                        FIN.NOMBRE as "nombre",
+                        CON.pfk_cod_concepto as "cod_concepto",   
+                        CON.NOM_CONCEPTO as "nom_concepto",   
+                        CON.valor as "valor",
+                        nvl(FIN.FK_COD_EMP, '."'%null%'".') as "cod_emp"
+                    FROM NOV_FINIQUITO_CONCEPTOS con, NOV_FINIQUITOS FIN, NOV_CONCEPTOS CO
+                    WHERE CON.PFK_FINIQUITO = FIN.PK_FINIQUITO
+                    AND con.pfk_cod_concepto = co.pk_cod_concepto
+                    AND CON.PFK_COD_EMP = CO.PFK_COD_EMP
+                    AND FIN.periodo is not null
+                    AND (CON.estado_enviado is null
+                    OR CON.estado_enviado <>'." 'OK')
+                    AND FIN.estado = 'TERMINADO' 
+                    AND CON.VALOR = 0
+                    AND CO.NO_CERO = '0' 
+                )
+                WHERE ROWNUM <= 200 ";
 
         $query = $this->db->query($sql);
         return $query->result_array();
     }
 
     public function cargarConceptosIngPersonalIssa(){
-        $sql = 'SELECT 
-                    ING.PK_ID as "codigo",'.
-                    "to_char(to_date(ING.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
-                    "to_char(ING.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
-                    'case SUBSTR(ING.RUT || '."'-'".'||ING.DV,0,1) when '."'0'".' then SUBSTR(ING.RUT || '."'-'".'||ING.DV,2,LENGTH(rut)) else ING.RUT ||'."'-'".'|| ING.DV end as "rut",
-                    ING.APE_PAT || '."' ' || ING.APE_MAT || ', ' ||ING.NOMBRES " . '  as "nombre",
-                    CON.pfk_cod_concepto as "cod_concepto",   
-                    CON.NOM_CONCEPTO as "nom_concepto",   
-                    CON.valor as "valor",
-                    nvl(ING.COD_EMP, '."'%null%'".') as "cod_emp"
-                FROM NOV_INGRESAR_PERSONAL ING, NOV_ING_PER_CONCEPTOS con
-                WHERE ING.PK_ID = CON.PFK_INGRESO 
-                AND ING.periodo is not null
-                AND (CON.estado_enviado is null
-                OR CON.estado_enviado <>'." 'OK')
-                AND ING.estado = 'TERMINADO' 
-                AND ROWNUM <= 200
-                ORDER BY ING.FECHA_CREACION asc";
+        $sql = 'SELECT * 
+                FROM (
+                    SELECT 
+                        ING.PK_ID as "codigo",'.
+                        "to_char(to_date(ING.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
+                        "to_char(ING.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
+                        'case SUBSTR(ING.RUT || '."'-'".'||ING.DV,0,1) when '."'0'".' then SUBSTR(ING.RUT || '."'-'".'||ING.DV,2,LENGTH(rut)) else ING.RUT ||'."'-'".'|| ING.DV end as "rut",
+                        ING.APE_PAT || '."' ' || ING.APE_MAT || ', ' ||ING.NOMBRES " . '  as "nombre",
+                        CON.pfk_cod_concepto as "cod_concepto",   
+                        CON.NOM_CONCEPTO as "nom_concepto",   
+                        CON.valor as "valor",
+                        nvl(ING.COD_EMP, '."'%null%'".') as "cod_emp"
+                    FROM NOV_INGRESAR_PERSONAL ING, NOV_ING_PER_CONCEPTOS con
+                    WHERE ING.PK_ID = CON.PFK_INGRESO 
+                    AND ING.periodo is not null
+                    AND (CON.estado_enviado is null
+                    OR CON.estado_enviado <>'." 'OK')
+                    AND ING.estado = 'TERMINADO' 
+                    AND CON.valor <> 0 
+                    UNION ".
+                    'SELECT 
+                        ING.PK_ID as "codigo",'.
+                        "to_char(to_date(ING.PERIODO, 'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
+                        "to_char(ING.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
+                        'case SUBSTR(ING.RUT || '."'-'".'||ING.DV,0,1) when '."'0'".' then SUBSTR(ING.RUT || '."'-'".'||ING.DV,2,LENGTH(rut)) else ING.RUT ||'."'-'".'|| ING.DV end as "rut",
+                        ING.APE_PAT || '."' ' || ING.APE_MAT || ', ' ||ING.NOMBRES " . '  as "nombre",
+                        CON.pfk_cod_concepto as "cod_concepto",   
+                        CON.NOM_CONCEPTO as "nom_concepto",   
+                        CON.valor as "valor",
+                        nvl(ING.COD_EMP, '."'%null%'".') as "cod_emp"
+                    FROM NOV_INGRESAR_PERSONAL ING, NOV_ING_PER_CONCEPTOS con, NOV_CONCEPTOS CO
+                    WHERE ING.PK_ID = CON.PFK_INGRESO 
+                    AND con.pfk_cod_concepto = co.pk_cod_concepto
+                    AND CON.PFK_COD_EMP = CO.PFK_COD_EMP
+                    AND ING.periodo is not null
+                    AND (CON.estado_enviado is null
+                    OR CON.estado_enviado <>'." 'OK')
+                    AND ING.estado = 'TERMINADO' 
+                    AND CON.VALOR = 0
+                    AND CO.NO_CERO = '0' 
+                )
+                WHERE ROWNUM <= 200 ";
 
         $query = $this->db->query($sql);
         return $query->result_array();
@@ -546,7 +617,64 @@ class IssaModel extends CI_Model {
                     "valor",
                     "cod_emp"
                 FROM(
-                    SELECT 
+                    SELECT "mes_impacto", 
+                        "fecha_creacion", 
+                        "tipo", "rut", "nombre", 
+                        "cod_cc", "nom_cc", 
+                        "cod_cargo", 
+                        "nom_cargo", "fecha_ingreso", 
+                        "tipo_contrato","jornada", "cod_sindicato", "nom_sindicato", 
+                        "cod_adherido", "nom_adherido", "cod_concepto","nom_concepto",
+                        "valor",
+                        "cod_emp", ROWNUM FILA 
+                    FROM(
+                        SELECT 
+                                to_char(to_date(con.PFK_PROCESO,'. "'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
+                                "to_char(CON.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
+                                'con.pfk_tipo as "tipo",'.
+                                'case SUBSTR(pfk_rut,0,1) when '."'0'".' then SUBSTR(pfk_rut,2,LENGTH(pfk_rut)) else pfk_rut end as "rut",
+                                PER.NOMBRE as "nombre", 
+                                PER.PFK_COD_CC as "cod_cc", 
+                                PER.NOM_CC as "nom_cc",
+                                PER.COD_CARGO as "cod_cargo",
+                                PER.NOM_CARGO as "nom_cargo",'.
+                                "to_char(PER.FECHA_INGRESO, 'dd-mm-yyyy')".' as "fecha_ingreso",'.
+                                'nvl(PER.TIPO_CONTRATO, '."'%null%'".') as "tipo_contrato",
+                                nvl(PER.JORNADA, '."'%null%'".') as "jornada",
+                                nvl(PER.COD_SINDICATO, '."'%null%'".') as "cod_sindicato", 
+                                nvl(PER.NOM_SINDICATO, '."'%null%'".') as "nom_sindicato", 
+                                nvl(PER.COD_ADHERIDO, '."'%null%'".') as "cod_adherido",
+                                nvl(PER.NOM_ADHERIDO, '."'%null%'".') as "nom_adherido",
+                                nvl(CON.pfk_cod_concepto, '."'%null%'".') as "cod_concepto",   
+                                nvl(CON.NOM_CONCEPTO, '."'%null%'".') as "nom_concepto",
+                                nvl(CON.valor, 0) as "valor",
+                                nvl(con.PFK_COD_EMP, '."'%null%'".') as "cod_emp"
+                        FROM NOV_PROC_MENSUAl_conceptos con, 
+                            NOV_PROC_MENSUAL_PERSONS PER,
+                            NOV_PROC_MENSUAL_CC CC,
+                            NOV_PROC_MENSUAL PRO
+                        WHERE PRO.PK_PROCESO = CC.PFK_PROCESO
+                        AND PRO.PK_TIPO = CC.PFK_TIPO
+                        AND PRO.PFK_COD_EMP = CC.PFK_COD_EMP
+                        AND CC.PFK_PROCESO = PER.PFK_PROCESO
+                        AND CC.PFK_TIPO = PER.PFK_TIPO
+                        AND CC.PFK_COD_EMP = PER.PFK_COD_EMP
+                        AND cc.pk_cod_cc = PER.PFK_COD_CC
+                        AND CON.PFK_PROCESO = PER.PFK_PROCESO
+                        AND CON.PFK_TIPO = PER.PFK_TIPO
+                        AND CON.PFK_COD_EMP = PER.PFK_COD_EMP
+                        AND CON.PFK_COD_CC = PER.PFK_COD_CC
+                        AND CON.PFK_RUT = PER.PK_RUT
+                        AND CON.PFK_COD_EMP ='."'".$p_cod_emp."'
+                        AND CON.PFK_PROCESO = '$p_proceso'
+                        AND CON.PFK_TIPO = '$p_tipo'
+                        AND CON.VALOR <> 0
+                        AND (CON.estado_enviado is null
+                        OR CON.estado_enviado <> 'OK') ";
+
+                    $sql .= '
+                        UNION
+                        SELECT 
                             to_char(to_date(con.PFK_PROCESO,'. "'yyyy/mm'), 'mm-yyyy')".' as "mes_impacto",'.
                             "to_char(CON.FECHA_CREACION, 'dd-mm-yyyy')".' as "fecha_creacion",'.
                             'con.pfk_tipo as "tipo",'.
@@ -566,42 +694,39 @@ class IssaModel extends CI_Model {
                             nvl(CON.pfk_cod_concepto, '."'%null%'".') as "cod_concepto",   
                             nvl(CON.NOM_CONCEPTO, '."'%null%'".') as "nom_concepto",
                             nvl(CON.valor, 0) as "valor",
-                            nvl(con.PFK_COD_EMP, '."'%null%'".') as "cod_emp",
-                            ROWNUM FILA
-                    FROM NOV_PROC_MENSUAl_conceptos con, 
-                        NOV_PROC_MENSUAL_PERSONS PER,
-                        NOV_PROC_MENSUAL_CC CC,
-                        NOV_PROC_MENSUAL PRO
-                    WHERE PRO.PK_PROCESO = CC.PFK_PROCESO
-                    AND PRO.PK_TIPO = CC.PFK_TIPO
-                    AND PRO.PFK_COD_EMP = CC.PFK_COD_EMP
-                    AND CC.PFK_PROCESO = PER.PFK_PROCESO
-                    AND CC.PFK_TIPO = PER.PFK_TIPO
-                    AND CC.PFK_COD_EMP = PER.PFK_COD_EMP
-                    AND cc.pk_cod_cc = PER.PFK_COD_CC
-                    AND CON.PFK_PROCESO = PER.PFK_PROCESO
-                    AND CON.PFK_TIPO = PER.PFK_TIPO
-                    AND CON.PFK_COD_EMP = PER.PFK_COD_EMP
-                    AND CON.PFK_COD_CC = PER.PFK_COD_CC
-                    AND CON.PFK_RUT = PER.PK_RUT
-                    AND CON.PFK_COD_EMP ='."'".$p_cod_emp."'
-                    AND CON.PFK_PROCESO = '$p_proceso'
-                    AND CON.PFK_TIPO = '$p_tipo'
-                    AND (CON.estado_enviado is null
-                    OR CON.estado_enviado <> 'OK')
-                    ORDER BY 
-                        con.PFK_PROCESO, 
-                        con.pfk_tipo, 
-                        CON.PFK_COD_EMP, 
-                        CON.PFK_COD_CC, 
-                        CON.pfk_rut, 
-                        CON.PFK_COD_CONCEPTO
-                )
+                            nvl(con.PFK_COD_EMP, '."'%null%'".') as "cod_emp"
+                        FROM NOV_PROC_MENSUAl_conceptos con, 
+                            NOV_PROC_MENSUAL_PERSONS PER,
+                            NOV_PROC_MENSUAL_CC CC,
+                            NOV_PROC_MENSUAL PRO,
+                            NOV_CONCEPTOS CO
+                        WHERE PRO.PK_PROCESO = CC.PFK_PROCESO
+                        AND PRO.PK_TIPO = CC.PFK_TIPO
+                        AND PRO.PFK_COD_EMP = CC.PFK_COD_EMP
+                        AND CC.PFK_PROCESO = PER.PFK_PROCESO
+                        AND CC.PFK_TIPO = PER.PFK_TIPO
+                        AND CC.PFK_COD_EMP = PER.PFK_COD_EMP
+                        AND cc.pk_cod_cc = PER.PFK_COD_CC
+                        AND CON.PFK_PROCESO = PER.PFK_PROCESO
+                        AND CON.PFK_TIPO = PER.PFK_TIPO
+                        AND CON.PFK_COD_EMP = PER.PFK_COD_EMP
+                        AND CON.PFK_COD_CC = PER.PFK_COD_CC
+                        AND CON.PFK_RUT = PER.PK_RUT
+                        AND con.pfk_cod_concepto = co.pk_cod_concepto
+                        AND CON.PFK_COD_EMP = CO.PFK_COD_EMP
+                        AND CON.PFK_COD_EMP ='."'".$p_cod_emp."'
+                        AND CON.PFK_PROCESO = '$p_proceso'
+                        AND CON.PFK_TIPO = '$p_tipo'
+                        AND CON.VALOR = 0
+                        AND CO.NO_CERO = '0'
+                        AND (CON.estado_enviado is null
+                        OR CON.estado_enviado <> 'OK')
+                    )
+                    ".'ORDER BY "rut", "cod_concepto"'.
+                ")
                 WHERE FILA >= $rowini
-                AND FILA <= $rowter";
-        //if($rowter == 300)
-         //   echo $sql . " \n\n\n";
-
+                AND FILA <= $rowter ";
+                        
         $query = $this->db->query($sql);
         return $query->result_array();
     }

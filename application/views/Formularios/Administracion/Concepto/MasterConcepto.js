@@ -59,117 +59,10 @@ Ext.define('fcab.Container.MasterConcepto.Grilla', {
     },
     columns: [
         {
-            text     : 'ID Empresa',
-            sortable : true,
-            dataIndex: 'PFK_COD_EMP',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'Empresa',
-            sortable : true,
-            dataIndex: 'NOM_EMP',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'ID Concepto',
-            sortable : true,
-            dataIndex: 'PK_COD_CONCEPTO',
-            //align: 'center',
-            flex: 1
-        },
-        {
-            text     : 'Concepto',
-            sortable : true,
-            dataIndex: 'NOMBRE',
-            flex:2
-        },
-        {
-            text     : 'Grupo',
-            sortable : true,
-            dataIndex: 'FK_GRUPO_CONCEPTO',
-            flex:1
-        },
-        {
-            text     : 'Tipo',
-            sortable : true,
-            dataIndex: 'FK_TIPO',
-            flex:1
-        },
-        {
-            text     : 'Periodo',
-            sortable : true,
-            dataIndex: 'FK_TIPO_MES',
-            flex:1
-        },
-        {
-            text     : 'Observación',
-            sortable : true,
-            dataIndex: 'OBSERVACION',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'Mes Inicial',
-            sortable : true,
-            dataIndex: 'MESES',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'Rango Inicio',
-            sortable : true,
-            dataIndex: 'RANGO_INI',
-            //align: 'center',
-            hidden: true,
-            flex: 1,
-            renderer: Ext.util.Format.numberRenderer('0.0,000')
-        },
-        {
-            text     : 'Rango Final',
-            sortable : true,
-            dataIndex: 'RANGO_FIN',
-            //align: 'center',
-            hidden: true,
-            flex: 1,
-            renderer: Ext.util.Format.numberRenderer('0.0,000')
-        },
-        {
-            text     : 'Creación',
-            sortable : true,
-            dataIndex: 'FECHA_CREACION',
-            flex:2,
-            //hidden: true
-        },
-        {
-            text     : 'Creador',
-            sortable : true,
-            dataIndex: 'USR_CREADOR',
-            flex:2,
-        },
-        {
-            text     : 'Modificación',
-            sortable : true,
-            dataIndex: 'FECHA_MODIFICO',
-            flex:2,
-            //hidden: true
-        },
-        {
-            text     : 'Modificador',
-            sortable : true,
-            dataIndex: 'USR_MODIFICO',
-            flex: 2,
-        },
-        {
             text     : 'Estado',
             sortable : true,
             dataIndex: 'ESTADO',
-            flex: 1,
+            width:100,
             renderer : function(value, meta) {
                 if(value === 'A')
                 {
@@ -182,7 +75,131 @@ Ext.define('fcab.Container.MasterConcepto.Grilla', {
                     return value;
                 }
             }
-        }
+        },
+        {
+            text     : 'ID Empresa',
+            sortable : true,
+            dataIndex: 'PFK_COD_EMP',
+            //align: 'center',
+            hidden: true,
+            width:100,
+        },
+        {
+            text     : 'Empresa',
+            sortable : true,
+            dataIndex: 'NOM_EMP',
+            //align: 'center',
+            hidden: true,
+            width:100,
+        },
+        {
+            text     : 'ID Concepto',
+            sortable : true,
+            dataIndex: 'PK_COD_CONCEPTO',
+            //align: 'center',
+            width:150,
+        },
+        {
+            text     : 'Concepto',
+            sortable : true,
+            dataIndex: 'NOMBRE',
+            width:200,
+        },
+        {
+            text     : 'Grupo',
+            sortable : true,
+            dataIndex: 'FK_GRUPO_CONCEPTO',
+            width:150,
+        },
+        {
+            text     : 'Tipo',
+            sortable : true,
+            dataIndex: 'FK_TIPO',
+            width:150,
+        },
+        {
+            text     : 'Periodo',
+            sortable : true,
+            dataIndex: 'FK_TIPO_MES',
+            width:150,
+        },
+        {
+            text     : 'Observación',
+            sortable : true,
+            dataIndex: 'OBSERVACION',
+            //align: 'center',
+            hidden: true,
+            width:200,
+        },
+        {
+            text     : 'Mes Inicial',
+            sortable : true,
+            dataIndex: 'MESES',
+            //align: 'center',
+            hidden: true,
+            width: 100,
+        },
+        {
+            text     : 'Copiar Anterior',
+            sortable : true,
+            dataIndex: 'COPIAR_ANTERIOR',
+            //align: 'center',
+            hidden: true,
+            width: 100,
+        },
+        {
+            text     : 'No Cero',
+            sortable : true,
+            dataIndex: 'NO_CERO',
+            //align: 'center',
+            hidden: true,
+            width: 100,
+        },
+        {
+            text     : 'Rango Inicio',
+            sortable : true,
+            dataIndex: 'RANGO_INI',
+            //align: 'center',
+            hidden: true,
+            width: 100,
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
+        },
+        {
+            text     : 'Rango Final',
+            sortable : true,
+            dataIndex: 'RANGO_FIN',
+            //align: 'center',
+            hidden: true,
+            width:100,
+            renderer: Ext.util.Format.numberRenderer('0.0,000')
+        },
+        {
+            text     : 'Creación',
+            sortable : true,
+            dataIndex: 'FECHA_CREACION',
+            width:150,
+            //hidden: true
+        },
+        {
+            text     : 'Creador',
+            sortable : true,
+            dataIndex: 'USR_CREADOR',
+            width:150,
+        },
+        {
+            text     : 'Modificación',
+            sortable : true,
+            dataIndex: 'FECHA_MODIFICO',
+            width:150,
+            //hidden: true
+        },
+        {
+            text     : 'Modificador',
+            sortable : true,
+            dataIndex: 'USR_MODIFICO',
+            width:150,
+        },
+        
     ],
     dockedItems: [{
         xtype: 'toolbar',

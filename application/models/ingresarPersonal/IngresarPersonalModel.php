@@ -95,7 +95,8 @@ class IngresarPersonalModel extends CI_Model
                     NOM_DEPARTAMENTO,
                     CORREO_EMP,
                     COD_LUGAR_TRABAJO,
-                    NOM_LUGAR_TRABAJO
+                    NOM_LUGAR_TRABAJO,
+                    NOM_JEFE
                 FROM NOV_INGRESAR_PERSONAL PER 
                 WHERE 1 = 1 ";
 
@@ -149,8 +150,6 @@ class IngresarPersonalModel extends CI_Model
         $P_COD_CARGO,
         $P_NOM_CARGO,
         $P_INE,
-        $P_RUT_JEFE,
-        $P_DV_JEFE,
         $P_TIPO_CONTRATO,
         $P_ROL_CARGO,
         $P_SUELDO_BASE,
@@ -231,8 +230,6 @@ class IngresarPersonalModel extends CI_Model
                         , :P_COD_CARGO  
                         , :P_NOM_CARGO  
                         , :P_INE  
-                        , :P_RUT_JEFE 
-                        , :P_DV_JEFE 
                         , :P_TIPO_CONTRATO 
                         , :P_ROL_CARGO 
                         , :P_SUELDO_BASE 
@@ -308,8 +305,6 @@ class IngresarPersonalModel extends CI_Model
         oci_bind_by_name($proc, "P_COD_CARGO", $P_COD_CARGO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_NOM_CARGO", $P_NOM_CARGO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_INE", $P_INE, 100, SQLT_CHR);
-        oci_bind_by_name($proc, "P_RUT_JEFE", $P_RUT_JEFE, 20, SQLT_CHR);
-        oci_bind_by_name($proc, "P_DV_JEFE", $P_DV_JEFE, 1, SQLT_CHR);
         oci_bind_by_name($proc, "P_TIPO_CONTRATO", $P_TIPO_CONTRATO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_ROL_CARGO", $P_ROL_CARGO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_SUELDO_BASE", $P_SUELDO_BASE);
@@ -392,8 +387,6 @@ class IngresarPersonalModel extends CI_Model
         $P_COD_CARGO,
         $P_NOM_CARGO,
         $P_INE,
-        $P_RUT_JEFE,
-        $P_DV_JEFE,
         $P_TIPO_CONTRATO,
         $P_ROL_CARGO,
         $P_SUELDO_BASE,
@@ -472,8 +465,6 @@ class IngresarPersonalModel extends CI_Model
                       , :P_COD_CARGO  
                       , :P_NOM_CARGO  
                       , :P_INE  
-                      , :P_RUT_JEFE 
-                      , :P_DV_JEFE 
                       , :P_TIPO_CONTRATO 
                       , :P_ROL_CARGO 
                       , :P_SUELDO_BASE 
@@ -548,8 +539,6 @@ class IngresarPersonalModel extends CI_Model
         oci_bind_by_name($proc, "P_COD_CARGO", $P_COD_CARGO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_NOM_CARGO", $P_NOM_CARGO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_INE", $P_INE, 100, SQLT_CHR);
-        oci_bind_by_name($proc, "P_RUT_JEFE", $P_RUT_JEFE, 20, SQLT_CHR);
-        oci_bind_by_name($proc, "P_DV_JEFE", $P_DV_JEFE, 1, SQLT_CHR);
         oci_bind_by_name($proc, "P_TIPO_CONTRATO", $P_TIPO_CONTRATO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_ROL_CARGO", $P_ROL_CARGO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_SUELDO_BASE", $P_SUELDO_BASE);

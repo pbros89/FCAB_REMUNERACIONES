@@ -60,71 +60,10 @@ Ext.define('fcab.Container.MasterUsuario.Grilla', {
     },
     columns: [
         {
-            text     : 'ID EMPRESA',
-            sortable : true,
-            dataIndex: 'PFK_COD_EMP',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'EMPRESA',
-            sortable : true,
-            dataIndex: 'NOM_EMP',
-            //align: 'center',
-            hidden: true,
-            flex: 1
-        },
-        {
-            text     : 'Usuario',
-            sortable : true,
-            dataIndex: 'PK_USUARIO',
-            //align: 'center',
-            flex: 1
-        },
-        {
-            text     : 'Rol',
-            sortable : true,
-            dataIndex: 'ROL',
-            flex:1
-        },
-        {
-            text     : 'Correo',
-            sortable : true,
-            dataIndex: 'CORREO',
-            flex:2
-        },
-        {
-            text     : 'Creación',
-            sortable : true,
-            dataIndex: 'FECHA_CREACION',
-            flex:2,
-            //hidden: true
-        },
-        {
-            text     : 'Creador',
-            sortable : true,
-            dataIndex: 'USR_CREADOR',
-            flex:2,
-        },
-        {
-            text     : 'Modificación',
-            sortable : true,
-            dataIndex: 'FECHA_MODIFICO',
-            flex:2,
-            //hidden: true
-        },
-        {
-            text     : 'Modificador',
-            sortable : true,
-            dataIndex: 'USR_MODIFICO',
-            flex: 2,
-        },
-        {
             text     : 'Estado',
             sortable : true,
             dataIndex: 'ESTADO',
-            flex: 1,
+            width: 100,
             renderer : function(value, meta) {
                 if(value === 'A')
                 {
@@ -137,7 +76,69 @@ Ext.define('fcab.Container.MasterUsuario.Grilla', {
                     return value;
                 }
             }
-        }
+        },
+        {
+            text     : 'ID EMPRESA',
+            sortable : true,
+            dataIndex: 'PFK_COD_EMP',
+            //align: 'center',
+            hidden: true,
+            width: 100,
+        },
+        {
+            text     : 'EMPRESA',
+            sortable : true,
+            dataIndex: 'NOM_EMP',
+            //align: 'center',
+            hidden: true,
+            width: 100,
+        },
+        {
+            text     : 'Usuario',
+            sortable : true,
+            dataIndex: 'PK_USUARIO',
+            //align: 'center',
+            width: 200,
+        },
+        {
+            text     : 'Rol',
+            sortable : true,
+            dataIndex: 'ROL',
+            width: 150,
+        },
+        {
+            text     : 'Correo',
+            sortable : true,
+            dataIndex: 'CORREO',
+            width: 250,
+        },
+        {
+            text     : 'Creación',
+            sortable : true,
+            dataIndex: 'FECHA_CREACION',
+            width: 150,
+            //hidden: true
+        },
+        {
+            text     : 'Creador',
+            sortable : true,
+            dataIndex: 'USR_CREADOR',
+            width: 150,
+        },
+        {
+            text     : 'Modificación',
+            sortable : true,
+            dataIndex: 'FECHA_MODIFICO',
+            width: 150,
+            //hidden: true
+        },
+        {
+            text     : 'Modificador',
+            sortable : true,
+            dataIndex: 'USR_MODIFICO',
+            width: 150,
+        },
+        
     ],
     dockedItems: [{
         xtype: 'toolbar',

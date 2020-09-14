@@ -19,8 +19,6 @@ Ext.define("fcab.Container.EditarIngresoPersonalCargo", {
             Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #cbTipoContrato')[0].setValue(param.COD_TIPO_CONTRATO);
             Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #dtIngreso')[0].setValue(param.FECHA_INGRESO);
             Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #dtVencimiento')[0].setValue(param.FECHA_VENCIMIENTO);
-            Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtDVJefatura')[0].setValue(param.DV_JEFE);
-            Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtRutJefatura')[0].setValue(param.RUT_JEFE);
             Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtCorreoEmp')[0].setValue(param.CORREO_EMP);
             Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #cbLugar')[0].setValue(param.COD_LUGAR_TRABAJO);
     
@@ -52,36 +50,6 @@ Ext.define("fcab.Container.EditarIngresoPersonalCargo", {
     
             items: [{
                 xtype: 'container',
-                columnWidth: 1,
-                layout: 'hbox',
-                style: 'margin: 0 10px 5px 0',
-                items: [{
-                    xtype: 'thousandnumber',
-                    style: 'margin: 0 10px 5px 0',
-                    itemId: 'txtRutJefatura',
-                    name: 'txtRutJefatura',
-                    forcePrecision: true,
-                    decimalPrecision: 0,
-                    allowDecimals: false,
-                    labelAlign:'top',
-                    fieldLabel: 'Rut Jefatura',
-                    width: '20%',
-                    allowBlank: true,
-                    minValue: 0
-                },{
-                    xtype: 'textfield',
-                    style: 'margin: 0 10px 5px 0',
-                    itemId: 'txtDVJefatura',
-                    name: 'txtDVJefatura',
-                    labelAlign:'top',
-                    fieldLabel: 'DV',
-                    width: '5%',
-                    typeAhead: true,
-                    maxLength: 1,
-                    allowBlank: true
-                }]
-            },{
-                xtype: 'container',
                 columnWidth: .5,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
@@ -108,12 +76,15 @@ Ext.define("fcab.Container.EditarIngresoPersonalCargo", {
                             console.log(newValue);
                             var cbGer = Ext.ComponentQuery.query('#EditarIngresoPersonal #cbGer')[0];
                             var cbDepto = Ext.ComponentQuery.query('#EditarIngresoPersonal #cbDepto')[0];
+                            var txtJefatura = Ext.ComponentQuery.query('#EditarIngresoPersonal #txtJefatura')[0];
                             if(newValue != null) {
                                 cbGer.setValue(obj.selection.data.COD_GERENCIA);
                                 cbDepto.setValue(obj.selection.data.COD_DEPARTAMENTO);
+                                txtJefatura.setValue(obj.selection.data.RUT_JEFE + " " +obj.selection.data.NOM_JEFE);
                             }else{
                                 cbGer.setValue(null);
                                 cbDepto.setValue(null);
+                                txtJefatura.reset();
                             }
                         }
                     }
@@ -154,6 +125,23 @@ Ext.define("fcab.Container.EditarIngresoPersonalCargo", {
                             }
                         }
                     }
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtJefatura',
+                    name: 'txtJefatura',
+                    labelAlign:'top',
+                    fieldLabel: 'Jefatura',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
             },{
                 xtype: 'container',

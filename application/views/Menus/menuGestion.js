@@ -124,9 +124,9 @@ Ext.define("fcab.store.menu.gestion", {
       },
       {
         name: "Filtro1", //Items a Filtrar
-        text: "Cambiar Cargo Renta",
+        text: "Cambios Laborales",
         tipo: "tab",
-        tituloTab: "Cambiar Cargo Renta",
+        tituloTab: "Cambios Laborales",
         id: "menu_cambio_cargo_renta",
         formulario: "MainCambioCargoRenta",
         icon: "icon-listaTab",

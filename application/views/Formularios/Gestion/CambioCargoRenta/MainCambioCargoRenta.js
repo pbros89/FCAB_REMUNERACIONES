@@ -339,13 +339,13 @@ Ext.define('fcab.Container.MainCambioCargoRenta.Grilla', {
                   modalAdjuntosAdmin(
                     recRow.data.PK_ID,
                     "cambio_cargo_renta",
-                    "Cambio Cargo Renta " + recRow.data.PK_ID
+                    "Cambio Laboral " + recRow.data.PK_ID
                   );
                 } else {
                   modalAdjuntosBasic(
                     recRow.data.PK_ID,
                     "cambio_cargo_renta",
-                    "Cambio Cargo Renta " + recRow.data.PK_ID
+                    "Cambio Laboral " + recRow.data.PK_ID
                   );
                 }
               } catch (e) {
@@ -375,8 +375,8 @@ Ext.define('fcab.Container.MainCambioCargoRenta.Grilla', {
             handler: function () {
                 this.ownerCt.ownerCt.saveDocumentAs({
                   type: 'excel',
-                  title: "Cambio Cargo Renta " + NOM_EMPRESA,
-                  fileName: 'Cambio Cargo Renta '+NOM_EMPRESA+' ' + new Date().getTime() +'.xls'
+                  title: "Cambio Laboral " + NOM_EMPRESA,
+                  fileName: 'Cambio Laboral '+NOM_EMPRESA+' ' + new Date().getTime() +'.xls'
                 });
             }
 
@@ -409,7 +409,7 @@ Ext.define('fcab.Container.MainCambioCargoRenta.Grilla', {
             }
         }]
     }],
-    title: 'Cambio de Cargo Renta ('+NOM_EMPRESA+')',
+    title: 'Cambios Laborales ('+NOM_EMPRESA+')',
 });
 
 
@@ -419,7 +419,7 @@ var clickCrearCambioCargoRenta = function (grid) {
     var width = Ext.getBody().getViewSize().width*.80;
     var height = Ext.getBody().getViewSize().height*.90;
 
-    ventanaDinamica("CrearCambioCargoRenta", "Cambiar Cargo Renta ("+NOM_EMPRESA+")", width, "", "CrearCambioCargoRenta", 1, 0, rec);
+    ventanaDinamica("CrearCambioCargoRenta", "Cambio Laboral ("+NOM_EMPRESA+")", width, "", "CrearCambioCargoRenta", 1, 0, rec);
 };
 
 
@@ -458,7 +458,7 @@ var cargarMainCambioCargoRenta = function(filtros){
 var clickTerminarCambioCargoRenta = function(grid, rowIndex) {
     var rec = grid.getStore();
     var recRow = rec.getAt(rowIndex);
-    Ext.MessageBox.confirm('Terminar Cambio Cargo Renta', '¿Esta seguro de terminar el cambio?', function(btn) {
+    Ext.MessageBox.confirm('Terminar Cambio Laboral', '¿Esta seguro de terminar el cambio?', function(btn) {
         if (btn === 'yes') {
                 storeTerminarCambioCargoRenta.load({
                     params:{
@@ -494,10 +494,10 @@ var clickAnularCambioCargoRenta = function(grid, rowIndex) {
     var rec = grid.getStore();
     var recRow = rec.getAt(rowIndex);
     Ext.MessageBox.confirm(
-        'Anular cambio de cargo renta', 
-        '¿Esta seguro de anular el cambio de cargo renta?<br>'+
+        'Anular cambio laboral', 
+        '¿Esta seguro de anular el cambio laboral?<br>'+
         '<b>-Los registros anulados no seran considerados para reportes.<br>'+
-        '-El trabajador vuelve a su información de cargo renta anterior.</b>', 
+        '-El trabajador vuelve a su información laboral anterior.</b>', 
     function(btn) {
         if (btn === 'yes') {
             storeAnularCambioCargoRenta.load({
@@ -509,7 +509,7 @@ var clickAnularCambioCargoRenta = function(grid, rowIndex) {
                 callback: function(records, operation, success) {
                     if(records != null) {
                         if(records[0].data.r_msg == 'OK'){
-                            showToast('Cambio de cargo renta anulado correctamente.');
+                            showToast('Cambio laboral anulado correctamente.');
                             cargarMainCambioCargoRenta(null);
                             
                         }else{
@@ -532,7 +532,7 @@ var clickAnularCambioCargoRenta = function(grid, rowIndex) {
 var clickEliminarCambioCargoRenta= function (grid, rowIndex) {
     var rec = grid.getStore();
     var recRow = rec.getAt(rowIndex);
-    Ext.MessageBox.confirm('Eliminar Cambio Cargo Renta', '¿Esta seguro de eliminar el cambio?', function(btn) {
+    Ext.MessageBox.confirm('Eliminar Cambio Laboral', '¿Esta seguro de eliminar el cambio?', function(btn) {
         if (btn === 'yes') {
             storeEliminarCambioCargoRenta.load({
                 params : {

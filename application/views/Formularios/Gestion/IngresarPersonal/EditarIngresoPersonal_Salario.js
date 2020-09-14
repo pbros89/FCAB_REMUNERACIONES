@@ -190,8 +190,6 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                     var cbTipoContrato = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #cbTipoContrato')[0];
                     var dtIngreso = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #dtIngreso')[0];
                     var dtVencimiento = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #dtVencimiento')[0];
-                    var txtDVJefatura = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtDVJefatura')[0];
-                    var txtRutJefatura = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtRutJefatura')[0];
                     var txtCorreoEmp = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #txtCorreoEmp')[0];
                     var cbLugar = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #cbLugar')[0];
 
@@ -254,8 +252,6 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                             , P_COD_CARGO : cbCargo.value
                             , P_NOM_CARGO : cbCargo.selection.data.NOMBRE 
                             , P_INE : cbIne.getRawValue()
-                            , P_RUT_JEFE : txtRutJefatura.value
-                            , P_DV_JEFE : txtDVJefatura.value
                             , P_TIPO_CONTRATO : cbTipoContrato.getRawValue()
                             , P_ROL_CARGO : cbRolCargo.value
                             , P_SUELDO_BASE : txtSueldo.value

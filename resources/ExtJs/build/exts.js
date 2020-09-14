@@ -807,13 +807,13 @@ Ext.onReady(function () {
                             
                         } catch (err) {
                             console.log(err);
-                            Ext.toast({
+                            /*Ext.toast({
                                 html: "Verificación de acceso al sistema fallida",
                                 closable: false,
                                 align: 't',
                                 slideInDuration: 400,
                                 minWidth: 400
-                            });
+                            });*/
 
                           return;
                         }

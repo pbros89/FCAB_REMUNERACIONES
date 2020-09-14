@@ -54,9 +54,7 @@ class IngresarPersonalController extends CI_Controller {
         $P_FECHA_VENCIMIENTO = $this->input->get('P_FECHA_VENCIMIENTO');  
         $P_COD_CARGO = $this->input->get('P_COD_CARGO');  
         $P_NOM_CARGO = $this->input->get('P_NOM_CARGO');  
-        $P_INE = $this->input->get('P_INE');  
-        $P_RUT_JEFE = $this->input->get('P_RUT_JEFE');  
-        $P_DV_JEFE = $this->input->get('P_DV_JEFE');  
+        $P_INE = $this->input->get('P_INE');   
         $P_TIPO_CONTRATO = $this->input->get('P_TIPO_CONTRATO'); 
         $P_ROL_CARGO = $this->input->get('P_ROL_CARGO');  
         $P_SUELDO_BASE = $this->input->get('P_SUELDO_BASE');  
@@ -129,8 +127,6 @@ class IngresarPersonalController extends CI_Controller {
             , $P_COD_CARGO  
             , $P_NOM_CARGO  
             , $P_INE  
-            , $P_RUT_JEFE 
-            , $P_DV_JEFE 
             , $P_TIPO_CONTRATO 
             , $P_ROL_CARGO 
             , $P_SUELDO_BASE 
@@ -209,8 +205,6 @@ class IngresarPersonalController extends CI_Controller {
         $P_COD_CARGO = $this->input->get('P_COD_CARGO');  
         $P_NOM_CARGO = $this->input->get('P_NOM_CARGO');  
         $P_INE = $this->input->get('P_INE');  
-        $P_RUT_JEFE = $this->input->get('P_RUT_JEFE');  
-        $P_DV_JEFE = $this->input->get('P_DV_JEFE');  
         $P_TIPO_CONTRATO = $this->input->get('P_TIPO_CONTRATO'); 
         $P_ROL_CARGO = $this->input->get('P_ROL_CARGO');  
         $P_SUELDO_BASE = $this->input->get('P_SUELDO_BASE');  
@@ -288,8 +282,6 @@ class IngresarPersonalController extends CI_Controller {
             , $P_COD_CARGO  
             , $P_NOM_CARGO  
             , $P_INE  
-            , $P_RUT_JEFE 
-            , $P_DV_JEFE 
             , $P_TIPO_CONTRATO 
             , $P_ROL_CARGO 
             , $P_SUELDO_BASE 

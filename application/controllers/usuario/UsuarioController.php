@@ -3,9 +3,6 @@
 if (!defined('BASEPATH'))
     exit('No se permite el acceso directo a este directorio');
 
-/**
- * @property  MaestraSGS_model Modelo de base de datos de la Grilla Maestra
- */
 class UsuarioController extends CI_Controller {
 
     function __construct() {

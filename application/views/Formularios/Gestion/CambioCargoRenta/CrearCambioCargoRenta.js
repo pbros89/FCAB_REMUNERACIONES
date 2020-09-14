@@ -95,16 +95,20 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                                     var txtRutOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtRutOld')[0];
                                     var txtCC = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtCC')[0];
                                     var txtCargo = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtCargo')[0];
-                                    var txtGerencia = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtGerencia')[0];
-                                    var txtDepartamento = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtDepartamento')[0];
+                                    var txtGerenciaOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtGerenciaOld')[0];
+                                    var txtDepartamentoOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtDepartamentoOld')[0];
                                     var txtNombre = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtNombre')[0];
                                     var txtIngreso = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtIngreso')[0];
                                     var txtTipoContratoOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtTipoContratoOld')[0];
                                     var txtJornadaOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtJornadaOld')[0];
                                     var txtFechaFinOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtFechaFinOld')[0];
                                     var txtSueldoOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtSueldoOld')[0];
+                                    var txtJefaturaOld = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtJefaturaOld')[0];
 
                                     var cbCC = Ext.ComponentQuery.query('#CrearCambioCargoRenta #cbCC')[0];
+                                    var txtGerencia = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtGerencia')[0];
+                                    var txtDepartamento = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtDepartamento')[0];
+                                    var txtJefatura = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtJefatura')[0];
                                     var cbCargo = Ext.ComponentQuery.query('#CrearCambioCargoRenta #cbCargo')[0];
                                     var cbLugar = Ext.ComponentQuery.query('#CrearCambioCargoRenta #cbLugar')[0];
                                     var cbJornada = Ext.ComponentQuery.query('#CrearCambioCargoRenta #cbJornada')[0];
@@ -117,14 +121,15 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                                         txtRutOld.setValue(records[0].data.RUT);
                                         txtCC.setValue(records[0].data.COD_CC+'-'+records[0].data.NOM_CC);
                                         txtCargo.setValue(records[0].data.NOM_CARGO);
-                                        txtGerencia.setValue(records[0].data.NOM_GERENCIA);
-                                        txtDepartamento.setValue(records[0].data.NOM_DEPARTAMENTO);
+                                        txtGerenciaOld.setValue(records[0].data.NOM_GERENCIA);
+                                        txtDepartamentoOld.setValue(records[0].data.NOM_DEPARTAMENTO);
                                         txtNombre.setValue(records[0].data.NOMBRE);
                                         txtIngreso.setValue(records[0].data.FECHA_INGRESO_FORMAT);
                                         txtTipoContratoOld.setValue(records[0].data.TIPO_CONTRATO);
                                         txtJornadaOld.setValue(records[0].data.JORNADA);
                                         txtFechaFinOld.setValue(records[0].data.FECHA_FIN_CONTRATO_FORMAT);
                                         txtSueldoOld.setValue(records[0].data.SALARIO_BASE);
+                                        txtJefaturaOld.setValue(records[0].data.RUT_SUPERVISOR + " " + records[0].data.NOM_SUPERVISOR);
 
                                         cbCC.setValue(records[0].data.COD_CC);
                                         cbCargo.setValue(records[0].data.COD_CARGO);
@@ -139,14 +144,15 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                                         txtRutOld.reset();
                                         txtCC.reset();
                                         txtCargo.reset();
-                                        txtGerencia.reset();
-                                        txtDepartamento.reset();
+                                        txtGerenciaOld.reset();
+                                        txtDepartamentoOld.reset();
                                         txtNombre.reset();
                                         txtIngreso.reset();
                                         txtTipoContratoOld.reset();
                                         txtJornadaOld.reset();
                                         txtFechaFinOld.reset();
                                         txtSueldoOld.reset();
+                                        txtJefaturaOld.reset();
 
                                         cbCC.reset();
                                         cbCargo.reset();
@@ -155,6 +161,9 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                                         cbLugar.reset();
                                         txtSueldo.reset();
                                         dtFin.reset();
+                                        txtGerencia.reset();
+                                        txtDepartamento.reset();
+                                        txtJefatura.reset();
 
                                         Ext.MessageBox.show({
                                             title: 'ADVERTENCIA',
@@ -234,8 +243,8 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'textfield',
-                    itemId: 'txtGerencia',
-                    name: 'txtGerencia',
+                    itemId: 'txtGerenciaOld',
+                    name: 'txtGerenciaOld',
                     labelAlign:'top',
                     fieldLabel: 'Gerencia',
                     anchor: '100%',
@@ -251,10 +260,27 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                 style: 'margin: 0 10px 5px 0',
                 items: [{
                     xtype: 'textfield',
-                    itemId: 'txtDepartamento',
-                    name: 'txtDepartamento',
+                    itemId: 'txtDepartamentoOld',
+                    name: 'txtDepartamentoOld',
                     labelAlign:'top',
                     fieldLabel: 'Departamento',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtJefaturaOld',
+                    name: 'txtJefaturaOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Jefatura',
                     anchor: '100%',
                     typeAhead: true,
                     allowBlank: false,
@@ -360,14 +386,14 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     anchor: '100%',
                     typeAhead: true,
                     allowBlank: true,
-                    decimalPrecision: 4,
+                    decimalPrecision: 0,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
             },],
         }, {
             xtype: 'fieldset',
-            title: 'Cambio Cargo Renta',
+            title: 'Cambio Laboral',
             style: 'margin: 0 10px 5px 0',
             columnWidth: .4,
             layout: {
@@ -446,6 +472,76 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     anchor: '100%',  
                     allowBlank: false,  
                     readOnly: false,  
+                    listeners: {
+                        change: function (obj, newValue, oldValue) {
+                            var txtGerencia = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtGerencia')[0];
+                            var txtDepartamento = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtDepartamento')[0];
+                            var txtJefatura = Ext.ComponentQuery.query('#CrearCambioCargoRenta #txtJefatura')[0];
+                          if (newValue) {
+    
+                            var item = obj.selection.data;
+                            txtGerencia.setValue(item.NOM_GERENCIA);
+                            txtDepartamento.setValue(item.NOM_DEPARTAMENTO);
+                            txtJefatura.setValue(item.RUT_JEFE + " " + item.NOM_JEFE);
+
+                          } else {
+                            txtGerencia.reset();
+                            txtDepartamento.reset();
+                            txtJefatura.reset();
+                          }
+                        },
+                      },
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtGerencia',
+                    name: 'txtGerencia',
+                    labelAlign:'top',
+                    fieldLabel: 'Gerencia',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtDepartamento',
+                    name: 'txtDepartamento',
+                    labelAlign:'top',
+                    fieldLabel: 'Departamento',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtJefatura',
+                    name: 'txtJefatura',
+                    labelAlign:'top',
+                    fieldLabel: 'Jefatura',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: false,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
             },{
                 xtype: 'container',
@@ -593,7 +689,6 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                     fieldLabel: 'Sueldo Base',
                     anchor: '100%',
                     allowBlank: false,
-                    decimalPrecision: 4,
                     minValue: 0
                 }]
             },{
@@ -615,7 +710,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
             }]
         }],
         buttons: [{
-            tooltip: 'Ingresar Cambio Cargo Renta',
+            tooltip: 'Ingresar Cambio Laboral',
             //scale: 'large',
             text: 'Ingresar',
             handler: function () {
@@ -669,7 +764,7 @@ Ext.define("fcab.Container.CrearCambioCargoRenta", {
                             callback: function(records, operation, success) {
                                 if(records != null) {
                                     if(records[0].data.r_msg == 'OK'){
-                                        showToast('Cambio de cargo renta creado correctamente.');
+                                        showToast('Cambio laboral creado correctamente.');
                                         cargarMainCambioCargoRenta(null);
                                         Ext.getCmp('CrearCambioCargoRenta').destroy();
                                     }else{

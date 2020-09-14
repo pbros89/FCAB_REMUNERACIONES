@@ -46,9 +46,12 @@ class CentroCostoController extends CI_Controller {
         $p_nom_ger = $this->input->get('p_nom_ger');  
         $p_cod_dep = $this->input->get('p_cod_dep');  
         $p_nom_dep = $this->input->get('p_nom_dep'); 
-         
+        $p_rut_jefe = $this->input->get('p_rut_jefe');  
+        $p_nom_jefe = $this->input->get('p_nom_jefe'); 
+
         $query = $this->CentroCostoModel->crearCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado,
-            $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep);
+            $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep,
+            $p_rut_jefe, $p_nom_jefe);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
@@ -63,10 +66,12 @@ class CentroCostoController extends CI_Controller {
         $p_cod_ger = $this->input->get('p_cod_ger');  
         $p_nom_ger = $this->input->get('p_nom_ger');  
         $p_cod_dep = $this->input->get('p_cod_dep');  
-        $p_nom_dep = $this->input->get('p_nom_dep'); 
+        $p_nom_dep = $this->input->get('p_nom_dep');
+        $p_rut_jefe = $this->input->get('p_rut_jefe');  
+        $p_nom_jefe = $this->input->get('p_nom_jefe');  
 
         $query = $this->CentroCostoModel->modificarCentroCosto($p_cod_cc, $p_cod_emp, $p_nombre, $p_usuario, $p_estado,
-            $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep);
+            $p_cod_ger, $p_nom_ger, $p_cod_dep, $p_nom_dep, $p_rut_jefe, $p_nom_jefe);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

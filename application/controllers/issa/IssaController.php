@@ -522,7 +522,7 @@ class IssaController extends CI_Controller
 				$params = 'operacion=api_carga_maestro' .
 					'&maestro=api_proceso' .
 					'&datos=' . $jsonData;
-
+				//echo $jsonData;
 				$this->iniciarEnvioProcesoMensualIssa(
 					$params,
 					$data,

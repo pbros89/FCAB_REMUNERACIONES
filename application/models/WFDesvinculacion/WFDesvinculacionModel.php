@@ -129,10 +129,6 @@ class WFDesvinculacionModel extends CI_Model {
             $causal2 = $alerta['causal2'];
             $hechos = $alerta['hechos'];
             $motivo = $alerta['motivo'];
-            $horasextras = $alerta['horasextras'];
-            $viaticos = $alerta['viaticos'];
-            $haberes = $alerta['haberes'];
-            $descuentos = $alerta['descuentos'];
             $equipos = $alerta['equipos'];
             $celu = $alerta['celu'];
             $docs = $alerta['docs'];
@@ -154,10 +150,6 @@ class WFDesvinculacionModel extends CI_Model {
                                                         :P_CAUSAL2,
                                                         :P_HECHOS,
                                                         :P_MOTIVO,
-                                                        :P_HORASEXTRAS,
-                                                        :P_VIATICOS,
-                                                        :P_HABERES,
-                                                        :P_DESCUENTOS,
                                                         :P_EQUIPOS,
                                                         :P_CELU,
                                                         :P_DOCS,
@@ -178,10 +170,6 @@ class WFDesvinculacionModel extends CI_Model {
             oci_bind_by_name($proc,"P_CAUSAL2",$causal2, 40, SQLT_CHR);
             oci_bind_by_name($proc,"P_HECHOS",$hechos, 500, SQLT_CHR);
             oci_bind_by_name($proc,"P_MOTIVO",$motivo, 500, SQLT_CHR);
-            oci_bind_by_name($proc,"P_HORASEXTRAS",$horasextras, -1, OCI_B_INT);
-            oci_bind_by_name($proc,"P_VIATICOS",$viaticos, -1, OCI_B_INT);
-            oci_bind_by_name($proc,"P_HABERES",$haberes, 100, SQLT_CHR);
-            oci_bind_by_name($proc,"P_DESCUENTOS",$descuentos, 100, SQLT_CHR); 
             oci_bind_by_name($proc,"P_EQUIPOS",$equipos, 2, SQLT_CHR); 
             oci_bind_by_name($proc,"P_CELU",$celu, 2, SQLT_CHR); 
             oci_bind_by_name($proc,"P_DOCS",$docs, 2, SQLT_CHR); 

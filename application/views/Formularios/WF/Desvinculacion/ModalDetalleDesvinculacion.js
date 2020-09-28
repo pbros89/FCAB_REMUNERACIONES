@@ -292,68 +292,7 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                             },
                             items: [{
                                 xtype: 'label',
-                                text: 'Informe de haberes y descuentos pendientes a la fecha del finiquito del trabajador:',
-                                style: 'font-weight: bold;',
-                                margin: '10 0 10 0'
-                            }]
-                        },{
-                            xtype: 'container',
-                            layout: {
-                                type: 'hbox',
-                                align: 'left',
-                            },
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: 'Cantidad Horas Extras',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_horasExtras',
-                                margin: '0 10 0 0',
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Viáticos (en pesos)',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_viatico',
-                                margin: '0 10 0 0',
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
-                                xtype: 'textareafield',
-                                fieldLabel: 'Otros haberes',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_haberes',
-                                margin: '0 10 0 0',
-                                maxRows: 4,
-                                maxLength: 100,
-                                enforceMaxLength: true,
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
-                                xtype: 'textareafield',
-                                fieldLabel: 'Descuentos',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_descuentos',
-                                margin: '0 10 0 0',
-                                maxRows: 4,
-                                maxLength: 100,
-                                enforceMaxLength: true,
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            }]
-                        },{
-                            xtype: 'container',
-                            layout: {
-                                type: 'hbox',
-                                align: 'left',
-                            },
-                            items: [{
-                                xtype: 'label',
-                                text: 'Materiales, Equipos y Elementos detrabajo que debe entregar a Jefe Directo',
+                                text: 'Materiales, Equipos y Elementos de trabajo que debe entregar a Jefe Directo',
                                 style: 'font-weight: bold;',
                                 margin: '20 0 10 0'
                             }]
@@ -399,7 +338,14 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 margin: '0 10 0 0',
                                 readOnly: true,
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
+                            }]
+                        },{
+                            xtype: 'container',
+                            layout: {
+                                type: 'hbox',
+                                align: 'left',
+                            },
+                            items: [{
                                 xtype: 'textfield',
                                 fieldLabel: 'Vehículos u otros (Especificar)',
                                 flex: 1,
@@ -408,6 +354,9 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 margin: '0 10 0 0',
                                 readOnly: true,
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
+                            },{
+                                xtype: 'label',
+                                flex: 1
                             }]
                         }]
                     }]

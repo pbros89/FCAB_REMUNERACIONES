@@ -589,31 +589,27 @@ function func_llenarDatosPersonal(form, store){
 
 function func_guardarSolDesvinculacion(rol, personal, finiquito, carta, causal, causal2, hechos, motivo, vehiculo, modal){
 
+    //Mensaje de loading...
+    Ext.MessageBox.show({
+        msg: 'Creando Solicitud',
+        progressText: 'Espere por favor...',
+        width: 300,
+        wait: {
+            interval: 200
+        }
+    });
+    
     var array_lineas = [];
 
     var usuario = NOMBRE;
+    var empresa = EMPRESA;
     var estado = 'ACTIVO';
 
-    console.log('rol: '+rol);
-    console.log('personal: '+personal);
-    console.log('usuario: '+usuario);
-    console.log('finiquito: '+finiquito);
-    console.log('carta: '+carta);
-    console.log('causal: '+causal);
-    console.log('causal2: '+causal2);
-    console.log('hechos: '+hechos);
-    console.log('motivo: '+motivo);
-    console.log('equipos: '+equipos);
-    console.log('celu: '+celu);
-    console.log('docs: '+docs);
-    console.log('caja: '+caja);
-    console.log('vehiculo: '+vehiculo);
-    console.log('estado: '+estado);
-
     array_lineas.push({
+        usuario,
+        empresa,
         rol,
         personal,
-        usuario,
         finiquito,
         carta,
         causal,
@@ -635,6 +631,9 @@ function func_guardarSolDesvinculacion(rol, personal, finiquito, carta, causal, 
             listado_lineas: arrayToJson
         },
         callback: function(records) {
+            
+            Ext.MessageBox.hide();//Fin loading.
+
             if(records != null){
                 var estado = records[0].data.r_est;
                 var mensaje = records[0].data.r_msg;

@@ -1101,12 +1101,12 @@ class IssaModel extends CI_Model {
         oci_bind_by_name($proc,"P_HORAS_EMERGENCIA", $P_HORAS_EMERGENCIA, 20, SQLT_CHR);
         oci_bind_by_name($proc,"P_HORAS_NOCTURNAS", $P_HORAS_NOCTURNAS, 20, SQLT_CHR);
         oci_bind_by_name($proc,"P_HORAS_COMP_TURNO", $P_HORAS_COMP_TURNO, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"P_DESC_COMP_FERIADO", $P_DESC_COMP_FERIADO,);
-        oci_bind_by_name($proc,"P_DESC_COMP_LEGAL", $P_DESC_COMP_LEGAL,);
-        oci_bind_by_name($proc,"P_COLACION", $P_COLACION,);
-        oci_bind_by_name($proc,"P_VIATICO", $P_VIATICO,);
-        oci_bind_by_name($proc,"P_FALTA", $P_FALTA,);
-        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO,);
+        oci_bind_by_name($proc,"P_DESC_COMP_FERIADO", $P_DESC_COMP_FERIADO);
+        oci_bind_by_name($proc,"P_DESC_COMP_LEGAL", $P_DESC_COMP_LEGAL);
+        oci_bind_by_name($proc,"P_COLACION", $P_COLACION);
+        oci_bind_by_name($proc,"P_VIATICO", $P_VIATICO);
+        oci_bind_by_name($proc,"P_FALTA", $P_FALTA);
+        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -1168,9 +1168,9 @@ class IssaModel extends CI_Model {
         oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
         oci_bind_by_name($proc,"P_OBSERVACION", $P_OBSERVACION, 2000, SQLT_CHR);
         oci_bind_by_name($proc,"P_ERROR", $P_ERROR, 1000, SQLT_CHR);
-        oci_bind_by_name($proc,"P_CANT_INI", $P_CANT_INI,);
-        oci_bind_by_name($proc,"P_CANT_FIN", $P_CANT_FIN,);
-        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO,);
+        oci_bind_by_name($proc,"P_CANT_INI", $P_CANT_INI);
+        oci_bind_by_name($proc,"P_CANT_FIN", $P_CANT_FIN);
+        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -1330,7 +1330,7 @@ class IssaModel extends CI_Model {
       
       oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
       oci_bind_by_name($proc,"P_COD_EMP", $P_COD_EMP, 20, SQLT_CHR);
-      oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO,);
+      oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO);
       oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
       oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 

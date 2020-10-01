@@ -54,7 +54,7 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
         xtype: 'toolbar',
         items: [{
             xtype: 'combo',
-            fieldLabel: 'Rol atuador',
+            fieldLabel: 'Rol actuador',
             name:'cb_rol',
             margin: '0 30 0 0',
             width: 400,

@@ -292,68 +292,7 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                             },
                             items: [{
                                 xtype: 'label',
-                                text: 'Informe de haberes y descuentos pendientes a la fecha del finiquito del trabajador:',
-                                style: 'font-weight: bold;',
-                                margin: '10 0 10 0'
-                            }]
-                        },{
-                            xtype: 'container',
-                            layout: {
-                                type: 'hbox',
-                                align: 'left',
-                            },
-                            items: [{
-                                xtype: 'textfield',
-                                fieldLabel: 'Cantidad Horas Extras',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_horasExtras',
-                                margin: '0 10 0 0',
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
-                                xtype: 'textfield',
-                                fieldLabel: 'Viáticos (en pesos)',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_viatico',
-                                margin: '0 10 0 0',
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
-                                xtype: 'textareafield',
-                                fieldLabel: 'Otros haberes',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_haberes',
-                                margin: '0 10 0 0',
-                                maxRows: 4,
-                                maxLength: 100,
-                                enforceMaxLength: true,
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
-                                xtype: 'textareafield',
-                                fieldLabel: 'Descuentos',
-                                flex: 1,
-                                labelAlign: 'top',
-                                name: 'txt_descuentos',
-                                margin: '0 10 0 0',
-                                maxRows: 4,
-                                maxLength: 100,
-                                enforceMaxLength: true,
-                                readOnly: true,
-                                fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            }]
-                        },{
-                            xtype: 'container',
-                            layout: {
-                                type: 'hbox',
-                                align: 'left',
-                            },
-                            items: [{
-                                xtype: 'label',
-                                text: 'Materiales, Equipos y Elementos detrabajo que debe entregar a Jefe Directo',
+                                text: 'Materiales, Equipos y Elementos de trabajo que debe entregar a Jefe Directo',
                                 style: 'font-weight: bold;',
                                 margin: '20 0 10 0'
                             }]
@@ -399,7 +338,14 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 margin: '0 10 0 0',
                                 readOnly: true,
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
-                            },{
+                            }]
+                        },{
+                            xtype: 'container',
+                            layout: {
+                                type: 'hbox',
+                                align: 'left',
+                            },
+                            items: [{
                                 xtype: 'textfield',
                                 fieldLabel: 'Vehículos u otros (Especificar)',
                                 flex: 1,
@@ -408,6 +354,9 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 margin: '0 10 0 0',
                                 readOnly: true,
                                 fieldStyle: 'background-color:#d8d8d8 ; background-image:none;'
+                            },{
+                                xtype: 'label',
+                                flex: 1
                             }]
                         }]
                     }]
@@ -448,6 +397,8 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                         var caso = records[0].get('CASO');
                                         var estado = records[0].get('ESTADO');
 
+                                        console.log('caso: '+caso);
+
                                         //Traemos el detalle del Caso del wf:
                                         storeDesv_detalleCasoWF.load({
                                             params:{
@@ -468,8 +419,10 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                                         //Comprobamos si es ultima etapa:
                                                         if(recordAprob.length == recordCaso.length-1){
                                                             ultimo_paso = true;
-                                                            Ext.getCmp('id_labelCorreo').show();
+                                                            //Ext.getCmp('id_labelCorreo').show();
                                                             Ext.getCmp('id_itemsCorreo').show();
+                                                            Ext.getCmp('btn_aprobarSolDesv').hide();
+                                                            Ext.getCmp('btn_rechazarSolDesv').hide();
                                                         }
                                                     }
                                                 });
@@ -528,10 +481,11 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                 fieldLabel: 'Horario en que se notificará',
                                 labelAlign: 'top',
                                 name:'cb_horarioCorreo',
-                                margin: '0 35 0 0',
+                                margin: '0 10 0 0',
                                 flex: 1,
                                 store: storeDesv_horarioCorreo,
-                                displayField: 'HORARIO',
+                                displayField: 'DETALLE',
+                                valueField: 'HORARIO',
                                 allowBlank: false,
                                 listeners:{
                                     afterrender: function(combo){
@@ -550,8 +504,30 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                     }
                                 }
                             },{
-                                xtype: 'label',
-                                flex: 2
+                                xtype: 'button',
+                                text: 'Cerrar Solicitud',
+                                margin: '30 10 0 0',
+                                flex: 2,
+                                style:{
+                                    'background-color':'#00c853;',
+                                    'border':'1px solid #00c853;'
+                                },
+                                handler: function(){
+                                    var form = this.up('form').getForm();
+                                    var estado = 'A';
+                                    var modal = this;
+                                    if(ultimo_paso){
+                                        if(form.isValid()){
+                                            var combo_fecha = form.findField('date_fechaCorreo');
+                                            var fecha_correo = Ext.Date.format(combo_fecha.value,'d/m/Y');
+                                            var horario_correo = form.findField('cb_horarioCorreo').value;
+                                            console.log(horario_correo);
+                                            func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, fecha_correo, horario_correo, modal);
+                                        }else{
+                                            showToast('Debe seleccionar una fecha y un horario para la notificación por correos.');
+                                        }
+                                    }
+                                }
                             }]
                         },{
                             xtype: 'container',
@@ -578,7 +554,8 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                             var combo_fecha = form.findField('date_fechaCorreo');
                                             var fecha_correo = Ext.Date.format(combo_fecha.value,'d/m/Y');
                                             var horario_correo = form.findField('cb_horarioCorreo').value;
-                                            func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, fecha_correo, horario_correo, modal);
+                                            console.log(horario_correo);
+                                            //func_aprobar_desvinculacion(p_numero, p_rol, estado, NOMBRE, fecha_correo, horario_correo, modal);
                                         }else{
                                             showToast('Debe seleccionar una fecha y un horario para la notificación por correos.');
                                         }
@@ -648,10 +625,6 @@ function func_llenarDetalleDesvinculacion(form, recordsSol, recordsPer){
     }
     
     form.findField('txt_motivo').setValue(recordsSol[0].get('MOTIVO'));
-    form.findField('txt_horasExtras').setValue(recordsSol[0].get('HORAS_EXTRAS'));
-    form.findField('txt_viatico').setValue(recordsSol[0].get('VIATICOS'));
-    form.findField('txt_haberes').setValue(recordsSol[0].get('HABERES'));
-    form.findField('txt_descuentos').setValue(recordsSol[0].get('DESCUENTOS'));
     form.findField('txt_equipos').setValue(recordsSol[0].get('EQUIPOS'));
     form.findField('txt_celular').setValue(recordsSol[0].get('CELULAR'));
     form.findField('txt_docs').setValue(recordsSol[0].get('DOCUMENTOS'));
@@ -666,6 +639,23 @@ function func_llenarDetalleDesvinculacion(form, recordsSol, recordsPer){
 }
 
 function func_aprobar_desvinculacion(p_numero, p_rol, p_estado, p_usuario, p_fecha, p_horario, modal){
+    //Mensaje de loading...
+    Ext.MessageBox.show({
+        msg: 'Aplicando cambios',
+        progressText: 'Espere por favor...',
+        width: 300,
+        wait: {
+            interval: 200
+        }
+    });
+
+    console.log('p_numero: '+p_numero);
+    console.log('p_rol: '+p_rol);
+    console.log('p_estado: '+p_estado);
+    console.log('p_usuario: '+p_usuario);
+    console.log('p_fecha: '+p_fecha);
+    console.log('p_horario: '+p_horario);
+
     storeDesv_aprobarDesvinculacion.load({
         params:{
             p_numero: p_numero,
@@ -676,6 +666,9 @@ function func_aprobar_desvinculacion(p_numero, p_rol, p_estado, p_usuario, p_fec
             p_horario: p_horario
         },
         callback : function(records){
+
+            Ext.MessageBox.hide();//Fin loading.
+
             if(records != null){
                 var estado = records[0].data.r_est;
                 if (estado < 0) {

@@ -180,8 +180,8 @@ var storeDesv_existeSolicitud = new Ext.data.Store({
 
 var storeDesv_horarioCorreo = new Ext.data.Store({
   data:[
-    {"HORARIO":'Tarde'},
-    {"HORARIO":'Mañana'},
+    {"HORARIO":'Tarde', "DETALLE":'Tarde (17:00)'},
+    {"HORARIO":'Mañana', "DETALLE":'Mañana (12:00)'},
     
   ],
 autoload: false,

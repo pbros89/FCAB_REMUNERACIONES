@@ -158,6 +158,20 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
       },
     },
     {
+      text: "Caso",
+      sortable: true,
+      dataIndex: "FK_CASO",
+      hidden: false,
+      width: 150,
+    },
+    {
+      text: "Nombre WF",
+      sortable: true,
+      dataIndex: "FK_NOMBRE_WF",
+      hidden: true,
+      width: 150,
+    },
+    {
       text: "Total Etapas",
       sortable: true,
       dataIndex: "TOTAL_ETAPA",
@@ -411,13 +425,8 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
       hidden: true,
       width: 150,
     },
-    {
-      text: "Caso",
-      sortable: true,
-      dataIndex: "CASO",
-      hidden: true,
-      width: 150,
-    },
+    
+
     {
       text: "ID Cargo Actual",
       sortable: true,
@@ -721,18 +730,43 @@ var clickCrearWFModificarFicha = function (grid) {
 
   var cbRol = Ext.ComponentQuery.query("#WFModificarFichaInicioGrilla #cbRol")[0];
   
+  
   if(cbRol.getValue() != null) {
-    ventanaDinamica(
-      "WFModificarFichaCrear",
-      "Crear Solicitud (" + NOM_EMPRESA + " - " + cbRol.selection.data.PK_ROL_WF+ ")",
-      width,
-      "",
-      "WFModificarFichaCrear",
-      1,
-      0,
-      rec,
-      cbRol.selection.data
-    );
+
+    storeValidarRolEtapa1.load({
+      params: {
+        p_rol: cbRol.selection.data.PK_ROL_WF
+      },
+      callback: function(records, operation, success) {
+        if(records != null && records.length > 0) {
+            if(records[0].data.CONTAR != '0'){
+              
+              ventanaDinamica(
+                "WFModificarFichaCrear",
+                "Crear Solicitud (" + NOM_EMPRESA + " - " + cbRol.selection.data.PK_ROL_WF+ ")",
+                width,
+                "",
+                "WFModificarFichaCrear",
+                1,
+                0,
+                rec,
+                cbRol.selection.data
+              );
+                
+            }else{
+                Ext.MessageBox.show({
+                    title: 'ADVERTENCIA',
+                    msg: "El rol seleccionado no puede crear solicitudes.",
+                    icon: Ext.MessageBox.WARNING,
+                    buttons: Ext.Msg.OK
+                });
+            }
+        }
+        
+    }
+
+    });
+    
   }else{
     Ext.MessageBox.show({
       title: 'ADVERTENCIA',

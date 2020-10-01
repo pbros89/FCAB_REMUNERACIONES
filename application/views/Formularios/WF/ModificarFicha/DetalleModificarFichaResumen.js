@@ -204,10 +204,6 @@ var cargarResumenSolicitudCambiarFichaDetalle = function () {
       "</tr></table><br>";
   }
 
-  
-
-  
-
   /*** TRASLADO ****/
 
   if(param.TRAS_COD_CARGO != null && param.TRAS_COD_CARGO != '') {
@@ -232,18 +228,17 @@ var cargarResumenSolicitudCambiarFichaDetalle = function () {
   }
 
 
-  if(param.TRAS_TIENE_BONO != null && param.TRAS_TIENE_BONO != '0' && 
-    param.TRAS_BONO != null && param.TRAS_BONO != '') {
+  if(param.TRAS_TIENE_BONO != null && param.TRAS_TIENE_BONO != '0') {
     trasladoCount++;
     trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td><b>Bono Reemplazo: </b><br>'+param.TRAS_BONO+'</td>' +
+      '<td><b>Bono Reemplazo: </b><br>SI </td>' +
       "</tr>" +
       "</table><br>";
   }else if(param.TRAS_TIENE_BONO != '1' ){
     if(trasladoCount == 2)
     {
       '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-        '<td><b>Bono de Reemplazo: </b><br>Sin bono de reemplazo</td>' +
+        '<td><b>Bono Reemplazo: </b><br>NO</td>' +
         "</tr>" +
       "</table><br>";
       trasladoCount++;

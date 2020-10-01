@@ -32,6 +32,7 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapas", {
         {
           xtype: "container",
           itemId: 'pnlBtn',
+          hidden: true,
           columnWidth: 1,
           layout: {
             type: "hbox",
@@ -119,7 +120,7 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapasGrilla", {
     {
       text: "Rol",
       sortable: true,
-      dataIndex: "FK_ROL",
+      dataIndex: "FK_ROL_WF",
       hidden: false,
       flex: 1
     },
@@ -178,39 +179,69 @@ var cargarEtapasSolicitudCambiarFichaDetalle = function () {
     "#WFModificarFichaDetalleEtapas #pnlBtn"
   )[0];
 
+  pnlBtn.hide();
+  lblTitulo.setHtml(null);
+
   storeCargarEtapasCambiarficha.load({
     params: {
       'p_id': obj.PK_ID
     },
     callback: function(records, operation, success) {
       if(records != null && records.length > 0) {
-        var count = 0;
+        var countEs = 0;
+        var countRe = 0;
         for(var i = 0; i < records.length; i++) {
           var item = records[i].data;
           
-          if(item.ESTADO == 'EN ESPERA' && count == 0) {
-            count++;
+          if(item.ESTADO == 'EN ESPERA' && countEs == 0 && countRe == 0) {
+            console.log("ESPERA");
+            countEs++;
             lblTitulo.setHtml(
               '<table width="100%" >' +
               '<tr><td><b>Mi Rol:</b> '+rol.NOMBRE+' ('+rol.PK_ROL_WF+')</td></tr>' +
               "<tr><td><b>Caso:</b> "+item.PFK_CASO+"</td></tr> "+
               "<tr><td><b>Etapa Actual:</b> "+item.PFK_ETAPA+"</td></tr>"+
-              "<tr><td><b>Rol Actual:</b> "+item.FK_ROL+"</td></tr> "+
+              "<tr><td><b>Rol Actual:</b> "+item.FK_ROL_WF+"</td></tr> "+
               "</table>",);
-
-            if(obj.ESTADO == 'ACTIVO' && item.FK_ROL ==  rol.PK_ROL_WF) {
-              pnlBtn.show();
-            }else{
-              pnlBtn.hide();
-            }
           }
+
+          if(item.ESTADO == 'EN ESPERA') {
+            if(countEs == 0 && countRe == 0) {
+              lblTitulo.setHtml(
+                '<table width="100%" >' +
+                '<tr><td><b>Mi Rol:</b> '+rol.NOMBRE+' ('+rol.PK_ROL_WF+')</td></tr>' +
+                "<tr><td><b>Caso:</b> "+item.PFK_CASO+"</td></tr> "+
+                "<tr><td><b>Etapa Actual:</b> "+item.PFK_ETAPA+"</td></tr>"+
+                "<tr><td><b>Rol Actual:</b> "+item.FK_ROL_WF+"</td></tr> "+
+                "</table>",);
+            }
+            countEs++;
+          }
+
+          if(obj.ESTADO == 'ACTIVO' && 
+            item.FK_ROL_WF ==  rol.PK_ROL_WF && 
+            countEs == 1) {
+            console.log("entro");
+            pnlBtn.show();
+          }
+
+          if(item.ESTADO == 'RECHAZADO') {
+            countRe++;
+          }
+          
         }
+
+        if(countRe > 0 || countEs == 0) {
+          pnlBtn.hide();
+          lblTitulo.setHtml(null);
+        }
+        
+      }else{
+        pnlBtn.hide();
+        lblTitulo.setHtml(null);
       }
     }
   });
-  if(obj.ESTADO != 'ACTIVO') {
-    pnlBtn.hide();
-  }
 
 };
 

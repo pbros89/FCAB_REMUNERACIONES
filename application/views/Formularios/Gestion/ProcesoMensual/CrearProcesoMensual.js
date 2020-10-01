@@ -223,58 +223,41 @@ Ext.define('fcab.Container.MainProcesoMensual.Crear', {
                 var ewin = Ext.WindowManager.getActive();
                 if (ewin) {
 
-                    Ext.MessageBox.show({
-                        msg: 'Creando Proceso Mensual',
-                        progressText: 'Espere por favor...',
-                        width: 300,
-                        wait: {
-                            interval: 200
-                        }
-                    });
-
                     var values = form.getValues();
-                    //console.log(values);
-                    storeCrearProcesoMensual.load({
-                        params : {
-                            p_cod_emp: EMPRESA,
-                            p_anho: values.cbAnho,
-                            p_mes: values.cbMes,
-                            p_tipo: values.cbTipo,
-                            p_inicio: values.dtFec1 + " " + values.dtHH1,
-                            p_termino: values.dtFec2 + " " + values.dtHH2,
-                            p_observacion: values.txtObservacion,
-                            p_usuario: NOMBRE
-                        },
-                        callback: function(records, operation, success) {
-                            Ext.MessageBox.hide();
-                            var param = { 
-                                p_proceso : values.cbAnho + '/' + values.cbMes,
-                                p_cod_emp : EMPRESA
-                            };
-                            if(records != null) {
-                                if(records[0].data.r_msg == 'OK'){
-                                    showToast('Proceso mensual creado correctamente.');
-                                    cargarMainProcesoMensual(null);
-                                    Ext.getCmp('MainProcesoMensualCrear').destroy();
-                                    ventanaDinamica("MainProcesoMensualGrillaValidacion", "Detalle Validación Proceso", "800", "", "MainProcesoMensualGrillaValidacion", 1, 0, 'CORRECTO', param);
-                                }else{
-                                    
-                                    if(records[0].data.r_est != '-2'){
-                                        Ext.MessageBox.show({
-                                            title: 'ADVERTENCIA',
-                                            msg: records[0].data.r_msg,
-                                            icon: Ext.MessageBox.WARNING,
-                                            buttons: Ext.Msg.OK
-                                        });
-                                    }else{
-                                        ventanaDinamica("MainProcesoMensualGrillaValidacion", "Detalle Validación Proceso", "800", "", "MainProcesoMensualGrillaValidacion", 1, 0, records[0].data.r_msg, param);
-                                    }
 
+                    if(EMPRESA == '097') {
+                        storeValidarPeriodoAsisSolProc.load({
+                            params : {
+                                periodo: values.cbAnho+values.cbMes,
+                            },
+                            callback: function(records, operation, success) {
+
+                                if(records != null && records.length > 0) {
+                                    if(records[0].data.OBSERVACION == 'OK'){
+                                        iniciarProcesoMensual(values);
+                                    }else{
+                                        Ext.MessageBox.confirm('ADVERTENCIA', '<b>Los calculos de asistencia (ISSA) no han sido cargados en el proceso anterior.</b><br>¿Desea continuar iniciando el proceso mensual?', function(btn) {
+                                            if (btn === 'yes') {
+                                                iniciarProcesoMensual(values);
+                                            }
+                                        });
+                                        
+                                    }
+                                }else{
+                                    Ext.MessageBox.confirm('ADVERTENCIA', '<b>Los calculos de asistencia (ISSA) no han sido cargados en el proceso anterior.</b><br>¿Desea continuar iniciando el proceso mensual?', function(btn) {
+                                        if (btn === 'yes') {
+                                            iniciarProcesoMensual(values);
+                                        }
+                                    });
                                 }
+                                
                             }
-                            
-                        }
-                    });
+                        });
+                    }else{
+                        iniciarProcesoMensual(values);
+                    }
+
+                    
                 }
             }
         }]
@@ -382,3 +365,60 @@ Ext.define('fcab.Container.MainProcesoMensual.GrillaValidacion', {
     height: 480,
     width : '100%',
 });
+
+
+var iniciarProcesoMensual = function(values) {
+    Ext.MessageBox.show({
+        msg: 'Creando Proceso Mensual',
+        progressText: 'Espere por favor...',
+        width: 300,
+        wait: {
+            interval: 200
+        }
+    });
+
+    
+    //console.log(values);
+
+    storeCrearProcesoMensual.load({
+        params : {
+            p_cod_emp: EMPRESA,
+            p_anho: values.cbAnho,
+            p_mes: values.cbMes,
+            p_tipo: values.cbTipo,
+            p_inicio: values.dtFec1 + " " + values.dtHH1,
+            p_termino: values.dtFec2 + " " + values.dtHH2,
+            p_observacion: values.txtObservacion,
+            p_usuario: NOMBRE
+        },
+        callback: function(records, operation, success) {
+            Ext.MessageBox.hide();
+            var param = { 
+                p_proceso : values.cbAnho + '/' + values.cbMes,
+                p_cod_emp : EMPRESA
+            };
+            if(records != null) {
+                if(records[0].data.r_msg == 'OK'){
+                    showToast('Proceso mensual creado correctamente.');
+                    cargarMainProcesoMensual(null);
+                    Ext.getCmp('MainProcesoMensualCrear').destroy();
+                    ventanaDinamica("MainProcesoMensualGrillaValidacion", "Detalle Validación Proceso", "800", "", "MainProcesoMensualGrillaValidacion", 1, 0, 'CORRECTO', param);
+                }else{
+                    
+                    if(records[0].data.r_est != '-2'){
+                        Ext.MessageBox.show({
+                            title: 'ADVERTENCIA',
+                            msg: records[0].data.r_msg,
+                            icon: Ext.MessageBox.WARNING,
+                            buttons: Ext.Msg.OK
+                        });
+                    }else{
+                        ventanaDinamica("MainProcesoMensualGrillaValidacion", "Detalle Validación Proceso", "800", "", "MainProcesoMensualGrillaValidacion", 1, 0, records[0].data.r_msg, param);
+                    }
+
+                }
+            }
+            
+        }
+    });
+}

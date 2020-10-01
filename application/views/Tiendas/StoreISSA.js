@@ -535,3 +535,147 @@ var storeCargarConteoPMEnviosIssa = Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
+
+
+var storeCargarSeguimientAsisIssa = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/cargarSeguimientAsisIssa',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar historial',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+var storeCrearAsisIssaPeriodo = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/crearAsisIssaPeriodo',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al descargar API',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+var storeImportarAsiSolIssaProceso = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/importarAsiSolIssaProceso',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al importar en el proceso',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+var storeCargarAsisIssa = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/cargarAsisIssa',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar data',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeValidarPeriodoAsisSolProc = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/validarPeriodoAsisSolProc',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al validar',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+

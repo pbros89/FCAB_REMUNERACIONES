@@ -212,6 +212,7 @@ Ext.define("fcab.Container.WFModificarFichaCrearTraslado", {
                     columnWidth: 0.5,
                     layout: 'anchor',
                     style: 'margin: 0 10px 0 0',
+                    hidden: true,
                     items: [
                       {
                         xtype: "thousandnumber",

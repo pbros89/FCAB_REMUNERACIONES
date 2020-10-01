@@ -349,18 +349,17 @@ var cargarResumenSolicitudcambiarFicha = function () {
   }
 
 
-  if(valuesTras.rbBono != null && valuesTras.rbBono != '0' && 
-    valuesTras.txtMonto != null && valuesTras.txtMonto != '') {
+  if(valuesTras.rbBono != null && valuesTras.rbBono != '0') {
     trasladoCount++;
     trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td><b>Bono Reemplazo: </b><br>'+valuesTras.txtMonto+'</td>' +
+      '<td><b>Bono Reemplazo: </b><br>SI</td>' +
       "</tr>" +
       "</table><br>";
   }else if(valuesTras.rbBono != '1' ){
     if(trasladoCount == 2)
     {
       '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-        '<td><b>Bono de Reemplazo: </b><br>Sin bono de reemplazo</td>' +
+        '<td><b>Bono Reemplazo: </b><br>NO</td>' +
         "</tr>" +
       "</table><br>";
       trasladoCount++;
@@ -482,7 +481,7 @@ var crearSolicitudModificarFicha = function() {
   Ext.MessageBox.confirm('Crear Solicitud', '¿Está seguro de crear la solicitud?<br><b>La solicitud no podra ser modificada luego de ser creada.</b>', function(btn) {
     if (btn === 'yes') {
       Ext.MessageBox.show({
-        msg: 'Cambiando Etapa',
+        msg: 'Creando Solicitud',
         progressText: 'Espere por favor...',
         width: 300,
         wait: {
@@ -516,7 +515,7 @@ var crearSolicitudModificarFicha = function() {
             P_TRAS_INI: valuesTras.dtIniTras,
             P_TRAS_FIN: valuesTras.dtFinTras,
             P_TRAS_TIENE_BONO: valuesTras.rbBono,
-            P_TRAS_BONO: valuesTras.txtMonto,
+            P_TRAS_BONO: "0",//valuesTras.txtMonto,
             P_MOTIVO_CAMBIO: txtMotivo.getValue(),
             P_USUARIO: NOMBRE,
             P_COD_EMP: EMPRESA,

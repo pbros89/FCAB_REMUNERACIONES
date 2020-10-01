@@ -159,4 +159,12 @@ class WFModificarFichaController extends CI_Controller
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
+
+    public function validarRolEtapa1() {
+        $p_rol = $this->input->get('p_rol');
+
+        $query = $this->WFModificarFichaModel->validarRolEtapa1($p_rol);
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
 }

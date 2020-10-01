@@ -26,7 +26,9 @@ class IssaModel extends CI_Model {
                     nvl(MONTO, '."'0'".') as "monto",
                     nvl(TIPO_MONTO, '."'%null%'".') as "tipo_moneda",
                     nvl(OBSERVACION, '."'%null%'".') as "observacion",
-                    nvl(FK_COD_EMP, '."'%null%'".') as "cod_emp"
+                    nvl(FK_COD_EMP, '."'%null%'".') as "cod_emp",
+                    nvl(COD_REG_APV, '."'%null%'".') as "cod_reg_apv",
+                    nvl(NOM_REG_APV, '."'%null%'".') as "nom_reg_apv"
                 FROM NOV_CAMBIO_AFP CAM 
                 WHERE periodo is not null
                 AND (estado_enviado is null
@@ -85,7 +87,17 @@ class IssaModel extends CI_Model {
                     "nvl(to_char(FECHA_FIN_CONTRATO, 'dd-mm-yyyy'), '%null%')".' as "fecha_fin_contrato",'.
                     'nvl(SUELDO_BASE, '."0".') as "sueldo_base",
                     nvl(OBSERVACION, '."'%null%'".') as "observacion",
-                    nvl(FK_COD_EMP, '."'%null%'".') as "cod_emp"
+                    nvl(FK_COD_EMP, '."'%null%'".') as "cod_emp",
+
+                    nvl(ROL_CARGO, '."'%null%'".') as "rol_cargo",
+                    nvl(COD_GERENCIA, '."'%null%'".') as "cod_gerencia",
+                    nvl(NOM_GERENCIA, '."'%null%'".') as "nom_gerencia",
+                    nvl(COD_DEPARTAMENTO, '."'%null%'".') as "cod_departamento",
+                    nvl(NOM_DEPARTAMENTO, '."'%null%'".') as "nom_departamento",
+                    nvl(COD_LUGAR_TRABAJO, '."'%null%'".') as "cod_lugar",
+                    nvl(NOM_LUGAR_TRABAJO, '."'%null%'".') as "nom_lugar",
+                    nvl(RUT_JEFE, '."'%null%'".') as "rut_jefe",
+                    nvl(NOM_JEFE, '."'%null%'".') as " nom_jefe"
                 FROM NOV_CAMBIO_CARGO_RENTA CAM 
                 WHERE periodo is not null
                 AND (estado_enviado is null
@@ -557,7 +569,9 @@ class IssaModel extends CI_Model {
 
     public function contarRegistrosProcesoMensualIssa($p_proceso, $p_tipo, $p_cod_emp) {
         //AND PRO.estado = 'TERMINADO'
-        $sql = 'SELECT 
+        $sql = '
+            SELECT SUM(CONTAR) CONTAR FROM (
+            SELECT 
                     count(*) CONTAR
             FROM NOV_PROC_MENSUAl_conceptos con, 
                 NOV_PROC_MENSUAL_PERSONS PER,
@@ -578,9 +592,38 @@ class IssaModel extends CI_Model {
             AND CON.PFK_COD_EMP ='."'".$p_cod_emp."'
             AND CON.PFK_PROCESO = '$p_proceso'
             AND CON.PFK_TIPO = '$p_tipo'
+            AND CON.VALOR <> 0
             AND (CON.estado_enviado is null
-            OR CON.estado_enviado <> 'OK')
-            ";
+            OR CON.estado_enviado <> 'OK')".
+            'UNION
+            SELECT 
+                    count(*) CONTAR
+            FROM NOV_PROC_MENSUAl_conceptos con, 
+                NOV_PROC_MENSUAL_PERSONS PER,
+                NOV_PROC_MENSUAL_CC CC,
+                NOV_PROC_MENSUAL PRO,
+                NOV_CONCEPTOS CO
+            WHERE PRO.PK_PROCESO = CC.PFK_PROCESO
+            AND PRO.PK_TIPO = CC.PFK_TIPO
+            AND PRO.PFK_COD_EMP = CC.PFK_COD_EMP
+            AND CC.PFK_PROCESO = PER.PFK_PROCESO
+            AND CC.PFK_TIPO = PER.PFK_TIPO
+            AND CC.PFK_COD_EMP = PER.PFK_COD_EMP
+            AND cc.pk_cod_cc = PER.PFK_COD_CC
+            AND CON.PFK_PROCESO = PER.PFK_PROCESO
+            AND CON.PFK_TIPO = PER.PFK_TIPO
+            AND CON.PFK_COD_EMP = PER.PFK_COD_EMP
+            AND CON.PFK_COD_CC = PER.PFK_COD_CC
+            AND CON.PFK_RUT = PER.PK_RUT
+            AND con.pfk_cod_concepto = co.pk_cod_concepto
+            AND CON.PFK_COD_EMP = CO.PFK_COD_EMP
+            AND CON.PFK_COD_EMP ='."'".$p_cod_emp."'
+            AND CON.PFK_PROCESO = '$p_proceso'
+            AND CON.PFK_TIPO = '$p_tipo'
+            AND CON.VALOR = 0
+            AND CO.NO_CERO = '0'
+            AND (CON.estado_enviado is null
+            OR CON.estado_enviado <> 'OK'))";
 
             //echo $sql;
 
@@ -1007,5 +1050,310 @@ class IssaModel extends CI_Model {
         return $query->result();
 
     }   
+
+    public function guardarAsiSolIssa(
+        $P_RUT,
+        $P_PERIODO,
+        $P_NOMBRE,
+        $P_DESDE,
+        $P_HASTA,
+        $P_HORAS_EXTRAS,
+        $P_HORAS_EMERGENCIA,
+        $P_HORAS_NOCTURNAS,
+        $P_HORAS_COMP_TURNO,
+        $P_DESC_COMP_FERIADO,
+        $P_DESC_COMP_LEGAL,
+        $P_COLACION,
+        $P_VIATICO,
+        $P_FALTA,
+        $P_USUARIO )
+
+    {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+                $this->db->conn_id,
+                    "BEGIN NOV_INS_ASIS_SOL_ISSA(
+                            :P_RUT,
+                            :P_PERIODO,
+                            :P_NOMBRE,
+                            :P_DESDE,
+                            :P_HASTA,
+                            :P_HORAS_EXTRAS,
+                            :P_HORAS_EMERGENCIA,
+                            :P_HORAS_NOCTURNAS,
+                            :P_HORAS_COMP_TURNO,
+                            :P_DESC_COMP_FERIADO,
+                            :P_DESC_COMP_LEGAL,
+                            :P_COLACION,
+                            :P_VIATICO,
+                            :P_FALTA,
+                            :P_USUARIO,
+                            :r_est,
+                            :r_msg);END;");
+        
+        oci_bind_by_name($proc,"P_RUT", $P_RUT, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_NOMBRE", $P_NOMBRE, 200, SQLT_CHR);
+        oci_bind_by_name($proc,"P_DESDE", $P_DESDE, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_HASTA", $P_HASTA, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_HORAS_EXTRAS", $P_HORAS_EXTRAS, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_HORAS_EMERGENCIA", $P_HORAS_EMERGENCIA, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_HORAS_NOCTURNAS", $P_HORAS_NOCTURNAS, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_HORAS_COMP_TURNO", $P_HORAS_COMP_TURNO, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_DESC_COMP_FERIADO", $P_DESC_COMP_FERIADO,);
+        oci_bind_by_name($proc,"P_DESC_COMP_LEGAL", $P_DESC_COMP_LEGAL,);
+        oci_bind_by_name($proc,"P_COLACION", $P_COLACION,);
+        oci_bind_by_name($proc,"P_VIATICO", $P_VIATICO,);
+        oci_bind_by_name($proc,"P_FALTA", $P_FALTA,);
+        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO,);
+        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
+    public function eliminarAsiSolIssa(
+        $P_PERIODO,
+        $P_USUARIO)
+    {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+                $this->db->conn_id,
+                    "BEGIN NOV_DEL_ASIS_SOL_ISSA(
+                            :P_PERIODO,
+                            :P_USUARIO,
+                            :r_est,
+                            :r_msg);END;");
+        
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
+
+    public function guardarLogAsiSolIssa(
+          $P_PERIODO 
+        , $P_OBSERVACION 
+        , $P_USUARIO 
+        , $P_ERROR 
+        , $P_CANT_INI 
+        , $P_CANT_FIN  )
+
+    {
+        $r_est = 0;
+        $r_msg = "";
+        $proc = oci_parse(
+                $this->db->conn_id,
+                    "BEGIN NOV_INS_LOG_ASIS_SOL_ISSA(
+                          :P_PERIODO 
+                        , :P_OBSERVACION 
+                        , :P_USUARIO 
+                        , :P_ERROR 
+                        , :P_CANT_INI 
+                        , :P_CANT_FIN
+                        , :r_est
+                        , :r_msg);END;");
+        
+        oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_OBSERVACION", $P_OBSERVACION, 2000, SQLT_CHR);
+        oci_bind_by_name($proc,"P_ERROR", $P_ERROR, 1000, SQLT_CHR);
+        oci_bind_by_name($proc,"P_CANT_INI", $P_CANT_INI,);
+        oci_bind_by_name($proc,"P_CANT_FIN", $P_CANT_FIN,);
+        oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO,);
+        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+        return $result;
+    }
+
     
+    public function cargarAsisIssaNo($p_periodo, $p_cod_emp){
+        $sql = "SELECT DISTINCT 
+                    PK_RUT,
+                    PK_PERIODO,
+                    NOMBRE,
+                    DESDE,
+                    HASTA,
+                    to_number(SUBSTR(HORAS_EXTRAS,0,INSTR(HORAS_EXTRAS, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_EXTRAS,INSTR(HORAS_EXTRAS, ':')+1,4)/60) HORAS_EXTRAS_NUM,
+                    
+                    to_number(SUBSTR(HORAS_EMERGENCIA,0,INSTR(HORAS_EMERGENCIA, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_EMERGENCIA,INSTR(HORAS_EMERGENCIA, ':')+1,4)/60) HORAS_EMERGENCIA_NUM,
+                    
+                    to_number(SUBSTR(HORAS_NOCTURNAS,0,INSTR(HORAS_NOCTURNAS, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_NOCTURNAS,INSTR(HORAS_NOCTURNAS, ':')+1,4)/60) HORAS_NOCTURNAS_NUM,
+
+                    to_number(SUBSTR(HORAS_COMP_TURNO,0,INSTR(HORAS_COMP_TURNO, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_COMP_TURNO,INSTR(HORAS_COMP_TURNO, ':')+1,4)/60) HORAS_COMP_TURNO_NUM,
+                    HORAS_EXTRAS,
+                    HORAS_EMERGENCIA,
+                    HORAS_NOCTURNAS,
+                    HORAS_COMP_TURNO,
+                    DESC_COMP_FERIADO,
+                    DESC_COMP_LEGAL,
+                    COLACION,
+                    VIATICO,
+                    FALTA
+                FROM nov_asis_sol_issa ASI
+                WHERE replace(ASI.PK_PERIODO, '/', '') = replace('$p_periodo', '/', '')
+                AND ASI.PK_RUT NOT IN (
+                    SELECT ((case substr(PER.PK_rut, 0, 1) when '0' then substr(PER.PK_rut, 2) else PER.PK_rut end))
+                    FROM NOV_PROC_MENSUAL_PERSONS PER
+                    WHERE replace(pfk_proceso, '/', '') = replace('$p_periodo', '/', '')
+                    AND pfk_tipo = 'PROCESO'
+                    AND pfk_cod_emp = '$p_cod_emp'
+                )
+                ORDER BY ASI.PK_RUT";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarAsisIssa($p_periodo){
+        $sql = "SELECT DISTINCT PK_RUT,
+                    PK_PERIODO,
+                    NOMBRE,
+                    DESDE,
+                    HASTA,
+                    to_number(SUBSTR(HORAS_EXTRAS,0,INSTR(HORAS_EXTRAS, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_EXTRAS,INSTR(HORAS_EXTRAS, ':')+1,4)/60) HORAS_EXTRAS_NUM,
+                    
+                    to_number(SUBSTR(HORAS_EMERGENCIA,0,INSTR(HORAS_EMERGENCIA, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_EMERGENCIA,INSTR(HORAS_EMERGENCIA, ':')+1,4)/60) HORAS_EMERGENCIA_NUM,
+                    
+                    to_number(SUBSTR(HORAS_NOCTURNAS,0,INSTR(HORAS_NOCTURNAS, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_NOCTURNAS,INSTR(HORAS_NOCTURNAS, ':')+1,4)/60) HORAS_NOCTURNAS_NUM,
+
+                    to_number(SUBSTR(HORAS_COMP_TURNO,0,INSTR(HORAS_COMP_TURNO, ':')-1)) +  
+                    to_number(SUBSTR(HORAS_COMP_TURNO,INSTR(HORAS_COMP_TURNO, ':')+1,4)/60) HORAS_COMP_TURNO_NUM,
+                    HORAS_EXTRAS,
+                    HORAS_EMERGENCIA,
+                    HORAS_NOCTURNAS,
+                    HORAS_COMP_TURNO,
+                    DESC_COMP_FERIADO,
+                    DESC_COMP_LEGAL,
+                    COLACION,
+                    VIATICO,
+                    FALTA
+                FROM nov_asis_sol_issa ASI
+                WHERE replace(ASI.PK_PERIODO, '/', '') = replace('$p_periodo', '/', '')
+                ORDER BY ASI.PK_RUT";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+
+    public function cargarAsisIssaCon($p_cod_emp){
+        $sql = "SELECT COD_EMP,
+                    COD_HORAS_EXTRAS,
+                    COD_HORAS_EMERGENCIA,
+                    COD_HORAS_NOCTURNAS,
+                    COD_HORAS_COMP_TURNO,
+                    COD_DESC_COMP_FERIADO,
+                    COD_DESC_COMP_LEGAL,
+                    COD_COLACION,
+                    COD_VIATICO,
+                    COD_FALTA
+                FROM nov_asis_sol_issa_con 
+                WHERE COD_EMP = '$p_cod_emp' ";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarSeguimientAsisIssa() {
+        $sql = "SELECT PRO.PK_PROCESO, PRO.PFK_COD_EMP, 
+                NVL((
+                    SELECT (CASE WHEN LOG.OBSERVACION||LOG.ERROR = 'FINALOK' THEN 'OK' ELSE LOG.ERROR END)
+                    FROM NOV_LOG_ASIS_SOL_ISSA LOG, 
+                    (
+                        SELECT MAX(FECHA) FECHA, PERIODO
+                        FROM NOV_LOG_ASIS_SOL_ISSA
+                        GROUP BY PERIODO
+                    ) MAX
+                    WHERE MAX.FECHA = LOG.FECHA
+                    AND MAX.PERIODO = LOG.PERIODO
+                    AND MAX.PERIODO = REPLACE(PRO.PK_PROCESO, '/', '')
+                ), 'NO EXISTE') CARGAR_DATA,
+                NVL((
+                    SELECT LOG.OBSERVACION
+                    FROM NOV_ASIS_SOL_ISSA_PROCESO LOG, 
+                    (
+                        SELECT MAX(FECHA) FECHA, PERIODO
+                        FROM NOV_ASIS_SOL_ISSA_PROCESO
+                        GROUP BY PERIODO
+                    ) MAX
+                    WHERE MAX.FECHA = LOG.FECHA
+                    AND MAX.PERIODO = LOG.PERIODO
+                    AND MAX.PERIODO = REPLACE(PRO.PK_PROCESO, '/', '')
+                ), 'NO EXISTE') IMPORTAR_PROCESO
+                FROM nov_proc_mensual PRO
+                WHERE PK_TIPO = 'PROCESO'
+                AND PFK_COD_EMP = '097'
+                ORDER BY PRO.PK_PROCESO DESC ";
+            
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function importarAsiSolIssaProceso(
+        $P_PERIODO 
+      , $P_COD_EMP 
+      , $P_USUARIO )
+
+    {
+      $r_est = 0;
+      $r_msg = "";
+      $proc = oci_parse(
+              $this->db->conn_id,
+                  "BEGIN NOV_INS_ASIS_SOL_ISSA_PROC(
+                        :P_PERIODO 
+                      , :P_COD_EMP
+                      , :P_USUARIO 
+                      , :r_est
+                      , :r_msg);END;");
+      
+      oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+      oci_bind_by_name($proc,"P_COD_EMP", $P_COD_EMP, 20, SQLT_CHR);
+      oci_bind_by_name($proc,"P_USUARIO", $P_USUARIO,);
+      oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
+      oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+
+      oci_execute($proc);
+
+      $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
+      return $result;
+  }
+
+  public function validarPeriodoAsisSolProc($periodo) {
+    $sql = "SELECT pro.*
+            FROM NOV_ASIS_SOL_ISSA_PROCESO pro, (
+                    SELECT MAX(FECHA) FECHA, PERIODO
+                    FROM NOV_ASIS_SOL_ISSA_PROCESO
+                    GROUP BY PERIODO
+                ) MAX
+            WHERE MAX.FECHA = pro.FECHA
+            AND MAX.PERIODO = pro.PERIODO
+            AND pro.PERIODO = case when instr(REPLACE('$periodo', '/', ''), '01') > 0 then 
+                    TO_NUMBER(REPLACE('$periodo', '/', ''))-96 
+                    ELSE TO_NUMBER(REPLACE('$periodo', '/', ''))-1 END";
+
+    $query = $this->db->query($sql);
+    return $query->result();
+  }
 }

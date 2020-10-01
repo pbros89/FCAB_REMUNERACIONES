@@ -23,7 +23,10 @@ class AdjuntoController extends CI_Controller {
         $this->load->library('upload');
         $p_ruta = $this->input->post('p_ruta');
         $p_cod = $this->input->post('p_cod');
-       
+
+        //$p_archivo = $this->input->post('archivo');
+
+        //print_r($p_archivo);
         //Eliminando acentos y caracteres especiales del nombre
         $filename = pathinfo($_FILES['archivo']['name'], PATHINFO_FILENAME);
         $output = iconv("utf-8", "ascii//TRANSLIT//IGNORE", $filename);

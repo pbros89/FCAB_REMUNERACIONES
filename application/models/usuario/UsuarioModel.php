@@ -135,7 +135,6 @@ class UsuarioModel extends CI_Model {
         oci_bind_by_name($proc,"p_correo", $p_correo, 500, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
-        oci_bind_by_name($proc,"p_rol_wf", $p_rol_wf, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -167,7 +166,6 @@ class UsuarioModel extends CI_Model {
         oci_bind_by_name($proc,"p_correo", $p_correo, 500, SQLT_CHR);
         oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
         oci_bind_by_name($proc,"p_estado", $p_estado, 1, SQLT_CHR);
-        oci_bind_by_name($proc,"p_rol_wf", $p_rol_wf, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 
@@ -299,7 +297,7 @@ class UsuarioModel extends CI_Model {
                     PK_ROL_WF,
                     NOMBRE,
                     OBSERVACION
-                FROM NOV_ROLES_WF 
+                FROM NOV_WF_ROLES 
                 ORDER BY PK_ROL_WF ASC";
                 
 
@@ -312,7 +310,7 @@ class UsuarioModel extends CI_Model {
                     rol.PK_ROL_WF,
                     rol.NOMBRE,
                     rol.OBSERVACION
-                FROM NOV_ROLES_WF rol, NOV_USUARIOS_ROLES_WF usrrol
+                FROM NOV_WF_ROLES rol, NOV_WF_USUARIOS_ROLES usrrol
                 WHERE rol.pk_rol_wf = usrrol.pfk_rol_wf ";
         if(!empty($p_usuario))
         {
@@ -343,10 +341,10 @@ class UsuarioModel extends CI_Model {
                     rol.PK_ROL_WF,
                     rol.NOMBRE,
                     rol.OBSERVACION
-                FROM NOV_ROLES_WF rol, 
+                FROM NOV_WF_ROLES rol, 
                     (
                         SELECT *
-                        FROM NOV_USUARIOS_ROLES_WF 
+                        FROM NOV_WF_USUARIOS_ROLES 
                         WHERE PFK_COD_EMP = '$p_cod_emp'
                         AND PFK_USUARIO = '$p_usuario'
                     ) usrrol

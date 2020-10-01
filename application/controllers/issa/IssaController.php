@@ -558,8 +558,8 @@ class IssaController extends CI_Controller
 		if ($data != null && count($data) > 0) {
 			//Realiza el envio a ISSA
 			$cantEnviados = count($data);
-			$resIssa = $this->enviarIssa($params);
-			//$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
+			//$resIssa = $this->enviarIssa($params);
+			$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
 
 			if ($resIssa != null) {
 				$resDecode = json_decode($resIssa);
@@ -622,8 +622,8 @@ class IssaController extends CI_Controller
 		if ($data != null && count($data) > 0) {
 			//Realiza el envio a ISSA
 			$cantEnviados = count($data);
-			$resIssa = $this->enviarIssa($params);
-			//$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
+			//$resIssa = $this->enviarIssa($params);
+			$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
 
 			if ($resIssa != null) {
 				$resDecode = json_decode($resIssa);
@@ -666,6 +666,7 @@ class IssaController extends CI_Controller
 		$result = '{"success":"true", "items":' . json_encode($log) . '}';
 		$this->output->set_output($result);
 	}
+	
 
 	private function enviarIssaQA($params)
 	{
@@ -871,4 +872,201 @@ class IssaController extends CI_Controller
 		//Hacemos una salida al navegador con el archivo Excel.
 		$objWriter->save('php://output');
 	}
+
+
+	public function crearAsisIssaPeriodo() {
+		set_time_limit(300);
+		ini_set('max_execution_time', '300');
+		ini_set('memory_limit', '2048M');
+
+		$p_periodo = '';
+		$p_usuario = 'SYSTEM';
+		$count = 0;
+		$observacion = 'OK';
+
+		if ($this->input->get('p_usuario') != null) {
+			$p_usuario = $this->input->get('p_usuario');
+		}
+
+		if ($this->input->get('p_periodo') != null) {
+			$p_periodo = $this->input->get('p_periodo');
+		}
+
+		$params = 'operacion=asis_solicitud_he' .
+					'&periodo=' . $p_periodo;
+
+		$resData = $this->enviarIssa($params);
+
+
+		if ($resData != null) {
+			$resDecode = json_decode($resData);
+			
+			if (isset($resDecode->Error) && $resDecode->Error == 0) {
+				$error = $resDecode->Error;
+				$results = $resDecode->Results;
+				$mensaje = $resDecode->Mensaje;
+				if(count($results) > 0) {
+					//limpiamos data existente del periodo
+					$this->IssaModel->eliminarAsiSolIssa($p_periodo, $p_usuario);
+
+					//guardamos log de inicio de guardados de registros
+					$this->IssaModel->guardarLogAsiSolIssa(
+					$p_periodo 
+					, 'INICIO' 
+					, $p_usuario 
+					, $mensaje 
+					, count($results) 
+					, 0);
+
+					//print_r($results);
+					foreach ($results as $i) {
+						$res = $this->IssaModel->guardarAsiSolIssa(
+							$i->rut,
+							$i->periodo,
+							$i->nombre,
+							$i->desde,
+							$i->hasta,
+							$i->horas_extras,
+							$i->horas_emergencia,
+							$i->horas_nocturnas,
+							$i->horas_comp_turno,
+							$i->desc_comp_feriado,
+							$i->desc_comp_legal,
+							$i->colacion,
+							$i->viatico,
+							$i->falta,
+							$p_usuario
+						);
+
+						if($res != null && $res['r_est'] == 0) {
+							$count++;
+						}
+					}
+
+					//print_r('FINAL ' . count($results) . ' / ' . $count);
+
+					if (count($results) == $count) {
+						$this->IssaModel->guardarLogAsiSolIssa(
+							$p_periodo 
+						, 'FINAL' 
+						, $p_usuario 
+						, $observacion
+						, count($results) 
+						, $count);
+						
+					} else {
+						$observacion = "El servicio no guardo todos los datos enviados" ;
+						$this->IssaModel->guardarLogAsiSolIssa(
+							$p_periodo 
+						, 'FINAL' 
+						, $p_usuario 
+						, $observacion
+						, count($results) 
+						, $count);
+					}
+				}else{
+					$observacion = "Servicio sin data" ;
+					$this->IssaModel->guardarLogAsiSolIssa(
+						$p_periodo 
+						, 'INICIO' 
+						, $p_usuario 
+						, $observacion 
+						, count($results) 
+						, 0);
+				}
+				
+			} else {
+				$observacion = "Error en respuesta del servicio" ;
+				$this->IssaModel->guardarLogAsiSolIssa(
+					$p_periodo 
+				  , 'ERROR' 
+				  , $p_usuario 
+				  , $observacion
+				  , 0
+				  , 0);
+				
+			}
+		} else {
+			$observacion = 'Servicio sin respuesta';
+			$this->IssaModel->guardarLogAsiSolIssa(
+				$p_periodo 
+			  , 'ERROR' 
+			  , $p_usuario 
+			  , $observacion
+			  , 0
+			  , 0);
+		}
+
+		$result = array('r_est' => '0', 'r_msg' => $observacion);
+		$resultFinal = '{"success":"true", "items": '.json_encode($result).'}';
+		$this->output->set_output($resultFinal);
+	}
+
+
+	public function cargarAsisIssaNo()
+	{
+		$p_periodo = $this->input->get('p_periodo');
+		$p_cod_emp = $this->input->get('p_cod_emp');
+
+		$query = $this->IssaModel->cargarAsisIssaNo($p_periodo, $p_cod_emp);
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+	}
+
+
+	public function cargarAsisIssa()
+	{
+		$p_periodo = $this->input->get('p_periodo');
+
+		$query = $this->IssaModel->cargarAsisIssa($p_periodo);
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+	}
+
+	public function cargarAsisIssaCon() {
+
+		$p_cod_emp = $this->input->get('p_cod_emp');
+
+		$query = $this->IssaModel->cargarAsisIssaCon($p_cod_emp);
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+	}
+
+	public function cargarSeguimientAsisIssa() {
+		
+		$query = $this->IssaModel->cargarSeguimientAsisIssa();
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+	}
+
+	public function importarAsiSolIssaProceso()
+	{
+		$P_PERIODO = $this->input->get('P_PERIODO');
+		$P_COD_EMP = $this->input->get('P_COD_EMP');
+		$P_USUARIO = $this->input->get('P_USUARIO');
+
+		$query = $this->IssaModel->importarAsiSolIssaProceso(
+			  $P_PERIODO 
+			, $P_COD_EMP 
+			, $P_USUARIO);
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+		$this->output->set_output($result);
+	}
+
+	public function validarPeriodoAsisSolProc()
+	{
+		$periodo = $this->input->get('periodo');
+		$query = $this->IssaModel->validarPeriodoAsisSolProc(
+			  $periodo);
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+		$this->output->set_output($result);
+	}
+
+
 }

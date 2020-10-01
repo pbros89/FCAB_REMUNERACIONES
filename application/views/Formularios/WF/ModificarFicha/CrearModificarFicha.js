@@ -10,16 +10,33 @@ Ext.define("fcab.Container.WFModificarFichaCrear", {
       storeCargarParam_TIPO_CONTRATO.load();
       storeCargarCentroCostosFiltro.load();
       storeCargarCargosFiltro.load();
-      storeExtras_cargarPeriodos.load();
       storeCargarParam_LUGAR_TRABAJO.load();
       storeCargarParam_GERENCIA.load();
-      storeCargarParam_DEPARTAMENTO.load();
+      storeCargarParam_DEPARTAMENTO.load()
       storeCargarPersonalVigentePorPrivilegioUsuario.load({
         params: {
           p_cod_emp: EMPRESA,
           p_usuario: NOMBRE,
           p_rol: ROL,
         },
+      });
+
+      storeExtras_cargarPeriodos.load({
+        callback: function(records, operation, success) {
+          var cbPeriodo = Ext.ComponentQuery.query('#WFModificarFichaCrearPanelBuscar #cbPeriodo')[0];
+
+          if(records != null && records.length > 0) {
+            var date = new Date();
+            console.log(records[0].data.PERIODO);
+            console.log(records[1].data.PERIODO);
+            console.log(date.getDate());
+            if(date.getDate() <= 19) {
+              cbPeriodo.setValue(records[0].data.PERIODO);
+            }else{
+              cbPeriodo.setValue(records[1].data.PERIODO);
+            }
+          }
+        }
       });
     },
   },

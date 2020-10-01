@@ -397,6 +397,8 @@ var ModalDetalleDesvinculacion= function(p_numero, p_rol){
                                         var caso = records[0].get('CASO');
                                         var estado = records[0].get('ESTADO');
 
+                                        console.log('caso: '+caso);
+
                                         //Traemos el detalle del Caso del wf:
                                         storeDesv_detalleCasoWF.load({
                                             params:{
@@ -646,6 +648,13 @@ function func_aprobar_desvinculacion(p_numero, p_rol, p_estado, p_usuario, p_fec
             interval: 200
         }
     });
+
+    console.log('p_numero: '+p_numero);
+    console.log('p_rol: '+p_rol);
+    console.log('p_estado: '+p_estado);
+    console.log('p_usuario: '+p_usuario);
+    console.log('p_fecha: '+p_fecha);
+    console.log('p_horario: '+p_horario);
 
     storeDesv_aprobarDesvinculacion.load({
         params:{

@@ -216,7 +216,7 @@ class WFDesvinculacionModel extends CI_Model {
                     d.caja_chica,
                     d.det_vehiculos   vehiculos,
                     d.estado,
-                    d.fk_caso
+                    d.fk_caso caso
                 FROM
                     nov_sol_desvinculacion   d,
                     nov_personal             p
@@ -232,7 +232,7 @@ class WFDesvinculacionModel extends CI_Model {
         }
         $sql .= "ORDER BY
                         d.estado,
-                        d.pk_num_desv";
+                        d.pk_solicitud";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -256,7 +256,7 @@ class WFDesvinculacionModel extends CI_Model {
                     d.caja_chica,
                     d.det_vehiculos   vehiculos,
                     d.estado,
-                    d.fk_caso,
+                    d.fk_caso caso,
                     p1.nombre causal,
                     CASE
                         WHEN d.causal_desp_2 IS NULL THEN null
@@ -286,7 +286,7 @@ class WFDesvinculacionModel extends CI_Model {
                     nov_wf_proceso
                 WHERE
                     pfk_nombre_wf = '$wf'
-                    and pfk_caso = $caso";
+                    and pfk_caso = '$caso'";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -354,7 +354,7 @@ class WFDesvinculacionModel extends CI_Model {
             END;"
         );
 
-        oci_bind_by_name($proc, "P_NUMERO", $numero, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_NUMERO", $numero, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_ROL", $rol, 40, SQLT_CHR);
         oci_bind_by_name($proc, "P_ESTADO", $estado, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_USUARIO", $usuario, 40, SQLT_CHR);
@@ -362,7 +362,7 @@ class WFDesvinculacionModel extends CI_Model {
         oci_bind_by_name($proc, "P_HORARIO", $horario, 20, SQLT_CHR);
         oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
-
+        
         oci_execute($proc);
 
         $result = array('r_est' => $r_est, 'r_msg' => $r_msg);

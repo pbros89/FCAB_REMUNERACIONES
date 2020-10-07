@@ -191,7 +191,7 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
             tooltip: 'Descargar manual de usuario.',
             iconCls: 'icon-form-detail',
             handler: function () {
-                window.open('resources/docs/Matriz_Causales_Desvinculacion.pdf');
+                window.open('resources/upload/solicitud_desvinculacion/causales/Matriz_Causales_Desvinculacion.pdf');
             }
         },{
             text: 'Refrescar',

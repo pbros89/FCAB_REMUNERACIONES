@@ -167,4 +167,22 @@ class WFModificarFichaController extends CI_Controller
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
+
+    public function enviarCorreoCambioEtapaWFCambioFicha()
+    {
+        $P_ID = $this->input->get('P_ID');
+        $P_ROL_WF = $this->input->get('P_ROL_WF');
+        $P_COD_EMP = $this->input->get('P_COD_EMP');
+        $P_COD_CC = $this->input->get('P_COD_CC');
+        $P_ESTADO_SOL = $this->input->get('P_ESTADO_SOL');
+
+        $query = $this->WFModificarFichaModel->enviarCorreoCambioEtapaWFCambioFicha(
+              $P_ID 
+            , $P_COD_EMP 
+            , $P_COD_CC 
+            , $P_ROL_WF 
+            , $P_ESTADO_SOL );
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
 }

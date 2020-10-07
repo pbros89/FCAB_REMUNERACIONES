@@ -20,7 +20,6 @@ Ext.define("fcab.Container.DetalleIngresoPersonalCargo", {
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #cbTipoContrato')[0].setValue(param.COD_TIPO_CONTRATO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #dtIngreso')[0].setValue(param.FECHA_INGRESO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #dtVencimiento')[0].setValue(param.FECHA_VENCIMIENTO);
-            Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtDVJefatura')[0].setValue(param.RUT_JEFE);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtJefatura')[0].setValue(param.RUT_JEFE + "-" + param.DV_JEFE + " " +param.NOM_JEFE);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtDepto')[0].setValue(param.NOM_DEPARTAMENTO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalCargo #txtGer')[0].setValue(param.NOM_GERENCIA);

@@ -267,7 +267,10 @@ class WFModificarFichaModel extends CI_Model
                             , :P_COD_CC_SOL
                             , :P_PERIODO
                             , :R_EST
-                            , :R_MSG);END;"
+                            , :R_MSG
+                            , :R_ID
+                            , :R_ROL 
+                            , :R_EST_SOL);END;"
         );
 
         oci_bind_by_name($proc, "P_COD_CARGO", $P_COD_CARGO, 20, SQLT_CHR);
@@ -308,9 +311,13 @@ class WFModificarFichaModel extends CI_Model
         oci_bind_by_name($proc, "R_EST", $R_EST, -1, OCI_B_INT);
         oci_bind_by_name($proc, "R_MSG", $R_MSG, 200, SQLT_CHR);
 
+        oci_bind_by_name($proc, "R_ID", $R_ID, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "R_ROL", $R_ROL, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "R_EST_SOL", $R_EST_SOL, 20, SQLT_CHR);
+
         oci_execute($proc);
 
-        $result = array('r_est' => $R_EST, 'r_msg' => $R_MSG);
+        $result = array('r_est' => $R_EST, 'r_msg' => $R_MSG, 'r_id' => $R_ID, 'r_rol' => $R_ROL, 'r_est_sol' => $R_EST_SOL);
         return $result;
     }
 
@@ -324,6 +331,10 @@ class WFModificarFichaModel extends CI_Model
     ) {
         $R_EST = 0;
         $R_MSG = "";
+        $R_ID = 0;
+        $R_ROL = "";
+        $R_EST_SOL = "";
+
         $proc = oci_parse(
             $this->db->conn_id,
             "BEGIN NOV_EST_SOL_CAMBIO_FICHA(
@@ -332,7 +343,10 @@ class WFModificarFichaModel extends CI_Model
                             , :P_USUARIO
                             , :P_ESTADO
                             , :R_EST
-                            , :R_MSG);END;"
+                            , :R_MSG
+                            , :R_ID
+                            , :R_ROL 
+                            , :R_EST_SOL);END;"
         );
 
         oci_bind_by_name($proc, "P_ID", $P_ID, -1, OCI_B_INT);
@@ -342,9 +356,14 @@ class WFModificarFichaModel extends CI_Model
 
         oci_bind_by_name($proc, "R_EST", $R_EST, -1, OCI_B_INT);
         oci_bind_by_name($proc, "R_MSG", $R_MSG, 200, SQLT_CHR);
+
+        oci_bind_by_name($proc, "R_ID", $R_ID, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "R_ROL", $R_ROL, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "R_EST_SOL", $R_EST_SOL, 20, SQLT_CHR);
+
         oci_execute($proc);
 
-        $result = array('r_est' => $R_EST, 'r_msg' => $R_MSG);
+        $result = array('r_est' => $R_EST, 'r_msg' => $R_MSG, 'r_id' => $R_ID, 'r_rol' => $R_ROL, 'r_est_sol' => $R_EST_SOL);
         return $result;
     }
 
@@ -402,5 +421,35 @@ class WFModificarFichaModel extends CI_Model
 
         $query = $this->db->query($sql);
         return $query->result();
+    }
+
+    public function enviarCorreoCambioEtapaWFCambioFicha(
+          $P_ID 
+        , $P_COD_EMP 
+        , $P_COD_CC 
+        , $P_ROL_WF 
+        , $P_ESTADO_SOL 
+    ) {
+
+        $proc = oci_parse(
+            $this->db->conn_id,
+            "BEGIN NOV_CORREO_SOL_CAMBIO_FICHA(
+                              :P_ID
+                            , :P_COD_EMP
+                            , :P_COD_CC
+                            , :P_ROL_WF
+                            , :P_ESTADO_SOL);END;"
+        );
+
+        oci_bind_by_name($proc, "P_ID", $P_ID, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_ROL_WF", $P_ROL_WF, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_EMP", $P_COD_EMP, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_ESTADO_SOL", $P_ESTADO_SOL, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_CC", $P_COD_CC, 20, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => 0, 'r_msg' => 'OK');
+        return $result;
     }
 }

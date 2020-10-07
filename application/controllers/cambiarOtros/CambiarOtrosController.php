@@ -49,6 +49,10 @@ class CambiarOtrosController extends CI_Controller {
         $P_CIUDAD = $this->input->get('P_CIUDAD');  
         $P_COMUNA = $this->input->get('P_COMUNA');  
         $P_PERIODO = $this->input->get('P_PERIODO');  
+        $P_COD_COMUNA = $this->input->get('P_COD_COMUNA'); 
+        $P_COD_CIUDAD = $this->input->get('P_COD_CIUDAD'); 
+        $P_TELEFONO2 = $this->input->get('P_TELEFONO2'); 
+        
 
         $query = $this->CambiarOtrosModel->crearCambioOtros(
               $P_RUT  
@@ -70,6 +74,9 @@ class CambiarOtrosController extends CI_Controller {
             , $P_CIUDAD 
             , $P_COMUNA
             , $P_PERIODO 
+            , $P_COD_COMUNA 
+            , $P_COD_CIUDAD
+            , $P_TELEFONO2 
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';

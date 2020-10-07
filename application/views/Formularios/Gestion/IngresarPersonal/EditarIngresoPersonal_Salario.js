@@ -165,20 +165,21 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                     var dtNacimiento = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #dtNacimiento')[0];
                     var txtApeMat = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtApeMat')[0];
                     var txtCalle = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCalle')[0];
-                    //var txtCelular = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCelular')[0];
-                    var txtCiudad = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCiudad')[0];
-                    var txtComuna = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtComuna')[0];
+                    var txtFono2 = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtFono2')[0];
+                    var cbCiudad = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #cbCiudad')[0];
+                    var cbComuna = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #cbComuna')[0];
                     var txtCorreo = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtCorreo')[0];
                     var txtDV = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtDV')[0];
                     var txtDepartamento = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtDepartamento')[0];
                     var txtFono = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtFono')[0];
-                    var txtNacionalidad = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtNacionalidad')[0];
+                    var cbNacionalidad = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #cbNacionalidad')[0];
                     var txtApePat = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtApePat')[0];
                     var txtNombre = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtNombre')[0];
                     var txtNumero = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtNumero')[0];
                     var txtRut = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtRut')[0];
                     var cbSexo = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #cbSexo')[0];
                     var txtPeriodo = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #txtPeriodo')[0];
+                    var cbInvalidez = Ext.ComponentQuery.query('#EditarIngresoPersonalInfo #cbInvalidez')[0];
 
                     //CARGO
                     var formCargo = Ext.ComponentQuery.query('#EditarIngresoPersonalCargo #formCargo')[0];
@@ -235,14 +236,14 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                             , P_FECHA_INGRESO : dtIngresoString
                             , P_FECHA_NACIMIENTO  : dtNacimientoString
                             , P_SEXO : cbSexo.getRawValue()
-                            , P_NACIONALIDAD : txtNacionalidad.value
+                            , P_NACIONALIDAD : cbNacionalidad.getRawValue()
                             , P_ESTADO_CIVIL : cbEstadoCivil.getRawValue()
                             , P_NIVEL_EDUCACION : cbNvlEducacional.getRawValue()
                             , P_CALLE : txtCalle.value
                             , P_NUMERO : txtNumero.value
                             , P_DEPARTAMENTO : txtDepartamento.value
-                            , P_COMUNA : txtComuna.value
-                            , P_CIUDAD  : txtCiudad.value
+                            , P_COMUNA : cbComuna.getRawValue()
+                            , P_CIUDAD  : cbCiudad.getRawValue()
                             , P_TELEFONO : txtFono.value
                             , P_CELULAR  : '' //txtCelular.value
                             , P_CORREO : txtCorreo.value
@@ -297,13 +298,19 @@ Ext.define("fcab.Container.EditarIngresoPersonalSalario", {
                             , P_CORREO_EMP: txtCorreoEmp.value
                             , P_COD_LUGAR_TRABAJO: cbLugar.value
                             , P_NOM_LUGAR_TRABAJO: cbLugar.getRawValue()
+                            , P_COD_COMUNA: cbComuna.value
+                            , P_COD_CIUDAD: cbCiudad.value
+                            , P_COD_NACIONALIDAD: cbNacionalidad.value
+                            , P_COD_INVALIDEZ: cbInvalidez.value
+                            , P_NOM_INVALIDEZ: cbInvalidez.getRawValue()
+                            , P_TELEFONO2: txtFono2.value
                         },
                         callback: function(records, operation, success) {
                             if(records != null) {
                                 if(records[0].data.r_msg == 'OK'){
                                     showToast('Ingreso de personal editado correctamente.');
                                     cargarMainIngresoPersonal(null);
-                                    ewin.destroy();
+                                    Ext.getCmp('EditarIngresoPersonal').destroy();
                                 }else{
                                     Ext.MessageBox.show({
                                         title: 'ADVERTENCIA',

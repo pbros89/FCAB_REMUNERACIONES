@@ -171,10 +171,26 @@ Ext.define('fcab.Container.MainCambioOtros.Grilla', {
             width: 200
         },
         {
+            text     : 'ID Ciudad',
+            sortable : true,
+            dataIndex: 'COD_CIUDAD',
+            //align: 'center',
+            hidden: true,
+            width: 200
+        },
+        {
             text     : 'Ciudad',
             sortable : true,
             dataIndex: 'CIUDAD',
             //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'ID Comuna',
+            sortable : true,
+            dataIndex: 'COD_COMUNA',
+            //align: 'center',
+            hidden: true,
             width: 200
         },
         {
@@ -195,6 +211,13 @@ Ext.define('fcab.Container.MainCambioOtros.Grilla', {
             text     : 'Telefono',
             sortable : true,
             dataIndex: 'TELEFONO',
+            //align: 'center',
+            width: 200
+        },
+        {
+            text     : 'Telefono2',
+            sortable : true,
+            dataIndex: 'TELEFONO2',
             //align: 'center',
             width: 200
         },

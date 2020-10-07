@@ -18,18 +18,20 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtApeMat')[0].setValue(param.APE_MAT);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtCalle')[0].setValue(param.CALLE);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtPeriodo')[0].setValue(param.PERIODO);
-            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtCiudad')[0].setValue(param.CIUDAD);
-            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtComuna')[0].setValue(param.COMUNA);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #cbCiudad')[0].setValue(param.COD_CIUDAD);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #cbComuna')[0].setValue(param.COD_COMUNA);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtCorreo')[0].setValue(param.CORREO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtDV')[0].setValue(param.DV);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtDepartamento')[0].setValue(param.DEPARTAMENTO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtFono')[0].setValue(param.TELEFONO);
-            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtNacionalidad')[0].setValue(param.NACIONALIDAD);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #cbNacionalidad')[0].setValue(param.COD_NACIONALIDAD);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtApePat')[0].setValue(param.APE_PAT);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtNombre')[0].setValue(param.NOMBRES);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtNumero')[0].setValue(param.NUMERO);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtRut')[0].setValue(param.RUT);
             Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #cbSexo')[0].setValue(param.COD_SEXO);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #txtFono2')[0].setValue(param.TELEFONO2);
+            Ext.ComponentQuery.query('#DetalleIngresoPersonalInfo #cbInvalidez')[0].setValue(param.COD_INVALIDEZ);
         }
     },
     items: [{
@@ -213,21 +215,28 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                 }]
             },{
                 xtype: 'container',
-                columnWidth: .25,
+                columnWidth: 0.25,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtNacionalidad',
-                    name: 'txtNacionalidad',
-                    labelAlign:'top',
+                    xtype: 'combo',
+                    name: 'cbNacionalidad',
+                    itemId: 'cbNacionalidad',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_NACIONALIDAD,
                     fieldLabel: 'Nacionalidad',
-                    anchor: '100%',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
                     typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false ,
-                    readOnly : true,
-                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'  
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: true, 
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;' 
                 }]
             },{
                 xtype: 'container',
@@ -275,7 +284,7 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                     selectOnFocus: true,
                     forceSelection: true,
                     anchor: '100%',  
-                    allowBlank: false,  
+                    allowBlank: true,  
                     readOnly : true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;' 
                 }]
@@ -339,17 +348,24 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtComuna',
-                    name: 'txtComuna',
-                    labelAlign:'top',
+                    xtype: 'combo',
+                    name: 'cbComuna',
+                    itemId: 'cbComuna',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_COMUNA,
                     fieldLabel: 'Comuna',
-                    anchor: '100%',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
                     typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false,
-                    readOnly : true,
-                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'    
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: true,  
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;' 
                 }]
             },{
                 xtype: 'container',
@@ -357,17 +373,24 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtCiudad',
-                    name: 'txtCiudad',
-                    labelAlign:'top',
+                    xtype: 'combo',
+                    name: 'cbCiudad',
+                    itemId: 'cbCiudad',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_CIUDAD,
                     fieldLabel: 'Ciudad',
-                    anchor: '100%',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
                     typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false,
-                    readOnly : true,
-                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'   
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: true,  
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;' 
                 }]
             },{
                 xtype: 'container',
@@ -391,6 +414,25 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                 }]
             },{
                 xtype: 'container',
+                columnWidth: 0.25,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'thousandnumber',
+                    itemId: 'txtFono2',
+                    name: 'txtFono2',
+                    forcePrecision: true,
+                    decimalPrecision: 0,
+                    allowDecimals: false,
+                    labelAlign:'top',
+                    fieldLabel: 'Teléfono2',
+                    anchor: '100%',
+                    allowBlank: true,
+                    minValue: 0,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'
+                }]
+            },{
+                xtype: 'container',
                 
                 columnWidth: 0.5,
                 layout: 'anchor',
@@ -407,6 +449,31 @@ Ext.define("fcab.Container.DetalleIngresoPersonalInfo", {
                     maxLength: 500,
                     allowBlank: true,
                     readOnly : true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;'
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbInvalidez',
+                    itemId: 'cbInvalidez',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_INVALIDEZ,
+                    fieldLabel: 'Invalidadez',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: true,  
+                    readOnly: true,  
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;'
                 }]
             },],

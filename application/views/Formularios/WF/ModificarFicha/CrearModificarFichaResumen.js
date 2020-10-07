@@ -528,10 +528,23 @@ var crearSolicitudModificarFicha = function() {
           },
           callback: function(records, operation, success) {
             Ext.MessageBox.hide();
+            cargarWFModificarFicha(null);
             if(records != null) {
                 if(records[0].data.r_msg == 'OK'){
+                    
+                    var item = records[0].data;
+                    //console.log(item);
+                    storeEnviarCorreoCambioEtapaWFCambioFicha.load({
+                      params: {
+                        P_ID: item.r_id,
+                        P_ROL_WF: item.r_rol,
+                        P_COD_EMP: EMPRESA,
+                        P_COD_CC: cbTrabajador.selection.data.COD_CC,
+                        P_ESTADO_SOL: item.r_est_sol
+                      },
+                    });
+                    
                     showToast('Solicitud creada correctamente');
-                    cargarWFModificarFicha(null);
                     Ext.getCmp('WFModificarFichaCrear').destroy();
                 }else{
                     Ext.MessageBox.show({

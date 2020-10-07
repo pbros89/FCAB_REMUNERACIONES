@@ -235,19 +235,27 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                 }]
             },{
                 xtype: 'container',
-                columnWidth: .25,
+                columnWidth: 0.25,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtNacionalidad',
-                    name: 'txtNacionalidad',
-                    labelAlign:'top',
+                    xtype: 'combo',
+                    name: 'cbNacionalidad',
+                    itemId: 'cbNacionalidad',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_NACIONALIDAD,
                     fieldLabel: 'Nacionalidad',
-                    anchor: '100%',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
                     typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false    
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
                 }]
             },{
                 xtype: 'container',
@@ -351,15 +359,23 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtComuna',
-                    name: 'txtComuna',
-                    labelAlign:'top',
+                    xtype: 'combo',
+                    name: 'cbComuna',
+                    itemId: 'cbComuna',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_COMUNA,
                     fieldLabel: 'Comuna',
-                    anchor: '100%',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
                     typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false    
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
                 }]
             },{
                 xtype: 'container',
@@ -367,15 +383,23 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
                 items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtCiudad',
-                    name: 'txtCiudad',
-                    labelAlign:'top',
+                    xtype: 'combo',
+                    name: 'cbCiudad',
+                    itemId: 'cbCiudad',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_CIUDAD,
                     fieldLabel: 'Ciudad',
-                    anchor: '100%',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
                     typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false    
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
                 }]
             },{
                 xtype: 'container',
@@ -397,6 +421,24 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                 }]
             },{
                 xtype: 'container',
+                columnWidth: 0.25,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'thousandnumber',
+                    itemId: 'txtFono2',
+                    name: 'txtFono2',
+                    forcePrecision: true,
+                    decimalPrecision: 0,
+                    allowDecimals: false,
+                    labelAlign:'top',
+                    fieldLabel: 'Teléfono2',
+                    anchor: '100%',
+                    allowBlank: true,
+                    minValue: 0
+                }]
+            },{
+                xtype: 'container',
                 
                 columnWidth: 0.5,
                 layout: 'anchor',
@@ -412,6 +454,30 @@ Ext.define("fcab.Container.CrearIngresoPersonalInfo", {
                     typeAhead: true,
                     maxLength: 500,
                     allowBlank: true
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbInvalidez',
+                    itemId: 'cbInvalidez',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_INVALIDEZ,
+                    fieldLabel: 'Invalidadez',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
                 }]
             },],
         }],

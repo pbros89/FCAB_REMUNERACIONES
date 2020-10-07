@@ -96,7 +96,13 @@ class IngresarPersonalModel extends CI_Model
                     CORREO_EMP,
                     COD_LUGAR_TRABAJO,
                     NOM_LUGAR_TRABAJO,
-                    NOM_JEFE
+                    NOM_JEFE,
+                    COD_COMUNA,
+                    COD_CIUDAD,
+                    COD_NACIONALIDAD,
+                    COD_INVALIDEZ,
+                    NOM_INVALIDEZ,
+                    TELEFONO2
                 FROM NOV_INGRESAR_PERSONAL PER 
                 WHERE 1 = 1 ";
 
@@ -193,7 +199,13 @@ class IngresarPersonalModel extends CI_Model
         $P_PERIODO,
         $P_CORREO_EMP,
         $P_COD_LUGAR_TRABAJO,
-        $P_NOM_LUGAR_TRABAJO
+        $P_NOM_LUGAR_TRABAJO,
+        $P_COD_COMUNA,
+        $P_COD_CIUDAD,
+        $P_COD_NACIONALIDAD,
+        $P_COD_INVALIDEZ,
+        $P_NOM_INVALIDEZ,
+        $P_TELEFONO2
     ) {
 
 
@@ -276,6 +288,12 @@ class IngresarPersonalModel extends CI_Model
                         , :P_CORREO_EMP
                         , :P_COD_LUGAR_TRABAJO
                         , :P_NOM_LUGAR_TRABAJO
+                        , :P_COD_COMUNA
+                        , :P_COD_CIUDAD
+                        , :P_COD_NACIONALIDAD
+                        , :P_COD_INVALIDEZ
+                        , :P_NOM_INVALIDEZ
+                        , :P_TELEFONO2
                         , :r_est
                         , :r_msg);END;"
         );
@@ -352,6 +370,13 @@ class IngresarPersonalModel extends CI_Model
         oci_bind_by_name($proc, "P_CORREO_EMP", $P_CORREO_EMP, 500, SQLT_CHR);
         oci_bind_by_name($proc, "P_COD_LUGAR_TRABAJO", $P_COD_LUGAR_TRABAJO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_NOM_LUGAR_TRABAJO", $P_NOM_LUGAR_TRABAJO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_COMUNA", $P_COD_COMUNA, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_CIUDAD", $P_COD_CIUDAD, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_NACIONALIDAD", $P_COD_NACIONALIDAD, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_INVALIDEZ", $P_COD_INVALIDEZ, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_NOM_INVALIDEZ", $P_NOM_INVALIDEZ, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TELEFONO2", $P_TELEFONO2, 20, SQLT_CHR);
+
         oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
@@ -431,7 +456,13 @@ class IngresarPersonalModel extends CI_Model
         $P_PERIODO,
         $P_CORREO_EMP,
         $P_COD_LUGAR_TRABAJO,
-        $P_NOM_LUGAR_TRABAJO
+        $P_NOM_LUGAR_TRABAJO,
+        $P_COD_COMUNA,
+        $P_COD_CIUDAD,
+        $P_COD_NACIONALIDAD,
+        $P_COD_INVALIDEZ,
+        $P_NOM_INVALIDEZ,
+        $P_TELEFONO2
     ) {
 
 
@@ -510,6 +541,12 @@ class IngresarPersonalModel extends CI_Model
                       , :P_CORREO_EMP
                       , :P_COD_LUGAR_TRABAJO
                       , :P_NOM_LUGAR_TRABAJO
+                      , :P_COD_COMUNA
+                        , :P_COD_CIUDAD
+                        , :P_COD_NACIONALIDAD
+                        , :P_COD_INVALIDEZ
+                        , :P_NOM_INVALIDEZ
+                        , :P_TELEFONO2
                       , :r_est
                       , :r_msg);END;"
         );
@@ -585,6 +622,12 @@ class IngresarPersonalModel extends CI_Model
         oci_bind_by_name($proc, "P_CORREO_EMP", $P_CORREO_EMP, 500, SQLT_CHR);
         oci_bind_by_name($proc, "P_COD_LUGAR_TRABAJO", $P_COD_LUGAR_TRABAJO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_NOM_LUGAR_TRABAJO", $P_NOM_LUGAR_TRABAJO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_COMUNA", $P_COD_COMUNA, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_CIUDAD", $P_COD_CIUDAD, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_NACIONALIDAD", $P_COD_NACIONALIDAD, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_INVALIDEZ", $P_COD_INVALIDEZ, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_NOM_INVALIDEZ", $P_NOM_INVALIDEZ, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TELEFONO2", $P_TELEFONO2, 20, SQLT_CHR);
         oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 

@@ -27,7 +27,14 @@ Ext.define("fcab.Container.DetalleIngresoPersonal", {
             storeCargarCentroCostosFiltro.load();
             storeCargarCargosFiltro.load();
             storeCargarParam_CUENTA_AHORRO2.load();
+            storeExtras_cargarPeriodos.load();
             storeCargarParam_LUGAR_TRABAJO.load();
+            storeCargarParam_GERENCIA.load();
+            storeCargarParam_DEPARTAMENTO.load();
+            storeCargarParam_CIUDAD.load();
+            storeCargarParam_COMUNA.load();
+            storeCargarParam_NACIONALIDAD.load();
+            storeCargarParam_INVALIDEZ.load();
         },
     },
     //buttonAlign: 'center',

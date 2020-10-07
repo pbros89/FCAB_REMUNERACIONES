@@ -30,6 +30,10 @@ Ext.define("fcab.Container.CrearIngresoPersonal", {
             storeCargarParam_LUGAR_TRABAJO.load();
             storeCargarParam_GERENCIA.load();
             storeCargarParam_DEPARTAMENTO.load();
+            storeCargarParam_CIUDAD.load();
+            storeCargarParam_COMUNA.load();
+            storeCargarParam_NACIONALIDAD.load();
+            storeCargarParam_INVALIDEZ.load();
         },
         'tabchange': function (tabPanel, tab) {
             var tabPer = Ext.ComponentQuery.query('#CrearIngresoPersonal #tabPer')[0];

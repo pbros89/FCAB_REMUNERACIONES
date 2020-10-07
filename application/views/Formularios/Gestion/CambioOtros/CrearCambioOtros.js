@@ -17,6 +17,8 @@ Ext.define("fcab.Container.CrearCambioOtros", {
             storeCargarParam_NIVEL_EDUCACION.load();
             storeCargarParam_ESTADO_CIVIL.load();
             storeExtras_cargarPeriodos.load();
+            storeCargarParam_CIUDAD.load();
+            storeCargarParam_COMUNA.load();
         }
     },
     items: [{
@@ -96,16 +98,26 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                                     var txtNombre = Ext.ComponentQuery.query('#CrearCambioOtros #txtNombre')[0];
                                     var txtIngreso = Ext.ComponentQuery.query('#CrearCambioOtros #txtIngreso')[0];
                                     var txtCorreoOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtCorreoOld')[0];
-                                    var txtTelefonoOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtTelefonoOld')[0];
+                                    var txtTelefonoOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtTelefonoOld')[0];     
                                     var txtCorreo = Ext.ComponentQuery.query('#CrearCambioOtros #txtCorreo')[0];
                                     var txtTelefono = Ext.ComponentQuery.query('#CrearCambioOtros #txtTelefono')[0];
+                                    var txtTelefono2 = Ext.ComponentQuery.query('#CrearCambioOtros #txtTelefono2')[0];
                                     var cbEstadoCivil = Ext.ComponentQuery.query('#CrearCambioOtros #cbEstadoCivil')[0];
                                     var cbNvlEducacional = Ext.ComponentQuery.query('#CrearCambioOtros #cbNvlEducacional')[0]
                                     var txtCalle = Ext.ComponentQuery.query('#CrearCambioOtros #txtCalle')[0];
-                                    var txtCiudad = Ext.ComponentQuery.query('#CrearCambioOtros #txtCiudad')[0]
-                                    var txtComuna = Ext.ComponentQuery.query('#CrearCambioOtros #txtComuna')[0]
+                                    var cbCiudad = Ext.ComponentQuery.query('#CrearCambioOtros #cbCiudad')[0]
+                                    var cbComuna = Ext.ComponentQuery.query('#CrearCambioOtros #cbComuna')[0]
                                     var txtDepartamento = Ext.ComponentQuery.query('#CrearCambioOtros #txtDepartamento')[0];
                                     var txtNumero = Ext.ComponentQuery.query('#CrearCambioOtros #txtNumero')[0];
+
+                                    var txtEstCivilOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtEstCivilOld')[0];
+                                    var txtEducacionOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtEducacionOld')[0];
+                                    var txtCiudadOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtCiudadOld')[0];
+                                    var txtComunaOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtComunaOld')[0];
+                                    var txtCalleOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtCalleOld')[0];
+                                    var txtNumeroOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtNumeroOld')[0];
+                                    var txtDepartamentoOld = Ext.ComponentQuery.query('#CrearCambioOtros #txtDepartamentoOld')[0];
+                                    var txtTelefono2Old = Ext.ComponentQuery.query('#CrearCambioOtros #txtTelefono2Old')[0];
                                     
                                     if(records != null && records.length > 0) {
 
@@ -119,13 +131,23 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                                         txtCorreo.setValue(records[0].data.CORREO);
                                         txtTelefono.setValue(records[0].data.TELEFONO);
 
+                                        txtEstCivilOld.setValue(records[0].data.NOM_EST_CIVIL);
+                                        txtEducacionOld.setValue(records[0].data.ESCOLARIDAD);
+                                        txtCiudadOld.setValue(records[0].data.CIUDAD);
+                                        txtComunaOld.setValue(records[0].data.COMUNA);
+                                        txtCalleOld.setValue(records[0].data.CALLE);
+                                        txtNumeroOld.setValue(records[0].data.NUMERO);
+                                        txtDepartamentoOld.setValue(records[0].data.DEPARTAMENTO);
+                                        txtTelefono2Old.setValue(records[0].data.TELEFONO2);
+
                                         cbEstadoCivil.setValue(records[0].data.COD_EST_CIVIL);
                                         cbNvlEducacional.setValue(records[0].data.COD_ESCOLARIDAD);
                                         txtCalle.setValue(records[0].data.CALLE);
-                                        txtCiudad.setValue(records[0].data.CIUDAD);
-                                        txtComuna.setValue(records[0].data.COMUNA);
+                                        cbCiudad.setValue(records[0].data.COD_CIUDAD);
+                                        cbComuna.setValue(records[0].data.COD_COMUNA);
                                         txtDepartamento.setValue(records[0].data.DEPARTAMENTO);
                                         txtNumero.setValue(records[0].data.NUMERO);
+                                        txtTelefono2.setValue(records[0].data.TELEFONO2);
                                     }else{
 
                                         txtRutOld.reset();
@@ -141,10 +163,20 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                                         cbEstadoCivil.reset();
                                         cbNvlEducacional.reset();
                                         txtCalle.reset();
-                                        txtCiudad.reset();
-                                        txtComuna.reset();
+                                        cbCiudad.reset();
+                                        cbComuna.reset();
                                         txtDepartamento.reset();
                                         txtNumero.reset();
+                                        txtTelefono2.reset();
+
+                                        txtEstCivilOld.reset();
+                                        txtEducacionOld.reset();
+                                        txtCiudadOld.reset();
+                                        txtComunaOld.reset();
+                                        txtCalleOld.reset();
+                                        txtNumeroOld.reset();
+                                        txtDepartamentoOld.reset();
+                                        txtTelefono2Old.reset();
 
                                         Ext.MessageBox.show({
                                             title: 'ADVERTENCIA',
@@ -179,7 +211,7 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     fieldLabel: 'Rut',
                     anchor: '100%',
                     typeAhead: true,
-                    allowBlank: false,
+                    allowBlank: true,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
@@ -196,7 +228,7 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     fieldLabel: 'Nombre',
                     anchor: '100%',
                     typeAhead: true,
-                    allowBlank: false,
+                    allowBlank: true,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
@@ -213,7 +245,7 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     fieldLabel: 'Centro Costo',
                     anchor: '100%',
                     typeAhead: true,
-                    allowBlank: false,
+                    allowBlank: true,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
@@ -230,7 +262,7 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     fieldLabel: 'Cargo',
                     anchor: '100%',
                     typeAhead: true,
-                    allowBlank: false,
+                    allowBlank: true,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
@@ -247,11 +279,133 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     fieldLabel: 'Fecha Ingreso',
                     anchor: '100%',
                     typeAhead: true,
-                    allowBlank: false,
+                    allowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },  {
+                xtype: 'container',
+                columnWidth: .5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtEstCivilOld',
+                    name: 'txtEstCivilOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Estado Civil',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: true,
                     readOnly: true,
                     fieldStyle: 'background-color: #d8d8d8; background-image: none;',
                 }]
             }, {
+                xtype: 'container',
+                columnWidth: .5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtEducacionOld',
+                    name: 'txtEducacionOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Nivel Educación',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            }, {
+                xtype: 'container',
+                columnWidth: .5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtComunaOld',
+                    name: 'txtComunaOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Comuna',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            }, {
+                xtype: 'container',
+                columnWidth: .5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtCiudadOld',
+                    name: 'txtCiudadOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Ciudad',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            }, {
+                xtype: 'container',
+                columnWidth: .50,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtCalleOld',
+                    name: 'txtCalleOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Calle',
+                    anchor: '100%',
+                    typeAhead: true,
+                    maxLength: 100,
+                    allowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;', 
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.25,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtNumeroOld',
+                    name: 'txtNumeroOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Número',
+                    anchor: '100%',
+                    typeAhead: true,
+                    maxLength: 20,
+                    allowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',   
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.25,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtDepartamentoOld',
+                    name: 'txtDepartamentoOld',
+                    labelAlign:'top',
+                    fieldLabel: 'Departamento',
+                    anchor: '100%',
+                    typeAhead: true,
+                    maxLength: 20,
+                    aallowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',    
+                }]
+            },{
                 xtype: 'container',
                 columnWidth: .5,
                 layout: 'anchor',
@@ -279,6 +433,23 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     name: 'txtTelefonoOld',
                     labelAlign:'top',
                     fieldLabel: 'Telefono',
+                    anchor: '100%',
+                    typeAhead: true,
+                    allowBlank: true,
+                    readOnly: true,
+                    fieldStyle: 'background-color: #d8d8d8; background-image: none;',
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: .5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'textfield',
+                    itemId: 'txtTelefono2Old',
+                    name: 'txtTelefono2Old',
+                    labelAlign:'top',
+                    fieldLabel: 'Telefono2',
                     anchor: '100%',
                     typeAhead: true,
                     allowBlank: true,
@@ -394,6 +565,54 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                 }]
             },{
                 xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbComuna',
+                    itemId: 'cbComuna',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_COMUNA,
+                    fieldLabel: 'Comuna',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 0.5,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'combo',
+                    name: 'cbCiudad',
+                    itemId: 'cbCiudad',
+                    displayField: 'NOMBRE',
+                    valueField: 'CODIGO',
+                    store: storeCargarParam_CIUDAD,
+                    fieldLabel: 'Ciudad',
+                    labelAlign:'top',
+                    queryMode: 'local',
+                    triggerAction: 'all',
+                    editable: true,
+                    typeAhead: true,
+                    selectOnFocus: true,
+                    forceSelection: true,
+                    anchor: '100%',  
+                    allowBlank: false,  
+                    readOnly: false,  
+                }]
+            },{
+                xtype: 'container',
                 columnWidth: .50,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
@@ -442,38 +661,6 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                 }]
             },{
                 xtype: 'container',
-                columnWidth: .5,
-                layout: 'anchor',
-                style: 'margin: 0 10px 5px 0',
-                items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtComuna',
-                    name: 'txtComuna',
-                    labelAlign:'top',
-                    fieldLabel: 'Comuna',
-                    anchor: '100%',
-                    typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false    
-                }]
-            },{
-                xtype: 'container',
-                columnWidth: 0.5,
-                layout: 'anchor',
-                style: 'margin: 0 10px 5px 0',
-                items: [{
-                    xtype: 'textfield',
-                    itemId: 'txtCiudad',
-                    name: 'txtCiudad',
-                    labelAlign:'top',
-                    fieldLabel: 'Ciudad',
-                    anchor: '100%',
-                    typeAhead: true,
-                    maxLength: 100,
-                    allowBlank: false    
-                }]
-            },{
-                xtype: 'container',
                 columnWidth: 1,
                 layout: 'anchor',
                 style: 'margin: 0 10px 5px 0',
@@ -503,6 +690,24 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                     allowDecimals: false,
                     labelAlign:'top',
                     fieldLabel: 'Telefono',
+                    anchor: '100%',
+                    allowBlank: false,
+                    minValue: 0
+                }]
+            },{
+                xtype: 'container',
+                columnWidth: 1,
+                layout: 'anchor',
+                style: 'margin: 0 10px 5px 0',
+                items: [{
+                    xtype: 'thousandnumber',
+                    itemId: 'txtTelefono2',
+                    name: 'txtTelefono2',
+                    forcePrecision: true,
+                    decimalPrecision: 0,
+                    allowDecimals: false,
+                    labelAlign:'top',
+                    fieldLabel: 'Telefono2',
                     anchor: '100%',
                     allowBlank: false,
                     minValue: 0
@@ -538,6 +743,8 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                 var cbTipoCambio = Ext.ComponentQuery.query('#CrearCambioOtros #cbTipoCambio')[0];
                 var cbEstadoCivil = Ext.ComponentQuery.query('#CrearCambioOtros #cbEstadoCivil')[0];
                 var cbNvlEducacional = Ext.ComponentQuery.query('#CrearCambioOtros #cbNvlEducacional')[0];
+                var cbCiudad = Ext.ComponentQuery.query('#CrearCambioOtros #cbCiudad')[0];
+                var cbComuna = Ext.ComponentQuery.query('#CrearCambioOtros #cbComuna')[0];
                 var form = this.up('form').getForm();
                 var values = form.getValues();
 
@@ -568,9 +775,12 @@ Ext.define("fcab.Container.CrearCambioOtros", {
                                 , P_CALLE: values.txtCalle
                                 , P_NUMERO: values.txtNumero
                                 , P_DEPARTAMENTO: values.txtDepartamento
-                                , P_CIUDAD: values.txtCiudad
-                                , P_COMUNA: values.txtComuna
+                                , P_CIUDAD: cbCiudad.getRawValue()
+                                , P_COMUNA: cbComuna.getRawValue()
                                 , P_PERIODO: values.cbPeriodo
+                                , P_COD_COMUNA: values.cbComuna
+                                , P_COD_CIUDAD: values.cbCiudad
+                                , P_TELEFONO2: values.txtTelefono2
                             },
                             callback: function(records, operation, success) {
                                 if(records != null) {

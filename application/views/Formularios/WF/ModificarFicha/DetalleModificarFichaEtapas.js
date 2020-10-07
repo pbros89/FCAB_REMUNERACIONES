@@ -32,7 +32,6 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapas", {
         {
           xtype: "container",
           itemId: 'pnlBtn',
-          hidden: true,
           columnWidth: 1,
           layout: {
             type: "hbox",
@@ -170,6 +169,7 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapasGrilla", {
 
 var cargarEtapasSolicitudCambiarFichaDetalle = function () {
 
+  console.log("entro 1");
   var rol = Ext.getCmp('WFModificarFichaDetalle').myExtraParams.param1;
   var obj = Ext.getCmp('WFModificarFichaDetalle').myExtraParams.param2;
   var lblTitulo = Ext.ComponentQuery.query(
@@ -191,19 +191,9 @@ var cargarEtapasSolicitudCambiarFichaDetalle = function () {
         var countEs = 0;
         var countRe = 0;
         for(var i = 0; i < records.length; i++) {
+          console.log("entro 3");
           var item = records[i].data;
           
-          if(item.ESTADO == 'EN ESPERA' && countEs == 0 && countRe == 0) {
-            console.log("ESPERA");
-            countEs++;
-            lblTitulo.setHtml(
-              '<table width="100%" >' +
-              '<tr><td><b>Mi Rol:</b> '+rol.NOMBRE+' ('+rol.PK_ROL_WF+')</td></tr>' +
-              "<tr><td><b>Caso:</b> "+item.PFK_CASO+"</td></tr> "+
-              "<tr><td><b>Etapa Actual:</b> "+item.PFK_ETAPA+"</td></tr>"+
-              "<tr><td><b>Rol Actual:</b> "+item.FK_ROL_WF+"</td></tr> "+
-              "</table>",);
-          }
 
           if(item.ESTADO == 'EN ESPERA') {
             if(countEs == 0 && countRe == 0) {
@@ -215,13 +205,17 @@ var cargarEtapasSolicitudCambiarFichaDetalle = function () {
                 "<tr><td><b>Rol Actual:</b> "+item.FK_ROL_WF+"</td></tr> "+
                 "</table>",);
             }
+            
             countEs++;
           }
+
+          //console.log(i + " " +item.FK_ROL_WF + " " + rol.PK_ROL_WF + " " + obj.ESTADO + " " + countEs);
 
           if(obj.ESTADO == 'ACTIVO' && 
             item.FK_ROL_WF ==  rol.PK_ROL_WF && 
             countEs == 1) {
-            console.log("entro");
+
+            console.log("entro 2");
             pnlBtn.show();
           }
 
@@ -232,6 +226,7 @@ var cargarEtapasSolicitudCambiarFichaDetalle = function () {
         }
 
         if(countRe > 0 || countEs == 0) {
+          console.log("entro  mal");
           pnlBtn.hide();
           lblTitulo.setHtml(null);
         }
@@ -260,6 +255,8 @@ var cambiarEstadoEtapaSolCambioFicha = function(estado) {
             interval: 200
         }
       });
+      
+      storeCambiarEstadoEtapaSolCambioFicha.proxy.setTimeout(300000);
       storeCambiarEstadoEtapaSolCambioFicha.load({
         params: {
           P_ID: obj.PK_ID,
@@ -269,11 +266,24 @@ var cambiarEstadoEtapaSolCambioFicha = function(estado) {
         },
         callback: function(records, operation, success) {
           Ext.MessageBox.hide();
+          cargarWFModificarFicha(null);
+          cargarEtapasSolicitudCambiarFichaDetalle();
           if(records != null) {
               if(records[0].data.r_msg == 'OK'){
-                  showToast('Etapa cambiada correctamente');
-                  cargarWFModificarFicha(null);
-                  cargarEtapasSolicitudCambiarFichaDetalle();
+
+                var item = records[0].data;
+                //console.log(item);
+                storeEnviarCorreoCambioEtapaWFCambioFicha.load({
+                  params: {
+                    P_ID: item.r_id,
+                    P_ROL_WF: item.r_rol,
+                    P_COD_EMP: EMPRESA,
+                    P_COD_CC: obj.COD_CC_SOL,
+                    P_ESTADO_SOL: item.r_est_sol
+                  },
+                });
+
+                showToast('Etapa cambiada correctamente');
               }else{
                   Ext.MessageBox.show({
                       title: 'ADVERTENCIA',

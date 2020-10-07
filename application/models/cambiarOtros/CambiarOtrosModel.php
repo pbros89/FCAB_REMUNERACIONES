@@ -48,7 +48,13 @@ class CambiarOtrosModel extends CI_Model {
                     CIUDAD_OLD,
                     TO_CHAR(FECHA_CREACION, 'YYYY/MM/DD') FECHA_CREACION,
                     ESTADO,
-                    PERIODO
+                    PERIODO,
+                    COD_COMUNA,
+                    COD_CIUDAD,
+                    TELEFONO2,
+                    COD_COMUNA_OLD,
+                    COD_CIUDAD_OLD,
+                    TELEFONO2_OLD
                 FROM NOV_CAMBIO_OTROS CAM 
                 WHERE 1 = 1 ";
 
@@ -99,6 +105,9 @@ class CambiarOtrosModel extends CI_Model {
         , $P_CIUDAD 
         , $P_COMUNA 
         , $P_PERIODO
+        , $P_COD_COMUNA 
+        , $P_COD_CIUDAD
+        , $P_TELEFONO2 
     )
     {
         $r_est = 0;
@@ -125,6 +134,9 @@ class CambiarOtrosModel extends CI_Model {
                         , :P_CIUDAD 
                         , :P_COMUNA 
                         , :P_PERIODO
+                        , :P_COD_COMUNA 
+                        , :P_COD_CIUDAD 
+                        , :P_TELEFONO2
                         , :r_est
                         , :r_msg);END;");
         
@@ -147,6 +159,9 @@ class CambiarOtrosModel extends CI_Model {
         oci_bind_by_name($proc,"P_CIUDAD", $P_CIUDAD, 100, SQLT_CHR);
         oci_bind_by_name($proc,"P_COMUNA", $P_COMUNA, 100, SQLT_CHR);
         oci_bind_by_name($proc,"P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_COD_COMUNA", $P_COD_COMUNA, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_COD_CIUDAD", $P_COD_CIUDAD, 20, SQLT_CHR);
+        oci_bind_by_name($proc,"P_TELEFONO2", $P_TELEFONO2, 20, SQLT_CHR);
         oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
         oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
 

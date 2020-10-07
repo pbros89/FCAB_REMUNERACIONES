@@ -101,6 +101,13 @@ class IngresarPersonalController extends CI_Controller {
         $P_COD_LUGAR_TRABAJO = $this->input->get('P_COD_LUGAR_TRABAJO');  
         $P_NOM_LUGAR_TRABAJO = $this->input->get('P_NOM_LUGAR_TRABAJO');  
 
+        $P_COD_COMUNA = $this->input->get('P_COD_COMUNA'); 
+        $P_COD_CIUDAD = $this->input->get('P_COD_CIUDAD');
+        $P_COD_NACIONALIDAD = $this->input->get('P_COD_NACIONALIDAD');
+        $P_COD_INVALIDEZ = $this->input->get('P_COD_INVALIDEZ');
+        $P_NOM_INVALIDEZ = $this->input->get('P_NOM_INVALIDEZ');
+        $P_TELEFONO2 = $this->input->get('P_TELEFONO2');
+
         $query = $this->IngresarPersonalModel->crearIngresarPersonal( 
               $P_RUT  
             , $P_DV  
@@ -171,6 +178,12 @@ class IngresarPersonalController extends CI_Controller {
             , $P_CORREO_EMP
             , $P_COD_LUGAR_TRABAJO
             , $P_NOM_LUGAR_TRABAJO
+            , $P_COD_COMUNA
+            , $P_COD_CIUDAD
+            , $P_COD_NACIONALIDAD
+            , $P_COD_INVALIDEZ
+            , $P_NOM_INVALIDEZ
+            , $P_TELEFONO2
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
@@ -254,6 +267,13 @@ class IngresarPersonalController extends CI_Controller {
         $P_COD_LUGAR_TRABAJO = $this->input->get('P_COD_LUGAR_TRABAJO');  
         $P_NOM_LUGAR_TRABAJO = $this->input->get('P_NOM_LUGAR_TRABAJO');  
 
+        $P_COD_COMUNA = $this->input->get('P_COD_COMUNA'); 
+        $P_COD_CIUDAD = $this->input->get('P_COD_CIUDAD');
+        $P_COD_NACIONALIDAD = $this->input->get('P_COD_NACIONALIDAD');
+        $P_COD_INVALIDEZ = $this->input->get('P_COD_INVALIDEZ');
+        $P_NOM_INVALIDEZ = $this->input->get('P_NOM_INVALIDEZ');
+        $P_TELEFONO2 = $this->input->get('P_TELEFONO2');
+
 
 
         $query = $this->IngresarPersonalModel->modificarIngresarPersonal( 
@@ -327,6 +347,12 @@ class IngresarPersonalController extends CI_Controller {
             , $P_CORREO_EMP
             , $P_COD_LUGAR_TRABAJO
             , $P_NOM_LUGAR_TRABAJO
+            , $P_COD_COMUNA
+            , $P_COD_CIUDAD
+            , $P_COD_NACIONALIDAD
+            , $P_COD_INVALIDEZ
+            , $P_NOM_INVALIDEZ
+            , $P_TELEFONO2
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';

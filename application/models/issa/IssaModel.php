@@ -88,7 +88,6 @@ class IssaModel extends CI_Model {
                     'nvl(SUELDO_BASE, '."0".') as "sueldo_base",
                     nvl(OBSERVACION, '."'%null%'".') as "observacion",
                     nvl(FK_COD_EMP, '."'%null%'".') as "cod_emp",
-
                     nvl(ROL_CARGO, '."'%null%'".') as "rol_cargo",
                     nvl(COD_GERENCIA, '."'%null%'".') as "cod_gerencia",
                     nvl(NOM_GERENCIA, '."'%null%'".') as "nom_gerencia",
@@ -396,7 +395,10 @@ class IssaModel extends CI_Model {
                     nvl(CORREO, '."'%null%'".') as "correo", 
                     nvl(TELEFONO, '."'%null%'".') as "telefono",
                     nvl(OBSERVACION, '."'%null%'".') as "observacion",
-                    nvl(FK_COD_EMP, '."'%null%'".') as "cod_emp"
+                    nvl(FK_COD_EMP, '."'%null%'".') as "cod_emp",
+                    nvl(TELEFONO2, '."'%null%'".') as "telefono2",
+                    nvl(COD_COMUNA, '."'%null%'".') as "cod_comuna",
+                    nvl(COD_CIUDAD, '."'%null%'".') as "cod_ciudad"
                 FROM NOV_CAMBIO_OTROS CAM 
                 WHERE periodo is not null
                 AND (estado_enviado is null
@@ -551,7 +553,19 @@ class IssaModel extends CI_Model {
                     nvl(COD_BANCO, '."'%null%'".') as "cod_banco", 
                     nvl(BANCO, '."'%null%'".') as "banco", 
                     nvl(CUENTA, '."'%null%'".') as "cuenta",
-                    nvl(COD_EMP, '."'%null%'".') as "cod_emp"
+                    nvl(COD_EMP, '."'%null%'".') as "cod_emp",
+                    nvl(CORREO_EMP, '."'%null%'".') as "correo_emp",
+                    nvl(COD_EMP, '."'%null%'".') as "cod_emp",
+                    nvl(COD_LUGAR_TRABAJO, '."'%null%'".') as "cod_lugar",
+                    nvl(NOM_LUGAR_TRABAJO, '."'%null%'".') as "nom_lugar",
+                    nvl(NOM_JEFE, '."'%null%'".') as "nom_jefe",
+                    nvl(COD_COMUNA, '."'%null%'".') as "cod_comuna",
+                    nvl(COD_CIUDAD, '."'%null%'".') as "cod_ciudad",
+                    nvl(COD_NACIONALIDAD, '."'%null%'".') as "cod_nacionalidad",
+                    nvl(COD_INVALIDEZ, '."'%null%'".') as "cod_invalidez",
+                    nvl(NOM_INVALIDEZ, '."'%null%'".') as "nom_invalidez",
+                    nvl(TELEFONO2, '."'%null%'".') as "telefono2"
+                    
                 FROM NOV_INGRESAR_PERSONAL ING
                 WHERE periodo is not null
                 AND (estado_enviado is null

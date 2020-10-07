@@ -220,6 +220,34 @@ var storeValidarRolEtapa1 =  Ext.create('Ext.data.Store', {
 });
 
 
+var storeEnviarCorreoCambioEtapaWFCambioFicha =  Ext.create('Ext.data.Store', {
+
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/enviarCorreoCambioEtapaWFCambioFicha',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        timeout: 300000,
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+            }
+        }
+    },
+    autoLoad: false
+});
+
+
+
+
+
+
+
+
 
 
 

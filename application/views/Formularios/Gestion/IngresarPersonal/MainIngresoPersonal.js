@@ -237,12 +237,14 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             width: 100
         },
         {
-            text     : 'Celular',
+            text     : 'Telefono2',
             sortable : true,
-            dataIndex: 'CELULAR',
+            dataIndex: 'TELEFONO2',
             //align: 'center',
             width: 100
         },
+        
+        
         {
             text     : 'Correo',
             sortable : true,
@@ -544,6 +546,41 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             text     : 'ID Nivel Educación',
             sortable : true,
             dataIndex: 'COD_NIVEL_EDUCACION',
+            width:100,
+            hidden: true
+        },
+        {
+            text     : 'ID Nacionalidad',
+            sortable : true,
+            dataIndex: 'COD_NACIONALIDAD',
+            width:100,
+            hidden: true
+        },
+        {
+            text     : 'ID Comuna',
+            sortable : true,
+            dataIndex: 'COD_COMUNA',
+            width:100,
+            hidden: true
+        },
+        {
+            text     : 'ID Ciudad',
+            sortable : true,
+            dataIndex: 'COD_CIUDAD',
+            width:100,
+            hidden: true
+        },
+        {
+            text     : 'ID Invalidez',
+            sortable : true,
+            dataIndex: 'COD_INVALIDEZ',
+            width:100,
+            hidden: true
+        },
+        {
+            text     : 'Invalidez',
+            sortable : true,
+            dataIndex: 'NOM_INVALIDEZ',
             width:100,
             hidden: true
         },

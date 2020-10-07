@@ -206,18 +206,7 @@ var ModalFormDesvinculacion= function(rol){
                                 name: 'date_fecha',
                                 format: 'd/m/Y',
                                 allowBlank: false,
-                                listeners:{
-                                    select: function(){
-                                        var form = this.up('form').getForm();
-                                        var combo_fecha = form.findField('date_fecha');
-                                        var myfecha = Ext.Date.format(combo_fecha.value,'Y/m/d');
-                                        var hoy = Ext.Date.format(new Date(),'Y/m/d');
-                                        if(myfecha<=hoy){
-                                            showToast('La fecha debe ser mayor que hoy.');
-                                            combo_fecha.reset();
-                                        }
-                                    }	
-                                }
+                                minValue: Ext.Date.add(new Date(), Ext.Date.DAY,2),//Se restringe por 48 horas.
                             },{
                                 xtype: 'radiogroup',
                                 fieldLabel: '¿Carta aviso 30 días?',

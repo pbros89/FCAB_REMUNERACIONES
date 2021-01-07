@@ -51,7 +51,7 @@ Ext.define('fcab.Container.MainCambioOtros.Grilla', {
     store: storeCargarCambiarOtros,
     columnLines: true,
     emptyText: 'Sin datos para mostrar',
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     filtros: null,
     plugins: pluginFactory(),

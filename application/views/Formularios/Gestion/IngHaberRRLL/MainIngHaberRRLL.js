@@ -422,7 +422,7 @@ Ext.define('fcab.Container.MainIngHaberRRLL.Grilla', {
             }
         }]
     }],
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     title: 'Habers RRLL ('+NOM_EMPRESA+')',
 });

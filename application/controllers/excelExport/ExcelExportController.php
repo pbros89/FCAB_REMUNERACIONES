@@ -1458,4 +1458,174 @@ class ExcelExportController extends CI_Controller {
          $objWriter->save('php://output');
 
     }
+
+
+    public function cargarPresupuestoDotacion() {
+
+        set_time_limit(300);
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '2048M');
+
+        $p_anho= $_POST['cbAnho'];
+        $p_tipo= $_POST['cbTipo'];
+        $p_cod_emp = $_POST['p_cod_emp'];
+        $p_usuario = $_POST['p_usuario'];
+        $p_rol = $_POST['p_rol'];
+
+        //print_r($names);
+        $this->load->library('excel'); 
+        $filename='REPORTE_PRESUPUESTO_DOTACION.xls'; //save our workbook as this file name
+
+
+        $this->excel->setActiveSheetIndex(0);
+        $this->excel->getActiveSheet()->setTitle('Información General');
+        $this->excel->getActiveSheet()->setCellValue("A1", 'Reporte');
+        $this->excel->getActiveSheet()->setCellValue("B1", 'Presupuesto Dotación');
+        $this->excel->getActiveSheet()->setCellValue("A2", 'Fecha Creación');
+        $this->excel->getActiveSheet()->setCellValue("B2", new DateTime());
+        $this->excel->getActiveSheet()->setCellValue("A3", 'Usuario Creador');
+        $this->excel->getActiveSheet()->setCellValue("B3", $p_usuario);
+        $this->excel->getActiveSheet()->setCellValue("A4", 'Rol');
+        $this->excel->getActiveSheet()->setCellValue("B4", $p_rol);
+        $this->excel->getActiveSheet()->setCellValue("A5", 'Año');
+        $this->excel->getActiveSheet()->setCellValue("B5", $p_anho);
+        $this->excel->getActiveSheet()->setCellValue("A6", 'Tipo');
+        $this->excel->getActiveSheet()->setCellValue("B6", $p_tipo);
+        $this->excel->getActiveSheet()->setCellValue("A7", 'Empresa');
+        $this->excel->getActiveSheet()->setCellValue("B7", $p_cod_emp);
+
+
+        $names = [];
+        $query = $this->ExcelExportModel->cargarPresupuestoDotacion($p_anho, $p_cod_emp, $p_tipo, $p_rol, $p_usuario);
+        
+        if(count($query) > 0){
+            $names = get_object_vars($query[0]);
+            //print_r($names);
+            
+            $names = array_keys($names);
+            
+            //Cargamos la librería de excel.
+            
+            $this->excel->createSheet();
+            $this->excel->setActiveSheetIndex(1);
+            $this->excel->getActiveSheet()->setTitle('Datos');
+            //Contador de filas
+            $current_col = 0;
+            $current_row = 1;
+
+            
+            //print_r($conceptos);
+            //HEADER
+            foreach($names as $name) {
+                $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
+                $current_col++;
+            }
+
+            $current_row++;
+
+             //DATA
+            foreach($query as $obj) {
+                $current_col = 0;
+                $obj = get_object_vars($obj);
+                foreach($names as $name) {
+                    $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $obj[$name]);
+                    $current_col++;
+                }
+                $current_row++;
+            }
+            
+         }
+
+         //Le ponemos un nombre al archivo que se va a generar.
+         header('Content-Type: application/vnd.ms-excel');
+         //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+         header('Content-Disposition: attachment;filename="'.$filename.'"');
+         header('Cache-Control: max-age=0');
+         $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+         //Hacemos una salida al navegador con el archivo Excel.
+         $objWriter->save('php://output');
+
+    }
+
+
+    public function cargarCierrePersonal() {
+
+        set_time_limit(300);
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '2048M');
+
+        $p_anho= $_POST['cbAnho'];
+        $p_mes= $_POST['cbMes'];
+        $p_usuario = $_POST['p_usuario'];
+
+        //print_r($names);
+        $this->load->library('excel'); 
+        $filename='REPORTE_CIERRE_PERSONAL.xls'; //save our workbook as this file name
+
+
+        $this->excel->setActiveSheetIndex(0);
+        $this->excel->getActiveSheet()->setTitle('Información General');
+        $this->excel->getActiveSheet()->setCellValue("A1", 'Reporte');
+        $this->excel->getActiveSheet()->setCellValue("B1", 'Presupuesto Dotación');
+        $this->excel->getActiveSheet()->setCellValue("A2", 'Fecha Creación');
+        $this->excel->getActiveSheet()->setCellValue("B2", new DateTime());
+        $this->excel->getActiveSheet()->setCellValue("A3", 'Usuario Creador');
+        $this->excel->getActiveSheet()->setCellValue("B3", $p_usuario);
+        $this->excel->getActiveSheet()->setCellValue("A4", 'Año');
+        $this->excel->getActiveSheet()->setCellValue("B4", $p_anho);
+        $this->excel->getActiveSheet()->setCellValue("A5", 'Mes');
+        $this->excel->getActiveSheet()->setCellValue("B5", $p_mes);
+
+
+        $names = [];
+        $query = $this->ExcelExportModel->cargarCierrePersonal($p_anho, $p_mes);
+        
+        if(count($query) > 0){
+            $names = get_object_vars($query[0]);
+            //print_r($names);
+            
+            $names = array_keys($names);
+            
+            //Cargamos la librería de excel.
+            
+            $this->excel->createSheet();
+            $this->excel->setActiveSheetIndex(1);
+            $this->excel->getActiveSheet()->setTitle('Datos');
+            //Contador de filas
+            $current_col = 0;
+            $current_row = 1;
+
+            
+            //print_r($conceptos);
+            //HEADER
+            foreach($names as $name) {
+                $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
+                $current_col++;
+            }
+
+            $current_row++;
+
+             //DATA
+            foreach($query as $obj) {
+                $current_col = 0;
+                $obj = get_object_vars($obj);
+                foreach($names as $name) {
+                    $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $obj[$name]);
+                    $current_col++;
+                }
+                $current_row++;
+            }
+            
+         }
+
+         //Le ponemos un nombre al archivo que se va a generar.
+         header('Content-Type: application/vnd.ms-excel');
+         //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+         header('Content-Disposition: attachment;filename="'.$filename.'"');
+         header('Cache-Control: max-age=0');
+         $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+         //Hacemos una salida al navegador con el archivo Excel.
+         $objWriter->save('php://output');
+
+    }
 }

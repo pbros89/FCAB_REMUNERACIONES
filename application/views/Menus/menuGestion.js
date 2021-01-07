@@ -231,7 +231,35 @@ Ext.define("fcab.store.menu.gestion", {
         leaf: true,
         iconCls: "icon-prototipo",
         cerrable: 1,
-        //cls: "x-hidden",
+        cls: "x-hidden",
+        //disabled: true
+      },
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Presupuesto",
+        tipo: "tab",
+        tituloTab: "Presupuesto",
+        id: "menu_presupuesto",
+        formulario: "MainPresupuesto",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        cls: "x-hidden",
+        //disabled: true
+      },
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Presupuesto Dotación",
+        tipo: "tab",
+        tituloTab: "Presupuesto Dotación",
+        id: "menu_presupuesto_dotacion",
+        formulario: "DotacionPresupuesto",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        cls: "x-hidden",
         //disabled: true
       },
       {
@@ -246,6 +274,21 @@ Ext.define("fcab.store.menu.gestion", {
         iconCls: "icon-prototipo",
         cerrable: 1,
         cls: "x-hidden",
+        //disabled: true
+      },
+
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Indicadores",
+        tipo: "tab",
+        tituloTab: "Indicadores",
+        id: "menu_indicadores",
+        formulario: "MainIndicadores",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        //cls: "x-hidden",
         //disabled: true
       },
     ],

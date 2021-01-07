@@ -347,7 +347,7 @@ Ext.define('fcab.Container.MainCambioSindicato.Grilla', {
             }
         }]
     }],
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     title: 'Cambio de Sindicato ('+NOM_EMPRESA+')',
 });

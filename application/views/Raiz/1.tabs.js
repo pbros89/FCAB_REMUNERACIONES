@@ -11,7 +11,9 @@ Ext.define('fcab.view.TabPanel', {
     minWidth: 860,
     maxHeight: 3000,
     layout: 'anchor',
+    border: false,
     defaults: {
+        //border: false,
         //bodyPadding: 10
     },
     listeners: {
@@ -67,13 +69,17 @@ var addTab = function (id, titulo, icono, formulario, cerrable) {
             id: id,
             closeAction: 'destroy',
             iconCls: icono,
+            border: false,
+            autoScroll: true,
             closable: parseInt(cerrable), //BUG AL DESTRUIR ALGUNOS OBJETOS (CERRAR CON BOTON)
-            minWidth: 860,
-            layout: 'anchor',
+            layout: {
+                layout: 'fit',
+                align: 'stretch'
+            },
             loader: {
                 loadMask: 'Cargando...'
             },
-            autoScroll: true,
+            
             items: [{
                     xtype: formulario
                 }],

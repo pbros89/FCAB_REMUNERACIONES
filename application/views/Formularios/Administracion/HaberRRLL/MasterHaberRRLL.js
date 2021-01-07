@@ -241,7 +241,7 @@ Ext.define('fcab.Container.MasterHaberRRLL.Grilla', {
             }
         }]
     }],
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     title: 'Maestro Haberes RRLL ('+NOM_EMPRESA+')',
     viewConfig: {

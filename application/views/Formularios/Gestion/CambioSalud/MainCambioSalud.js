@@ -56,7 +56,7 @@ Ext.define('fcab.Container.MainCambioSalud.Grilla', {
     emptyText: 'Sin datos para mostrar',
     filtros: null,
     plugins: pluginFactory(),
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     listeners: {
         itemdblclick: function( view, rec, node, index, e, options ) {

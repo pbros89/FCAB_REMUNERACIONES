@@ -53,7 +53,7 @@ Ext.define('fcab.Container.MainCambioAFP.Grilla', {
     itemId: 'MainCambioAFPGrilla',
     store: storeCargarCambiarAFP,
     columnLines: true,
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     emptyText: 'Sin datos para mostrar',
     filtros: null,

@@ -558,8 +558,8 @@ class IssaController extends CI_Controller
 		if ($data != null && count($data) > 0) {
 			//Realiza el envio a ISSA
 			$cantEnviados = count($data);
-			//$resIssa = $this->enviarIssa($params);
-			$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
+			$resIssa = $this->enviarIssa($params);
+			//$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
 
 			if ($resIssa != null) {
 				$resDecode = json_decode($resIssa);
@@ -622,8 +622,8 @@ class IssaController extends CI_Controller
 		if ($data != null && count($data) > 0) {
 			//Realiza el envio a ISSA
 			$cantEnviados = count($data);
-			//$resIssa = $this->enviarIssa($params);
-			$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
+			$resIssa = $this->enviarIssa($params);
+			//$resIssa = $this->enviarIssaQA($params); //enviarIssa es PROD // enviarIssaQA es DESA
 
 			if ($resIssa != null) {
 				$resDecode = json_decode($resIssa);
@@ -1068,5 +1068,525 @@ class IssaController extends CI_Controller
 		$this->output->set_output($result);
 	}
 
+	public function crearDotacionISSA() {
+
+		set_time_limit(300);
+		ini_set('max_execution_time', '300');
+		ini_set('memory_limit', '2048M');
+
+		$p_fecha = date('d-m-Y');
+		
+		$p_usuario = 'SYSTEM';
+		$count = 0;
+		$data = array();
+		$observacion = 'OK';
+
+		if ($this->input->get('p_usuario') != null) {
+			$p_usuario = $this->input->get('p_usuario');
+		}
+
+		if ($this->input->get('p_fecha') != null) {
+			$p_fecha = $this->input->get('p_fecha');
+		}
+
+		//echo $p_fecha;
+		$params = 'operacion=asis_dotacion' .
+					'&fecha=' . $p_fecha . 
+					'&fecha_ultima_mod='. 
+					'&empresa=' . 
+					'&rut=';
+
+		$resData = $this->enviarIssa($params);
+
+
+		if ($resData != null) {
+			$resDecode = json_decode($resData);
+
+			
+			
+			if (isset($resDecode->Error) && $resDecode->Error == 0) {
+				$error = $resDecode->Error;
+				$results = $resDecode->Results;
+				$mensaje = $resDecode->Mensaje;
+
+				//print_r(count($results));
+				if(count($results) > 0) {
+				
+					$this->IssaModel->borrarDotacionIssa();
+
+					foreach ($results as $i) {
+
+						$data[$count]['CODIGO'] = $i->codigo;
+						$data[$count]['RUT'] = $i->rut;
+						$data[$count]['APELLIDO_1'] = $i->apellido_1;
+						$data[$count]['APELLIDO_2'] = $i->apellido_2;
+						$data[$count]['NOMBRES'] = $i->nombres;
+						$data[$count]['FECHA_ALTA'] = $i->fecha_alta;
+						$data[$count]['FECHA_BAJA'] = $i->fecha_baja;
+						$data[$count]['COD_EMPRESA'] = $i->cod_empresa;
+						$data[$count]['NOM_EMPRESA'] = $i->nom_empresa;
+						$data[$count]['DIRECCION'] = $i->Direccion;
+						$data[$count]['COD_COMUNA'] = $i->cod_Comuna;
+						$data[$count]['NOM_COMUNA'] = $i->nom_Comuna;
+						$data[$count]['CIUDAD'] = $i->Ciudad;
+						$data[$count]['FONO'] = $i->Fono;
+						$data[$count]['CELULAR'] = $i->Celular;
+						$data[$count]['MAIL'] = $i->Mail;
+						$data[$count]['COD_SEXO'] = $i->cod_Sexo;
+						$data[$count]['NOM_SEXO'] = $i->nom_Sexo;
+						$data[$count]['FECHANACIMIENTO'] = $i->FechaNacimiento;
+						$data[$count]['COD_NACIONALIDAD'] = $i->cod_Nacionalidad;
+						$data[$count]['NOM_NACIONALIDAD'] = $i->nom_Nacionalidad;
+						$data[$count]['COD_ESTADOCIVIL'] = $i->cod_EstadoCivil;
+						$data[$count]['NOM_ESTADOCIVIL'] = $i->nom_EstadoCivil;
+						$data[$count]['COD_FORMAPAGO'] = $i->cod_FormaPago;
+						$data[$count]['NOM_FORMAPAGO'] = $i->nom_FormaPago;
+						$data[$count]['COD_BANCO'] = $i->cod_Banco;
+						$data[$count]['NOM_BANCO'] = $i->nom_Banco;
+						$data[$count]['NUMEROCUENTA'] = $i->NumeroCuenta;
+						$data[$count]['COD_CONDICIONPAGO'] = $i->cod_CondicionPago;
+						$data[$count]['NOM_CONDICIONPAGO'] = $i->nom_CondicionPago;
+						$data[$count]['CONTACTO'] = $i->Contacto;
+						$data[$count]['CELULARCONTACTO'] = $i->CelularContacto;
+						$data[$count]['FONOCONTACTO'] = $i->FonoContacto;
+						$data[$count]['MAILCONTACTO'] = $i->MailContacto;
+						$data[$count]['COD_SIGLA'] = $i->cod_Sigla;
+						$data[$count]['NOM_SIGLA'] = $i->nom_Sigla;
+						$data[$count]['COD_REGION'] = $i->cod_Region;
+						$data[$count]['NOM_REGION'] = $i->nom_Region;
+						$data[$count]['EMAIL_PERSONAL'] = $i->email_personal;
+						$data[$count]['INSTITUCIÓN_AFP'] = $i->RemInstitución_AFP;
+						$data[$count]['NOMINSTITUCIÓN_AFP'] = $i->RemNomInstitución_AFP;
+						$data[$count]['TIPO_CONTRATO'] = $i->RemTipo_Contrato;
+						$data[$count]['NOMTIPO_CONTRATO'] = $i->RemNomTipo_Contrato;
+						$data[$count]['CONVENIO_COL_INSTITUCION'] = $i->RemConvenio_Colectivo_Institucion;
+						$data[$count]['NOMCONVENIO_COL_INS'] = $i->RemNomConvenio_Colectivo_Institucion;
+						$data[$count]['SUPERVISOR'] = $i->RemSupervisor;
+						$data[$count]['NOMSUPERVISOR'] = $i->RemNomSupervisor;
+						$data[$count]['SINDICATO'] = $i->RemSindicato;
+						$data[$count]['NOMSINDICATO'] = $i->RemNomSindicato;
+						$data[$count]['SUELDO_BASE'] = $i->RemSueldo_Base;
+						$data[$count]['CARGO'] = $i->RemCargo;
+						$data[$count]['NOMCARGO'] = $i->RemNomCargo;
+						$data[$count]['CC'] = $i->RemCentro_Costo;
+						$data[$count]['NOMCC'] = $i->RemNomCentro_Costo;
+						$data[$count]['DEPARTAMENTO'] = $i->RemDepartamento;
+						$data[$count]['NOMDEPARTAMENTO'] = $i->RemNomDepartamento;
+						$data[$count]['GERENCIA'] = $i->RemGerencia;
+						$data[$count]['NOMGERENCIA'] = $i->RemNomGerencia;
+						$data[$count]['JORNADA'] = $i->RemJornada_Laboral;
+						$data[$count]['NOMJORNADA'] = $i->RemNomJornada_Laboral;
+						$data[$count]['SALUD'] = $i->RemInstitución_Salud;
+						$data[$count]['NOMSALUD'] = $i->RemNomInstitución_Salud;
+						$data[$count]['CONVENIO'] = $i->RemConvenio;
+						$data[$count]['NOMCONVENIO'] = $i->RemNomConvenio;
+
+						$count++;
+					}
+					$this->IssaModel->guardarDotacionIssa($data);
+					$this->IssaModel->crearLogDotacionIssa($p_fecha, $p_usuario, $observacion);
+						
+				}else{
+					$observacion = "Servicio sin data" ;
+				}
+				
+			} else {
+				$observacion = "Error en respuesta del servicio" ;
+				
+			}
+		} else {
+			$observacion = 'Servicio sin respuesta';
+		}
+
+		$result = array('r_est' => '0', 'r_msg' => $observacion);
+		$resultFinal = '{"success":"true", "items": '.json_encode($result).'}';
+		$this->output->set_output($resultFinal);
+
+	}
+
+	public function cargarCountDifDotacion()
+    {
+		$query = $this->IssaModel->cargarCountDifDotacion();
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+	}
+
+	public function cargarUltimoLogDotacionIssa()
+    {
+		$query = $this->IssaModel->cargarUltimoLogDotacionIssa();
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+	}
+
+
+	public function crearXlsDotacionIssa()
+	{
+
+		set_time_limit(300);
+		ini_set('max_execution_time', '300');
+		ini_set('memory_limit', '2048M');
+
+		//print_r($names);
+		$this->load->library('excel');
+		$filename = 'FICHAS_ISSA.xls'; //save our workbook as this file name
+
+
+		$this->excel->setActiveSheetIndex(0);
+		$this->excel->getActiveSheet()->setTitle('Datos');
+
+		$names = [];
+		$query = $this->IssaModel->cargarDotacionesIssa();
+
+		if (count($query) > 0) {
+			$names = get_object_vars($query[0]);
+			//print_r($names);
+
+			$names = array_keys($names);
+			//Contador de filas
+			$current_col = 0;
+			$current_row = 1;
+
+
+			//print_r($conceptos);
+			//HEADER
+			foreach ($names as $name) {
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
+				$current_col++;
+			}
+
+			$current_row++;
+
+			//DATA
+			foreach ($query as $obj) {
+				$current_col = 0;
+				$obj = get_object_vars($obj);
+				foreach ($names as $name) {
+					$this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $obj[$name]);
+					$current_col++;
+				}
+				$current_row++;
+			}
+		}
+
+		//Le ponemos un nombre al archivo que se va a generar.
+		header('Content-Type: application/vnd.ms-excel');
+		//header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="' . $filename . '"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+		//Hacemos una salida al navegador con el archivo Excel.
+		$objWriter->save('php://output');
+	}
+
+	public function crearXlsDotacionIssaTipo()
+	{
+
+		set_time_limit(300);
+		ini_set('max_execution_time', '300');
+		ini_set('memory_limit', '2048M');
+
+		$p_tipo = $_POST['p_tipo'];
+
+		//print_r($names);
+		$this->load->library('excel');
+		$filename = 'DIFERENCIAS_FICHAS_'.$p_tipo.'.xls'; //save our workbook as this file name
+
+
+		$this->excel->setActiveSheetIndex(0);
+		$this->excel->getActiveSheet()->setTitle('FCAB_RRHH');
+
+		$names = [];
+		$query = $this->IssaModel->cargarDotacionIssaPorTipo('FCAB_RRHH', $p_tipo);
+
+		if (count($query) > 0) {
+			$names = get_object_vars($query[0]);
+			//print_r($names);
+
+			$names = array_keys($names);
+			//Contador de filas
+			$current_col = 0;
+			$current_row = 1;
+
+
+			//print_r($conceptos);
+			//HEADER
+			foreach ($names as $name) {
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
+				$current_col++;
+			}
+
+			$current_row++;
+
+			//DATA
+			foreach ($query as $obj) {
+				$current_col = 0;
+				$obj = get_object_vars($obj);
+				foreach ($names as $name) {
+					$this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $obj[$name]);
+					$current_col++;
+				}
+				$current_row++;
+			}
+		}
+
+		$this->excel->createSheet();
+		$this->excel->setActiveSheetIndex(1);
+		$this->excel->getActiveSheet()->setTitle('ISSA');
+
+		$names = [];
+		$query = $this->IssaModel->cargarDotacionIssaPorTipo('ISSA', $p_tipo);
+
+		if (count($query) > 0) {
+			$names = get_object_vars($query[0]);
+			//print_r($names);
+
+			$names = array_keys($names);
+			//Contador de filas
+			$current_col = 0;
+			$current_row = 1;
+
+
+			//print_r($conceptos);
+			//HEADER
+			foreach ($names as $name) {
+				$this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
+				$current_col++;
+			}
+
+			$current_row++;
+
+			//DATA
+			foreach ($query as $obj) {
+				$current_col = 0;
+				$obj = get_object_vars($obj);
+				foreach ($names as $name) {
+					$this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $obj[$name]);
+					$current_col++;
+				}
+				$current_row++;
+			}
+		}
+
+		//Le ponemos un nombre al archivo que se va a generar.
+		header('Content-Type: application/vnd.ms-excel');
+		//header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="' . $filename . '"');
+		header('Cache-Control: max-age=0');
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+		//Hacemos una salida al navegador con el archivo Excel.
+		$objWriter->save('php://output');
+	}
+
+
+
+	public function crearAusentismoISSA() {
+
+		set_time_limit(300);
+		ini_set('max_execution_time', '300');
+		ini_set('memory_limit', '2048M');
+
+		$p_fecha = '01-01-2020';
+		$p_usuario = 'SYSTEM';
+		$p_tipo = ''; //LICENCIA, PERMISO, VACACION
+		$operacion = '';
+		$count = 0;
+		$data = array();
+		$observacion = 'OK';
+
+		if ($this->input->get('p_tipo') != null) {
+			$p_tipo = $this->input->get('p_tipo');
+		}
+		
+		switch($p_tipo) {
+			case 'LICENCIA':
+				$operacion = 'api_list_licenciamedica';
+				break;
+			case 'PERMISO':
+				$operacion = 'api_list_permisos';
+				break;
+			case 'VACACION':
+				$operacion = 'api_list_vacaciones';
+				break;
+			default :
+				$p_tipo = 'ERROR';
+				$observacion = 'Tipo incorrecto';
+				break;
+		}
+
+		if($p_tipo != 'ERROR') {
+			
+			if ($this->input->get('p_usuario') != null) {
+				$p_usuario = $this->input->get('p_usuario');
+			}
+
+			$last_log = $this->IssaModel->cargarUltimoLogAusentismo($p_tipo);
+
+
+			if ($this->input->get('p_fecha') != null) {
+				$p_fecha = $this->input->get('p_fecha');
+			}else{
+				if(count($last_log) > 0) {
+					$p_fecha = $last_log[0]->FECHA_EJECUTAR;
+				}
+			}
+			$params = 'operacion=' . $operacion .
+						'&fecha=' . $p_fecha ;
+
+			$resData = $this->enviarIssa($params);
+
+
+			if ($resData != null) {
+				$resDecode = json_decode($resData);
+
+				if (isset($resDecode->Error) && $resDecode->Error == 0) {
+					$error = $resDecode->Error;
+					$results = $resDecode->Results;
+					$mensaje = $resDecode->Mensaje;
+
+					//print_r(count($results));
+					if(count($results) > 0) {
+						$sequencia = $this->IssaModel->cargarSeqAusentismo();
+						$names = get_object_vars($results[0]);
+						$names = array_keys($names);
+						//print_r($names);
+						foreach ($results as $i) {
+							
+							$i = get_object_vars($i);
+							//print_r($i);
+							foreach ($names as $name) {
+								$nameUpper = strtoupper($name);
+								if(strpos($name, "TOM_DIAS") === false) {
+									$data[$count][$nameUpper] = $i[$name];
+								}else{
+									$data[$count][$nameUpper] = str_replace('.','%',$i[$name]);
+									$data[$count][$nameUpper] = str_replace(',','.',$data[$count][$nameUpper] );
+									$data[$count][$nameUpper] = str_replace('%','',$data[$count][$nameUpper] );
+								}
+								
+							}
+							$data[$count]['ID_EJECUCION'] = $sequencia[0]->SEQUENCIA;
+							$count++;
+						}
+						//print_r($data[0]);
+						$this->IssaModel->guardarAusentismoIssa($p_tipo, $data);
+						$this->IssaModel->crearLogAusentismoIssa($sequencia[0]->SEQUENCIA, $p_tipo, $p_fecha, $p_usuario, $observacion);
+						$this->IssaModel->eliminarDatosAusentismo();	
+					}else{
+						$observacion = "Servicio sin data" ;
+					}
+					
+				} else {
+					$observacion = "Error en respuesta del servicio" ;
+					
+				}
+			} else {
+				$observacion = 'Servicio sin respuesta';
+			}
+		}
+
+		$result = array('r_est' => '0', 'r_msg' => $observacion);
+		$resultFinal = '{"success":"true", "items": '.json_encode($result).'}';
+		$this->output->set_output($resultFinal);
+
+	}
+
+
+	public function cargarAusentismosISSA() {
+		$p_tipo = $this->input->get('p_tipo');
+		$p_fec1 = $this->input->get('p_fec1');
+		$p_fec2 = $this->input->get('p_fec2');
+		$p_rut = $this->input->get('p_rut');
+
+		$query = $this->IssaModel->cargarAusentismosISSA($p_tipo, $p_fec1, $p_fec2, $p_rut);
+
+		$result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+	}
+
+
+	public function crearXlsAusentismoIssa()
+	{
+		set_time_limit(300);
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '2048M');
+
+        $p_tipo = $_POST['p_tipo'];
+		$p_fec1 = $_POST['p_fec1'];
+		$p_fec2 = $_POST['p_fec2'];
+		$p_rut = $_POST['p_rut'];
+
+        //print_r($names);
+        $this->load->library('excel'); 
+        $filename='AUSENTISMO_ISSA_'.$p_tipo.'.xls'; //save our workbook as this file name
+
+
+        $this->excel->setActiveSheetIndex(0);
+        $this->excel->getActiveSheet()->setTitle('Información General');
+        $this->excel->getActiveSheet()->setCellValue("A1", 'Reporte');
+        $this->excel->getActiveSheet()->setCellValue("B1", 'Ausentismo ISSA');
+        $this->excel->getActiveSheet()->setCellValue("A2", 'Fecha Creación');
+        $this->excel->getActiveSheet()->setCellValue("B2", new DateTime());
+        $this->excel->getActiveSheet()->setCellValue("A3", 'Tipo');
+        $this->excel->getActiveSheet()->setCellValue("B3", $p_tipo);
+        $this->excel->getActiveSheet()->setCellValue("A4", 'Rut');
+        $this->excel->getActiveSheet()->setCellValue("B4", $p_rut);
+        $this->excel->getActiveSheet()->setCellValue("A5", 'Fecha Desde');
+        $this->excel->getActiveSheet()->setCellValue("B5", $p_fec1);
+        $this->excel->getActiveSheet()->setCellValue("A6", 'Fecha Hasta');
+        $this->excel->getActiveSheet()->setCellValue("B6", $p_fec2);
+
+
+        $names = [];
+        $query = $this->IssaModel->cargarAusentismosISSA($p_tipo, $p_fec1, $p_fec2, $p_rut);
+        
+        if(count($query) > 0){
+            $names = get_object_vars($query[0]);
+            //print_r($names);
+            
+            $names = array_keys($names);
+            
+            //Cargamos la librería de excel.
+            
+            $this->excel->createSheet();
+            $this->excel->setActiveSheetIndex(1);
+            $this->excel->getActiveSheet()->setTitle('Datos');
+            //Contador de filas
+            $current_col = 0;
+            $current_row = 1;
+
+            
+            //print_r($conceptos);
+            //HEADER
+            foreach($names as $name) {
+                $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $name);
+                $current_col++;
+            }
+
+            $current_row++;
+
+             //DATA
+            foreach($query as $obj) {
+                $current_col = 0;
+                $obj = get_object_vars($obj);
+                foreach($names as $name) {
+                    $this->excel->getActiveSheet()->setCellValueByColumnAndRow($current_col, $current_row, $obj[$name]);
+                    $current_col++;
+                }
+                $current_row++;
+            }
+            
+         }
+
+         //Le ponemos un nombre al archivo que se va a generar.
+         header('Content-Type: application/vnd.ms-excel');
+         //header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+         header('Content-Disposition: attachment;filename="'.$filename.'"');
+         header('Cache-Control: max-age=0');
+         $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+         //Hacemos una salida al navegador con el archivo Excel.
+         $objWriter->save('php://output');
+	}
 
 }

@@ -678,4 +678,124 @@ var storeValidarPeriodoAsisSolProc = Ext.create('Ext.data.Store', {
     autoLoad: false
 });
 
+var storeCrearDotacionISSA = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/crearDotacionISSA',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al crear dotacion issa',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeCargarCountDifDotacion = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/cargarCountDifDotacion',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar diferencias',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeCargarUltimoLogDotacionIssa = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/cargarUltimoLogDotacionIssa',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al cargar diferencias',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+var storeCrearXlsDotacionIssa = Ext.create('Ext.data.Store', {
+   
+    proxy: {
+        type:   'ajax',
+        url:    JsonHost + 'issa/IssaController/crearXlsDotacionIssa',
+        reader: {
+            type: 'json',
+            rootProperty: 'items'
+        },
+        listeners: {
+            exception: function(proxy, response, operation){
+                console.log(proxy);
+                console.log(response);
+                console.log(operation);
+                Ext.MessageBox.show({
+                    title: 'EXCEPCION',
+                    msg: 'Problemas al crear .xls',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+                });
+            }
+            
+            
+        }
+    },
+    autoLoad: false
+});
+
+
+
+
+
+
 

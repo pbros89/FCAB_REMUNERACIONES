@@ -21,7 +21,8 @@ class CargoModel extends CI_Model {
                     CAR.USR_CREADOR, 
                     TO_CHAR(CAR.FECHA_MODIFICO, 'YYYY/MM/DD HH24:MI') FECHA_MODIFICO, 
                     CAR.USR_MODIFICO,
-                    CAR.FK_ROL
+                    CAR.FK_ROL,
+                    CAR.PK_COD_CARGO || ' - ' || CAR.NOMBRE NOMBRE_FULL
                 FROM NOV_CARGOS CAR, NOV_EMPRESAS EMP  
                 WHERE CAR.PFK_COD_EMP = EMP.PK_COD_EMP ";
 

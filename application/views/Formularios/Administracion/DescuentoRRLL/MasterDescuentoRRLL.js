@@ -48,7 +48,7 @@ Ext.define('fcab.Container.MasterDescuentoRRLL.Grilla', {
     store: storeCargarDescuentosRRLL,
     columnLines: true,
     emptyText: 'Sin datos para mostrar',
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     filtros: null,
     plugins: pluginFactory(),

@@ -47,7 +47,7 @@ class AdjuntoController extends CI_Controller {
         $this->upload->initialize($config);
 
         if (!$this->upload->do_upload('archivo')) {
-            //$this->output->set_output(json_encode(array('success' => false, 'msg' => $this->upload->display_errors())));
+            $this->output->set_output(json_encode(array('success' => false, 'msg' => $this->upload->display_errors())));
         } else {
             //$this->output->set_output(json_encode(array('success' => true, 'data' => array(array('file_path' => $this->upload->data()['file_path'], 'file_size' => $this->upload->data()['file_size'], 'file_name' => $this->upload->data()['file_name'])))));
             echo json_encode(array('success' => true, 'data' => array($this->upload->data()), 'cod' => $p_cod, 'ruta' => $p_ruta));

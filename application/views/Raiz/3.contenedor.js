@@ -246,6 +246,36 @@ Ext.define("fcab.view.MyViewport", {
               }
               break;
 
+            case "CONTACTO_EMERGENCIA":
+              if (estado == "A") {
+                var p = rootGestion.items.items[0].store.getById(
+                  "menu_contacto_emergencia"
+                );
+                p.data.cls = "";
+                countGestion++;
+              }
+              break;
+
+            case "PRESUPUESTO":
+              if (estado == "A") {
+                var p = rootGestion.items.items[0].store.getById(
+                  "menu_presupuesto"
+                );
+                p.data.cls = "";
+                countGestion++;
+              }
+              break;
+
+            case "PRESUPUESTO_DOTACION":
+              if (estado == "A") {
+                var p = rootGestion.items.items[0].store.getById(
+                  "menu_presupuesto_dotacion"
+                );
+                p.data.cls = "";
+                countGestion++;
+              }
+              break;
+
             /**************** MENUS REPORTE *******************/
             case "REPORT_CAMBIO_AFP":
               if (estado == "A") {
@@ -386,6 +416,16 @@ Ext.define("fcab.view.MyViewport", {
                 countReporte++;
               }
               break;
+
+            case "REPORT_PRESUPUESTO_DOTACION":
+              if (estado == "A") {
+                var p = rootReporte.items.items[0].store.getById(
+                  "menu_reporte_presup_dotacion"
+                );
+                p.data.cls = "";
+                countReporte++;
+              }
+              break;
           }
         }
       });
@@ -509,9 +549,10 @@ Ext.define("fcab.view.MyViewport", {
     {
       region: "center",
       id: "reg-center",
-      bodyStyle: "padding:5px;",
-      layout: "fit",
-      autoScroll: true,
+      bodyStyle: "padding:5px; overflowY: auto;",
+      layout: 'fit',
+      overflowY: 'auto',
+      //border:false,
       items: tabs,
     },
   ],
@@ -521,15 +562,12 @@ var modalExterno = function () {
   Ext.define("fcab.view.MyViewport.Externo", {
     extend: "Ext.container.Viewport",
     layout: "border",
-    autoScroll: true,
     items: [
       {
         region: "center",
         id: "reg-center",
         bodyStyle: "padding:5px;",
         layout: "fit",
-        autoScroll: true,
-        header: {},
         items: [
           {
             xtype: formExterno,

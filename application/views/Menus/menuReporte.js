@@ -220,6 +220,34 @@ Ext.define("fcab.store.menu.reporte", {
         cls: "x-hidden",
         //disabled: true
       },
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Presupuesto Dotación",
+        tipo: "tab",
+        tituloTab: "Presupuesto Dotación",
+        id: "menu_reporte_presup_dotacion",
+        formulario: "ReportePresupDotacion",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-reportes",
+        cerrable: 1,
+        cls: "x-hidden",
+        //disabled: true
+      },
+      /*{
+        name: "Filtro1", //Items a Filtrar
+        text: "Cierre Personal",
+        tipo: "tab",
+        tituloTab: "Cierre Personal",
+        id: "menu_reporte_cierre_personal",
+        formulario: "ReporteCierrePersonal",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-reportes",
+        cerrable: 1,
+        //cls: "x-hidden",
+        //disabled: true
+      },*/
     ],
   },
 });

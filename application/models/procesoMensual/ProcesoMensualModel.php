@@ -3,14 +3,17 @@
 if (!defined('BASEPATH'))
     exit('No se permite el acceso directo a este directorio');
 
-class ProcesoMensualModel extends CI_Model {
+class ProcesoMensualModel extends CI_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->database("BD_NOVEDADES");
     }
 
-    public function cargarProcesosMensual($p_anho, $p_mes, $p_cod_emp, $p_estado, $p_tipo, $p_no_tipo) {
+    public function cargarProcesosMensual($p_anho, $p_mes, $p_cod_emp, $p_estado, $p_tipo, $p_no_tipo)
+    {
         $sql = "SELECT 
                     PROC.PK_TIPO,
                     PROC.PK_PROCESO, 
@@ -33,38 +36,32 @@ class ProcesoMensualModel extends CI_Model {
                 FROM NOV_PROC_MENSUAL PROC, NOV_EMPRESAS EMP  
                 WHERE PROC.PFK_COD_EMP = EMP.PK_COD_EMP ";
 
-                if(!empty($p_cod_emp))
-                {
-                    $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' ";
-                }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' ";
+        }
 
-                if(!empty($p_anho))
-                {
-                    $sql .= "AND PROC.ANHO = '$p_anho' ";
-                }
+        if (!empty($p_anho)) {
+            $sql .= "AND PROC.ANHO = '$p_anho' ";
+        }
 
-                if(!empty($p_mes))
-                {
-                    $sql .= "AND PROC.MES = '$p_mes' ";
-                }
+        if (!empty($p_mes)) {
+            $sql .= "AND PROC.MES = '$p_mes' ";
+        }
 
-                if(!empty($p_tipo))
-                {
-                    $sql .= "AND PROC.PK_TIPO = '$p_tipo' ";
-                }
+        if (!empty($p_tipo)) {
+            $sql .= "AND PROC.PK_TIPO = '$p_tipo' ";
+        }
 
-                if(!empty($p_estado))
-                {
-                    $sql .= "AND PROC.ESTADO = '$p_estado' ";
-                }
+        if (!empty($p_estado)) {
+            $sql .= "AND PROC.ESTADO = '$p_estado' ";
+        }
 
-                if(!empty($p_no_tipo))
-                {
-                    $sql .= "AND PROC.PK_TIPO <> '$p_no_tipo' ";
-                }
+        if (!empty($p_no_tipo)) {
+            $sql .= "AND PROC.PK_TIPO <> '$p_no_tipo' ";
+        }
 
-                $sql .= "ORDER BY PROC.PK_PROCESO DESC, PROC.PK_TIPO DESC";
-                
+        $sql .= "ORDER BY PROC.PK_PROCESO DESC, PROC.PK_TIPO DESC";
+
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -75,8 +72,8 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_INS_PROCESO_MENSUAL(
+            $this->db->conn_id,
+            "BEGIN NOV_INS_PROCESO_MENSUAL(
                             :p_anho,
                             :p_mes,
                             :p_tipo,
@@ -86,18 +83,19 @@ class ProcesoMensualModel extends CI_Model {
                             :p_observacion,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_anho", $p_anho,-1,OCI_B_INT);
-        oci_bind_by_name($proc,"p_mes", $p_mes, 2, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_inicio", $p_inicio, 30, SQLT_CHR);
-        oci_bind_by_name($proc,"p_termino", $p_termino, 30, SQLT_CHR);
-        oci_bind_by_name($proc,"p_observacion", $p_observacion, 1000, SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_anho", $p_anho, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "p_mes", $p_mes, 2, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_inicio", $p_inicio, 30, SQLT_CHR);
+        oci_bind_by_name($proc, "p_termino", $p_termino, 30, SQLT_CHR);
+        oci_bind_by_name($proc, "p_observacion", $p_observacion, 1000, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -111,8 +109,8 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_UPD_PROCESO_MENSUAL(
+            $this->db->conn_id,
+            "BEGIN NOV_UPD_PROCESO_MENSUAL(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
@@ -121,17 +119,18 @@ class ProcesoMensualModel extends CI_Model {
                             :p_observacion,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_inicio", $p_inicio, 30, SQLT_CHR);
-        oci_bind_by_name($proc,"p_termino", $p_termino, 30, SQLT_CHR);
-        oci_bind_by_name($proc,"p_observacion", $p_observacion, 1000, SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_inicio", $p_inicio, 30, SQLT_CHR);
+        oci_bind_by_name($proc, "p_termino", $p_termino, 30, SQLT_CHR);
+        oci_bind_by_name($proc, "p_observacion", $p_observacion, 1000, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -139,9 +138,10 @@ class ProcesoMensualModel extends CI_Model {
         return $result;
     }
 
-    public function cargarDetalleProcesoMensual($p_anho, $p_mes, $p_cod_emp, $p_estado, $p_tipo, $p_rol, $p_usuario) {
-        
-       
+    public function cargarDetalleProcesoMensual($p_anho, $p_mes, $p_cod_emp, $p_estado, $p_tipo, $p_rol, $p_usuario)
+    {
+
+
         $sql = "SELECT 
                     PROC.PK_TIPO,
                     PROC.PK_PROCESO, 
@@ -168,13 +168,13 @@ class ProcesoMensualModel extends CI_Model {
                         AND cc.pfk_cod_emp = proc.pfk_cod_emp
                         AND cc.pfk_proceso = proc.pk_proceso
                         AND cc.pfk_tipo = proc.pk_tipo ";
-                        if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                            $sql .= "AND CC.PK_COD_CC IN (
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND CC.PK_COD_CC IN (
                                 SELECT PFK_COD_CC 
                                 FROM NOV_USUARIOS_CC 
                                 WHERE PFK_USUARIO = '$p_usuario'
                                 AND PFK_COD_EMP = '$p_cod_emp' )";
-                        }
+        }
         $sql .= ") CC_ESPERA,
                     (
                         SELECT COUNT(*) 
@@ -183,13 +183,13 @@ class ProcesoMensualModel extends CI_Model {
                         AND cc.pfk_cod_emp = proc.pfk_cod_emp
                         AND cc.pfk_proceso = proc.pk_proceso
                         AND cc.pfk_tipo = proc.pk_tipo ";
-                        if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                            $sql .= "AND CC.PK_COD_CC IN (
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND CC.PK_COD_CC IN (
                                 SELECT PFK_COD_CC 
                                 FROM NOV_USUARIOS_CC 
                                 WHERE PFK_USUARIO = '$p_usuario'
                                 AND PFK_COD_EMP = '$p_cod_emp' )";
-                        }
+        }
         $sql .= ") CC_TERMINADO,
                     (
                         SELECT COUNT(*) 
@@ -198,13 +198,13 @@ class ProcesoMensualModel extends CI_Model {
                         AND per.pfk_cod_emp = proc.pfk_cod_emp
                         AND per.pfk_proceso = proc.pk_proceso
                         AND per.pfk_tipo = proc.pk_tipo ";
-                        if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                            $sql .= "AND per.PFK_COD_CC IN (
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND per.PFK_COD_CC IN (
                                 SELECT PFK_COD_CC 
                                 FROM NOV_USUARIOS_CC 
                                 WHERE PFK_USUARIO = '$p_usuario'
                                 AND PFK_COD_EMP = '$p_cod_emp' )";
-                        }
+        }
         $sql .= ") PERSONA_ESPERA,
                     (
                         SELECT COUNT(*) 
@@ -213,51 +213,47 @@ class ProcesoMensualModel extends CI_Model {
                         AND per.pfk_cod_emp = proc.pfk_cod_emp
                         AND per.pfk_proceso = proc.pk_proceso
                         AND per.pfk_tipo = proc.pk_tipo ";
-                        if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                            $sql .= "AND per.PFK_COD_CC IN (
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND per.PFK_COD_CC IN (
                                 SELECT PFK_COD_CC 
                                 FROM NOV_USUARIOS_CC 
                                 WHERE PFK_USUARIO = '$p_usuario'
                                 AND PFK_COD_EMP = '$p_cod_emp' )";
-                        }
+        }
         $sql .= ") PERSONA_TERMINADO
                 FROM NOV_PROC_MENSUAL PROC, NOV_EMPRESAS EMP  
                 WHERE PROC.PFK_COD_EMP = EMP.PK_COD_EMP ";
 
-                if(!empty($p_cod_emp))
-                {
-                    $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' ";
-                }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' ";
+        }
 
-                if(!empty($p_anho))
-                {
-                    $sql .= "AND PROC.ANHO = '$p_anho' ";
-                }
+        if (!empty($p_anho)) {
+            $sql .= "AND PROC.ANHO = '$p_anho' ";
+        }
 
-                if(!empty($p_mes))
-                {
-                    $sql .= "AND PROC.MES = '$p_mes' ";
-                }
+        if (!empty($p_mes)) {
+            $sql .= "AND PROC.MES = '$p_mes' ";
+        }
 
-                if(!empty($p_tipo))
-                {
-                    $sql .= "AND PROC.PK_TIPO = '$p_tipo' ";
-                }
+        if (!empty($p_tipo)) {
+            $sql .= "AND PROC.PK_TIPO = '$p_tipo' ";
+        }
 
-                if(!empty($p_estado))
-                {
-                    $sql .= "AND PROC.ESTADO = '$p_estado' ";
-                }
+        if (!empty($p_estado)) {
+            $sql .= "AND PROC.ESTADO = '$p_estado' ";
+        }
 
-                $sql .= "ORDER BY PROC.PK_PROCESO DESC, PROC.PK_TIPO DESC";
-                
+        $sql .= "ORDER BY PROC.PK_PROCESO DESC, PROC.PK_TIPO DESC";
+
 
         $query = $this->db->query($sql);
         return $query->result();
     }
 
 
-    public function cargarCCProcesoMensual($p_proceso, $p_cod_emp, $p_tipo, $p_cod_cc, $p_nom_cc){
+    public function cargarCCProcesoMensual($p_proceso, $p_cod_emp, $p_tipo, $p_cod_cc, $p_nom_cc)
+    {
         $sql = "SELECT 
                     PFK_PROCESO, 
                     PFK_COD_EMP, 
@@ -273,38 +269,34 @@ class ProcesoMensualModel extends CI_Model {
                 FROM NOV_PROC_MENSUAL_CC CC
                 WHERE 1 = 1 ";
 
-                if(!empty($p_cod_emp))
-                {
-                    $sql .= "AND PFK_COD_EMP = '$p_cod_emp' ";
-                }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND PFK_COD_EMP = '$p_cod_emp' ";
+        }
 
-                if(!empty($p_proceso))
-                {
-                    $sql .= "AND PFK_PROCESO = '$p_proceso' ";
-                }
+        if (!empty($p_proceso)) {
+            $sql .= "AND PFK_PROCESO = '$p_proceso' ";
+        }
 
-                if(!empty($p_tipo))
-                {
-                    $sql .= "AND PFK_TIPO = '$p_tipo' ";
-                }
+        if (!empty($p_tipo)) {
+            $sql .= "AND PFK_TIPO = '$p_tipo' ";
+        }
 
-                if(!empty($p_cod_cc))
-                {
-                    $sql .= "AND UPPER(PK_COD_CC) LIKE(UPPER('%$p_cod_cc%')) ";
-                }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND UPPER(PK_COD_CC) LIKE(UPPER('%$p_cod_cc%')) ";
+        }
 
-                if(!empty($p_nom_cc))
-                {
-                    $sql .= "AND UPPER(NOM_CC) LIKE(UPPER('%$p_nom_cc%')) ";
-                }
+        if (!empty($p_nom_cc)) {
+            $sql .= "AND UPPER(NOM_CC) LIKE(UPPER('%$p_nom_cc%')) ";
+        }
 
-                $sql .= "ORDER BY PK_COD_CC ASC ";
+        $sql .= "ORDER BY PK_COD_CC ASC ";
 
         $query = $this->db->query($sql);
         return $query->result();
     }
 
-    public function cargarPersonasProcesoMensual($p_proceso, $p_cod_emp, $p_tipo, $p_cod_cc, $p_rut){
+    public function cargarPersonasProcesoMensual($p_proceso, $p_cod_emp, $p_tipo, $p_cod_cc, $p_rut)
+    {
         $sql = "SELECT 
                     PFK_PROCESO, 
                     PFK_COD_EMP, 
@@ -323,39 +315,34 @@ class ProcesoMensualModel extends CI_Model {
                 FROM NOV_PROC_MENSUAL_PERSONS
                 WHERE 1 = 1 ";
 
-                if(!empty($p_cod_emp))
-                {
-                    $sql .= "AND PFK_COD_EMP = '$p_cod_emp' ";
-                }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND PFK_COD_EMP = '$p_cod_emp' ";
+        }
 
-                if(!empty($p_proceso))
-                {
-                    $sql .= "AND PFK_PROCESO = '$p_proceso' ";
-                }
+        if (!empty($p_proceso)) {
+            $sql .= "AND PFK_PROCESO = '$p_proceso' ";
+        }
 
-                if(!empty($p_tipo))
-                {
-                    $sql .= "AND PFK_TIPO = '$p_tipo' ";
-                }
+        if (!empty($p_tipo)) {
+            $sql .= "AND PFK_TIPO = '$p_tipo' ";
+        }
 
-                if(!empty($p_cod_cc))
-                {
-                    $sql .= "AND UPPER(PFK_COD_CC) LIKE(UPPER('%$p_cod_cc%')) ";
-                }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND UPPER(PFK_COD_CC) LIKE(UPPER('%$p_cod_cc%')) ";
+        }
 
-                if(!empty($p_rut))
-                {
-                    $sql .= "AND PK_RUT = '$p_rut' ";
-                }
+        if (!empty($p_rut)) {
+            $sql .= "AND PK_RUT = '$p_rut' ";
+        }
 
-                $sql .= "ORDER BY PFK_COD_CC ASC, NOMBRE ASC";
+        $sql .= "ORDER BY PFK_COD_CC ASC, NOMBRE ASC";
 
         $query = $this->db->query($sql);
         return $query->result();
-        
     }
 
-    public function cargarPersonasProcesoMensualPorUsuario($p_usuario, $p_rol, $p_cod_emp, $p_cod_cc, $p_desc, $p_estado){
+    public function cargarPersonasProcesoMensualPorUsuario($p_usuario, $p_rol, $p_cod_emp, $p_cod_cc, $p_desc, $p_estado)
+    {
         $sql = "SELECT 
                     procPER.PFK_PROCESO, 
                     procPER.PFK_COD_EMP, 
@@ -376,40 +363,40 @@ class ProcesoMensualModel extends CI_Model {
                 AND procper.pfk_proceso = proc.pk_proceso
                 AND procper.pfk_cod_emp = PROC.PFK_COD_EMP
                 AND PROCPER.PFK_TIPO = PROC.PK_TIPO ";
-                
-                if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                    $sql .= "AND PROCPER.PFK_COD_CC IN (
+
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND PROCPER.PFK_COD_CC IN (
                         SELECT PFK_COD_CC 
                         FROM NOV_USUARIOS_CC 
                         WHERE PFK_USUARIO = '$p_usuario'
                         AND PFK_COD_EMP = '$p_cod_emp' 
                     )";
-                }
+        }
 
-                if(!empty($p_desc)){
-                    $sql .= "AND (PROCPER.PK_RUT LIKE ('%$p_desc%') 
+        if (!empty($p_desc)) {
+            $sql .= "AND (PROCPER.PK_RUT LIKE ('%$p_desc%') 
                                 OR UPPER(PROCPER.NOMBRE) LIKE (UPPER('%$p_desc%'))) ";
-                }
+        }
 
-                if(!empty($p_cod_cc)){
-                    $sql .= "AND PROCPER.PFK_COD_CC = '$p_cod_cc' ";
-                }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND PROCPER.PFK_COD_CC = '$p_cod_cc' ";
+        }
 
-                if(!empty($p_estado)){
-                    $sql .= "AND PROCPER.ESTADO = '$p_estado' ";
-                }
-                $sql .= "AND PROC.ESTADO = 'EN ESPERA'
+        if (!empty($p_estado)) {
+            $sql .= "AND PROCPER.ESTADO = '$p_estado' ";
+        }
+        $sql .= "AND PROC.ESTADO = 'EN ESPERA'
                 AND PROC.PFK_COD_EMP = '$p_cod_emp' 
                 ORDER BY PFK_COD_CC ASC, NOMBRE ASC ";
 
-            
+
         $query = $this->db->query($sql);
         return $query->result();
-
     }
-    
 
-    public function cargarCCProcesoMensualPorUsuario($p_usuario, $p_rol, $p_cod_emp){
+
+    public function cargarCCProcesoMensualPorUsuario($p_usuario, $p_rol, $p_cod_emp)
+    {
 
         $sql = "SELECT 
                     CC.PFK_PROCESO, 
@@ -429,15 +416,15 @@ class ProcesoMensualModel extends CI_Model {
                 AND CC.pfk_cod_emp = PROC.PFK_COD_EMP
                 AND CC.PFK_TIPO = PROC.PK_TIPO ";
 
-                if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                    $sql .= "AND CC.PK_COD_CC IN (
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND CC.PK_COD_CC IN (
                         SELECT PFK_COD_CC 
                         FROM NOV_USUARIOS_CC 
                         WHERE PFK_USUARIO = '$p_usuario'
                         AND PFK_COD_EMP = '$p_cod_emp' 
                     )";
-                }
-                $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' 
+        }
+        $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' 
                         AND PROC.ESTADO = 'EN ESPERA'
                 ORDER BY PK_COD_CC ASC";
 
@@ -446,7 +433,8 @@ class ProcesoMensualModel extends CI_Model {
     }
 
 
-    public function cargarConceptosPersonaProcesoMensual($p_proceso, $p_cod_emp, $p_tipo, $p_cod_cc, $p_rut, $p_grupo){
+    public function cargarConceptosPersonaProcesoMensual($p_proceso, $p_cod_emp, $p_tipo, $p_cod_cc, $p_rut, $p_grupo)
+    {
 
         $sql = "SELECT 
                     PFK_PROCESO,
@@ -507,8 +495,8 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_UPD_PROC_MENSUAL_CONCEPTO(
+            $this->db->conn_id,
+            "BEGIN NOV_UPD_PROC_MENSUAL_CONCEPTO(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
@@ -518,18 +506,19 @@ class ProcesoMensualModel extends CI_Model {
                             :p_usuario,
                             :p_valor,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_cc", $p_cod_cc, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_rut", $p_rut, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_concepto", $p_cod_concepto, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_valor", $p_valor, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_cc", $p_cod_cc, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_rut", $p_rut, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_concepto", $p_cod_concepto, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_valor", $p_valor, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -543,38 +532,39 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_EST_PROC_MENSUAL(
+            $this->db->conn_id,
+            "BEGIN NOV_EST_PROC_MENSUAL(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
                             :p_estado,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_estado", $p_estado, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_estado", $p_estado, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
         $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
         return $result;
     }
-    
+
 
     public function modificarEstadoProcMensualCC($p_proceso, $p_tipo, $p_cod_emp, $p_cod_cc, $p_estado, $p_usuario)
     {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_EST_PROC_MENSUAL_CC(
+            $this->db->conn_id,
+            "BEGIN NOV_EST_PROC_MENSUAL_CC(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
@@ -582,16 +572,17 @@ class ProcesoMensualModel extends CI_Model {
                             :p_estado,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_cc", $p_cod_cc, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_estado", $p_estado, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_cc", $p_cod_cc, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_estado", $p_estado, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -604,8 +595,8 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_EST_PROC_MENSUAL_PERSON(
+            $this->db->conn_id,
+            "BEGIN NOV_EST_PROC_MENSUAL_PERSON(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
@@ -614,17 +605,18 @@ class ProcesoMensualModel extends CI_Model {
                             :p_estado,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_cc", $p_cod_cc, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_rut", $p_rut, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_estado", $p_estado, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_cc", $p_cod_cc, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_rut", $p_rut, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_estado", $p_estado, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -632,7 +624,8 @@ class ProcesoMensualModel extends CI_Model {
         return $result;
     }
 
-    public function exportarProcesoMensualRRHH($p_proceso, $p_tipo, $p_cod_emp, $p_cod_cc){
+    public function exportarProcesoMensualRRHH($p_proceso, $p_tipo, $p_cod_emp, $p_cod_cc)
+    {
         $sql = "SELECT 
                 cc.pk_cod_cc COD_CC, 
                 cc.NOM_CC, 
@@ -696,42 +689,45 @@ class ProcesoMensualModel extends CI_Model {
         return $query->result();
     }
 
-    public function importarProcesoMensualPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $data) {
- 
+    public function importarProcesoMensualPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $data)
+    {
+
         $this->db->query(
             "DELETE FROM NOV_IMPORT_PROC_MENSUAL_BASIC 
-            WHERE USUARIO = '$p_usuario' ");
+            WHERE USUARIO = '$p_usuario' "
+        );
 
-        $res = $this->db->insert_batch('NOV_IMPORT_PROC_MENSUAL_BASIC',$data);
+        $res = $this->db->insert_batch('NOV_IMPORT_PROC_MENSUAL_BASIC', $data);
 
 
-        if($res){
+        if ($res) {
             return TRUE;
-        }else{
+        } else {
             return FALSE;
         }
- 
     }
 
-    public function importarProcesoMensual($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $data) {
- 
+    public function importarProcesoMensual($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $data)
+    {
+
         $this->db->query(
             "DELETE FROM NOV_IMPORT_PROCESO_MENSUAL 
-            WHERE USUARIO = '$p_usuario' ");
+            WHERE USUARIO = '$p_usuario' "
+        );
 
-        $res = $this->db->insert_batch('NOV_IMPORT_PROCESO_MENSUAL',$data);
+        $res = $this->db->insert_batch('NOV_IMPORT_PROCESO_MENSUAL', $data);
 
 
-        if($res){
+        if ($res) {
             return TRUE;
-        }else{
+        } else {
             return FALSE;
         }
- 
     }
 
-    public function validarImportarProcesoPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario){
-        $sql ="SELECT 
+    public function validarImportarProcesoPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario)
+    {
+        $sql = "SELECT 
                     RUT,
                     COD_CONCEPTO,
                     VALOR,
@@ -754,8 +750,9 @@ class ProcesoMensualModel extends CI_Model {
         return $query->result();
     }
 
-    public function resumenValidarImportarProcesoPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario){
-        $sql ="SELECT MENSAJE, COUNT(*) CONTAR
+    public function resumenValidarImportarProcesoPersonalizado($p_proceso, $p_tipo, $p_cod_emp, $p_usuario)
+    {
+        $sql = "SELECT MENSAJE, COUNT(*) CONTAR
                 FROM (SELECT 
                         RUT,
                         COD_CONCEPTO,
@@ -780,7 +777,8 @@ class ProcesoMensualModel extends CI_Model {
         return $query->result();
     }
 
-    public function validarImportarProceso($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_cod_cc){
+    public function validarImportarProceso($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_cod_cc)
+    {
         $sql = "SELECT 
                     NVL(CON.PFK_COD_CC, IMP.COD_CC) COD_CC, 
                     IMP.NOM_CC, 
@@ -826,7 +824,8 @@ class ProcesoMensualModel extends CI_Model {
         return $query->result();
     }
 
-    public function resumenValidarImportarProceso($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_cod_cc){
+    public function resumenValidarImportarProceso($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_cod_cc)
+    {
 
         $sql = "SELECT MENSAJE, COUNT(*) CONTAR
             FROM(
@@ -859,23 +858,24 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_UPD_IMPORTAR_PROC_MENSUAL(
+            $this->db->conn_id,
+            "BEGIN NOV_UPD_IMPORTAR_PROC_MENSUAL(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
                             :p_usuario,
                             :p_cod_cc,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_cc", $p_cod_cc, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_cc", $p_cod_cc, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -888,21 +888,22 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_UPD_IMPORT_PROC_MEN_BASIC(
+            $this->db->conn_id,
+            "BEGIN NOV_UPD_IMPORT_PROC_MEN_BASIC(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -915,29 +916,31 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_DEL_PROC_MENSUAL(
+            $this->db->conn_id,
+            "BEGIN NOV_DEL_PROC_MENSUAL(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
         $result = array('r_est' => $r_est, 'r_msg' => $r_msg);
         return $result;
     }
-    
-    public function cargarValidacionCC($p_proceso, $p_cod_emp) {
+
+    public function cargarValidacionCC($p_proceso, $p_cod_emp)
+    {
         $sql = "SELECT PFK_PROCESO,
                     PFK_COD_EMP,
                     PK_INDEX,
@@ -961,21 +964,22 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_TER_ALL_CC_PROC_MENSUAL(
+            $this->db->conn_id,
+            "BEGIN NOV_TER_ALL_CC_PROC_MENSUAL(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -988,21 +992,22 @@ class ProcesoMensualModel extends CI_Model {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_INS_PROC_MENSUAL_FALTANTE(
+            $this->db->conn_id,
+            "BEGIN NOV_INS_PROC_MENSUAL_FALTANTE(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
                             :p_usuario,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -1011,9 +1016,10 @@ class ProcesoMensualModel extends CI_Model {
     }
 
 
-    public function cargarTrabajadoresFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp){
+    public function cargarTrabajadoresFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp)
+    {
 
-    $sql = "SELECT
+        $sql = "SELECT
         '$p_proceso' PFK_PROCESO, 
         '$p_cod_emp' PFK_COD_EMP, 
         PER1.COD_CC PFK_COD_CC, 
@@ -1082,7 +1088,7 @@ class ProcesoMensualModel extends CI_Model {
     AND CONTAR = 1
     ORDER BY PFK_COD_CC, PK_RUT";
 
-       /* $sql = "SELECT PFK_PROCESO,
+        /* $sql = "SELECT PFK_PROCESO,
                     PFK_COD_EMP,
                     PFK_COD_CC,
                     PK_RUT,
@@ -1215,15 +1221,16 @@ class ProcesoMensualModel extends CI_Model {
 
         $query = $this->db->query($sql);
         return $query->result();
-    } 
+    }
 
-    public function cargarConceptosFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp){
+    public function cargarConceptosFaltantesProcMensual($p_proceso, $p_tipo, $p_cod_emp)
+    {
 
         $grupos = "";
 
-        if($p_tipo == 'RRHH') {
+        if ($p_tipo == 'RRHH') {
             $grupos = "'HABER', 'BDI', 'DESCUENTO'";
-        }else{
+        } else {
             $grupos = "'HABER', 'BDI'";
         }
 
@@ -1292,30 +1299,31 @@ class ProcesoMensualModel extends CI_Model {
 
         $query = $this->db->query($sql);
         return $query->result();
-    } 
+    }
 
     public function refrescarTrabajadorProcMensual($p_proceso, $p_tipo, $p_cod_emp, $p_usuario, $p_rut)
     {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
-                $this->db->conn_id,
-                    "BEGIN NOV_REFRESCAR_PROC_MENSUAL(
+            $this->db->conn_id,
+            "BEGIN NOV_REFRESCAR_PROC_MENSUAL(
                             :p_proceso,
                             :p_tipo,
                             :p_cod_emp,
                             :p_usuario,
                             :p_rut,
                             :r_est,
-                            :r_msg);END;");
-        
-        oci_bind_by_name($proc,"p_proceso", $p_proceso, 20, SQLT_CHR);
-        oci_bind_by_name($proc,"p_tipo", $p_tipo, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_cod_emp", $p_cod_emp,20,SQLT_CHR);
-        oci_bind_by_name($proc,"p_usuario", $p_usuario, 100, SQLT_CHR);
-        oci_bind_by_name($proc,"p_rut", $p_rut,20,SQLT_CHR);
-        oci_bind_by_name($proc,"r_est",$r_est, -1, OCI_B_INT);
-        oci_bind_by_name($proc,"r_msg",$r_msg, 200, SQLT_CHR);
+                            :r_msg);END;"
+        );
+
+        oci_bind_by_name($proc, "p_proceso", $p_proceso, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_tipo", $p_tipo, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_cod_emp", $p_cod_emp, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "p_usuario", $p_usuario, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "p_rut", $p_rut, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "r_est", $r_est, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "r_msg", $r_msg, 200, SQLT_CHR);
 
         oci_execute($proc);
 
@@ -1323,7 +1331,8 @@ class ProcesoMensualModel extends CI_Model {
         return $result;
     }
 
-    public function cargarCCProcesoMensualPorUsuarioEstado($p_usuario, $p_rol, $p_cod_emp, $p_estado){
+    public function cargarCCProcesoMensualPorUsuarioEstado($p_usuario, $p_rol, $p_cod_emp, $p_estado)
+    {
 
         $sql = "SELECT 
                     CC.PFK_PROCESO, 
@@ -1343,16 +1352,16 @@ class ProcesoMensualModel extends CI_Model {
                 AND CC.pfk_cod_emp = PROC.PFK_COD_EMP
                 AND CC.PFK_TIPO = PROC.PK_TIPO 
                 AND CC.ESTADO = '$p_estado' ";
-                
-                if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                    $sql .= "AND CC.PK_COD_CC IN (
+
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND CC.PK_COD_CC IN (
                         SELECT PFK_COD_CC 
                         FROM NOV_USUARIOS_CC 
                         WHERE PFK_USUARIO = '$p_usuario'
                         AND PFK_COD_EMP = '$p_cod_emp' 
                     )";
-                }
-                $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' 
+        }
+        $sql .= "AND PROC.PFK_COD_EMP = '$p_cod_emp' 
                         AND PROC.ESTADO = 'EN ESPERA'
                 ORDER BY PK_COD_CC ASC";
 
@@ -1360,7 +1369,8 @@ class ProcesoMensualModel extends CI_Model {
         return $query->result();
     }
 
-    public function cargarPersonasProcesoMensualPorUsuarioEstado($p_usuario, $p_rol, $p_cod_emp, $p_estado){
+    public function cargarPersonasProcesoMensualPorUsuarioEstado($p_usuario, $p_rol, $p_cod_emp, $p_estado)
+    {
         $sql = "SELECT 
                     procPER.PFK_PROCESO, 
                     procPER.PFK_COD_EMP, 
@@ -1381,26 +1391,25 @@ class ProcesoMensualModel extends CI_Model {
                 AND procper.pfk_proceso = proc.pk_proceso
                 AND procper.pfk_cod_emp = PROC.PFK_COD_EMP
                 AND PROCPER.PFK_TIPO = PROC.PK_TIPO ";
-                
-                if(!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH'){
-                    $sql .= "AND PROCPER.PFK_COD_CC IN (
+
+        if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
+            $sql .= "AND PROCPER.PFK_COD_CC IN (
                         SELECT PFK_COD_CC 
                         FROM NOV_USUARIOS_CC 
                         WHERE PFK_USUARIO = '$p_usuario'
                         AND PFK_COD_EMP = '$p_cod_emp' 
                     )";
-                }
+        }
 
-                if(!empty($p_estado)){
-                    $sql .= "AND PROCPER.ESTADO = '$p_estado' ";
-                }
-                $sql .= "AND PROC.ESTADO = 'EN ESPERA'
+        if (!empty($p_estado)) {
+            $sql .= "AND PROCPER.ESTADO = '$p_estado' ";
+        }
+        $sql .= "AND PROC.ESTADO = 'EN ESPERA'
                 AND PROC.PFK_COD_EMP = '$p_cod_emp' 
                 ORDER BY PFK_COD_CC ASC, NOMBRE ASC ";
 
-            
+
         $query = $this->db->query($sql);
         return $query->result();
-
     }
 }

@@ -14,8 +14,8 @@ Ext.define("fcab.Container.WFModificarFichaInicio", {
     storeCargarRolesWFUsuario.load({
       params: {
         p_usuario: NOMBRE,
-        p_cod_emp: EMPRESA
-      }
+        p_cod_emp: EMPRESA,
+      },
     });
     cargarWFModificarFicha(null);
   },
@@ -32,9 +32,6 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
   itemId: "WFModificarFichaInicioGrilla",
   store: storeCagarSolicitudesCambioFicha,
   title: "Solicitud Modificar Ficha de Personal (" + NOM_EMPRESA + ")",
-  viewConfig: {
-    stripeRows: true,
-  },
   columnLines: true,
   emptyText: "Sin datos para mostrar",
   filtros: null,
@@ -145,13 +142,13 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
       text: "Dias Espera",
       sortable: true,
       dataIndex: "DIAS_INAC",
-      align: 'center',
+      align: "center",
       width: 100,
       renderer: function (value, meta) {
         var number = Number(value);
-        if(number >= 2) {
+        if (number >= 2) {
           meta.style = "color:red;";
-        }else{
+        } else {
           meta.style = "color:green;";
         }
         return value;
@@ -175,28 +172,28 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
       text: "Total Etapas",
       sortable: true,
       dataIndex: "TOTAL_ETAPA",
-      align: 'center',
+      align: "center",
       width: 100,
     },
     {
       text: "En Espera",
       sortable: true,
       dataIndex: "EN_ESPERA_ETAPA",
-      align: 'center',
+      align: "center",
       width: 100,
     },
     {
       text: "Aprobadas",
       sortable: true,
       dataIndex: "APROBADO_ETAPA",
-      align: 'center',
+      align: "center",
       width: 100,
     },
     {
       text: "Rechazadas",
       sortable: true,
       dataIndex: "RECHAZO_ETAPA",
-      align: 'center',
+      align: "center",
       width: 100,
     },
     {
@@ -425,7 +422,6 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
       hidden: true,
       width: 150,
     },
-    
 
     {
       text: "ID Cargo Actual",
@@ -552,23 +548,23 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
       xtype: "toolbar",
       items: [
         {
-            xtype: "combo",
-            name: "cbRol",
-            itemId: "cbRol",
-            displayField: "NOMBRE",
-            valueField: "PK_ROL_WF",
-            store: storeCargarRolesWFUsuario,
-            fieldLabel: "Rol",
-            labelAlign: "left",
-            queryMode: "local",
-            triggerAction: "all",
-            editable: false,
-            typeAhead: true,
-            selectOnFocus: true,
-            forceSelection: true,
-            allowBlank: true,
-            readOnly: false,
-          },
+          xtype: "combo",
+          name: "cbRol",
+          itemId: "cbRol",
+          displayField: "NOMBRE",
+          valueField: "PK_ROL_WF",
+          store: storeCargarRolesWFUsuario,
+          fieldLabel: "Rol",
+          labelAlign: "left",
+          queryMode: "local",
+          triggerAction: "all",
+          editable: false,
+          typeAhead: true,
+          selectOnFocus: true,
+          forceSelection: true,
+          allowBlank: true,
+          readOnly: false,
+        },
         {
           text: "Ingresar",
           itemId: "btnIngresar",
@@ -601,66 +597,70 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
                 Ext.Msg.ERROR,
                 Ext.Msg.OK
               );
-              
             }
           },
         },
         {
-          text: 'Anular',
-          itemId: 'btnAnular',
+          text: "Anular",
+          itemId: "btnAnular",
           hidden: false,
-          tooltip: 'Anular Item seleccionado',
-          iconCls: 'icon-form-suspend',
+          tooltip: "Anular Item seleccionado",
+          iconCls: "icon-form-suspend",
           handler: function () {
-              var grid = this.up('grid'); //Recuperamos la grilla
-              try { //Obtenemos el index del item seleccionado
-                  var rowIndex = grid.getSelectionModel().getCurrentPosition().rowIdx;
-                  clickAnularWFModificarFicha(grid, rowIndex);
-              } catch (e) {
-                  msg("Nada seleccionado", "Por favor, seleccione el item que desea anular", Ext.Msg.ERROR, Ext.Msg.OK);
-                  console.debug(e);
-              }
-          }
-
+            var grid = this.up("grid"); //Recuperamos la grilla
+            try {
+              //Obtenemos el index del item seleccionado
+              var rowIndex = grid.getSelectionModel().getCurrentPosition()
+                .rowIdx;
+              clickAnularWFModificarFicha(grid, rowIndex);
+            } catch (e) {
+              msg(
+                "Nada seleccionado",
+                "Por favor, seleccione el item que desea anular",
+                Ext.Msg.ERROR,
+                Ext.Msg.OK
+              );
+              console.debug(e);
+            }
+          },
         },
         {
-            text: "Documentos",
-            itemId: "btnDoc",
-            hidden: false,
-            tooltip: "Ver documentos",
-            iconCls: "icon-form-folder",
-            handler: function() {
-              var grid = this.up("grid"); //Recuperamos la grilla
-              try {
-                //Obtenemos el index del item seleccionado
-                var rowIndex = grid.getSelectionModel().getCurrentPosition()
-                  .rowIdx;
-                var rec = grid.getStore();
-                var recRow = rec.getAt(rowIndex);
-                if (recRow.data.ESTADO == 'ACTIVO') 
-                {
-                  modalAdjuntosAdmin(
-                    recRow.data.PK_ID,
-                    "cambio_ficha_wf",
-                    "Solicitud " + recRow.data.PK_ID
-                  );
-                } else {
-                  modalAdjuntosBasic(
-                    recRow.data.PK_ID,
-                    "cambio_ficha_wf",
-                    "Solicitud " + recRow.data.PK_ID
-                  );
-                }
-              } catch (e) {
-                msg(
-                  "Nada seleccionado",
-                  "Por favor, seleccione el item",
-                  Ext.Msg.WARNING,
-                  Ext.Msg.OK
+          text: "Documentos",
+          itemId: "btnDoc",
+          hidden: false,
+          tooltip: "Ver documentos",
+          iconCls: "icon-form-folder",
+          handler: function () {
+            var grid = this.up("grid"); //Recuperamos la grilla
+            try {
+              //Obtenemos el index del item seleccionado
+              var rowIndex = grid.getSelectionModel().getCurrentPosition()
+                .rowIdx;
+              var rec = grid.getStore();
+              var recRow = rec.getAt(rowIndex);
+              if (recRow.data.ESTADO == "ACTIVO") {
+                modalAdjuntosAdmin(
+                  recRow.data.PK_ID,
+                  "cambio_ficha_wf",
+                  "Solicitud " + recRow.data.PK_ID
                 );
-                console.debug(e);
+              } else {
+                modalAdjuntosBasic(
+                  recRow.data.PK_ID,
+                  "cambio_ficha_wf",
+                  "Solicitud " + recRow.data.PK_ID
+                );
               }
+            } catch (e) {
+              msg(
+                "Nada seleccionado",
+                "Por favor, seleccione el item",
+                Ext.Msg.WARNING,
+                Ext.Msg.OK
+              );
+              console.debug(e);
             }
+          },
         },
         {
           text: "Refrescar",
@@ -723,70 +723,83 @@ Ext.define("fcab.Container.WF.ModificarFicha.Inicio.Grilla", {
   ],
 });
 
-var clickCrearWFModificarFicha = function (grid) {  
-  var width = Ext.getBody().getViewSize().width > 1300 ? 1300 : Ext.getBody().getViewSize().width;
-  var height = Ext.getBody().getViewSize().height > 800 ? 800 : Ext.getBody().getViewSize().height;
+var clickCrearWFModificarFicha = function (grid) {
+  var width =
+    Ext.getBody().getViewSize().width > 1300
+      ? 1300
+      : Ext.getBody().getViewSize().width;
+  var height =
+    Ext.getBody().getViewSize().height > 800
+      ? 800
+      : Ext.getBody().getViewSize().height;
   var rec = grid.getStore();
 
-  var cbRol = Ext.ComponentQuery.query("#WFModificarFichaInicioGrilla #cbRol")[0];
-  
-  
-  if(cbRol.getValue() != null) {
+  var cbRol = Ext.ComponentQuery.query(
+    "#WFModificarFichaInicioGrilla #cbRol"
+  )[0];
 
+  if (cbRol.getValue() != null) {
     storeValidarRolEtapa1.load({
       params: {
-        p_rol: cbRol.selection.data.PK_ROL_WF
+        p_rol: cbRol.selection.data.PK_ROL_WF,
       },
-      callback: function(records, operation, success) {
-        if(records != null && records.length > 0) {
-            if(records[0].data.CONTAR != '0'){
-              
-              ventanaDinamica(
-                "WFModificarFichaCrear",
-                "Crear Solicitud (" + NOM_EMPRESA + " - " + cbRol.selection.data.PK_ROL_WF+ ")",
-                width,
-                "",
-                "WFModificarFichaCrear",
-                1,
-                0,
-                rec,
-                cbRol.selection.data
-              );
-                
-            }else{
-                Ext.MessageBox.show({
-                    title: 'ADVERTENCIA',
-                    msg: "El rol seleccionado no puede crear solicitudes.",
-                    icon: Ext.MessageBox.WARNING,
-                    buttons: Ext.Msg.OK
-                });
-            }
+      callback: function (records, operation, success) {
+        if (records != null && records.length > 0) {
+          if (records[0].data.CONTAR != "0") {
+            ventanaDinamica(
+              "WFModificarFichaCrear",
+              "Crear Solicitud (" +
+                NOM_EMPRESA +
+                " - " +
+                cbRol.selection.data.PK_ROL_WF +
+                ")",
+              width,
+              "",
+              "WFModificarFichaCrear",
+              1,
+              0,
+              rec,
+              cbRol.selection.data
+            );
+          } else {
+            Ext.MessageBox.show({
+              title: "ADVERTENCIA",
+              msg: "El rol seleccionado no puede crear solicitudes.",
+              icon: Ext.MessageBox.WARNING,
+              buttons: Ext.Msg.OK,
+            });
+          }
         }
-        
-    }
-
+      },
     });
-    
-  }else{
+  } else {
     Ext.MessageBox.show({
-      title: 'ADVERTENCIA',
+      title: "ADVERTENCIA",
       msg: "Debe seleccionar un rol para poder crear una solicitud.",
       icon: Ext.MessageBox.WARNING,
-      buttons: Ext.Msg.OK
-  });
+      buttons: Ext.Msg.OK,
+    });
   }
 };
 
 var clickDetalleWFModificarFicha = function (grid, rowIndex) {
-  var width = Ext.getBody().getViewSize().width > 1300 ? 1300 : Ext.getBody().getViewSize().width;
-  var height = Ext.getBody().getViewSize().height > 800 ? 800 : Ext.getBody().getViewSize().height;
-  
+  var width =
+    Ext.getBody().getViewSize().width > 1300
+      ? 1300
+      : Ext.getBody().getViewSize().width;
+  var height =
+    Ext.getBody().getViewSize().height > 800
+      ? 800
+      : Ext.getBody().getViewSize().height;
+
   var rec = grid.getStore();
   var recRow = rec.getAt(rowIndex);
-  var cbRol = Ext.ComponentQuery.query("#WFModificarFichaInicioGrilla #cbRol")[0];
+  var cbRol = Ext.ComponentQuery.query(
+    "#WFModificarFichaInicioGrilla #cbRol"
+  )[0];
   var id = recRow.data.PK_ID;
   var estado = recRow.data.ESTADO;
-  if(cbRol.getValue() != null) {
+  if (cbRol.getValue() != null) {
     ventanaDinamica(
       "WFModificarFichaDetalle",
       "Detalle Solicitud (" + id + " - " + estado + ")",
@@ -798,50 +811,49 @@ var clickDetalleWFModificarFicha = function (grid, rowIndex) {
       cbRol.selection.data,
       recRow.data
     );
-  }else{
+  } else {
     Ext.MessageBox.show({
-      title: 'ADVERTENCIA',
+      title: "ADVERTENCIA",
       msg: "Debe seleccionar un rol para poder ingresar al detalle",
       icon: Ext.MessageBox.WARNING,
-      buttons: Ext.Msg.OK
-  });
+      buttons: Ext.Msg.OK,
+    });
   }
 };
 
-var clickAnularWFModificarFicha = function(grid, rowIndex) {
+var clickAnularWFModificarFicha = function (grid, rowIndex) {
   var rec = grid.getStore();
-    var recRow = rec.getAt(rowIndex);
-    Ext.MessageBox.confirm(
-        'Anular Solicitud', 
-        '¿Esta seguro de anular la solicitud?', 
-    function(btn) {
-        if (btn === 'yes') {
-            storeAnularSolicitudCambioFicha.load({
-                params:{
-                    P_ID: recRow.data.PK_ID,
-                    P_USUARIO: NOMBRE
-                },
-                callback: function(records, operation, success) {
-                    if(records != null) {
-                        if(records[0].data.r_msg == 'OK'){
-                            showToast('Solicitud anulada correctamente.');
-                            cargarWFModificarFicha(null);
-                            
-                        }else{
-                            Ext.MessageBox.show({
-                                title: 'ADVERTENCIA',
-                                msg: records[0].data.r_msg,
-                                icon: Ext.MessageBox.WARNING,
-                                buttons: Ext.Msg.OK
-                            });
-                        }
-                    }
-                    
-                }
-            });
-        }
-    });
-}
+  var recRow = rec.getAt(rowIndex);
+  Ext.MessageBox.confirm(
+    "Anular Solicitud",
+    "¿Esta seguro de anular la solicitud?",
+    function (btn) {
+      if (btn === "yes") {
+        storeAnularSolicitudCambioFicha.load({
+          params: {
+            P_ID: recRow.data.PK_ID,
+            P_USUARIO: NOMBRE,
+          },
+          callback: function (records, operation, success) {
+            if (records != null) {
+              if (records[0].data.r_msg == "OK") {
+                showToast("Solicitud anulada correctamente.");
+                cargarWFModificarFicha(null);
+              } else {
+                Ext.MessageBox.show({
+                  title: "ADVERTENCIA",
+                  msg: records[0].data.r_msg,
+                  icon: Ext.MessageBox.WARNING,
+                  buttons: Ext.Msg.OK,
+                });
+              }
+            }
+          },
+        });
+      }
+    }
+  );
+};
 
 var clickFiltrarWFModificarFicha = function (grid) {
   var rec = grid.getStore();

@@ -422,7 +422,7 @@ Ext.define('fcab.Container.MainIngDescuentoRRLL.Grilla', {
             }
         }]
     }],
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     title: 'Descuentos RRLL ('+NOM_EMPRESA+')',
 });

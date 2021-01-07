@@ -41,7 +41,7 @@ Ext.define('fcab.Container.MasterParametro.Grilla', {
     itemId: 'MasterParametroGrilla',
     store: storeCargarParametros,
     columnLines: true,
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     emptyText: 'Sin datos para mostrar',
     filtros: null,

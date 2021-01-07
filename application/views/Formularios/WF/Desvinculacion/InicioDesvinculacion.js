@@ -28,7 +28,7 @@ Ext.define('fcab.Container.InicioDesvinculacionGrilla.Grilla', {
     id: 'InicioDesvinculacionGrilla',
     title: 'Solicitud de Desvinculación ('+NOM_EMPRESA+')',
     store: storeDesv_listaDesvinculaciones,
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     columnLines: true,
     emptyText: 'Sin datos para mostrar',

@@ -784,7 +784,7 @@ Ext.define('fcab.Container.MainIngresoPersonal.Grilla', {
             }
         }]
     }],
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     title: 'Ingreso de Personal ('+NOM_EMPRESA+')',
 });

@@ -1072,4 +1072,84 @@ class ExcelExportModel extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result();
     }
+
+    public function cargarPresupuestoDotacion($p_anho, $p_cod_emp, $p_tipo, $p_rol, $p_usuario) {
+        $sql = "SELECT 
+                    p3.PFK_ANHO ANHO,
+                    p3.PFK_TIPO TIPO,
+                    p3.PFK_COD_EMP COD_EMP,
+                    p2.COD_GERENCIA,
+                    p2.NOM_GERENCIA,
+                    p2.COD_DEPARTAMENTO,
+                    p2.NOM_DEPARTAMENTO,
+                    p3.PFK_COD_CC COD_CC,
+                    p2.NOM_CC,
+                    p3.PK_COD_CARGO COD_CARGO,
+                    p3.NOM_CARGO,
+                    p3.ROL,
+                    p3.DOTACION REAL,
+                    p3.ENE,
+                    p3.FEB,
+                    p3.MAR,
+                    p3.ABR,
+                    p3.MAY,
+                    p3.JUN,
+                    p3.JUL,
+                    p3.AGO,
+                    p3.SEP,
+                    p3.OCT,
+                    p3.NOV,
+                    p3.DIC,
+                    p3.OBSERVACION
+                FROM NOV_PRESUP P1, NOV_PRESUP_CC P2, NOV_PRESUP_DOTACION P3
+                WHERE p1.pk_anho = p2.pfk_anho
+                AND p1.pfk_cod_emp = p2.pfk_cod_emp
+                AND p1.pk_tipo = p2.pfk_tipo
+                AND p2.pfk_anho = p3.pfk_anho
+                AND p2.pfk_cod_emp = p3.pfk_cod_emp
+                AND p2.pfk_tipo = p3.pfk_tipo 
+                AND p2.pk_cod_cc = p3.pfk_cod_cc ";
+            
+            if(!empty($p_anho))
+            {
+                $sql .= "AND p1.PK_ANHO = $p_anho ";
+            }
+
+            if(!empty($p_cod_emp))
+            {
+                $sql .= "AND p1.PFK_COD_EMP = '$p_cod_emp' ";
+            }
+
+            if(!empty($p_tipo))
+            {
+                $sql .= "AND p1.PK_TIPO = '$p_tipo' ";
+            }
+
+            //CUANDO EL ROL DE USUARIO ES DISTINTO A SUPER_ADMIN O ADMIN OBTIENE 
+            //SOLO LOS CONCEPTOS DE LOS CC DEL USUARIO
+            if(!empty($p_rol) && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ADMIN') {
+                $sql .= "AND p3.PFK_COD_CC IN (
+                    SELECT PFK_COD_CC
+                    FROM NOV_USUARIOS_CC
+                    WHERE PFK_COD_EMP = '$p_cod_emp'
+                    AND PFK_USUARIO = '$p_usuario'
+                ) ";
+            }
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+
+    public function cargarCierrePersonal($p_anho, $p_mes) {
+        $sql = "SELECT *
+                FROM nov_cierre_mensual_personal
+                WHERE PFK_ANHO = $p_anho
+                AND PFK_MES = $p_mes";
+                
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
 }

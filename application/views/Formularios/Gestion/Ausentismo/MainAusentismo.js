@@ -52,7 +52,7 @@ Ext.define('fcab.Container.MainAusentismo.Grilla', {
     itemId: 'MainAusentismoGrilla',
     store: storeCargarAusentismo,
     columnLines: true,
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     emptyText: 'Sin datos para mostrar',
     filtros: null,

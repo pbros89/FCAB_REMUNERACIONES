@@ -364,7 +364,7 @@ Ext.define('fcab.Container.MainFiniquito.Grilla', {
             }
         }]
     }],
-    height: Ext.getBody().getViewSize().height - 130, 
+    height: Ext.getBody().getViewSize().height - 150, 
     width : '100%',
     title: 'Finiquitar Personal ('+NOM_EMPRESA+')',
 });

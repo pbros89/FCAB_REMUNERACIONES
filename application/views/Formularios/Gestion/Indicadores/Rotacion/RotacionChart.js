@@ -39,7 +39,7 @@ var getChartRotacionTotal= function() {
                 tooltip: {
                     trackMouse: true,
                     renderer: function (tooltip, record, item) {
-                        tooltip.setHtml(record.get('ROL') + ': ' + record.get('PORCEN_ROTACION_TOTAL')+ '%');
+                        tooltip.setHtml('<b>' +record.get('ROL') + ': ' + record.get('PORCEN_ROTACION_TOTAL')+ '%' +'</b>');
                     }
                 }
             }]
@@ -88,7 +88,8 @@ var getChartRotacionVoluntaria= function() {
                 tooltip: {
                     trackMouse: true,
                     renderer: function (tooltip, record, item) {
-                        tooltip.setHtml(record.get('ROL') + ': ' + record.get('PORCEN_ROTACION_VOLUNTARIA') + '%');
+                        tooltip.setHtml(
+                          '<b>'+record.get('ROL') + ': ' + record.get('PORCEN_ROTACION_VOLUNTARIA') + '%</b>');
                     }
                 }
             }]

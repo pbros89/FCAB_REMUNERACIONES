@@ -50,7 +50,15 @@ class ExcelExportModel extends CI_Model {
 
 
     public function cargarProcesoConsolidadoHorizontal($p_cod_emp, $p_proceso, $p_tipo_proceso, $p_grupo_concepto, $p_tipo_concepto, $p_rol, $p_usuario) {
-        $sql1 = "SELECT listagg('''' || pfk_cod_concepto || ''' as ' || pfk_cod_concepto, ',') within group (order by PFK_COD_CONCEPTO) as CONCEPTOS
+        $sql1 = "SELECT substr(
+            XMLCast(
+              XMLAgg(
+                XMLElement(e, ','||'''' || REPLACE(pfk_cod_concepto, ' ', '_') || ''' as ' || REPLACE(pfk_cod_concepto, ' ', '_'))
+                order by PFK_COD_CONCEPTO
+              )
+              as clob
+            ), 2 -- length of ',' + 1
+          ) CONCEPTOS
         FROM   (
             SELECT DISTINCT 'RES_'||pfk_cod_concepto pfk_cod_concepto
             FROM NOV_PROC_MENSUAl_conceptos
@@ -88,7 +96,7 @@ class ExcelExportModel extends CI_Model {
         $query1 = $this->db->query($sql1);
         $result1 = $query1->result();
 
-        $conceptos = $result1[0]->CONCEPTOS;
+        $conceptos = $result1[0]->CONCEPTOS->read(100000);
 
         $sql2 = "SELECT * 
         FROM (
@@ -110,7 +118,7 @@ class ExcelExportModel extends CI_Model {
                 PER.NOM_ADHERIDO,
                 
                 sum(CON.valor) valor, 
-                'RES_'|| CON.pfk_cod_concepto pfk_cod_concepto
+                'RES_'|| REPLACE(pfk_cod_concepto, ' ', '_') pfk_cod_concepto
             FROM NOV_PROC_MENSUAl_conceptos con, NOV_PROC_MENSUAL_PERSONS PER
             WHERE CON.PFK_PROCESO = PER.PFK_PROCESO
             AND CON.PFK_TIPO = PER.PFK_TIPO
@@ -150,7 +158,7 @@ class ExcelExportModel extends CI_Model {
         PER.TIPO_CONTRATO, PER.JORNADA, PER.COD_SINDICATO, PER.NOM_SINDICATO, PER.COD_ADHERIDO, PER.NOM_ADHERIDO, 
         CON.pfk_cod_concepto 
         ORDER BY PER.PFK_COD_CC, CON.pfk_rut, 
-        'RES_'||CON.pfk_cod_concepto)
+        'RES_'||REPLACE(pfk_cod_concepto, ' ', '_'))
         pivot (sum(valor) for pfk_cod_concepto in ($conceptos))";
 
         $query2 = $this->db->query($sql2);
@@ -248,9 +256,17 @@ class ExcelExportModel extends CI_Model {
 
 
     public function cargarFiniquitoConsolidadoHorizontal($p_cod_emp, $p_desde, $p_hasta, $p_grupo_concepto, $p_tipo_concepto) {
-        $sql1 = "SELECT listagg('''' || pfk_cod_concepto || ''' as ' || pfk_cod_concepto, ',') within group (order by PFK_COD_CONCEPTO) as CONCEPTOS
+        $sql1 = "SELECT substr(
+            XMLCast(
+              XMLAgg(
+                XMLElement(e, ','||'''' || REPLACE(pfk_cod_concepto, ' ', '_') || ''' as ' || REPLACE(pfk_cod_concepto, ' ', '_'))
+                order by PFK_COD_CONCEPTO
+              )
+              as clob
+            ), 2 -- length of ',' + 1
+          ) CONCEPTOS
         FROM   (
-            SELECT DISTINCT 'RES_'|| pfk_cod_concepto  pfk_cod_concepto
+            SELECT DISTINCT 'RES_'|| REPLACE(pfk_cod_concepto, ' ', '_')  pfk_cod_concepto
             FROM NOV_FINIQUITO_CONCEPTOS con, NOV_FINIQUITOS FIN
             WHERE CON.PFK_FINIQUITO = FIN.PK_FINIQUITO
             AND FIN.FK_COD_EMP = '$p_cod_emp'
@@ -271,7 +287,7 @@ class ExcelExportModel extends CI_Model {
         $query1 = $this->db->query($sql1);
         $result1 = $query1->result();
 
-        $conceptos = $result1[0]->CONCEPTOS;
+        $conceptos = $result1[0]->CONCEPTOS->read(100000);
 
         $sql2 = "SELECT Q1.*,
             ( SELECT sum(CASE WHEN con1.grupo_concepto = 'FINIQUITO_DESC' THEN (CON1.valor*-1) ELSE CON1.VALOR END) FROM NOV_FINIQUITO_CONCEPTOS con1 WHERE CON1.PFK_FINIQUITO = Q1.CODIGO ) TOTAL 
@@ -286,7 +302,7 @@ class ExcelExportModel extends CI_Model {
                 FIN.NOM_CAUSAL,
                 FIN.FECHA_BAJA,
                 sum(CASE WHEN con.grupo_concepto = 'FINIQUITO_DESC' THEN (CON.valor*-1) ELSE CON.VALOR END) valor, 
-                'RES_'|| CON.pfk_cod_concepto pfk_cod_concepto
+                'RES_'|| REPLACE(pfk_cod_concepto, ' ', '_') pfk_cod_concepto
                 
             FROM NOV_FINIQUITOS FIN, NOV_FINIQUITO_CONCEPTOS con
             WHERE FIN.PK_FINIQUITO = CON.PFK_FINIQUITO 
@@ -308,7 +324,7 @@ class ExcelExportModel extends CI_Model {
         FIN.COD_CAUSAL,
         FIN.NOM_CAUSAL,
         FIN.FECHA_BAJA,
-        'RES_'||CON.pfk_cod_concepto)
+        'RES_'||REPLACE(pfk_cod_concepto, ' ', '_'))
         pivot (sum(valor) for pfk_cod_concepto in ($conceptos))) Q1";
 
         $query2 = $this->db->query($sql2);
@@ -376,9 +392,17 @@ class ExcelExportModel extends CI_Model {
     }
 
     public function cagarIngresosPersonalConsolidadoHorizontal($p_cod_emp, $p_desde, $p_hasta) {
-        $sql1 = "SELECT listagg('''' || pfk_cod_concepto || ''' as ' || pfk_cod_concepto, ',') within group (order by PFK_COD_CONCEPTO) as CONCEPTOS
+        $sql1 = "SELECT substr(
+            XMLCast(
+              XMLAgg(
+                XMLElement(e, ','||'''' || REPLACE(pfk_cod_concepto, ' ', '_') || ''' as ' || REPLACE(pfk_cod_concepto, ' ', '_'))
+                order by PFK_COD_CONCEPTO
+              )
+              as clob
+            ), 2 -- length of ',' + 1
+          ) CONCEPTOS
         FROM   (
-            SELECT DISTINCT 'RES_'||pfk_cod_concepto pfk_cod_concepto
+            SELECT DISTINCT 'RES_'||REPLACE(pfk_cod_concepto, ' ', '_') pfk_cod_concepto
             FROM NOV_ING_PER_CONCEPTOS con, NOV_INGRESAR_PERSONAL ING
             WHERE CON.PFK_INGRESO = ING.PK_ID
             AND ING.COD_EMP = '$p_cod_emp'
@@ -392,7 +416,7 @@ class ExcelExportModel extends CI_Model {
         $query1 = $this->db->query($sql1);
         $result1 = $query1->result();
 
-        $conceptos = $result1[0]->CONCEPTOS;
+        $conceptos = $result1[0]->CONCEPTOS->read(100000);
 
         $sql2 = "SELECT * 
         FROM (
@@ -476,7 +500,7 @@ class ExcelExportModel extends CI_Model {
                 ING.NOM_INVALIDEZ,
                 ING.TELEFONO2,
                 sum(CON.valor) valor, 
-                'RES_'|| CON.pfk_cod_concepto pfk_cod_concepto
+                'RES_'|| REPLACE(pfk_cod_concepto, ' ', '_') pfk_cod_concepto
             FROM NOV_INGRESAR_PERSONAL ING, NOV_ING_PER_CONCEPTOS con
             WHERE ING.PK_ID = CON.PFK_INGRESO
             AND ING.COD_EMP = '$p_cod_emp'
@@ -560,7 +584,7 @@ class ExcelExportModel extends CI_Model {
         ING.COD_INVALIDEZ,
         ING.NOM_INVALIDEZ,
         ING.TELEFONO2,
-        'RES_'||CON.pfk_cod_concepto )
+        'RES_'||REPLACE(pfk_cod_concepto, ' ', '_') )
         pivot (sum(valor) for pfk_cod_concepto in ($conceptos))";
 
         $query2 = $this->db->query($sql2);
@@ -1141,11 +1165,12 @@ class ExcelExportModel extends CI_Model {
     }
 
 
-    public function cargarCierrePersonal($p_anho, $p_mes) {
+    public function cargarCierrePersonal($p_anho, $p_mes, $p_cod_emp) {
         $sql = "SELECT *
                 FROM nov_cierre_mensual_personal
                 WHERE PFK_ANHO = $p_anho
-                AND PFK_MES = $p_mes";
+                AND PFK_MES = $p_mes 
+                AND COD_EMP = '$p_cod_emp' ";
                 
 
         $query = $this->db->query($sql);

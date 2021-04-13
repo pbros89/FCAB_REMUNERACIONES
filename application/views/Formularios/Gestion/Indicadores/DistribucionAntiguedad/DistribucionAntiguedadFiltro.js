@@ -31,9 +31,7 @@ Ext.define('fcab.Container.IndDistribucionAntiguedad.Filtro', {
             }
 
             storeCargarEmpresas.load();
-
             cmbAnho.getStore().loadData(years);
-            
 
             if(dataForm !== null && dataForm !== ""){
                 cmbAnho.setValue(dataForm.p_anho);
@@ -97,7 +95,7 @@ Ext.define('fcab.Container.IndDistribucionAntiguedad.Filtro', {
             selectOnFocus: true,
             forceSelection: true,
             anchor: '100%',  
-            allowBlank: false,  
+            allowBlank: true,  
             readOnly: false,
             listeners: {
                 change: function (obj, newValue, oldValue) {
@@ -242,11 +240,15 @@ Ext.define('fcab.Container.IndDistribucionAntiguedad.Filtro', {
                     p_cod_emp : values.cmbEmp, 
                     p_cod_ger : values.cmbGer,
                     p_cod_dep : values.cmbDep,
-                    p_cod_cc: values.cmbCC
+                    p_cod_cc: values.cmbCC,
+                    p_cod_emp_nom : Ext.ComponentQuery.query('IndDistribucionAntiguedadFiltro #cmbEmp')[0].getRawValue(), 
+                    p_cod_ger_nom : Ext.ComponentQuery.query('IndDistribucionAntiguedadFiltro #cmbGer')[0].getRawValue(),
+                    p_cod_dep_nom : Ext.ComponentQuery.query('IndDistribucionAntiguedadFiltro #cmbDep')[0].getRawValue(),
+                    p_cod_cc_nom: Ext.ComponentQuery.query('IndDistribucionAntiguedadFiltro #cmbCC')[0].getRawValue(),
                 }
-                cargarIndDistribuscionAntiguedad(filtros)
+                cargarIndDistribuscionAntiguedad(filtros, false)
             }else{
-                cargarIndDistribuscionAntiguedad(null);
+                cargarIndDistribuscionAntiguedad(null, false);
             }
             grid.filtros = filtros;
 

@@ -1392,11 +1392,12 @@ class IssaModel extends CI_Model
         return $query->result();
     }
 
-    public function borrarDotacionIssa() {
-    
+    public function borrarDotacionIssa()
+    {
+
         $this->db->query("DELETE FROM NOV_DOTACION_ISSA");
 
-        return TRUE; 
+        return TRUE;
     }
 
 
@@ -1413,8 +1414,9 @@ class IssaModel extends CI_Model
         }
     }
 
-    public function crearLogDotacionIssa($p_fecha, $p_usuario, $p_observacion) {
-    
+    public function crearLogDotacionIssa($p_fecha, $p_usuario, $p_observacion)
+    {
+
         $this->db->query(
             "INSERT INTO NOV_LOG_DOTACION_ISSA(
                 FECHA,
@@ -1425,8 +1427,9 @@ class IssaModel extends CI_Model
                 to_date('$p_fecha', 'dd-mm-yyyy'), 
                 '$p_usuario', 
                 '$p_observacion', 
-                SYSDATE)");
-        return TRUE; 
+                SYSDATE)"
+        );
+        return TRUE;
     }
 
     public function cargarCountDifDotacion()
@@ -1435,139 +1438,110 @@ class IssaModel extends CI_Model
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND per.cod_gerencia <> dot.gerencia
+                AND trim(per.cod_gerencia) <> trim(dot.gerencia)
                 UNION ALL
                 SELECT 'DEPARTAMENTO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND per.cod_departamento <> dot.departamento
+                AND trim(per.cod_departamento) <> trim(dot.departamento)
                 UNION ALL
                 SELECT 'CENTRO DE COSTO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND per.cod_cc <> dot.cc
+                AND trim(per.cod_cc) <> trim(dot.cc)
                 UNION ALL
                 SELECT 'CARGO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND PER.COD_CARGO <> REPLACE(REPLACE(DOT.CARGO, 'F', ''), 'T', '')
-                UNION ALL
-                SELECT 'SUPERVISOR' TIPO, COUNT(*) CONTAR
-                FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
-                WHERE per.num_rut = DOT.CODIGO
-                AND PER.FECHA_BAJA IS NULL
-                AND per.rut_supervisor <> DOT.SUPERVISOR
+                AND trim(REPLACE(REPLACE(REPLACE(PER.COD_CARGO,'F', ''), 'T', ''), 'C', '')) <> 
+                    trim(REPLACE(REPLACE(REPLACE(DOT.CARGO, 'F', ''), 'T', ''), 'C', ''))
                 UNION ALL
                 SELECT 'FECHA_ALTA' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND TO_CHAR(per.fecha_ingreso, 'DD-MM-YYYY') <> dot.fecha_alta
+                AND trim(TO_CHAR(per.fecha_ingreso, 'DD-MM-YYYY')) <> trim(dot.fecha_alta)
                 UNION ALL
                 SELECT 'COMUNA' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_COMUNA) <> UPPER(dot.cod_COMUNA)
+                AND trim(UPPER(nvl(per.cod_COMUNA, 'VACIO'))) <> trim(UPPER(dot.cod_COMUNA))
                 UNION ALL
                 SELECT 'CIUDAD' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.CIUDAD) <> UPPER(dot.CIUDAD)
+                AND trim(UPPER(per.CIUDAD)) <> trim(UPPER(dot.CIUDAD))
                 UNION ALL
                 SELECT 'SEXO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_SEXO) <> UPPER(dot.cod_SEXO)
+                AND trim(UPPER(per.cod_SEXO)) <> trim(UPPER(dot.cod_SEXO))
                 UNION ALL
                 SELECT 'FECHA_NACIMIENTO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND TO_CHAR(per.fecha_nac, 'DD-MM-YYYY') <> dot.FECHANACIMIENTO
+                AND trim(TO_CHAR(per.fecha_nac, 'DD-MM-YYYY')) <> trim(dot.FECHANACIMIENTO)
                 UNION ALL
                 SELECT 'NACIONALIDAD' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_pais) <> UPPER(dot.cod_NACIONALIDAD)
+                AND trim(UPPER(NVL(per.cod_pais, 'VACIO'))) <> trim(UPPER(dot.cod_NACIONALIDAD))
                 UNION ALL
                 SELECT 'ESTADO_CIVIL' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_est_civil) <> UPPER(dot.COD_ESTADOCIVIL)
+                AND trim(UPPER(NVL(per.cod_est_civil, 'VACIO'))) <> trim(UPPER(dot.COD_ESTADOCIVIL))
                 UNION ALL
                 SELECT 'FORMA_PAGO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_forma_pago) <> UPPER(dot.COD_FORMAPAGO)
-                UNION ALL
-                SELECT 'NOM_BANCO' TIPO, COUNT(*) CONTAR
-                FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
-                WHERE per.num_rut = DOT.CODIGO
-                AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_banco) <> UPPER(dot.COD_BANCO)
+                AND trim(UPPER(NVL(per.cod_forma_pago, 'VACIO'))) <> trim(UPPER(dot.COD_FORMAPAGO))
                 UNION ALL
                 SELECT 'NUMERO_CUENTA' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.num_cuenta) <> UPPER(dot.NUMEROCUENTA)
+                AND trim(UPPER(per.num_cuenta)) <> trim(UPPER(dot.NUMEROCUENTA))
                 UNION ALL
                 SELECT 'AFP' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.COD_AFP) <> UPPER(dot.INSTITUCIÓN_AFP)
-                UNION ALL
-                SELECT 'SALUD' TIPO, COUNT(*) CONTAR
-                FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
-                WHERE per.num_rut = DOT.CODIGO
-                AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_salud) <> UPPER(dot.SALUD)
+                AND trim(UPPER(per.COD_AFP)) <> trim(UPPER(dot.INSTITUCIÓN_AFP))
                 UNION ALL
                 SELECT 'TIPO_CONTRATO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_tipo_contrato) <> UPPER(dot.Tipo_Contrato)
+                AND trim(UPPER(per.cod_tipo_contrato)) <> trim(UPPER(dot.Tipo_Contrato))
                 UNION ALL
                 SELECT 'SINDICATO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.cod_sindicato) <> UPPER(dot.SINDICATO)
-                UNION ALL
-                SELECT 'SUELDO_BASE' TIPO, COUNT(*) CONTAR
-                FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
-                WHERE per.num_rut = DOT.CODIGO
-                AND PER.FECHA_BAJA IS NULL
-                AND TO_NUMBER(NVL(per.salario_base, '0')) <> TO_NUMBER(NVL(REPLACE(dot.SUELDO_BASE, '.00', ''), '0'))
+                AND trim(UPPER(per.cod_sindicato)) <> trim(UPPER(dot.SINDICATO))
                 UNION ALL
                 SELECT 'CORREO_EMP' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.CORREO_EMP) <> UPPER(dot.MAIL)
+                AND trim(UPPER(per.CORREO_EMP)) <> trim(UPPER(dot.MAIL))
                 UNION ALL
                 SELECT 'CORREO' TIPO, COUNT(*) CONTAR
                 FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
                 WHERE per.num_rut = DOT.CODIGO
                 AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.CORREO) <> UPPER(dot.EMAIL_PERSONAL)
-                UNION ALL
-                SELECT 'CELULAR' TIPO, COUNT(*) CONTAR
-                FROM NOV_PERSONAL PER, NOV_DOTACION_ISSA DOT
-                WHERE per.num_rut = DOT.CODIGO
-                AND PER.FECHA_BAJA IS NULL
-                AND UPPER(per.TELEFONO) <> UPPER(dot.fono)";
+                AND trim(UPPER(per.CORREO)) <> trim(UPPER(dot.EMAIL_PERSONAL))";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -1577,12 +1551,11 @@ class IssaModel extends CI_Model
     public function cargarUltimoLogDotacionIssa()
     {
         $sql = "SELECT TO_CHAR(FECHA, 'DD-MM-YYYY') FECHA,
-                        USUARIO,
-                        OBSERVACION,
-                        TO_CHAR(FECHA_CREACION, 'DD-MM-YYYY') FECHA_CREACION
+                USUARIO,
+                OBSERVACION,
+                TO_CHAR(FECHA_CREACION, 'DD-MM-YYYY') FECHA_CREACION
                 FROM NOV_LOG_DOTACION_ISSA
-                WHERE ROWNUM = 1
-                order by FECHA_CREACION DESC";
+                WHERE FECHA_CREACION = (select max(FECHA_CREACION) from NOV_LOG_DOTACION_ISSA)";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -1598,17 +1571,18 @@ class IssaModel extends CI_Model
     }
 
 
-    public function cargarDotacionIssaPorTipo($p_fuente, $p_tipo){
+    public function cargarDotacionIssaPorTipo($p_fuente, $p_tipo)
+    {
 
         $select = "";
         $where = "";
-        if($p_fuente == 'ISSA') {
+        if ($p_fuente == 'ISSA') {
             $select = "DOT.*";
-        }else{
+        } else {
             $select = "PER.*";
         }
-        
-        switch($p_tipo) {
+
+        switch ($p_tipo) {
             case "GERENCIA":
                 $where = "per.cod_gerencia <> dot.gerencia";
                 break;
@@ -1686,13 +1660,13 @@ class IssaModel extends CI_Model
                 AND PER.FECHA_BAJA IS NULL
                 AND @where@";
 
-        $sql = str_replace("@select@",$select, $sql);
-        $sql = str_replace("@where@",$where, $sql);
-        
+        $sql = str_replace("@select@", $select, $sql);
+        $sql = str_replace("@where@", $where, $sql);
+
         $query = $this->db->query($sql);
         return $query->result();
     }
-    
+
     public function cargarUltimoLogAusentismo($tipo)
     {
         $sql = "SELECT 
@@ -1706,7 +1680,7 @@ class IssaModel extends CI_Model
                     ID
                 FROM NOV_LOG_AUSENTISMO_ISSA 
                 WHERE TIPO = '$tipo' 
-                AND ROWNUM = 1
+                AND ID = (select max(ID) from NOV_LOG_AUSENTISMO_ISSA)
                 ORDER BY ID DESC";
 
         $query = $this->db->query($sql);
@@ -1725,14 +1699,14 @@ class IssaModel extends CI_Model
 
     public function guardarAusentismoIssa($tipo, $data)
     {
-        switch($tipo) {
-            case 'LICENCIA':    
+        switch ($tipo) {
+            case 'LICENCIA':
                 $res = $this->db->insert_batch('NOV_LICENCIAS_ISSA', $data);
                 break;
-            case 'PERMISO':    
+            case 'PERMISO':
                 $res = $this->db->insert_batch('NOV_PERMISOS_ISSA', $data);
                 break;
-            case 'VACACION':    
+            case 'VACACION':
                 $res = $this->db->insert_batch('NOV_VACACIONES_ISSA', $data);
                 break;
         }
@@ -1744,8 +1718,9 @@ class IssaModel extends CI_Model
         }
     }
 
-    public function crearLogAusentismoIssa($p_id, $p_tipo, $p_fecha, $p_usuario, $p_observacion) {
-    
+    public function crearLogAusentismoIssa($p_id, $p_tipo, $p_fecha, $p_usuario, $p_observacion)
+    {
+
         $this->db->query(
             "INSERT INTO NOV_LOG_AUSENTISMO_ISSA(
                 FECHA,
@@ -1762,12 +1737,14 @@ class IssaModel extends CI_Model
                 '',
                 '$p_observacion', 
                 SYSDATE,
-                $p_id)");
-        return TRUE; 
+                $p_id)"
+        );
+        return TRUE;
     }
 
 
-    public function eliminarDatosAusentismo() {
+    public function eliminarDatosAusentismo()
+    {
         $r_est = 0;
         $r_msg = "";
         $proc = oci_parse(
@@ -1787,8 +1764,9 @@ class IssaModel extends CI_Model
     }
 
 
-    public function cargarAusentismosISSA($p_tipo, $p_fec1, $p_fec2, $p_rut) {
-        switch($p_tipo) {
+    public function cargarAusentismosISSA($p_tipo, $p_fec1, $p_fec2, $p_rut)
+    {
+        switch ($p_tipo) {
             case 'LICENCIA':
                 $sql = $this->queryLicencia($p_fec1, $p_fec2, $p_rut);
                 break;
@@ -1802,53 +1780,55 @@ class IssaModel extends CI_Model
         $query = $this->db->query($sql);
         return $query->result();
     }
-    
-    private function queryLicencia($p_fec1, $p_fec2, $p_rut) {
+
+    private function queryLicencia($p_fec1, $p_fec2, $p_rut)
+    {
         $sql = "SELECT *
                 FROM nov_licencias_issa
                 WHERE (
                     TO_DATE(FECHAINGRESO, 'DD-MM-YYYY') BETWEEN TO_DATE('$p_fec1', 'DD-MM-YYYY') AND TO_DATE('$p_fec2', 'DD-MM-YYYY') OR
                     TO_DATE(FECHATERMINO, 'DD-MM-YYYY') BETWEEN TO_DATE('$p_fec1', 'DD-MM-YYYY') AND TO_DATE('$p_fec2', 'DD-MM-YYYY')
                 ) ";
-        if(!empty($p_rut)) {
-            $sql.= "AND RUT LIKE('%$p_rut%') ";
+        if (!empty($p_rut)) {
+            $sql .= "AND RUT LIKE('%$p_rut%') ";
         }
-                
-        $sql.= "ORDER BY ID_MAESTRO ASC, ID ASC";
+
+        $sql .= "ORDER BY ID_MAESTRO ASC, ID ASC";
 
         return $sql;
     }
 
-    private function queryPermiso($p_fec1, $p_fec2, $p_rut) {
+    private function queryPermiso($p_fec1, $p_fec2, $p_rut)
+    {
         $sql = "SELECT *
                 FROM nov_permisos_issa
                 WHERE (
                     TO_DATE(FECHA_INICIO, 'DD-MM-YYYY') BETWEEN TO_DATE('$p_fec1', 'DD-MM-YYYY') AND TO_DATE('$p_fec2', 'DD-MM-YYYY') OR
                     TO_DATE(FECHA_TERMINO, 'DD-MM-YYYY') BETWEEN TO_DATE('$p_fec1', 'DD-MM-YYYY') AND TO_DATE('$p_fec2', 'DD-MM-YYYY')
                 ) ";
-        if(!empty($p_rut)) {
-            $sql.= "AND RUT LIKE('%$p_rut%') ";
+        if (!empty($p_rut)) {
+            $sql .= "AND RUT LIKE('%$p_rut%') ";
         }
-                
-        $sql.= "ORDER BY ID_PERMISO ASC, ID ASC";
+
+        $sql .= "ORDER BY ID_PERMISO ASC, ID ASC";
 
         return $sql;
     }
 
-    private function queryVacacion($p_fec1, $p_fec2, $p_rut) {
+    private function queryVacacion($p_fec1, $p_fec2, $p_rut)
+    {
         $sql = "SELECT *
                 FROM nov_vacaciones_issa
                 WHERE (
                     TO_DATE(FECHAINGRESO, 'DD-MM-YYYY') BETWEEN TO_DATE('$p_fec1', 'DD-MM-YYYY') AND TO_DATE('$p_fec2', 'DD-MM-YYYY') OR
                     TO_DATE(FECHATERMINO, 'DD-MM-YYYY') BETWEEN TO_DATE('$p_fec1', 'DD-MM-YYYY') AND TO_DATE('$p_fec2', 'DD-MM-YYYY')
                 ) ";
-        if(!empty($p_rut)) {
-            $sql.= "AND RUT LIKE('%$p_rut%') ";
+        if (!empty($p_rut)) {
+            $sql .= "AND RUT LIKE('%$p_rut%') ";
         }
-                
-        $sql.= "ORDER BY ID_MAESTRO ASC, ID ASC";
+
+        $sql .= "ORDER BY ID_MAESTRO ASC, ID ASC";
 
         return $sql;
     }
-    
 }

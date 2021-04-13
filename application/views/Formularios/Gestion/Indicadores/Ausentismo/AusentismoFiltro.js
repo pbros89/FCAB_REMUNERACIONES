@@ -101,7 +101,7 @@ Ext.define('fcab.Container.IndAusentismo.Filtro', {
             selectOnFocus: true,
             forceSelection: true,
             anchor: '100%',  
-            allowBlank: false,  
+            allowBlank: true,  
             readOnly: false,
             listeners: {
                 change: function (obj, newValue, oldValue) {
@@ -275,11 +275,16 @@ Ext.define('fcab.Container.IndAusentismo.Filtro', {
                     p_cod_ger : values.cmbGer,
                     p_cod_dep : values.cmbDep,
                     p_cod_cc: values.cmbCC,
-                    p_rol_cargo: values.cmbRol
+                    p_rol_cargo: values.cmbRol,
+                    p_cod_emp_nom : Ext.ComponentQuery.query('IndAusentismoFiltro #cmbEmp')[0].getRawValue(), 
+                    p_cod_ger_nom : Ext.ComponentQuery.query('IndAusentismoFiltro #cmbGer')[0].getRawValue(),
+                    p_cod_dep_nom : Ext.ComponentQuery.query('IndAusentismoFiltro #cmbDep')[0].getRawValue(),
+                    p_cod_cc_nom: Ext.ComponentQuery.query('IndAusentismoFiltro #cmbCC')[0].getRawValue(),
+                    p_rol_cargo_nom: Ext.ComponentQuery.query('IndAusentismoFiltro #cmbRol')[0].getRawValue(),
                 }
-                cargarIndAusentismo(filtros)
+                cargarIndAusentismo(filtros, false)
             }else{
-                cargarIndAusentismo(null);
+                cargarIndAusentismo(null, false);
             }
             grid.filtros = filtros;
 

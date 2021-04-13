@@ -32,15 +32,8 @@ Ext.define('fcab.Container.IndDistribucionPais.Filtro', {
             }
 
             storeCargarEmpresas.load();
-            storeCargarParam_GERENCIA.load();
-            storeCargarParam_DEPARTAMENTO.load();
             storeCargarRolesCargo.load();
-            storeCargarCentroCostosFiltro.load({
-                params: {
-                    p_cod_emp : EMPRESA
-                }
-            });
-
+      
             cmbAnho.getStore().loadData(years);
             
 
@@ -108,7 +101,7 @@ Ext.define('fcab.Container.IndDistribucionPais.Filtro', {
             selectOnFocus: true,
             forceSelection: true,
             anchor: '100%',  
-            allowBlank: false,  
+            allowBlank: true,  
             readOnly: false,
             listeners: {
                 change: function (obj, newValue, oldValue) {
@@ -282,11 +275,16 @@ Ext.define('fcab.Container.IndDistribucionPais.Filtro', {
                     p_cod_ger : values.cmbGer,
                     p_cod_dep : values.cmbDep,
                     p_cod_cc: values.cmbCC,
-                    p_rol_cargo: values.cmbRol
+                    p_rol_cargo: values.cmbRol,
+                    p_cod_emp_nom : Ext.ComponentQuery.query('IndDistribucionPaisFiltro #cmbEmp')[0].getRawValue(), 
+                    p_cod_ger_nom : Ext.ComponentQuery.query('IndDistribucionPaisFiltro #cmbGer')[0].getRawValue(),
+                    p_cod_dep_nom : Ext.ComponentQuery.query('IndDistribucionPaisFiltro #cmbDep')[0].getRawValue(),
+                    p_cod_cc_nom: Ext.ComponentQuery.query('IndDistribucionPaisFiltro #cmbCC')[0].getRawValue(),
+                    p_rol_cargo_nom: Ext.ComponentQuery.query('IndDistribucionPaisFiltro #cmbRol')[0].getRawValue(),
                 }
-                cargarIndDistribuscionPais(filtros)
+                cargarIndDistribuscionPais(filtros, false)
             }else{
-                cargarIndDistribuscionPais(null);
+                cargarIndDistribuscionPais(null, false);
             }
             grid.filtros = filtros;
 

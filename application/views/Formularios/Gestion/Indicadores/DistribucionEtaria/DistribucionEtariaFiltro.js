@@ -41,14 +41,6 @@ Ext.define("fcab.Container.IndDistribucionEtaria.Filtro", {
       }
 
       storeCargarEmpresas.load();
-      storeCargarParam_GERENCIA.load();
-      storeCargarParam_DEPARTAMENTO.load();
-      storeCargarCentroCostosFiltro.load({
-        params: {
-          p_cod_emp: EMPRESA,
-        },
-      });
-
       cmbAnho.getStore().loadData(years);
 
       if (dataForm !== null && dataForm !== "") {
@@ -114,7 +106,7 @@ Ext.define("fcab.Container.IndDistribucionEtaria.Filtro", {
           selectOnFocus: true,
           forceSelection: true,
           anchor: "100%",
-          allowBlank: false,
+          allowBlank: true,
           readOnly: false,
           listeners: {
             change: function (obj, newValue, oldValue) {
@@ -282,10 +274,22 @@ Ext.define("fcab.Container.IndDistribucionEtaria.Filtro", {
             p_cod_ger: values.cmbGer,
             p_cod_dep: values.cmbDep,
             p_cod_cc: values.cmbCC,
+            p_cod_emp_nom: Ext.ComponentQuery.query(
+              "IndDistribucionEtariaFiltro #cmbEmp"
+            )[0].getRawValue(),
+            p_cod_ger_nom: Ext.ComponentQuery.query(
+              "IndDistribucionEtariaFiltro #cmbGer"
+            )[0].getRawValue(),
+            p_cod_dep_nom: Ext.ComponentQuery.query(
+              "IndDistribucionEtariaFiltro #cmbDep"
+            )[0].getRawValue(),
+            p_cod_cc_nom: Ext.ComponentQuery.query(
+              "IndDistribucionEtariaFiltro #cmbCC"
+            )[0].getRawValue(),
           };
-          cargarIndDistribuscionEtaria(filtros);
+          cargarIndDistribuscionEtaria(filtros, false);
         } else {
-          cargarIndDistribuscionEtaria(null);
+          cargarIndDistribuscionEtaria(null, false);
         }
         grid.filtros = filtros;
 

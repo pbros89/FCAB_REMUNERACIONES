@@ -4,8 +4,7 @@ Ext.define("fcab.Container.IndRotacion", {
   itemId: "IndRotacion",
   border: false,
   frame: false,
-  width: "100%",
-  layout: "anchor",
+  autoScroll: true,
   padding: 10,
   constructor: function (config) {
     this.callParent([config]);
@@ -13,7 +12,7 @@ Ext.define("fcab.Container.IndRotacion", {
   },
   listeners: {
     afterrender: function () {
-      cargarIndRotacion(null);
+      cargarIndRotacion(null, true);
     },
   },
   items: [
@@ -59,7 +58,7 @@ Ext.define("fcab.Container.IndRotacion", {
           xtype: "panel",
           layout: "hbox",
           width: "100%",
-          padding: 10,
+        
           frame: false,
           border: false,
           items: [{
@@ -87,11 +86,8 @@ Ext.define("fcab.Container.IndRotacion", {
 });
 
 
-var cargarIndRotacion = function (filtros) {
-  var grid = Ext.ComponentQuery.query(
-    "#IndRotacion #IndRotacionGrid"
-  )[0];
-  var storeGrid = grid.getStore();
+var cargarIndRotacion = function (filtros, init) {
+
   var pnlChartTotal = Ext.ComponentQuery.query(
     "#IndRotacion #IndRotacionTotalChart"
   )[0];
@@ -115,8 +111,19 @@ var cargarIndRotacion = function (filtros) {
       p_cod_dep: "",
       p_cod_cc: "",
       p_rol_cargo: "",
-      p_causal: ""
+      p_causal: "",
+      p_cod_emp_nom: "",
+      p_cod_ger_nom: "",
+      p_cod_dep_nom: "",
+      p_cod_cc_nom: "",
+      p_rol_cargo_nom: "",
+      p_causal_nom: ""
     };
+  }
+
+  if(init) {
+    params.p_cod_emp=EMPRESA;
+    params.p_cod_emp_nom = NOM_EMPRESA;
   }
 
   storeCargarConteoRotacionConsolidado.load({
@@ -130,22 +137,23 @@ var cargarIndRotacion = function (filtros) {
       var html =
         "<h2>Rotación 12 meses moviles</h2>" +
         "<p><b>Filtros = Empresa:" +
-        (params.p_cod_emp != "" && params.p_cod_emp != null? params.p_cod_emp : "TODOS") +
+        (params.p_cod_emp_nom != "" && params.p_cod_emp_nom != null? params.p_cod_emp_nom : "TODOS") +
         " / Gerencia:" +
-        (params.p_cod_ger != "" && params.p_cod_ger != null ? params.p_cod_ger : "TODOS") +
+        (params.p_cod_ger_nom != "" && params.p_cod_ger_nom != null ? params.p_cod_ger_nom : "TODOS") +
         " / Departamento:" +
-        (params.p_cod_dep != "" && params.p_cod_dep != null ? params.p_cod_dep : "TODOS") +
+        (params.p_cod_dep_nom != "" && params.p_cod_dep_nom != null ? params.p_cod_dep_nom : "TODOS") +
         " / Centro de Costo:" +
-        (params.p_cod_cc != "" && params.p_cod_cc != null? params.p_cod_cc : "TODOS") +
+        (params.p_cod_cc_nom != "" && params.p_cod_cc_nom != null? params.p_cod_cc_nom : "TODOS") +
         " / Rol Cargo:" +
-        (params.p_rol_cargo != "" && params.p_rol_cargo != null? params.p_rol_cargo : "TODOS") +
+        (params.p_rol_cargo_nom != "" && params.p_rol_cargo_nom != null? params.p_rol_cargo_nom : "TODOS") +
         " / Causal:" +
-        (params.p_causal != "" && params.p_causal != null? params.p_causal : "TODOS") +
+        (params.p_causal_nom != "" && params.p_causal_nom != null? params.p_causal_nom : "TODOS") +
         " </b></br>"+
         "<i>Nota: El último mes de cierre define el final de los 12 meses moviles.</i></p>";
       pnlTitle.setHtml(html);
       pnlChartTotal.add(getChartRotacionTotal());
       pnlChartVoluntaria.add(getChartRotacionVoluntaria());
+      cargarIndRotacionGrid();
     },
   });
 };

@@ -25,11 +25,7 @@ var getChartDistribucionEtaria = function () {
         position: "left",
         adjustByMajorUnit: true,
         grid: true,
-        fields: [
-          "< 30",
-          ">= 30 a <= 45",
-          "> 45 a <= 62",
-          "> 62"],
+        fields: ["< 30", ">= 30 a <= 45", "> 45 a <= 62", "> 62"],
         minimum: 0,
         label: {
           fontSize: 10,
@@ -54,19 +50,18 @@ var getChartDistribucionEtaria = function () {
     series: [
       {
         type: "bar",
-        title: [
-          "< 30",
-          ">= 30 & <= 45",
-          "> 45 & <= 62",
-          "> 62" ],
+        title: ["< 30", ">= 30 & <= 45", "> 45 & <= 62", "> 62"],
         xField: "MES_TEXT",
-        yField: [
-          "< 30",
-          ">= 30 & <= 45",
-          "> 45 & <= 62",
-          "> 62"],
+        yField: ["< 30", ">= 30 & <= 45", "> 45 & <= 62", "> 62"],
         stacked: true,
-        colors: ['#005A8B', '#007C92',  '#63CECA', '#EAAB00',  '#CD202C', '#1E1E1E'],
+        colors: [
+          "#005A8B",
+          "#007C92",
+          "#63CECA",
+          "#EAAB00",
+          "#CD202C",
+          "#1E1E1E",
+        ],
         style: {
           opacity: 0.8,
         },
@@ -89,19 +84,33 @@ var getChartDistribucionEtaria = function () {
               ),
               browser = item.series.getTitle()[fieldIndex];
 
+            var total =
+              parseInt(record.get("< 30")) +
+              parseInt(record.get(">= 30 & <= 45")) +
+              parseInt(record.get("> 45 & <= 62")) +
+              parseInt(record.get("> 62"));
+
+            var percent = (
+              parseFloat(record.get(item.field) / total) * 100.0
+            ).toFixed(2);
+
             tooltip.setHtml(
-              browser +
+              "<b>Rango " +
+                browser +
                 " en " +
                 record.get("MES_TEXT") +
-                ": " +
-                record.get(item.field)
-            ); //+ '%');
+                "</b></br>" +
+                "Cantidad: " +
+                record.get(item.field) +
+                "</br>" +
+                "Porcentaje: " +
+                percent
+            ); 
 
             if (pnlChart2.params) {
               if (
                 pnlChart2.params.p_anho != record.get("ANHO") ||
-                pnlChart2.params.p_mes != record.get("MES") ||
-                pnlChart2.params.p_cod_emp != EMPRESA
+                pnlChart2.params.p_mes != record.get("MES")
               ) {
                 //pnlChart2.removeAll();
                 pnlChart2.params = {

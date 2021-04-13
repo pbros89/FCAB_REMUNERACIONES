@@ -100,7 +100,7 @@ Ext.define('fcab.Container.IndDotacion.Filtro', {
             selectOnFocus: true,
             forceSelection: true,
             anchor: '100%',  
-            allowBlank: false,  
+            allowBlank: true,  
             readOnly: false,
             listeners: {
                 change: function (obj, newValue, oldValue) {
@@ -274,11 +274,16 @@ Ext.define('fcab.Container.IndDotacion.Filtro', {
                     p_cod_ger : values.cmbGer,
                     p_cod_dep : values.cmbDep,
                     p_cod_cc: values.cmbCC,
-                    p_rol_cargo: values.cmbRol
+                    p_rol_cargo: values.cmbRol,
+                    p_cod_emp_nom : Ext.ComponentQuery.query('IndDotacionFiltro #cmbEmp')[0].getRawValue(), 
+                    p_cod_ger_nom : Ext.ComponentQuery.query('IndDotacionFiltro #cmbGer')[0].getRawValue(),
+                    p_cod_dep_nom : Ext.ComponentQuery.query('IndDotacionFiltro #cmbDep')[0].getRawValue(),
+                    p_cod_cc_nom: Ext.ComponentQuery.query('IndDotacionFiltro #cmbCC')[0].getRawValue(),
+                    p_rol_cargo_nom: Ext.ComponentQuery.query('IndDotacionFiltro #cmbRol')[0].getRawValue(),
                 }
-                cargarIndDotacion(filtros)
+                cargarIndDotacion(filtros, false)
             }else{
-                cargarIndDotacion(null);
+                cargarIndDotacion(null, false);
             }
             grid.filtros = filtros;
 

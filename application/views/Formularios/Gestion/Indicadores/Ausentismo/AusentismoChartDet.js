@@ -71,13 +71,29 @@ var getChartAusentismoDet = function () {
               ),
               browser = item.series.getTitle()[fieldIndex];
 
+              var total =
+              parseInt(record.get("VACACIONES")) +
+              parseInt(record.get("LICENCIAS")) +
+              parseInt(record.get("AUSENCIAS"));
+
+            var percent = (
+              parseFloat(record.get(item.field) / total) * 100.0
+            ).toFixed(2);
+
             tooltip.setHtml(
-              browser +
+              "<b>" +
+                browser +
+                ' ' +
+                record.get("COD_GERENCIA") +
                 " en " +
                 record.get("MES_TEXT") +
-                ": " +
-                record.get(item.field)
-            ); //+ '%');
+                "</b></br>" +
+                "Cantidad: " +
+                record.get(item.field) +
+                "</br>" +
+                "Porcentaje: " +
+                percent
+            );
 
             
           },

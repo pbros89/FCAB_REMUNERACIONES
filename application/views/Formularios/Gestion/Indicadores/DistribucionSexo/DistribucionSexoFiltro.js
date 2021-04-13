@@ -113,7 +113,7 @@ Ext.define("fcab.Container.IndDistribucionSexo.Filtro", {
           selectOnFocus: true,
           forceSelection: true,
           anchor: "100%",
-          allowBlank: false,
+          allowBlank: true,
           readOnly: false,
           listeners: {
             change: function (obj, newValue, oldValue) {
@@ -309,10 +309,25 @@ Ext.define("fcab.Container.IndDistribucionSexo.Filtro", {
             p_cod_dep: values.cmbDep,
             p_cod_cc: values.cmbCC,
             p_rol_cargo: values.cmbRol,
+            p_cod_emp_nom: Ext.ComponentQuery.query(
+              "IndDistribucionSexoFiltro #cmbEmp"
+            )[0].getRawValue(),
+            p_cod_ger_nom: Ext.ComponentQuery.query(
+              "IndDistribucionSexoFiltro #cmbGer"
+            )[0].getRawValue(),
+            p_cod_dep_nom: Ext.ComponentQuery.query(
+              "IndDistribucionSexoFiltro #cmbDep"
+            )[0].getRawValue(),
+            p_cod_cc_nom: Ext.ComponentQuery.query(
+              "IndDistribucionSexoFiltro #cmbCC"
+            )[0].getRawValue(),
+            p_rol_cargo_nom: Ext.ComponentQuery.query(
+              "IndDistribucionSexoFiltro #cmbRol"
+            )[0].getRawValue(),
           };
-          cargarIndDistribuscionSexo(filtros);
+          cargarIndDistribuscionSexo(filtros, false);
         } else {
-          cargarIndDistribuscionSexo(null);
+          cargarIndDistribuscionSexo(null, false);
         }
         grid.filtros = filtros;
 

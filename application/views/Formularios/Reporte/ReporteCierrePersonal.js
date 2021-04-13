@@ -30,6 +30,11 @@ Ext.define("fcab.Container.ReporteCierrePersonal", {
         cbAnho.getStore().loadData(years);
         cbAnho.setValue(year);
         cbMes.setValue(cbMes.getStore().getAt(month));
+        storeCargarEmpresas.load({
+            params: {
+                p_estado: 'A'
+            }
+        });
     
     },
     items: [{
@@ -44,7 +49,30 @@ Ext.define("fcab.Container.ReporteCierrePersonal", {
             align: 'strech'
         },
         items:[{
-            
+            xtype: 'container',
+            columnWidth: 1,
+            layout: 'anchor',
+            style: 'margin: 0 10px 5px 0',
+            items: [{
+                xtype: 'combo',
+                name: 'cbEmp',
+                itemId: 'cbEmp',
+                fieldLabel: 'Empresa',
+                labelAlign:'left',
+                queryMode: 'local',
+                triggerAction: 'all',
+                displayField: 'NOMBRE',
+                valueField: 'PK_COD_EMP',
+                editable: true,
+                typeAhead: true,
+                selectOnFocus: true,
+                forceSelection: true,
+                anchor: '30%',  
+                allowBlank: false,
+                store: storeCargarEmpresas,
+                value: EMPRESA
+            }]
+        },{
             xtype: 'container',
             columnWidth: 1,
             layout: 'anchor',

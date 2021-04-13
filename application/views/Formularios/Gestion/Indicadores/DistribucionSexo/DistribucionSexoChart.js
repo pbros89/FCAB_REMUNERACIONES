@@ -74,19 +74,31 @@ Ext.define("fcab.Container.IndDistribucionSexo.Chart", {
                     ),
                     browser = item.series.getTitle()[fieldIndex];
       
+                    var total =
+                    parseInt(record.get("M")) +
+                    parseInt(record.get("F"));
+      
+                  var percent = (
+                    parseFloat(record.get(item.field) / total) * 100.0
+                  ).toFixed(2);
+      
                   tooltip.setHtml(
-                    browser +
+                    "<b>Sexo " +
+                      browser +
                       " en " +
                       record.get("MES_TEXT") +
-                      ": " +
-                      record.get(item.field)
-                  ); //+ '%');
+                      "</b></br>" +
+                      "Cantidad: " +
+                      record.get(item.field) +
+                      "</br>" +
+                      "Porcentaje: " +
+                      percent
+                  );
       
                   if (pnlChart2.params) {
                     if (
                       pnlChart2.params.p_anho != record.get("ANHO") ||
-                      pnlChart2.params.p_mes != record.get("MES") ||
-                      pnlChart2.params.p_cod_emp != EMPRESA
+                      pnlChart2.params.p_mes != record.get("MES")
                     ) {
                       //pnlChart2.removeAll();
                       pnlChart2.params = {

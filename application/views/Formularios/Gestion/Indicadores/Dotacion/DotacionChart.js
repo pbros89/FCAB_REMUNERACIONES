@@ -13,8 +13,6 @@ var getChartDotacion = function () {
     xtype: "cartesian",
     reference: "chart",
     store: storeCargarConteoDotacionMensual,
-    //insetPadding: 40,
-    //innerPadding: 20,
     axes: [
       {
         type: "numeric",
@@ -22,7 +20,7 @@ var getChartDotacion = function () {
         position: "left",
         adjustByMajorUnit: true,
         grid: true,
-        fields: ["VALOR"],
+        fields: ["DOTACION"],
         minimum: 0,
         label: {
           fontSize: 10,
@@ -47,11 +45,18 @@ var getChartDotacion = function () {
     series: [
       {
         type: "bar",
-        title: ["VALOR"],
+        title: ["DOTACION"],
         xField: ["MES_TEXT"],
-        yField: ["VALOR"],
+        yField: ["DOTACION"],
         stacked: true,
-        colors: ['#005A8B', '#007C92',  '#63CECA', '#EAAB00',  '#CD202C', '#1E1E1E'],
+        colors: [
+          "#005A8B",
+          "#007C92",
+          "#63CECA",
+          "#EAAB00",
+          "#CD202C",
+          "#1E1E1E",
+        ],
         style: {
           opacity: 0.8,
         },
@@ -68,62 +73,71 @@ var getChartDotacion = function () {
             var pnlChart2 = Ext.ComponentQuery.query(
               "#IndDotacion #IndDotacionGerenciaChart"
             )[0];
-            var fieldIndex = Ext.Array.indexOf(
-                item.series.getYField(),
-                item.field
-              ),
-              browser = item.series.getTitle()[fieldIndex];
+            var pnlChart3 = Ext.ComponentQuery.query(
+              "#IndDotacion #IndDotacionEmpresaChart"
+            )[0];
 
             tooltip.setHtml(
-              browser +
+              "<b>" +
+                "Dotación" +
                 " en " +
                 record.get("MES_TEXT") +
-                ": " +
+                "</b></br>" +
+                "Cantidad: " +
                 record.get(item.field)
-            ); //+ '%');
-
+            );
             if (pnlChart2.params) {
               if (
                 pnlChart2.params.p_anho != record.get("ANHO") ||
-                pnlChart2.params.p_mes != record.get("MES") ||
-                pnlChart2.params.p_cod_emp != EMPRESA
+                pnlChart2.params.p_mes != record.get("MES")
               ) {
-                //pnlChart2.removeAll();
                 pnlChart2.params = {
                   p_anho: record.get("ANHO"),
                   p_mes: record.get("MES"),
                   p_cod_emp: filtros != null ? filtros.p_cod_emp : EMPRESA,
-                  p_cod_ger : filtros != null ? filtros.p_cod_ger : '',
-                  p_cod_dep : filtros != null ? filtros.p_cod_dep : '',
-                  p_cod_cc: filtros != null ? filtros.p_cod_cc : '',
-                  p_rol_cargo: filtros != null ? filtros.p_rol_cargo : ''
+                  p_cod_ger: filtros != null ? filtros.p_cod_ger : "",
+                  p_cod_dep: filtros != null ? filtros.p_cod_dep : "",
+                  p_cod_cc: filtros != null ? filtros.p_cod_cc : "",
+                  p_rol_cargo: filtros != null ? filtros.p_rol_cargo : "",
                 };
 
                 storeCargarConteoDotacionGerencia.load({
                   params: pnlChart2.params,
                   callback: function () {
                     pnlChart2.add(getChartDotacionGerencia());
+                    storeCargarConteoDotacionEmpresa.load({
+                      params: pnlChart2.params,
+                      callback: function () {
+                        pnlChart3.add(getChartDotacionEmpresa());
+                      },
+                    });
                   },
                 });
               }
-            }else{
-                //pnlChart2.removeAll();
-                pnlChart2.params = {
-                  p_anho: record.get("ANHO"),
-                  p_mes: record.get("MES"),
-                  p_cod_emp: filtros != null ? filtros.p_cod_emp : EMPRESA,
-                  p_cod_ger : filtros != null ? filtros.p_cod_ger : '',
-                  p_cod_dep : filtros != null ? filtros.p_cod_dep : '',
-                  p_cod_cc: filtros != null ? filtros.p_cod_cc : '',
-                  p_rol_cargo: filtros != null ? filtros.p_rol_cargo : ''
-                };
+            } else {
+              //pnlChart2.removeAll();
+              pnlChart2.params = {
+                p_anho: record.get("ANHO"),
+                p_mes: record.get("MES"),
+                p_cod_emp: filtros != null ? filtros.p_cod_emp : EMPRESA,
+                p_cod_ger: filtros != null ? filtros.p_cod_ger : "",
+                p_cod_dep: filtros != null ? filtros.p_cod_dep : "",
+                p_cod_cc: filtros != null ? filtros.p_cod_cc : "",
+                p_rol_cargo: filtros != null ? filtros.p_rol_cargo : "",
+              };
 
-                storeCargarConteoDotacionGerencia.load({
-                  params: pnlChart2.params,
-                  callback: function () {
-                    pnlChart2.add(getChartDotacionGerencia());
-                  },
-                });
+              storeCargarConteoDotacionGerencia.load({
+                params: pnlChart2.params,
+                callback: function () {
+                  pnlChart2.add(getChartDotacionGerencia());
+                  storeCargarConteoDotacionEmpresa.load({
+                    params: pnlChart2.params,
+                    callback: function () {
+                      pnlChart3.add(getChartDotacionEmpresa());
+                    },
+                  });
+                },
+              });
             }
           },
         },
@@ -131,5 +145,3 @@ var getChartDotacion = function () {
     ],
   };
 };
-
-

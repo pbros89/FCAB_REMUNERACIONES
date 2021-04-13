@@ -1548,6 +1548,7 @@ class ExcelExportController extends CI_Controller {
     }
 
 
+    
     public function cargarCierrePersonal() {
 
         set_time_limit(300);
@@ -1556,6 +1557,7 @@ class ExcelExportController extends CI_Controller {
 
         $p_anho= $_POST['cbAnho'];
         $p_mes= $_POST['cbMes'];
+        $p_cod_emp= $_POST['cbEmp'];
         $p_usuario = $_POST['p_usuario'];
 
         //print_r($names);
@@ -1566,7 +1568,7 @@ class ExcelExportController extends CI_Controller {
         $this->excel->setActiveSheetIndex(0);
         $this->excel->getActiveSheet()->setTitle('Información General');
         $this->excel->getActiveSheet()->setCellValue("A1", 'Reporte');
-        $this->excel->getActiveSheet()->setCellValue("B1", 'Presupuesto Dotación');
+        $this->excel->getActiveSheet()->setCellValue("B1", 'Cierre Personal');
         $this->excel->getActiveSheet()->setCellValue("A2", 'Fecha Creación');
         $this->excel->getActiveSheet()->setCellValue("B2", new DateTime());
         $this->excel->getActiveSheet()->setCellValue("A3", 'Usuario Creador');
@@ -1575,10 +1577,12 @@ class ExcelExportController extends CI_Controller {
         $this->excel->getActiveSheet()->setCellValue("B4", $p_anho);
         $this->excel->getActiveSheet()->setCellValue("A5", 'Mes');
         $this->excel->getActiveSheet()->setCellValue("B5", $p_mes);
+        $this->excel->getActiveSheet()->setCellValue("A6", 'Empresa');
+        $this->excel->getActiveSheet()->setCellValue("B6", $p_cod_emp);
 
 
         $names = [];
-        $query = $this->ExcelExportModel->cargarCierrePersonal($p_anho, $p_mes);
+        $query = $this->ExcelExportModel->cargarCierrePersonal($p_anho, $p_mes, $p_cod_emp);
         
         if(count($query) > 0){
             $names = get_object_vars($query[0]);

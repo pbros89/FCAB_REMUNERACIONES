@@ -276,6 +276,16 @@ Ext.define("fcab.view.MyViewport", {
               }
               break;
 
+            case "INDICADORES":
+              if (estado == "A") {
+                var p = rootGestion.items.items[0].store.getById(
+                  "menu_indicadores"
+                );
+                p.data.cls = "";
+                countGestion++;
+              }
+              break;
+
             /**************** MENUS REPORTE *******************/
             case "REPORT_CAMBIO_AFP":
               if (estado == "A") {
@@ -426,6 +436,15 @@ Ext.define("fcab.view.MyViewport", {
                 countReporte++;
               }
               break;
+            case "REPORT_CIERRE_MENSUAL":
+              if (estado == "A") {
+                var p = rootReporte.items.items[0].store.getById(
+                  "menu_reporte_cierre_personal"
+                );
+                p.data.cls = "";
+                countReporte++;
+              }
+              break;
           }
         }
       });
@@ -549,10 +568,9 @@ Ext.define("fcab.view.MyViewport", {
     {
       region: "center",
       id: "reg-center",
-      bodyStyle: "padding:5px; overflowY: auto;",
-      layout: 'fit',
-      overflowY: 'auto',
-      //border:false,
+      bodyStyle: "padding:5px;",
+      layout: "fit",
+      autoScroll: true,
       items: tabs,
     },
   ],

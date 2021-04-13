@@ -234,7 +234,7 @@ Ext.define("fcab.store.menu.reporte", {
         cls: "x-hidden",
         //disabled: true
       },
-      /*{
+      {
         name: "Filtro1", //Items a Filtrar
         text: "Cierre Personal",
         tipo: "tab",
@@ -245,9 +245,9 @@ Ext.define("fcab.store.menu.reporte", {
         leaf: true,
         iconCls: "icon-reportes",
         cerrable: 1,
-        //cls: "x-hidden",
+        cls: "x-hidden",
         //disabled: true
-      },*/
+      },
     ],
   },
 });

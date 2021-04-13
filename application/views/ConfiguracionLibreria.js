@@ -53,18 +53,17 @@ rutas[31] = "Formularios/WF/ModificarFicha";
 rutas[32] = "Formularios/Gestion/ContactoEmergencia";
 rutas[33] = "Formularios/Gestion/Presupuesto";
 rutas[34] = "Formularios/Gestion/Indicadores";
-rutas[35] = "Formularios/Gestion/Indicadores/Resumen";
-rutas[36] = "Formularios/Gestion/Indicadores/DistribucionEtaria";
-rutas[37] = "Formularios/Gestion/Indicadores/DistribucionAntiguedad";
-rutas[38] = "Formularios/Gestion/Indicadores/DistribucionPais";
-rutas[39] = "Formularios/Gestion/Indicadores/DistribucionSexo";
-rutas[40] = "Formularios/Gestion/Indicadores/Rotacion";
-rutas[41] = "Formularios/Gestion/Indicadores/Dotacion";
-rutas[42] = "Formularios/Gestion/Indicadores/CierreMensual";
-rutas[43] = "Formularios/Gestion/Indicadores/Ausentismo";
+rutas[35] = "Formularios/Gestion/Indicadores/DistribucionEtaria";
+rutas[36] = "Formularios/Gestion/Indicadores/DistribucionAntiguedad";
+rutas[37] = "Formularios/Gestion/Indicadores/DistribucionPais";
+rutas[38] = "Formularios/Gestion/Indicadores/DistribucionSexo";
+rutas[39] = "Formularios/Gestion/Indicadores/Rotacion";
+rutas[40] = "Formularios/Gestion/Indicadores/Dotacion";
+rutas[41] = "Formularios/Gestion/Indicadores/CierreMensual";
+rutas[42] = "Formularios/Gestion/Indicadores/Ausentismo";
 
 //TODO: Al Final cargar la raiz del sitio.
-rutas[44] = "Raiz";
+rutas[43] = "Raiz";
 
 Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
@@ -117,8 +116,7 @@ var promises = [
   sortec.async.PrometoSyncArchivos(rutas[40]),
   sortec.async.PrometoSyncArchivos(rutas[41]),
   sortec.async.PrometoSyncArchivos(rutas[42]),
-  sortec.async.PrometoSyncArchivos(rutas[43]),
-  sortec.async.PrometoSyncArchivos(rutas[44])
+  sortec.async.PrometoSyncArchivos(rutas[43])
 ];
 
 Ext.Promise.all(promises).then(function (values) {

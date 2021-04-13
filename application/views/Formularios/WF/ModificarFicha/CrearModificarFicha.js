@@ -58,13 +58,14 @@ Ext.define("fcab.Container.WFModificarFichaCrearPanelBuscar", {
   padding: 10,
   border: false,
   layout: {
-    type: "column",
-    align: "stretch",
+    type: "hbox",
+    align: "bottom",
+    //pack: "end",
   },
   items: [
     {
       xtype: "container",
-      columnWidth: 0.4,
+      flex: 1,
       style: "margin: 0 10px 0 0",
       layout: {
         type: "hbox",
@@ -125,7 +126,7 @@ Ext.define("fcab.Container.WFModificarFichaCrearPanelBuscar", {
     },
     {
       xtype: "container",
-      columnWidth: 0.6,
+      flex: 2,
       layout: {
         type: "hbox",
         align: "bottom",
@@ -176,7 +177,7 @@ Ext.define("fcab.Container.WFModificarFichaCrearTabpanel", {
   xtype: "WFModificarFichaCrearTabpanel",
   itemId: "WFModificarFichaCrearTabpanel",
   activeTab: 0,
-  width: "100%",
+  flex: 1,
   disabled: true,
   height: (Ext.getBody().getViewSize().height - 150) > 800 ? 800 : Ext.getBody().getViewSize().height - 150,
   listeners: {
@@ -188,7 +189,6 @@ Ext.define("fcab.Container.WFModificarFichaCrearTabpanel", {
       }
     },
   },
-  //buttonAlign: 'center',
   defaults: {
     scrollable: true,
   },

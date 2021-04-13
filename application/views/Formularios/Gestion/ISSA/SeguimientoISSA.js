@@ -7,46 +7,32 @@
     itemId: 'SeguimientoISSA',
     activeTab: 0,
     width : '100%',
-
+    maxHeight: 3000,
     listeners: {
         beforerender: function(){
             initSeguimientoIssa();
         }
     },
-    //buttonAlign: 'center',
-    defaults: {
-        
-        scrollable: true
-    },
-    layout: {
-        align: "stretch",
-        pack: 'center'
-    },
     items: [{
         title: 'Novedades',
-        items:[{
-            xtype: 'SeguimientoISSAGrillaNovedades',
-        }]
+        xtype: 'SeguimientoISSAGrillaNovedades',
+        
     }, {
         title: 'Proceso Mensual',
-        items:[{
-            xtype: 'SeguimientoISSAGrillaPM'
-        }]
+        xtype: 'SeguimientoISSAGrillaPM'
+        
     }, {
         title: 'Solicitud Asistencia',
-        items:[{
-            xtype: 'SeguimientoISSAGrillaSolAsis'
-        }]
+        xtype: 'SeguimientoISSAGrillaSolAsis'
+        
     }, {
         title: 'Diferencia Ficha',
-        items:[{
-            xtype: 'ISSADiferenciaFichasGrilla'
-        }]
+        xtype: 'ISSADiferenciaFichasGrilla'
+        
     },{
         title: 'Ausentismo',
-        items:[{
-            xtype: 'AusentismoISSA'
-        }]
+        xtype: 'AusentismoISSA'
+        
     }],
 
     

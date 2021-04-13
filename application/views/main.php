@@ -33,8 +33,6 @@
     var formExternoParams = '<?php Print $formExternoParams ?>';
     var style_ext = '<?php Print $style ?>';
     
-
-    console.log(logeado + 'logeado');
     
 </script>
 <body>

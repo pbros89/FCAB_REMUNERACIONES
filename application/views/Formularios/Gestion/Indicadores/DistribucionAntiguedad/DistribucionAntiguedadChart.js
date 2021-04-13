@@ -57,7 +57,14 @@ var getChartDistribucionAntiguedad = function () {
         style: {
           opacity: 0.8,
         },
-        colors: ['#005A8B', '#007C92',  '#63CECA', '#EAAB00',  '#CD202C', '#1E1E1E'],
+        colors: [
+          "#005A8B",
+          "#007C92",
+          "#63CECA",
+          "#EAAB00",
+          "#CD202C",
+          "#1E1E1E",
+        ],
         highlight: {
           fillStyle: "yellow",
         },
@@ -77,19 +84,34 @@ var getChartDistribucionAntiguedad = function () {
               ),
               browser = item.series.getTitle()[fieldIndex];
 
+            var total =
+              parseInt(record.get("< 1")) +
+              parseInt(record.get(">= 1 & <= 5")) +
+              parseInt(record.get("> 5 & <= 10")) +
+              parseInt(record.get("> 10 & <= 20")) + 
+              parseInt(record.get("> 20"));
+
+            var percent = (
+              parseFloat(record.get(item.field) / total) * 100.0
+            ).toFixed(2);
+
             tooltip.setHtml(
-              browser +
+              "<b>Rango " +
+                browser +
                 " en " +
                 record.get("MES_TEXT") +
-                ": " +
-                record.get(item.field)
+                "</b></br>" +
+                "Cantidad: " +
+                record.get(item.field) +
+                "</br>" +
+                "Porcentaje: " +
+                percent
             ); //+ '%');
 
             if (pnlChart2.params) {
               if (
                 pnlChart2.params.p_anho != record.get("ANHO") ||
-                pnlChart2.params.p_mes != record.get("MES") ||
-                pnlChart2.params.p_cod_emp != EMPRESA
+                pnlChart2.params.p_mes != record.get("MES")
               ) {
                 //pnlChart2.removeAll();
                 pnlChart2.params = {

@@ -32,8 +32,9 @@ Ext.define('fcab.view.TabPanel', {
             iconCls: "icon-inicioTab",
             closable: 0, //BUG AL DESTRUIR ALGUNOS OBJETOS (CERRAR CON BOTON)
             layout: {
-                layout: 'fit',
-                align: 'stretch'
+                type: 'anchor',
+                align: 'top',
+                pack: 'start',
             },
             loader: {
                 loadMask: 'Cargando...'
@@ -73,7 +74,7 @@ var addTab = function (id, titulo, icono, formulario, cerrable) {
             autoScroll: true,
             closable: parseInt(cerrable), //BUG AL DESTRUIR ALGUNOS OBJETOS (CERRAR CON BOTON)
             layout: {
-                layout: 'fit',
+                type: 'fit',
                 align: 'stretch'
             },
             loader: {

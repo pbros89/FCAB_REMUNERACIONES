@@ -288,7 +288,7 @@ Ext.define("fcab.store.menu.gestion", {
         leaf: true,
         iconCls: "icon-prototipo",
         cerrable: 1,
-        //cls: "x-hidden",
+        cls: "x-hidden",
         //disabled: true
       },
     ],

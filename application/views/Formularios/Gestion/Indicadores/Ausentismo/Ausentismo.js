@@ -4,8 +4,7 @@ Ext.define("fcab.Container.IndAusentismo", {
   itemId: "IndAusentismo",
   border: false,
   frame: false,
-  width: "100%",
-  layout: "anchor",
+  autoScroll: true,
   padding: 10,
   constructor: function (config) {
     this.callParent([config]);
@@ -13,7 +12,7 @@ Ext.define("fcab.Container.IndAusentismo", {
   },
   listeners: {
     afterrender: function () {
-      cargarIndAusentismo(null);
+      cargarIndAusentismo(null, true);
     },
   },
   items: [
@@ -58,7 +57,6 @@ Ext.define("fcab.Container.IndAusentismo", {
           xtype: "panel",
           layout: "hbox",
           width: "100%",
-          padding: 10,
           frame: false,
           border: false,
           items: [
@@ -77,33 +75,32 @@ Ext.define("fcab.Container.IndAusentismo", {
         {
           xtype: "IndAusentismoGrid",
           width: "100%",
-          height: 300,
+          height: 500,
         },
-        {
+        /*{
           xtype: "IndAusentismoGridDet",
           width: "100%",
           height: 300,
-        },
+        },*/
       ],
     },
   ],
 });
 
 
-var cargarIndAusentismo = function (filtros) {
+var cargarIndAusentismo = function (filtros, init) {
   var pnlChart = Ext.ComponentQuery.query(
     "#IndAusentismo #IndAusentismoChart"
   )[0];
-  var grid = Ext.ComponentQuery.query(
-    "#IndAusentismo #IndAusentismoGrid"
-  )[0];
-  var storeGrid = grid.getStore();
+  var pnlChart2 = Ext.ComponentQuery.query("#IndAusentismo #IndAusentismoChartDet")[0];
   var pnlTitle = Ext.ComponentQuery.query(
     "#IndAusentismo #IndAusentismoChartTitle"
   )[0];
   var params = null;
   Ext.getCmp("MainIndicadores").disable();
   pnlChart.removeAll();
+  pnlChart2.removeAll();
+  pnlChart2.params = null;
 
   if (filtros != null) {
     params = filtros;
@@ -112,37 +109,27 @@ var cargarIndAusentismo = function (filtros) {
     var year = date.getFullYear();
     params = {
       p_anho: year,
-      p_cod_emp: EMPRESA,
+      p_cod_emp: "",
       p_cod_ger: "",
       p_cod_dep: "",
       p_cod_cc: "",
-      p_rol_cargo: ""
+      p_rol_cargo: "",
+      p_cod_emp_nom: "",
+      p_cod_ger_nom: "",
+      p_cod_dep_nom: "",
+      p_cod_cc_nom: "",
+      p_rol_cargo_nom: ""
     };
   }
-  storeGrid.removeAll();
+
+  if (init) {
+    params.p_cod_emp = EMPRESA;
+    params.p_cod_emp_nom = NOM_EMPRESA;
+  }
+
   storeCargarConteoAusentismoMensual.load({
     params: params,
     callback: function (records, operation, success) {
-
-      if(records != null) {
-        var itemTotal = {};
-        itemTotal.MES_TEXT = 'TOTAL'
-        itemTotal.TOTAL = 0;
-        itemTotal.DIAS_TRABAJADOS = 0;
-        itemTotal.VACACIONES = 0;
-        itemTotal.LICENCIAS = 0;
-        itemTotal.AUSENCIAS = 0;
-
-        for(var i = 0; i < records.length; i++) {
-          storeGrid.add(records[i].data);
-          itemTotal.TOTAL += parseInt(records[i].data.TOTAL);
-          itemTotal.DIAS_TRABAJADOS += parseInt(records[i].data.DIAS_TRABAJADOS);
-          itemTotal.VACACIONES += parseInt(records[i].data.VACACIONES);
-          itemTotal.LICENCIAS += parseInt(records[i].data.LICENCIAS);
-          itemTotal.AUSENCIAS += parseInt(records[i].data.AUSENCIAS);
-        }
-        storeGrid.add(itemTotal);
-      }
 
       Ext.getCmp("MainIndicadores").enable();
       
@@ -151,18 +138,19 @@ var cargarIndAusentismo = function (filtros) {
         "<p><b>Filtros = Año:" +
         (params.p_anho != "" && params.p_anho != null ? params.p_anho : "TODOS") +
         " / Empresa:" +
-        (params.p_cod_emp != "" && params.p_cod_emp != null? params.p_cod_emp : "TODOS") +
+        (params.p_cod_emp_nom != "" && params.p_cod_emp_nom != null? params.p_cod_emp_nom : "TODOS") +
         " / Gerencia:" +
-        (params.p_cod_ger != "" && params.p_cod_ger != null ? params.p_cod_ger : "TODOS") +
+        (params.p_cod_ger_nom != "" && params.p_cod_ger_nom != null ? params.p_cod_ger_nom : "TODOS") +
         " / Departamento:" +
-        (params.p_cod_dep != "" && params.p_cod_dep != null ? params.p_cod_dep : "TODOS") +
+        (params.p_cod_dep_nom != "" && params.p_cod_dep_nom != null ? params.p_cod_dep_nom : "TODOS") +
         " / Centro de Costo:" +
-        (params.p_cod_cc != "" && params.p_cod_cc != null? params.p_cod_cc : "TODOS") +
+        (params.p_cod_cc_nom != "" && params.p_cod_cc_nom != null? params.p_cod_cc_nom : "TODOS") +
         " / Rol Cargo:" +
-        (params.p_rol_cargo != "" && params.p_rol_cargo != null? params.p_rol_cargo : "TODOS") +
+        (params.p_rol_cargo_nom != "" && params.p_rol_cargo_nom != null? params.p_rol_cargo_nom : "TODOS") +
         " </b></p>";
       pnlTitle.setHtml(html);
       pnlChart.add(getChartAusentismo());
+      cargarIndAusentismoGrid();
     },
   });
 };

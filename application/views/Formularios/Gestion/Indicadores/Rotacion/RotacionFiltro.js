@@ -21,11 +21,8 @@ Ext.define("fcab.Container.IndRotacion.Filtro", {
         "IndRotacionFiltro #cmbCausal"
       )[0];
 
-
       storeCargarEmpresas.load();
-
       storeCargarRolesCargo.load();
-
 
       if (dataForm !== null && dataForm !== "") {
         cmbEmp.setValue(dataForm.p_cod_emp);
@@ -35,7 +32,7 @@ Ext.define("fcab.Container.IndRotacion.Filtro", {
         cmbRol.setValue(dataForm.p_rol_cargo);
         cmbCausal.setValue(dataForm.p_causal);
       } else {
-        cmbEmp.setValue('');
+        cmbEmp.setValue(EMPRESA);
         cmbGer.reset();
         cmbDep.reset();
         cmbCC.reset();
@@ -246,7 +243,7 @@ Ext.define("fcab.Container.IndRotacion.Filtro", {
       style: "margin-right: 5px",
       handler: function () {
 
-        Ext.ComponentQuery.query("IndRotacionFiltro #cmbEmp")[0].setValue('');
+        Ext.ComponentQuery.query("IndRotacionFiltro #cmbEmp")[0].setValue(EMPRESA);
         Ext.ComponentQuery.query("IndRotacionFiltro #cmbGer")[0].reset();
         Ext.ComponentQuery.query("IndRotacionFiltro #cmbDep")[0].reset();
         Ext.ComponentQuery.query("IndRotacionFiltro #cmbCC")[0].reset();
@@ -263,28 +260,23 @@ Ext.define("fcab.Container.IndRotacion.Filtro", {
         var form = this.up("form").getForm(); //Obtenemos el formulario actual
         var values = form.getValues();
         var filtros = null;
-        console.log(values);
-        if (
-          values.cmbEmp !== "" ||
-          values.cmbGer !== "" ||
-          values.cmbDep !== "" ||
-          values.cmbCC !== "" ||
-          values.cmbRol !== "" ||
-          values.cmbCausal !== ""
-        ) {
-          filtros = {
-            p_cod_emp: values.cmbEmp,
-            p_cod_ger: values.cmbGer,
-            p_cod_dep: values.cmbDep,
-            p_cod_cc: values.cmbCC,
-            p_rol_cargo: values.cmbRol,
-            p_causal: values.cmbCausal,
-          };
-          cargarIndRotacion(filtros);
-        } else {
-          cargarIndRotacion(null);
-        }
+        
+        filtros = {
+          p_cod_emp: values.cmbEmp,
+          p_cod_ger: values.cmbGer,
+          p_cod_dep: values.cmbDep,
+          p_cod_cc: values.cmbCC,
+          p_rol_cargo: values.cmbRol,
+          p_causal: values.cmbCausal,
+          p_cod_emp_nom : Ext.ComponentQuery.query('IndRotacionFiltro #cmbEmp')[0].getRawValue(), 
+          p_cod_ger_nom : Ext.ComponentQuery.query('IndRotacionFiltro #cmbGer')[0].getRawValue(),
+          p_cod_dep_nom : Ext.ComponentQuery.query('IndRotacionFiltro #cmbDep')[0].getRawValue(),
+          p_cod_cc_nom: Ext.ComponentQuery.query('IndRotacionFiltro #cmbCC')[0].getRawValue(),
+          p_rol_cargo_nom: Ext.ComponentQuery.query('IndRotacionFiltro #cmbRol')[0].getRawValue(),
+          p_causal_nom: Ext.ComponentQuery.query('IndRotacionFiltro #cmbCausal')[0].getRawValue(),
+        };
         grid.filtros = filtros;
+        cargarIndRotacion(filtros, false); 
 
         Ext.getCmp("IndRotacionFiltro").destroy();
       },

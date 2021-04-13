@@ -14,15 +14,13 @@ Ext.define("fcab.Container.IndDotacionGerencia.Chart", {
     xtype: 'cartesian',
     reference: 'chart',
     store: storeCargarConteoDotacionGerencia,
-    //insetPadding: 40,
-    //innerPadding: 20,
     axes: [{
         type: 'numeric',
         title: 'Cantidades',
         position: 'left',
         adjustByMajorUnit: true,
         grid: true,
-        fields: ['VALOR'],
+        fields: ['DOTACION'],
         minimum: 0,
         label: {
             fontSize: 10,
@@ -45,9 +43,9 @@ Ext.define("fcab.Container.IndDotacionGerencia.Chart", {
     }],
     series: [{
         type: 'bar',
-        title: ['VALOR' ],
+        title: ['DOTACION' ],
         xField: ['GERENCIA'],
-        yField: ['VALOR' ],
+        yField: ['DOTACION' ],
         colors: ['#005A8B', '#007C92',  '#63CECA', '#EAAB00',  '#CD202C', '#1E1E1E'],
         stacked: true,
         style: {
@@ -62,9 +60,16 @@ Ext.define("fcab.Container.IndDotacionGerencia.Chart", {
                 var fieldIndex = Ext.Array.indexOf(item.series.getYField(), item.field),
                     browser = item.series.getTitle()[fieldIndex];
         
-                tooltip.setHtml(browser + ' en ' +
-                    record.get('GERENCIA') + ': ' +
-                    record.get(item.field)); //+ '%');
+                tooltip.setHtml(
+                    "<b>" +
+                      "Dotación " +
+                      record.get("GERENCIA") +
+                      " en " +
+                      record.get("MES_TEXT") +
+                      "</b></br>" +
+                      "Cantidad: " +
+                      record.get(item.field) 
+                  ); 
             },
         }
     }]

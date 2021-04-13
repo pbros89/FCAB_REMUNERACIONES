@@ -68,10 +68,12 @@ class IndicadorModel extends CI_Model
                         WHEN MES = 10 THEN 'OCT' 
                         WHEN MES = 11 THEN 'NOV' 
                         WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
-                    SUM(CASE WHEN EDAD < 30 THEN 1 ELSE 0 END) ".'"< 30",'."
-                    SUM(CASE WHEN EDAD >= 30 AND EDAD <= 45 THEN 1 ELSE 0 END) ".'">= 30 & <= 45",'."
-                    SUM(CASE WHEN EDAD > 45 AND EDAD <= 62 THEN 1 ELSE 0 END) ".'"> 45 & <= 62",'."
-                    SUM(CASE WHEN EDAD > 62 THEN 1 ELSE 0 END) ".'"> 62"'."
+                    COUNT(*) TOTAL,
+                    ROUND(SUM(EDAD) / COUNT(*), 0) PROMEDIO,
+                    SUM(CASE WHEN EDAD < 30 THEN 1 ELSE 0 END) " . '"< 30",' . "
+                    SUM(CASE WHEN EDAD >= 30 AND EDAD <= 45 THEN 1 ELSE 0 END) " . '">= 30 & <= 45",' . "
+                    SUM(CASE WHEN EDAD > 45 AND EDAD <= 62 THEN 1 ELSE 0 END) " . '"> 45 & <= 62",' . "
+                    SUM(CASE WHEN EDAD > 62 THEN 1 ELSE 0 END) " . '"> 62"' . "
                 FROM (
                     SELECT 
                         PFK_ANHO ANHO, 
@@ -107,7 +109,7 @@ class IndicadorModel extends CI_Model
         }
 
         $sql .= ")
-                GROUP BY ANHO, MES";
+                GROUP BY ANHO, MES ";
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -187,6 +189,117 @@ class IndicadorModel extends CI_Model
         GROUP BY ANHO, MES, MES_TEXT, TIPO, IND 
         ORDER BY ANHO ASC, MES ASC, IND ASC 
         ";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarConteoDotacionEtariaMensualDinamic(
+        $p_anho,
+        $p_mes,
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_is_emp,
+        $p_is_ger,
+        $p_is_rol
+    ) {
+
+
+        $sql = "SELECT 
+                    ANHO, 
+                    MES, 
+                    (CASE 
+                        WHEN MES = 1 THEN 'ENE' 
+                        WHEN MES = 2 THEN 'FEB'
+                        WHEN MES = 3 THEN 'MAR' 
+                        WHEN MES = 4 THEN 'ABR' 
+                        WHEN MES = 5 THEN 'MAY' 
+                        WHEN MES = 6 THEN 'JUN' 
+                        WHEN MES = 7 THEN 'JUL' 
+                        WHEN MES = 8 THEN 'AGO' 
+                        WHEN MES = 9 THEN 'SEP' 
+                        WHEN MES = 10 THEN 'OCT' 
+                        WHEN MES = 11 THEN 'NOV' 
+                        WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol%
+                    COUNT(*) TOTAL,
+                    ROUND(SUM(EDAD) / COUNT(*), 0) PROMEDIO,
+                    SUM(CASE WHEN EDAD < 30 THEN 1 ELSE 0 END) " . '"< 30",' . "
+                    SUM(CASE WHEN EDAD >= 30 AND EDAD <= 45 THEN 1 ELSE 0 END) " . '">= 30 & <= 45",' . "
+                    SUM(CASE WHEN EDAD > 45 AND EDAD <= 62 THEN 1 ELSE 0 END) " . '"> 45 & <= 62",' . "
+                    SUM(CASE WHEN EDAD > 62 THEN 1 ELSE 0 END) " . '"> 62"' . "
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES, 
+                        COD_EMP,
+                        EMP.NOMBRE NOM_EMP,
+                        COD_GERENCIA,
+                        TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL,
+                        f_contar_anhos(
+                            p_fecini=>fecha_nac/*date*/,
+                            p_fecfin=>TO_DATE(
+                                PFK_ANHO ||
+                                case when PFK_MES < 10 THEN '0'||PFK_MES ELSE TO_CHAR(PFK_MES) END ||
+                                '01',
+                                'YYYYMMDD'
+                            )/*date*/) EDAD
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP
+                    AND FECHA_NAC IS NOT NULL ";
+        if (!empty($p_anho)) {
+            $sql .= "AND PFK_ANHO = $p_anho ";
+        }
+        if (!empty($p_mes)) {
+            $sql .= "AND PFK_MES = $p_mes ";
+        }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+
+        $sql .= ")
+                GROUP BY 
+                    ANHO, 
+                    %emp%
+                    %ger%
+                    %rol% 
+                    MES 
+                ORDER BY ANHO ASC, MES ASC";
+
+        /*%emp%
+                %ger%
+                %rol%*/
+
+        if ($p_is_emp == '1') {
+            $sql = str_replace('%emp%', 'COD_EMP, NOM_EMP, ', $sql);
+        } else {
+            $sql = str_replace('%emp%', '', $sql);
+        }
+
+        if ($p_is_ger == '1') {
+            $sql = str_replace('%ger%', 'COD_GERENCIA, ', $sql);
+        } else {
+            $sql = str_replace('%ger%', '', $sql);
+        }
+
+        if ($p_is_rol == '1') {
+            $sql = str_replace('%rol%', 'ROL, ', $sql);
+        } else {
+            $sql = str_replace('%rol%', '', $sql);
+        }
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -298,11 +411,13 @@ class IndicadorModel extends CI_Model
                         WHEN MES = 10 THEN 'OCT' 
                         WHEN MES = 11 THEN 'NOV' 
                         WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
-                    SUM(CASE WHEN ANTIGUEDAD < 1 THEN 1 ELSE 0 END) ".'"< 1",'."
-                    SUM(CASE WHEN ANTIGUEDAD >= 1 AND ANTIGUEDAD <= 5 THEN 1 ELSE 0 END) ".'">= 1 & <= 5",'."
-                    SUM(CASE WHEN ANTIGUEDAD > 5 AND ANTIGUEDAD <= 10 THEN 1 ELSE 0 END) ".'"> 5 & <= 10",'."
-                    SUM(CASE WHEN ANTIGUEDAD > 10 AND ANTIGUEDAD <= 20 THEN 1 ELSE 0 END) ".'"> 10 & <= 20",'."
-                    SUM(CASE WHEN ANTIGUEDAD > 20 THEN 1 ELSE 0 END) ".'"> 20"'."
+                    COUNT(*) TOTAL,
+                    ROUND(SUM(ANTIGUEDAD) / COUNT(*), 0) PROMEDIO,
+                    SUM(CASE WHEN ANTIGUEDAD < 1 THEN 1 ELSE 0 END) " . '"< 1",' . "
+                    SUM(CASE WHEN ANTIGUEDAD >= 1 AND ANTIGUEDAD <= 5 THEN 1 ELSE 0 END) " . '">= 1 & <= 5",' . "
+                    SUM(CASE WHEN ANTIGUEDAD > 5 AND ANTIGUEDAD <= 10 THEN 1 ELSE 0 END) " . '"> 5 & <= 10",' . "
+                    SUM(CASE WHEN ANTIGUEDAD > 10 AND ANTIGUEDAD <= 20 THEN 1 ELSE 0 END) " . '"> 10 & <= 20",' . "
+                    SUM(CASE WHEN ANTIGUEDAD > 20 THEN 1 ELSE 0 END) " . '"> 20"' . "
                 FROM (
                     SELECT 
                         PFK_ANHO ANHO, 
@@ -345,6 +460,119 @@ class IndicadorModel extends CI_Model
     }
 
 
+    public function cargarConteoDotacionAntiguedadMensualDinamic(
+        $p_anho,
+        $p_mes,
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_is_emp,
+        $p_is_ger,
+        $p_is_rol
+    ) {
+
+
+        $sql = "SELECT 
+                    ANHO, 
+                    MES, 
+                    (CASE 
+                        WHEN MES = 1 THEN 'ENE' 
+                        WHEN MES = 2 THEN 'FEB'
+                        WHEN MES = 3 THEN 'MAR' 
+                        WHEN MES = 4 THEN 'ABR' 
+                        WHEN MES = 5 THEN 'MAY' 
+                        WHEN MES = 6 THEN 'JUN' 
+                        WHEN MES = 7 THEN 'JUL' 
+                        WHEN MES = 8 THEN 'AGO' 
+                        WHEN MES = 9 THEN 'SEP' 
+                        WHEN MES = 10 THEN 'OCT' 
+                        WHEN MES = 11 THEN 'NOV' 
+                        WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol%
+                    COUNT(*) TOTAL,
+                    ROUND(SUM(ANTIGUEDAD) / COUNT(*), 0) PROMEDIO,
+                    SUM(CASE WHEN ANTIGUEDAD < 1 THEN 1 ELSE 0 END) " . '"< 1",' . "
+                    SUM(CASE WHEN ANTIGUEDAD >= 1 AND ANTIGUEDAD <= 5 THEN 1 ELSE 0 END) " . '">= 1 & <= 5",' . "
+                    SUM(CASE WHEN ANTIGUEDAD > 5 AND ANTIGUEDAD <= 10 THEN 1 ELSE 0 END) " . '"> 5 & <= 10",' . "
+                    SUM(CASE WHEN ANTIGUEDAD > 10 AND ANTIGUEDAD <= 20 THEN 1 ELSE 0 END) " . '"> 10 & <= 20",' . "
+                    SUM(CASE WHEN ANTIGUEDAD > 20 THEN 1 ELSE 0 END) " . '"> 20"' . "
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES, 
+                        COD_EMP,
+                        emp.NOMBRE NOM_EMP,
+                        COD_GERENCIA,
+                        TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL,
+                        f_contar_anhos(
+                            p_fecini=>FECHA_INGRESO/*date*/,
+                            p_fecfin=>TO_DATE(
+                                PFK_ANHO ||
+                                case when PFK_MES < 10 THEN '0'||PFK_MES ELSE TO_CHAR(PFK_MES) END ||
+                                '01',
+                                'YYYYMMDD'
+                            )/*date*/) ANTIGUEDAD
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP ";
+        if (!empty($p_anho)) {
+            $sql .= "AND PFK_ANHO = $p_anho ";
+        }
+        if (!empty($p_mes)) {
+            $sql .= "AND PFK_MES = $p_mes ";
+        }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+
+        $sql .= ")
+                GROUP BY 
+                    ANHO, 
+                    %emp%
+                    %ger%
+                    %rol% 
+                    MES 
+                ORDER BY ANHO ASC, MES ASC";
+
+        /*%emp%
+                %ger%
+                %rol%*/
+
+        if ($p_is_emp == '1') {
+            $sql = str_replace('%emp%', 'COD_EMP, NOM_EMP, ', $sql);
+        } else {
+            $sql = str_replace('%emp%', '', $sql);
+        }
+
+        if ($p_is_ger == '1') {
+            $sql = str_replace('%ger%', 'COD_GERENCIA, ', $sql);
+        } else {
+            $sql = str_replace('%ger%', '', $sql);
+        }
+
+        if ($p_is_rol == '1') {
+            $sql = str_replace('%rol%', 'ROL, ', $sql);
+        } else {
+            $sql = str_replace('%rol%', '', $sql);
+        }
+
+
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
 
     public function cargarConteoDotacionRolPaisMensual(
         $p_anho,
@@ -373,11 +601,13 @@ class IndicadorModel extends CI_Model
                         WHEN MES = 10 THEN 'OCT' 
                         WHEN MES = 11 THEN 'NOV' 
                         WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    
                     SUM(CASE WHEN 
                         UPPER(COD_PAIS) = 'CHL' OR 
                         UPPER(COD_PAIS)  = 'CHILENA' OR 
                         UPPER(COD_PAIS)  = 'CHILENO' OR 
                         UPPER(COD_PAIS) = 'CHILE' OR
+                        UPPER(COD_PAIS) = 'CHI' OR
                         UPPER(COD_PAIS) = 'CL' THEN
                     1 ELSE 0 END) NACIONAL,
                     COUNT(*) - SUM(CASE WHEN 
@@ -385,6 +615,7 @@ class IndicadorModel extends CI_Model
                         UPPER(COD_PAIS)  = 'CHILENA' OR 
                         UPPER(COD_PAIS)  = 'CHILENO' OR 
                         UPPER(COD_PAIS) = 'CHILE' OR
+                        UPPER(COD_PAIS) = 'CHI' OR
                         UPPER(COD_PAIS) = 'CL' THEN
                     1 ELSE 0 END) EXTRANJERO
                     
@@ -415,12 +646,133 @@ class IndicadorModel extends CI_Model
         }
 
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
 
         $sql .= ")
                 GROUP BY ANHO, MES
                 ORDER BY ANHO ASC, MES ASC";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarConteoDotacionRolPaisMensualDinamic(
+        $p_anho,
+        $p_mes,
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_rol_cargo,
+        $p_is_emp,
+        $p_is_ger,
+        $p_is_rol
+    ) {
+
+
+        $sql = "SELECT 
+                    ANHO, 
+                    MES, 
+                    (CASE 
+                        WHEN MES = 1 THEN 'ENE' 
+                        WHEN MES = 2 THEN 'FEB'
+                        WHEN MES = 3 THEN 'MAR' 
+                        WHEN MES = 4 THEN 'ABR' 
+                        WHEN MES = 5 THEN 'MAY' 
+                        WHEN MES = 6 THEN 'JUN' 
+                        WHEN MES = 7 THEN 'JUL' 
+                        WHEN MES = 8 THEN 'AGO' 
+                        WHEN MES = 9 THEN 'SEP' 
+                        WHEN MES = 10 THEN 'OCT' 
+                        WHEN MES = 11 THEN 'NOV' 
+                        WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol%
+                    COUNT(*) TOTAL,
+                    SUM(CASE WHEN 
+                        UPPER(COD_PAIS) = 'CHL' OR 
+                        UPPER(COD_PAIS)  = 'CHILENA' OR 
+                        UPPER(COD_PAIS)  = 'CHILENO' OR 
+                        UPPER(COD_PAIS) = 'CHILE' OR
+                        UPPER(COD_PAIS) = 'CHI' OR
+                        UPPER(COD_PAIS) = 'CL' THEN
+                    1 ELSE 0 END) NACIONAL,
+                    COUNT(*) - SUM(CASE WHEN 
+                        UPPER(COD_PAIS) = 'CHL' OR 
+                        UPPER(COD_PAIS)  = 'CHILENA' OR 
+                        UPPER(COD_PAIS)  = 'CHILENO' OR 
+                        UPPER(COD_PAIS) = 'CHILE' OR
+                        UPPER(COD_PAIS) = 'CHI' OR
+                        UPPER(COD_PAIS) = 'CL' THEN
+                    1 ELSE 0 END) EXTRANJERO
+                    
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES, 
+                        COD_EMP,
+                        emp.NOMBRE NOM_EMP,
+                        COD_GERENCIA,
+                        TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL,
+                        nvl(COD_PAIS, 'SIN PAIS') COD_PAIS
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP ";
+        if (!empty($p_anho)) {
+            $sql .= "AND PFK_ANHO = $p_anho ";
+        }
+        if (!empty($p_mes)) {
+            $sql .= "AND PFK_MES = $p_mes ";
+        }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+
+        if (!empty($p_rol_cargo)) {
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
+        }
+
+        $sql .= ")
+                GROUP BY 
+                    ANHO, 
+                    %emp%
+                    %ger%
+                    %rol% 
+                    MES 
+                ORDER BY ANHO ASC, MES ASC";
+
+        /*%emp%
+                %ger%
+                %rol%*/
+
+        if ($p_is_emp == '1') {
+            $sql = str_replace('%emp%', 'COD_EMP, NOM_EMP, ', $sql);
+        } else {
+            $sql = str_replace('%emp%', '', $sql);
+        }
+
+        if ($p_is_ger == '1') {
+            $sql = str_replace('%ger%', 'COD_GERENCIA, ', $sql);
+        } else {
+            $sql = str_replace('%ger%', '', $sql);
+        }
+
+        if ($p_is_rol == '1') {
+            $sql = str_replace('%rol%', 'ROL, ', $sql);
+        } else {
+            $sql = str_replace('%rol%', '', $sql);
+        }
+
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -459,6 +811,7 @@ class IndicadorModel extends CI_Model
                             UPPER(COD_PAIS)  = 'CHILENA' OR 
                             UPPER(COD_PAIS)  = 'CHILENO' OR 
                             UPPER(COD_PAIS) = 'CHILE' OR
+                            UPPER(COD_PAIS) = 'CHI' OR
                             UPPER(COD_PAIS) = 'CL' THEN
                         'NACIONAL' ELSE 'EXTRANJERO' END) TIPO
                 FROM (
@@ -488,7 +841,7 @@ class IndicadorModel extends CI_Model
         }
 
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
 
         $sql .= "))
@@ -553,7 +906,7 @@ class IndicadorModel extends CI_Model
             $sql .= "AND COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
 
         $sql .= ")
@@ -618,12 +971,111 @@ class IndicadorModel extends CI_Model
             $sql .= "AND COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
 
         $sql .= "))
                 GROUP BY ANHO, MES, MES_TEXT, TIPO 
                 ORDER BY ANHO ASC, MES ASC, MES_TEXT ASC, TIPO DESC";
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarConteoDotacionSexoMensualDinamic(
+        $p_anho,
+        $p_mes,
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_rol_cargo,
+        $p_is_emp,
+        $p_is_ger,
+        $p_is_rol
+    ) {
+
+        $sql = "SELECT 
+                    ANHO, 
+                    MES, 
+                    (CASE 
+                        WHEN MES = 1 THEN 'ENE' 
+                        WHEN MES = 2 THEN 'FEB'
+                        WHEN MES = 3 THEN 'MAR' 
+                        WHEN MES = 4 THEN 'ABR' 
+                        WHEN MES = 5 THEN 'MAY' 
+                        WHEN MES = 6 THEN 'JUN' 
+                        WHEN MES = 7 THEN 'JUL' 
+                        WHEN MES = 8 THEN 'AGO' 
+                        WHEN MES = 9 THEN 'SEP' 
+                        WHEN MES = 10 THEN 'OCT' 
+                        WHEN MES = 11 THEN 'NOV' 
+                        WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol%
+                    SUM(CASE WHEN COD_SEXO = 'F' THEN 1 ELSE 0 END) F,
+                    SUM(CASE WHEN COD_SEXO <> 'F' THEN 1 ELSE 0 END) M,
+                    COUNT(*) TOTAL
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES, 
+                        COD_SEXO,
+                        COD_EMP,
+                        emp.NOMBRE NOM_EMP,
+                        COD_GERENCIA,
+                        TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP ";
+        if (!empty($p_anho)) {
+            $sql .= "AND PFK_ANHO = $p_anho ";
+        }
+        if (!empty($p_mes)) {
+            $sql .= "AND PFK_MES = $p_mes ";
+        }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+        if (!empty($p_rol_cargo)) {
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
+        }
+
+        $sql .= ")
+                GROUP BY %emp%%ger%%rol% ANHO, MES 
+                ORDER BY ANHO ASC, MES ASC";
+
+
+        /*%emp%
+                %ger%
+                %rol%*/
+
+        if ($p_is_emp == '1') {
+            $sql = str_replace('%emp%', 'COD_EMP, NOM_EMP, ', $sql);
+        } else {
+            $sql = str_replace('%emp%', '', $sql);
+        }
+
+        if ($p_is_ger == '1') {
+            $sql = str_replace('%ger%', 'COD_GERENCIA, ', $sql);
+        } else {
+            $sql = str_replace('%ger%', '', $sql);
+        }
+
+        if ($p_is_rol == '1') {
+            $sql = str_replace('%rol%', 'ROL, ', $sql);
+        } else {
+            $sql = str_replace('%rol%', '', $sql);
+        }
+
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -656,13 +1108,14 @@ class IndicadorModel extends CI_Model
                     ROL,
                     COUNT(DISTINCT ANHO|| LPAD(MES, 2, '0')) MESES,
                     COUNT(*) DOTACION,
-                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL THEN 1 ELSE 0 END) ROTACION_TOTAL,
-                    SUM(CASE WHEN COD_CAUSAL = '2' THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
+                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = PFK_ANHO|| LPAD(PFK_MES, 2, '0') THEN 1 ELSE 0 END) ROTACION_TOTAL,
+                    SUM(CASE WHEN COD_CAUSAL = '2' AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = PFK_ANHO|| LPAD(PFK_MES, 2, '0') THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
                 FROM (
                     SELECT 
                         PFK_ANHO ANHO, 
                         PFK_MES MES, 
                         COD_CAUSAL,
+                        fecha_baja,
                         TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL
                     FROM NOV_CIERRE_MENSUAL_PERSONAL 
                     WHERE 1 = 1 
@@ -702,13 +1155,14 @@ class IndicadorModel extends CI_Model
                     ROL,
                     COUNT(DISTINCT ANHO || LPAD(MES, 2, '0')) MESES,
                     round(COUNT(*) / 12, 2) DOTACION,
-                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL THEN 1 ELSE 0 END) ROTACION_TOTAL,
-                    SUM(CASE WHEN COD_CAUSAL = '2' THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
+                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = PFK_ANHO|| LPAD(PFK_MES, 2, '0') THEN 1 ELSE 0 END) ROTACION_TOTAL,
+                    SUM(CASE WHEN COD_CAUSAL = '2' AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = PFK_ANHO|| LPAD(PFK_MES, 2, '0') THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
                 FROM (
                     SELECT 
                         PFK_ANHO ANHO, 
                         PFK_MES MES, 
                         COD_CAUSAL,
+                        fecha_baja,
                         TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL
                     FROM NOV_CIERRE_MENSUAL_PERSONAL 
                     WHERE 1 = 1 
@@ -731,7 +1185,7 @@ class IndicadorModel extends CI_Model
             $sql .= "AND COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL = UPPER('$p_rol_cargo') ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
         if (!empty($p_causal)) {
             $sql .= "AND COD_CAUSAL = '$p_causal' ";
@@ -739,6 +1193,174 @@ class IndicadorModel extends CI_Model
 
         $sql .= ")
                 GROUP BY ROL ";
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarConteoRotacionMensualDinamic(
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_rol_cargo,
+        $p_causal,
+        $p_is_emp,
+        $p_is_ger,
+        $p_is_rol
+    ) {
+
+        $sql = "SELECT 
+                    ANHO, 
+                    MES, 
+                    (CASE 
+                        WHEN MES = 1 THEN 'ENE' 
+                        WHEN MES = 2 THEN 'FEB'
+                        WHEN MES = 3 THEN 'MAR' 
+                        WHEN MES = 4 THEN 'ABR' 
+                        WHEN MES = 5 THEN 'MAY' 
+                        WHEN MES = 6 THEN 'JUN' 
+                        WHEN MES = 7 THEN 'JUL' 
+                        WHEN MES = 8 THEN 'AGO' 
+                        WHEN MES = 9 THEN 'SEP' 
+                        WHEN MES = 10 THEN 'OCT' 
+                        WHEN MES = 11 THEN 'NOV' 
+                        WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol%
+                    COUNT(DISTINCT ANHO|| LPAD(MES, 2, '0')) MESES,
+                    COUNT(*) DOTACION,
+                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL 
+                        AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = ANHO|| LPAD(MES, 2, '0')
+                        THEN 1 ELSE 0 END) ROTACION_TOTAL,
+                    SUM(CASE WHEN COD_CAUSAL = '2' 
+                        AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = ANHO|| LPAD(MES, 2, '0') 
+                        THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES, 
+                        COD_CAUSAL,
+                        COD_EMP,
+                        fecha_baja,
+                        emp.NOMBRE NOM_EMP,
+                        COD_GERENCIA,
+                        TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP 
+                    AND PFK_ANHO|| LPAD(PFK_MES, 2, '0') BETWEEN 
+                        TO_CHAR(ADD_MONTHS((SELECT MAX(TO_DATE(PFK_ANHO|| LPAD(PFK_MES, 2, '0'), 'YYYYMM'))
+                        FROM NOV_CIERRE_MENSUAL_PERSONAL), -11), 'YYYYMM')
+                    AND TO_CHAR((SELECT MAX(TO_DATE(PFK_ANHO|| LPAD(PFK_MES, 2, '0'), 'YYYYMM'))
+                        FROM NOV_CIERRE_MENSUAL_PERSONAL), 'YYYYMM') ";
+
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+        if (!empty($p_rol_cargo)) {
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
+        }
+        if (!empty($p_causal)) {
+            $sql .= "AND COD_CAUSAL = '$p_causal' ";
+        }
+
+        $sql .= ")
+                GROUP BY 
+                    ANHO, 
+                    %emp%
+                    %ger%
+                    %rol% 
+                    MES 
+        UNION ALL 
+        SELECT 
+                    null ANHO, 
+                    0 MES, 
+                    'TOTAL' MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol%
+                    COUNT(DISTINCT ANHO || LPAD(MES, 2, '0')) MESES,
+                    round(COUNT(*) / 12, 2) DOTACION,
+                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL 
+                        AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = ANHO|| LPAD(MES, 2, '0') 
+                            THEN 1 ELSE 0 END) ROTACION_TOTAL,
+                    SUM(CASE WHEN COD_CAUSAL = '2' 
+                        AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = ANHO|| LPAD(MES, 2, '0') 
+                        THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES, 
+                        COD_CAUSAL,
+                        COD_EMP,
+                        emp.NOMBRE NOM_EMP,
+                        fecha_baja,
+                        COD_GERENCIA,
+                        TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP 
+                    AND PFK_ANHO|| LPAD(PFK_MES, 2, '0') BETWEEN 
+                    TO_CHAR(ADD_MONTHS((SELECT MAX(TO_DATE(PFK_ANHO|| LPAD(PFK_MES, 2, '0'), 'YYYYMM'))
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL), -11), 'YYYYMM')
+                    AND TO_CHAR((SELECT MAX(TO_DATE(PFK_ANHO|| LPAD(PFK_MES, 2, '0'), 'YYYYMM'))
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL), 'YYYYMM') ";
+                    
+                    //AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = PFK_ANHO|| LPAD(PFK_MES, 2, '0')
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+        if (!empty($p_rol_cargo)) {
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
+        }
+        if (!empty($p_causal)) {
+            $sql .= "AND COD_CAUSAL = '$p_causal' ";
+        }
+
+        $sql .= ")
+                GROUP BY %emp%
+                %ger%
+                %rol% 1 
+            ORDER BY ANHO ASC, MES ASC";
+
+        /*%emp%
+                %ger%
+                %rol%*/
+
+        if ($p_is_emp == '1') {
+            $sql = str_replace('%emp%', 'COD_EMP, NOM_EMP, ', $sql);
+        } else {
+            $sql = str_replace('%emp%', '', $sql);
+        }
+
+        if ($p_is_ger == '1') {
+            $sql = str_replace('%ger%', 'COD_GERENCIA, ', $sql);
+        } else {
+            $sql = str_replace('%ger%', '', $sql);
+        }
+
+        if ($p_is_rol == '1') {
+            $sql = str_replace('%rol%', 'ROL, ', $sql);
+        } else {
+            $sql = str_replace('%rol%', '', $sql);
+        }
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -765,22 +1387,27 @@ class IndicadorModel extends CI_Model
                         MES, 
                         ROL,
                         COUNT(*) DOTACION,
-                        SUM(CASE WHEN COD_CAUSAL IS NOT NULL THEN 1 ELSE 0 END) ROTACION_TOTAL,
-                        SUM(CASE WHEN COD_CAUSAL = '2' THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
+                        SUM(CASE WHEN COD_CAUSAL IS NOT NULL 
+                            AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = ANHO|| LPAD(MES, 2, '0') 
+                            THEN 1 ELSE 0 END) ROTACION_TOTAL,
+                        SUM(CASE WHEN COD_CAUSAL = '2' 
+                            AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = ANHO|| LPAD(MES, 2, '0') 
+                            THEN 1 ELSE 0 END) ROTACION_VOLUNTARIA
                     FROM (
                         SELECT 
                             PFK_ANHO ANHO, 
                             PFK_MES MES, 
                             COD_CAUSAL,
+                            FECHA_BAJA,
                             TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL
-                        FROM NOV_CIERRE_MENSUAL_PERSONAL 
-                        WHERE 1 = 1 
+                        FROM NOV_CIERRE_MENSUAL_PERSONAL PER
+                        WHERE 1 = 1
                         AND PFK_ANHO|| LPAD(PFK_MES, 2, '0') BETWEEN 
                             TO_CHAR(ADD_MONTHS((SELECT MAX(TO_DATE(PFK_ANHO|| LPAD(PFK_MES, 2, '0'), 'YYYYMM'))
                             FROM NOV_CIERRE_MENSUAL_PERSONAL), -11), 'YYYYMM')
                         AND TO_CHAR((SELECT MAX(TO_DATE(PFK_ANHO|| LPAD(PFK_MES, 2, '0'), 'YYYYMM'))
                             FROM NOV_CIERRE_MENSUAL_PERSONAL), 'YYYYMM') ";
-
+                        //AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = PFK_ANHO|| LPAD(PFK_MES, 2, '0')
         if (!empty($p_cod_emp)) {
             $sql .= "AND COD_EMP = '$p_cod_emp' ";
         }
@@ -802,7 +1429,7 @@ class IndicadorModel extends CI_Model
 
         $sql .= ")
                 GROUP BY ANHO, MES, ROL )
-            GROUP BY ROL";
+            GROUP BY ROL ";
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -837,16 +1464,18 @@ class IndicadorModel extends CI_Model
                         WHEN MES = 10 THEN 'OCT' 
                         WHEN MES = 11 THEN 'NOV' 
                         WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
-                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL THEN 1 ELSE 0 END) CANTIDAD
+                    SUM(CASE WHEN COD_CAUSAL IS NOT NULL 
+                     AND TO_CHAR(FECHA_BAJA, 'YYYYMM') = PFK_ANHO|| LPAD(PFK_MES, 2, '0') 
+                    THEN 1 ELSE 0 END) CANTIDAD
                 FROM (
                     SELECT 
                         PFK_ANHO ANHO, 
                         PFK_MES MES, 
                         COD_CAUSAL,
-                        NOM_CAUSAL
-                    FROM NOV_CIERRE_MENSUAL_PERSONAL 
-                    WHERE 1 = 1 
-                    AND COD_CAUSAL IS NOT NULL ";
+                        NOM_CAUSAL,
+                        FECHA_BAJA
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL
+                    WHERE 1 = 1 ";
         if (!empty($p_anho)) {
             $sql .= "AND PFK_ANHO = $p_anho ";
         }
@@ -866,7 +1495,7 @@ class IndicadorModel extends CI_Model
             $sql .= "AND COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
         if (!empty($p_causal)) {
             $sql .= "AND COD_CAUSAL = '$p_causal' ";
@@ -907,7 +1536,7 @@ class IndicadorModel extends CI_Model
                         WHEN MES = 10 THEN 'OCT' 
                         WHEN MES = 11 THEN 'NOV' 
                         WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
-                    COUNT(*) VALOR
+                    COUNT(*) DOTACION
                 FROM (
                     SELECT 
                         PFK_ANHO ANHO, 
@@ -933,12 +1562,178 @@ class IndicadorModel extends CI_Model
             $sql .= "AND COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
 
         $sql .= ")
                 GROUP BY ANHO, MES 
                 ORDER BY ANHO ASC, MES ASC";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarConteoDotacionEmpresa(
+        $p_anho,
+        $p_mes,
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_rol_cargo
+    ) {
+
+
+        $sql = "SELECT 
+                    ANHO, 
+                    MES, 
+                    COD_EMP,
+                    NOM_EMP,
+                    (CASE 
+                        WHEN MES = 1 THEN 'ENE' 
+                        WHEN MES = 2 THEN 'FEB'
+                        WHEN MES = 3 THEN 'MAR' 
+                        WHEN MES = 4 THEN 'ABR' 
+                        WHEN MES = 5 THEN 'MAY' 
+                        WHEN MES = 6 THEN 'JUN' 
+                        WHEN MES = 7 THEN 'JUL' 
+                        WHEN MES = 8 THEN 'AGO' 
+                        WHEN MES = 9 THEN 'SEP' 
+                        WHEN MES = 10 THEN 'OCT' 
+                        WHEN MES = 11 THEN 'NOV' 
+                        WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    COUNT(*) DOTACION
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES,
+                        COD_EMP,
+                        emp.NOMBRE NOM_EMP
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP ";
+        if (!empty($p_anho)) {
+            $sql .= "AND PFK_ANHO = $p_anho ";
+        }
+        if (!empty($p_mes)) {
+            $sql .= "AND PFK_MES = $p_mes ";
+        }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+        if (!empty($p_rol_cargo)) {
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
+        }
+
+        $sql .= ")
+                GROUP BY ANHO, MES, COD_EMP, NOM_EMP
+                ORDER BY ANHO ASC, MES ASC";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarConteoDotacionMensualDinamic(
+        $p_anho,
+        $p_mes,
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_rol_cargo,
+        $p_is_emp,
+        $p_is_ger,
+        $p_is_rol
+    ) {
+
+
+        $sql = "SELECT 
+                    ANHO, 
+                    MES, 
+                    (CASE 
+                        WHEN MES = 1 THEN 'ENE' 
+                        WHEN MES = 2 THEN 'FEB'
+                        WHEN MES = 3 THEN 'MAR' 
+                        WHEN MES = 4 THEN 'ABR' 
+                        WHEN MES = 5 THEN 'MAY' 
+                        WHEN MES = 6 THEN 'JUN' 
+                        WHEN MES = 7 THEN 'JUL' 
+                        WHEN MES = 8 THEN 'AGO' 
+                        WHEN MES = 9 THEN 'SEP' 
+                        WHEN MES = 10 THEN 'OCT' 
+                        WHEN MES = 11 THEN 'NOV' 
+                        WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol% 
+                    COUNT(*) VALOR
+                FROM (
+                    SELECT 
+                        PFK_ANHO ANHO, 
+                        PFK_MES MES,
+                        COD_EMP,
+                        emp.NOMBRE NOM_EMP,
+                        COD_GERENCIA,
+                        TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) ROL
+                    FROM NOV_CIERRE_MENSUAL_PERSONAL per, NOV_EMPRESAS emp
+                    WHERE PER.COD_EMP = EMP.PK_COD_EMP ";
+        if (!empty($p_anho)) {
+            $sql .= "AND PFK_ANHO = $p_anho ";
+        }
+        if (!empty($p_mes)) {
+            $sql .= "AND PFK_MES = $p_mes ";
+        }
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND COD_CC = '$p_cod_cc' ";
+        }
+        if (!empty($p_rol_cargo)) {
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
+        }
+
+        $sql .= ")
+                GROUP BY 
+                    ANHO, 
+                    %emp%
+                    %ger%
+                    %rol% 
+                    MES 
+                ORDER BY ANHO ASC, MES ASC";
+
+
+        if ($p_is_emp == '1') {
+            $sql = str_replace('%emp%', 'COD_EMP, NOM_EMP, ', $sql);
+        } else {
+            $sql = str_replace('%emp%', '', $sql);
+        }
+
+        if ($p_is_ger == '1') {
+            $sql = str_replace('%ger%', 'COD_GERENCIA, ', $sql);
+        } else {
+            $sql = str_replace('%ger%', '', $sql);
+        }
+
+        if ($p_is_rol == '1') {
+            $sql = str_replace('%rol%', 'ROL, ', $sql);
+        } else {
+            $sql = str_replace('%rol%', '', $sql);
+        }
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -973,7 +1768,7 @@ class IndicadorModel extends CI_Model
                         WHEN MES = 10 THEN 'OCT' 
                         WHEN MES = 11 THEN 'NOV' 
                         WHEN MES = 12 THEN 'DIC' END) MES_TEXT,
-                    COUNT(*) VALOR
+                    COUNT(*) DOTACION
                 FROM (
                     SELECT 
                         PFK_ANHO ANHO, 
@@ -1000,7 +1795,7 @@ class IndicadorModel extends CI_Model
             $sql .= "AND COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
         $sql .= ")
                 GROUP BY ANHO, MES, GERENCIA 
@@ -1244,8 +2039,8 @@ class IndicadorModel extends CI_Model
                 FROM nov_cierre_mensual_personal
                 WHERE PFK_ANHO = $p_anho ";
 
-                for($i = 0; $i < count($meses); $i++) {
-                    $sql .= "UNION ALL
+        for ($i = 0; $i < count($meses); $i++) {
+            $sql .= "UNION ALL
                     SELECT 
                         ANHO, 
                         MES, 
@@ -1285,7 +2080,7 @@ class IndicadorModel extends CI_Model
                         TO_CHAR(fec_fin, 'DD') = TO_CHAR(last_day(fec_fin), 'DD')) THEN
                             30 
                         ELSE
-                            fec_fin - fec_ini
+                            fec_fin - fec_ini +1
                         END) LICENCIAS, 
                         0 AUSENCIAS
                     FROM (
@@ -1312,7 +2107,7 @@ class IndicadorModel extends CI_Model
                         TO_CHAR(fec_fin, 'DD') = TO_CHAR(last_day(fec_fin), 'DD')) THEN
                             30 
                         ELSE
-                            fec_fin - fec_ini
+                            fec_fin - fec_ini +1
                         END) AUSENCIAS
                     FROM (
                         SELECT %anho% ANHO, %mes% MES,
@@ -1330,11 +2125,11 @@ class IndicadorModel extends CI_Model
                         FROM nov_ind_permisos_vw
                         WHERE '%anho%%mes_text%' BETWEEN TO_CHAR(FEC_INI, 'YYYYMM') AND TO_CHAR(FEC_FIN, 'YYYYMM'))";
             $sql = str_replace("%anho%", $p_anho, $sql);
-            $sql = str_replace("%mes%", $i+1, $sql);
+            $sql = str_replace("%mes%", $i + 1, $sql);
             $sql = str_replace("%mes_text%", $meses[$i], $sql);
         }
         $sql .= ")
-        GROUP BY ANHO, MES, RUT) Q2 
+        GROUP BY ANHO, MES, RUT) Q2
         WHERE q1.pfk_anho = q2.anho
         AND q1.pfk_MES = q2.MES
         AND q1.NUM_RUT||'-'|| q1.DV_RUT = q2.RUT ";
@@ -1352,11 +2147,212 @@ class IndicadorModel extends CI_Model
             $sql .= "AND q1.COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND q1.ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(q1.ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
 
         $sql .= "GROUP BY Q2.ANHO, Q2.MES 
                 ORDER BY Q2.ANHO ASC, Q2.MES ASC";
+
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarConteoAusentismoMensualDinamic(
+        $p_anho,
+        $p_mes,
+        $p_cod_emp,
+        $p_cod_ger,
+        $p_cod_dep,
+        $p_cod_cc,
+        $p_rol_cargo,
+        $p_is_emp,
+        $p_is_ger,
+        $p_is_rol
+    ) {
+        $meses = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        $sql = "SELECT 
+                    Q2.ANHO, 
+                    Q2.MES, 
+                    (CASE 
+                        WHEN Q2.MES = 1 THEN 'ENE' 
+                        WHEN Q2.MES = 2 THEN 'FEB'
+                        WHEN Q2.MES = 3 THEN 'MAR' 
+                        WHEN Q2.MES = 4 THEN 'ABR' 
+                        WHEN Q2.MES = 5 THEN 'MAY' 
+                        WHEN Q2.MES = 6 THEN 'JUN' 
+                        WHEN Q2.MES = 7 THEN 'JUL' 
+                        WHEN Q2.MES = 8 THEN 'AGO' 
+                        WHEN Q2.MES = 9 THEN 'SEP' 
+                        WHEN Q2.MES = 10 THEN 'OCT' 
+                        WHEN Q2.MES = 11 THEN 'NOV' 
+                        WHEN Q2.MES = 12 THEN 'DIC' END) MES_TEXT,
+                    %emp%
+                    %ger%
+                    %rol%
+                    SUM(q2.DIAS_TRABAJADOS) DIAS_TRABAJADOS, 
+                    SUM(q2.VACACIONES) VACACIONES, 
+                    SUM(q2.LICENCIAS) LICENCIAS, 
+                    SUM(q2.AUSENCIAS) AUSENCIAS,
+                    (SUM(q2.DIAS_TRABAJADOS) + 
+                    SUM(q2.VACACIONES) +
+                    SUM(q2.LICENCIAS) +
+                    SUM(q2.AUSENCIAS)) TOTAL 
+                FROM nov_cierre_mensual_personal q1, 
+                (SELECT 
+                    ANHO, 
+                    MES, 
+                    RUT,
+                    SUM(DIAS_TRABAJADOS) DIAS_TRABAJADOS, 
+                    SUM(VACACIONES) VACACIONES, 
+                    SUM(LICENCIAS) LICENCIAS, 
+                    SUM(AUSENCIAS) AUSENCIAS
+                FROM(
+                SELECT PFK_ANHO ANHO, PFK_MES MES, NUM_RUT||'-'||DV_RUT RUT, NVL(DIAS_TRABAJADOS, 0) DIAS_TRABAJADOS, 0 VACACIONES, 0 LICENCIAS, 0 AUSENCIAS
+                FROM nov_cierre_mensual_personal
+                WHERE PFK_ANHO = $p_anho ";
+
+        for ($i = 0; $i < count($meses); $i++) {
+            $sql .= "UNION ALL
+                    SELECT 
+                        ANHO, 
+                        MES, 
+                        RUT, 
+                        0 DIAS_TRABAJADOS, 
+                        calcular_ausentismo(
+                            fec_ini=>fec_ini,
+                            fec_fin=>fec_fin ,
+                            lun=>'1',
+                            mar=>'1',
+                            mie=>'1',
+                            jue=>'1',
+                            vie=>'1',
+                            sab=>'0',
+                            dom=>'0',
+                            fer=>'1') VACACIONES, 
+                        0 LICENCIAS, 
+                        0 AUSENCIAS
+                    FROM (
+                        SELECT %anho% ANHO, %mes% MES,
+                            (CASE WHEN '%anho%%mes_text%' = TO_CHAR(FEC_INI, 'YYYYMM') THEN
+                                FEC_INI
+                            ELSE
+                                TO_DATE('%anho%%mes_text%01', 'YYYYMMDD')
+                            END) FEC_INI,
+                            
+                            (CASE WHEN '%anho%%mes_text%' = TO_CHAR(FEC_FIN, 'YYYYMM') THEN
+                                FEC_FIN
+                            ELSE
+                                LAST_DAY(TO_DATE('%anho%%mes_text%', 'YYYYMM'))
+                            END) FEC_FIN, RUT
+                        FROM nov_ind_vacaciones_vw
+                        WHERE '%anho%%mes_text%' BETWEEN TO_CHAR(FEC_INI, 'YYYYMM') AND TO_CHAR(FEC_FIN, 'YYYYMM'))
+                    UNION ALL
+                    SELECT ANHO, MES, RUT, 0 DIAS_TRABAJADOS, 0 VACACIONES, 
+                        (CASE WHEN (TO_CHAR(fec_ini, 'DD') = '01' AND 
+                        TO_CHAR(fec_fin, 'DD') = TO_CHAR(last_day(fec_fin), 'DD')) THEN
+                          (CASE WHEN (fec_fin - fec_ini +1) >= 30  THEN 30 ELSE (fec_fin - fec_ini +1) END)
+                        ELSE
+                            fec_fin - fec_ini +1
+                        END) LICENCIAS, 
+                        0 AUSENCIAS
+                    FROM (
+                        SELECT %anho% ANHO, %mes% MES,
+                            (CASE WHEN '%anho%%mes_text%' = TO_CHAR(FEC_INI, 'YYYYMM') THEN
+                                FEC_INI
+                            ELSE
+                                TO_DATE('%anho%%mes_text%01', 'YYYYMMDD')
+                            END) FEC_INI,
+                            
+                            (CASE WHEN '%anho%%mes_text%' = TO_CHAR(FEC_FIN, 'YYYYMM') THEN
+                                FEC_FIN
+                            ELSE
+                                LAST_DAY(TO_DATE('%anho%%mes_text%', 'YYYYMM'))
+                            END) FEC_FIN, RUT
+                        FROM nov_ind_licencias_vw
+                        WHERE '%anho%%mes_text%' BETWEEN TO_CHAR(FEC_INI, 'YYYYMM') AND TO_CHAR(FEC_FIN, 'YYYYMM'))
+                    UNION ALL
+                    SELECT ANHO, MES, RUT, 
+                        0 DIAS_TRABAJADOS, 
+                        0 VACACIONES, 
+                        0 LICENCIAS, 
+                        (CASE WHEN (TO_CHAR(fec_ini, 'DD') = '01' AND 
+                        TO_CHAR(fec_fin, 'DD') = TO_CHAR(last_day(fec_fin), 'DD')) THEN
+                            30 
+                        ELSE
+                            fec_fin - fec_ini +1
+                        END) AUSENCIAS
+                    FROM (
+                        SELECT %anho% ANHO, %mes% MES,
+                            (CASE WHEN '%anho%%mes_text%' = TO_CHAR(FEC_INI, 'YYYYMM') THEN
+                                FEC_INI
+                            ELSE
+                                TO_DATE('%anho%%mes_text%01', 'YYYYMMDD')
+                            END) FEC_INI,
+                            
+                            (CASE WHEN '%anho%%mes_text%' = TO_CHAR(FEC_FIN, 'YYYYMM') THEN
+                                FEC_FIN
+                            ELSE
+                                LAST_DAY(TO_DATE('%anho%%mes_text%', 'YYYYMM'))
+                            END) FEC_FIN, RUT
+                        FROM nov_ind_permisos_vw
+                        WHERE '%anho%%mes_text%' BETWEEN TO_CHAR(FEC_INI, 'YYYYMM') AND TO_CHAR(FEC_FIN, 'YYYYMM'))";
+            $sql = str_replace("%anho%", $p_anho, $sql);
+            $sql = str_replace("%mes%", $i + 1, $sql);
+            $sql = str_replace("%mes_text%", $meses[$i], $sql);
+        }
+        $sql .= ")
+        GROUP BY ANHO, MES, RUT) Q2, 
+        nov_empresas q3
+        WHERE q1.pfk_anho = q2.anho
+        AND q1.pfk_MES = q2.MES
+        AND q1.NUM_RUT||'-'|| q1.DV_RUT = q2.RUT 
+        AND q1.COD_EMP = q3.PK_COD_EMP ";
+
+        if (!empty($p_cod_emp)) {
+            $sql .= "AND q1.COD_EMP = '$p_cod_emp' ";
+        }
+        if (!empty($p_cod_ger)) {
+            $sql .= "AND q1.COD_GERENCIA = '$p_cod_ger' ";
+        }
+        if (!empty($p_cod_dep)) {
+            $sql .= "AND q1.COD_DEPARTAMENTO = '$p_cod_dep' ";
+        }
+        if (!empty($p_cod_cc)) {
+            $sql .= "AND q1.COD_CC = '$p_cod_cc' ";
+        }
+        if (!empty($p_rol_cargo)) {
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(q1.ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
+        }
+
+        $sql .= "GROUP BY 
+                    Q2.ANHO, 
+                    %emp1%
+                    %ger%
+                    %rol1%
+                    Q2.MES 
+                ORDER BY Q2.ANHO ASC, Q2.MES ASC";
+
+        if ($p_is_emp == '1') {
+            $sql = str_replace('%emp%', 'q1.COD_EMP, q3.NOMBRE NOM_EMP, ', $sql);
+            $sql = str_replace('%emp1%', 'q1.COD_EMP, q3.NOMBRE, ', $sql);
+        } else {
+            $sql = str_replace('%emp%', '', $sql);
+            $sql = str_replace('%emp1%', '', $sql);
+        }
+
+        if ($p_is_ger == '1') {
+            $sql = str_replace('%ger%', 'q1.COD_GERENCIA, ', $sql);
+        } else {
+            $sql = str_replace('%ger%', '', $sql);
+        }
+
+        if ($p_is_rol == '1') {
+            $sql = str_replace('%rol%', "TRIM(REPLACE(REPLACE(REPLACE(UPPER(q1.ROL), 'EX SHIPPING' ), '('), ')')) ROL, ", $sql);
+            $sql = str_replace('%rol1%', "TRIM(REPLACE(REPLACE(REPLACE(UPPER(q1.ROL), 'EX SHIPPING' ), '('), ')')), ", $sql);
+        } else {
+            $sql = str_replace('%rol%', '', $sql);
+            $sql = str_replace('%rol1%', '', $sql);
+        }
 
         $query = $this->db->query($sql);
         return $query->result();
@@ -1373,8 +2369,8 @@ class IndicadorModel extends CI_Model
     ) {
         $meses = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
-        if(!empty($p_mes)){
-            $valMes = $meses[intval($p_mes)-1];
+        if (!empty($p_mes)) {
+            $valMes = $meses[intval($p_mes) - 1];
             $meses = [];
             $meses[0] = $valMes;
         }
@@ -1418,8 +2414,8 @@ class IndicadorModel extends CI_Model
                 FROM nov_cierre_mensual_personal
                 WHERE PFK_ANHO = $p_anho ";
 
-                for($i = 0; $i < count($meses); $i++) {
-                    $sql .= "UNION ALL
+        for ($i = 0; $i < count($meses); $i++) {
+            $sql .= "UNION ALL
                     SELECT 
                         ANHO, 
                         MES, 
@@ -1459,7 +2455,7 @@ class IndicadorModel extends CI_Model
                         TO_CHAR(fec_fin, 'DD') = TO_CHAR(last_day(fec_fin), 'DD')) THEN
                             30 
                         ELSE
-                            fec_fin - fec_ini
+                            fec_fin - fec_ini +1
                         END) LICENCIAS, 
                         0 AUSENCIAS
                     FROM (
@@ -1486,7 +2482,7 @@ class IndicadorModel extends CI_Model
                         TO_CHAR(fec_fin, 'DD') = TO_CHAR(last_day(fec_fin), 'DD')) THEN
                             30 
                         ELSE
-                            fec_fin - fec_ini
+                            fec_fin - fec_ini +1
                         END) AUSENCIAS
                     FROM (
                         SELECT %anho% ANHO, %mes% MES,
@@ -1529,7 +2525,7 @@ class IndicadorModel extends CI_Model
             $sql .= "AND q1.COD_CC = '$p_cod_cc' ";
         }
         if (!empty($p_rol_cargo)) {
-            $sql .= "AND q1.ROL = '$p_rol_cargo' ";
+            $sql .= "AND TRIM(REPLACE(REPLACE(REPLACE(UPPER(q1.ROL), 'EX SHIPPING' ), '('), ')')) = UPPER('$p_rol_cargo') ";
         }
 
         $sql .= "GROUP BY Q2.ANHO, Q2.MES, Q1.COD_GERENCIA 
@@ -1538,6 +2534,4 @@ class IndicadorModel extends CI_Model
         $query = $this->db->query($sql);
         return $query->result();
     }
-
-    
 }

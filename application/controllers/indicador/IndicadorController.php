@@ -70,6 +70,36 @@ class IndicadorController extends CI_Controller
         $this->output->set_output($result);
     }
 
+    public function cargarConteoDotacionEtariaMensualDinamic()
+    {
+
+        $p_anho = $this->input->get('p_anho');
+        $p_mes = $this->input->get('p_mes');
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+
+        $p_is_emp = $this->input->get('p_is_emp');
+        $p_is_ger = $this->input->get('p_is_ger');
+        $p_is_rol = $this->input->get('p_is_rol');
+
+        $query = $this->IndicadorModel->cargarConteoDotacionEtariaMensualDinamic(
+            $p_anho,
+            $p_mes,
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_is_emp,
+            $p_is_ger,
+            $p_is_rol
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
     public function cargarConteoDotacionAntiguedadMensual()
     {
 
@@ -87,6 +117,36 @@ class IndicadorController extends CI_Controller
             $p_cod_ger,
             $p_cod_dep,
             $p_cod_cc
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarConteoDotacionAntiguedadMensualDinamic()
+    {
+
+        $p_anho = $this->input->get('p_anho');
+        $p_mes = $this->input->get('p_mes');
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+
+        $p_is_emp = $this->input->get('p_is_emp');
+        $p_is_ger = $this->input->get('p_is_ger');
+        $p_is_rol = $this->input->get('p_is_rol');
+
+        $query = $this->IndicadorModel->cargarConteoDotacionAntiguedadMensualDinamic(
+            $p_anho,
+            $p_mes,
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_is_emp,
+            $p_is_ger,
+            $p_is_rol
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
@@ -135,6 +195,38 @@ class IndicadorController extends CI_Controller
             $p_cod_dep,
             $p_cod_cc,
             $p_rol_cargo
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarConteoDotacionRolPaisMensualDinamic()
+    {
+
+        $p_anho = $this->input->get('p_anho');
+        $p_mes = $this->input->get('p_mes');
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+        $p_rol_cargo = $this->input->get('p_rol_cargo');
+
+        $p_is_emp = $this->input->get('p_is_emp');
+        $p_is_ger = $this->input->get('p_is_ger');
+        $p_is_rol = $this->input->get('p_is_rol');
+
+        $query = $this->IndicadorModel->cargarConteoDotacionRolPaisMensualDinamic(
+            $p_anho,
+            $p_mes,
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_rol_cargo,
+            $p_is_emp,
+            $p_is_ger,
+            $p_is_rol
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
@@ -216,6 +308,38 @@ class IndicadorController extends CI_Controller
         $this->output->set_output($result);
     }
 
+    public function cargarConteoDotacionSexoMensualDinamic()
+    {
+
+        $p_anho = $this->input->get('p_anho');
+        $p_mes = $this->input->get('p_mes');
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+        $p_rol_cargo = $this->input->get('p_rol_cargo');
+
+        $p_is_emp = $this->input->get('p_is_emp');
+        $p_is_ger = $this->input->get('p_is_ger');
+        $p_is_rol = $this->input->get('p_is_rol');
+
+        $query = $this->IndicadorModel->cargarConteoDotacionSexoMensualDinamic(
+            $p_anho,
+            $p_mes,
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_rol_cargo,
+            $p_is_emp,
+            $p_is_ger,
+            $p_is_rol
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
     public function cargarConteoRotacionMensual()
     {
 
@@ -233,6 +357,36 @@ class IndicadorController extends CI_Controller
             $p_cod_cc,
             $p_rol_cargo,
             $p_causal
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarConteoRotacionMensualDinamic()
+    {
+
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+        $p_rol_cargo = $this->input->get('p_rol_cargo');
+        $p_causal = $this->input->get('p_causal');
+
+        $p_is_emp = $this->input->get('p_is_emp');
+        $p_is_ger = $this->input->get('p_is_ger');
+        $p_is_rol = $this->input->get('p_is_rol');
+
+        $query = $this->IndicadorModel->cargarConteoRotacionMensualDinamic(
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_rol_cargo,
+            $p_causal,
+            $p_is_emp,
+            $p_is_ger,
+            $p_is_rol
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
@@ -339,6 +493,63 @@ class IndicadorController extends CI_Controller
         $this->output->set_output($result);
     }
 
+    public function cargarConteoDotacionEmpresa()
+    {
+
+        $p_anho = $this->input->get('p_anho');
+        $p_mes = $this->input->get('p_mes');
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+        $p_rol_cargo = $this->input->get('p_rol_cargo');
+
+        $query = $this->IndicadorModel->cargarConteoDotacionEmpresa(
+            $p_anho,
+            $p_mes,
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_rol_cargo
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarConteoDotacionMensualDinamic()
+    {
+
+        $p_anho = $this->input->get('p_anho');
+        $p_mes = $this->input->get('p_mes');
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+        $p_rol_cargo = $this->input->get('p_rol_cargo');
+
+        $p_is_emp = $this->input->get('p_is_emp');
+        $p_is_ger = $this->input->get('p_is_ger');
+        $p_is_rol = $this->input->get('p_is_rol');
+
+        $query = $this->IndicadorModel->cargarConteoDotacionMensualDinamic(
+            $p_anho,
+            $p_mes,
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_rol_cargo,
+            $p_is_emp,
+            $p_is_ger,
+            $p_is_rol
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
     public function cargarCierresMensual()
     {
         $query = $this->IndicadorModel->cargarCierresMensual();
@@ -348,7 +559,6 @@ class IndicadorController extends CI_Controller
 
     public function exportarDiasTrabajados()
     {
-
         set_time_limit(300);
         ini_set('max_execution_time', '300');
         ini_set('memory_limit', '2048M');
@@ -591,6 +801,36 @@ class IndicadorController extends CI_Controller
             $p_cod_dep,
             $p_cod_cc,
             $p_rol_cargo
+        );
+
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+    public function cargarConteoAusentismoMensualDinamic() {
+        $p_anho = $this->input->get('p_anho');
+        $p_mes = $this->input->get('p_mes');
+        $p_cod_emp = $this->input->get('p_cod_emp');
+        $p_cod_ger = $this->input->get('p_cod_ger');
+        $p_cod_dep = $this->input->get('p_cod_dep');
+        $p_cod_cc = $this->input->get('p_cod_cc');
+        $p_rol_cargo = $this->input->get('p_rol_cargo');
+
+        $p_is_emp = $this->input->get('p_is_emp');
+        $p_is_ger = $this->input->get('p_is_ger');
+        $p_is_rol = $this->input->get('p_is_rol');
+
+        $query = $this->IndicadorModel->cargarConteoAusentismoMensualDinamic(
+            $p_anho,
+            $p_mes,
+            $p_cod_emp,
+            $p_cod_ger,
+            $p_cod_dep,
+            $p_cod_cc,
+            $p_rol_cargo,
+            $p_is_emp,
+            $p_is_ger,
+            $p_is_rol
         );
 
         $result = '{"success":"true", "items":' . json_encode($query) . '}';

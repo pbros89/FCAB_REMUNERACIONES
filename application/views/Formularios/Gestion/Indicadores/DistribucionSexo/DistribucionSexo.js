@@ -4,8 +4,7 @@ Ext.define("fcab.Container.IndDistribucionSexo", {
   itemId: "IndDistribucionSexo",
   border: false,
   frame: false,
-  width: "100%",
-  layout: "anchor",
+  autoScroll: true,
   padding: 10,
   constructor: function (config) {
     this.callParent([config]);
@@ -13,7 +12,7 @@ Ext.define("fcab.Container.IndDistribucionSexo", {
   },
   listeners: {
     afterrender: function () {
-      cargarIndDistribuscionSexo(null);
+      cargarIndDistribuscionSexo(null, true);
     },
   },
   items: [
@@ -58,7 +57,6 @@ Ext.define("fcab.Container.IndDistribucionSexo", {
           xtype: "panel",
           layout: "hbox",
           width: "100%",
-          padding: 10,
           frame: false,
           border: false,
           items: [
@@ -78,7 +76,7 @@ Ext.define("fcab.Container.IndDistribucionSexo", {
         {
           xtype: "IndDistribucionSexoGrid",
           width: "100%",
-          height: 300,
+          height: 500,
         },
       ],
     },
@@ -86,16 +84,24 @@ Ext.define("fcab.Container.IndDistribucionSexo", {
 });
 
 
-var cargarIndDistribuscionSexo = function (filtros) {
+var cargarIndDistribuscionSexo = function (filtros, init) {
   var pnlChart = Ext.ComponentQuery.query(
     "#IndDistribucionSexo #IndDistribucionSexoChart"
   )[0];
+
+  var pnlChart2 = Ext.ComponentQuery.query(
+    "#IndDistribucionSexo #IndDistribucionSexoChartDet"
+  )[0];
+
   var pnlTitle = Ext.ComponentQuery.query(
     "#IndDistribucionSexo #IndDistribucionSexoChartTitle"
   )[0];
+
   var params = null;
   Ext.getCmp("MainIndicadores").disable();
   pnlChart.removeAll();
+  pnlChart2.removeAll();
+  pnlChart2.params = null;
 
   if (filtros != null) {
     params = filtros;
@@ -104,12 +110,22 @@ var cargarIndDistribuscionSexo = function (filtros) {
     var year = date.getFullYear();
     params = {
       p_anho: year,
-      p_cod_emp: EMPRESA,
+      p_cod_emp: "",
       p_cod_ger: "",
       p_cod_dep: "",
       p_cod_cc: "",
-      p_rol_cargo: ""
+      p_rol_cargo: "",
+      p_cod_emp_nom: "",
+      p_cod_ger_nom: "",
+      p_cod_dep_nom: "",
+      p_cod_cc_nom: "",
+      p_rol_cargo_nom: ""
     };
+  }
+
+  if(init) {
+    params.p_cod_emp=EMPRESA;
+    params.p_cod_emp_nom = NOM_EMPRESA;
   }
 
   storeCargarConteoDotacionRolSexoMensual.load({
@@ -121,19 +137,21 @@ var cargarIndDistribuscionSexo = function (filtros) {
         "<p><b>Filtros = Año:" +
         (params.p_anho != "" && params.p_anho != null ? params.p_anho : "TODOS") +
         " / Empresa:" +
-        (params.p_cod_emp != "" && params.p_cod_emp != null? params.p_cod_emp : "TODOS") +
+        (params.p_cod_emp_nom != "" && params.p_cod_emp_nom != null? params.p_cod_emp_nom : "TODOS") +
         " / Gerencia:" +
-        (params.p_cod_ger != "" && params.p_cod_ger != null ? params.p_cod_ger : "TODOS") +
+        (params.p_cod_ger_nom != "" && params.p_cod_ger_nom != null ? params.p_cod_ger_nom : "TODOS") +
         " / Departamento:" +
-        (params.p_cod_dep != "" && params.p_cod_dep != null ? params.p_cod_dep : "TODOS") +
+        (params.p_cod_dep_nom != "" && params.p_cod_dep_nom != null ? params.p_cod_dep_nom : "TODOS") +
         " / Centro de Costo:" +
-        (params.p_cod_cc != "" && params.p_cod_cc != null? params.p_cod_cc : "TODOS") +
+        (params.p_cod_cc_nom != "" && params.p_cod_cc_nom != null? params.p_cod_cc_nom : "TODOS") +
         " / Rol Cargo:" +
-        (params.p_rol_cargo != "" && params.p_rol_cargo != null? params.p_rol_cargo : "TODOS") +
+        (params.p_rol_cargo_nom != "" && params.p_rol_cargo_nom != null? params.p_rol_cargo_nom : "TODOS") +
         " </b></p>";
-      console.log(html);
+      //console.log(html);
       pnlTitle.setHtml(html);
       pnlChart.add(getChartDistribucionSexo());
+      cargarIndDistribuscionSexoGrid();
     },
   });
+
 };

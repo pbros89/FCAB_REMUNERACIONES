@@ -6,7 +6,6 @@ Ext.define("fcab.Container.MainIndicadores", {
   activeTab: 0,
   width: '100%',
   maxHeight: 3000,
-  layout: "anchor",
   //border:false,
   listeners: {
     afterrender: function () {
@@ -36,7 +35,7 @@ Ext.define("fcab.Container.MainIndicadores", {
     },
     {
       id: "tabIndDistribucionPais",
-      title: "País",
+      title: "Nacionalidad",
       xtype: "IndDistribucionPais",
     },
     {

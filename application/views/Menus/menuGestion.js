@@ -291,6 +291,20 @@ Ext.define("fcab.store.menu.gestion", {
         cls: "x-hidden",
         //disabled: true
       },
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Tarifario Mensual",
+        tipo: "tab",
+        tituloTab: "Tarifario Mensual",
+        id: "menu_tarifario_mensual",
+        formulario: "MainTarifarioMensual",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        cls: "x-hidden",
+        //disabled: true
+      },
     ],
   },
 });

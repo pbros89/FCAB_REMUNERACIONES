@@ -96,6 +96,15 @@ Ext.define("fcab.view.MyViewport", {
                 countAdmin++;
               }
               break;
+            case "MAESTRO_TARIFA":
+              if (estado == "A" && EMPRESA == '094') {
+                var p = rootAdmin.items.items[0].store.getById(
+                  "menu_tarifario"
+                );
+                p.data.cls = "";
+                countAdmin++;
+              }
+              break;
             /**************** MENUS GESTION *******************/
 
             case "PROCESO_MENSUAL":
@@ -280,6 +289,16 @@ Ext.define("fcab.view.MyViewport", {
               if (estado == "A") {
                 var p = rootGestion.items.items[0].store.getById(
                   "menu_indicadores"
+                );
+                p.data.cls = "";
+                countGestion++;
+              }
+              break;
+
+            case "TARIFA_MENSUAL":
+              if (estado == "A" && EMPRESA == '094') {
+                var p = rootGestion.items.items[0].store.getById(
+                  "menu_tarifario_mensual"
                 );
                 p.data.cls = "";
                 countGestion++;

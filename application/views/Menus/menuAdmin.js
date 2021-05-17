@@ -150,6 +150,20 @@ Ext.define("fcab.store.menu.admin", {
         cls: "x-hidden",
         //disabled: true
       },
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Maestro Tarifario",
+        tipo: "tab",
+        tituloTab: "Maestro Tarifario",
+        id: "menu_tarifario",
+        formulario: "MasterTarifario",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        cls: "x-hidden",
+        //disabled: true
+      },
     ],
   },
 });

@@ -487,4 +487,14 @@ function roundedRect(ctx,x,y,width,height,radius,stroke,fill){
     }
  }
 
+ function debounce(callback, wait) {
+    let timerId;
+    return (...args) => {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback(...args);
+      }, wait);
+    };
+  }
+
 

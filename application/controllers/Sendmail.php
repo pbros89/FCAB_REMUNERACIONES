@@ -36,21 +36,20 @@ class Sendmail extends CI_Controller
     public function ejemplo()
     {
         $this->load->library("email");
- 
-        //configuracion para gmail
-        $configGmail = array(
-        'protocol' => 'smtp',
-        'smtp_host' => 'ssl://smtp.gmail.com',
-        'smtp_port' => 465,
-        'smtp_user' => 'pedro.antonio.bros@gmail.com',
-        'smtp_pass' => '',
-        'mailtype' => 'html',
-        'charset' => 'utf-8',
-        'newline' => "\r\n"
-        );    
+        
+        $config = array();
+
+        $config['protocol']     = 'smtp';  // 'mail', 'sendmail', or 'smtp'
+        $config['smtp_host']    = 'smtp.gmail.com'; 
+        $config['smtp_port']    = 465;
+        $config['smtp_user']    = "pedro.antonio.bros@gmail.com";
+        $config['smtp_pass']    = "******";
+        $config['smtp_crypto']  = 'ssl';   //can be 'ssl' or 'tls' for example
+        $config['smtp_timeout'] = '30'; 
+        
 
         //cargamos la configuración para enviar con gmail
-        $this->email->initialize($configGmail);
+        $this->email->initialize($config);
 
         $this->email->from('pedro.antonio.bros@gmail.com');
         $this->email->to("pedro.antonio.bros@gmail.com");

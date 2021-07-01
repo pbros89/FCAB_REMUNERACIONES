@@ -56,17 +56,9 @@ class WFModificarFichaController extends CI_Controller
         $P_NOM_JORNADA = $this->input->get('P_NOM_JORNADA');
         $P_COD_LUGAR = $this->input->get('P_COD_LUGAR');
         $P_NOM_LUGAR = $this->input->get('P_NOM_LUGAR');
-        $P_DESC_BONOS = $this->input->get('P_DESC_BONOS');
         $P_SUELDO = $this->input->get('P_SUELDO');
-        $P_OBS_CARGO = $this->input->get('P_OBS_CARGO');
-        $P_OBS_CC = $this->input->get('P_OBS_CC');
-        $P_OBS_PLAZO = $this->input->get('P_OBS_PLAZO');
-        $P_OBS_JORNADA = $this->input->get('P_OBS_JORNADA');
-        $P_OBS_LUGAR = $this->input->get('P_OBS_LUGAR');
-        $P_OBS_SUELDO = $this->input->get('P_OBS_SUELDO');
         $P_TRAS_COD_CARGO = $this->input->get('P_TRAS_COD_CARGO');
         $P_TRAS_NOM_CARGO = $this->input->get('P_TRAS_NOM_CARGO');
-        $P_OBS_TRAS_CARGO = $this->input->get('P_OBS_TRAS_CARGO');
         $P_TRAS_INI = $this->input->get('P_TRAS_INI');
         $P_TRAS_FIN = $this->input->get('P_TRAS_FIN');
         $P_TRAS_TIENE_BONO = $this->input->get('P_TRAS_TIENE_BONO');
@@ -75,11 +67,22 @@ class WFModificarFichaController extends CI_Controller
         $P_USUARIO = $this->input->get('P_USUARIO');
         $P_COD_EMP = $this->input->get('P_COD_EMP');
         $P_NOM_EMP = $this->input->get('P_NOM_EMP');
-        $P_FK_PERSONAL = $this->input->get('P_FK_PERSONAL');
         $P_ESTADO = $this->input->get('P_ESTADO');
         $P_ROL_WF = $this->input->get('P_ROL_WF');
         $P_COD_CC_SOL = $this->input->get('P_COD_CC_SOL');
         $P_PERIODO = $this->input->get('P_PERIODO');
+        $P_OBSERVACION = $this->input->get('P_OBSERVACION');
+        $P_COD_CONTRATO = $this->input->get('P_COD_CONTRATO');
+        $P_NOM_CONTRATO = $this->input->get('P_NOM_CONTRATO');
+        $P_TIPO = $this->input->get('P_TIPO');
+        $P_COD_MOTIVO = $this->input->get('P_COD_MOTIVO');
+        $P_NOM_MOTIVO = $this->input->get('P_NOM_MOTIVO');
+        $P_TRAS_COD_CC = $this->input->get('P_TRAS_COD_CC');
+        $P_TRAS_NOM_CC = $this->input->get('P_TRAS_NOM_CC');
+        $P_TRAS_COD_CONTRATO = $this->input->get('P_TRAS_COD_CONTRATO');
+        $P_TRAS_NOM_CONTRATO = $this->input->get('P_TRAS_NOM_CONTRATO');
+        $P_TRAS_INDEFINIDO = $this->input->get('P_TRAS_INDEFINIDO');
+        $P_MID_POINT = $this->input->get('P_MID_POINT');
 
         $query = $this->WFModificarFichaModel->crearSolicitudCambioFicha(
             $P_COD_CARGO,
@@ -92,30 +95,32 @@ class WFModificarFichaController extends CI_Controller
             $P_NOM_JORNADA,
             $P_COD_LUGAR,
             $P_NOM_LUGAR,
-            $P_DESC_BONOS,
             $P_SUELDO,
-            $P_OBS_CARGO,
-            $P_OBS_CC,
-            $P_OBS_PLAZO,
-            $P_OBS_JORNADA,
-            $P_OBS_LUGAR,
-            $P_OBS_SUELDO,
             $P_TRAS_COD_CARGO,
             $P_TRAS_NOM_CARGO,
-            $P_OBS_TRAS_CARGO,
             $P_TRAS_INI,
             $P_TRAS_FIN,
             $P_TRAS_TIENE_BONO,
             $P_TRAS_BONO,
-            $P_MOTIVO_CAMBIO,
             $P_USUARIO,
             $P_COD_EMP,
             $P_NOM_EMP,
-            $P_FK_PERSONAL,
             $P_ESTADO,
             $P_ROL_WF,
             $P_COD_CC_SOL,
-            $P_PERIODO
+            $P_PERIODO,
+            $P_OBSERVACION,
+            $P_COD_CONTRATO,
+            $P_NOM_CONTRATO,
+            $P_TIPO,
+            $P_COD_MOTIVO,
+            $P_NOM_MOTIVO,
+            $P_TRAS_COD_CC,
+            $P_TRAS_NOM_CC,
+            $P_TRAS_COD_CONTRATO,
+            $P_TRAS_NOM_CONTRATO,
+            $P_TRAS_INDEFINIDO,
+            $P_MID_POINT
         );
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
@@ -128,13 +133,15 @@ class WFModificarFichaController extends CI_Controller
         $P_ROL_WF = $this->input->get('P_ROL_WF');
         $P_USUARIO = $this->input->get('P_USUARIO');
         $P_ESTADO = $this->input->get('P_ESTADO');
+        $P_OBSERVACION = $this->input->get('P_OBSERVACION');
 
-        $query = $this->WFModificarFichaModel->cambiarEstadoEtapaSolCambioFicha($P_ID, $P_ROL_WF, $P_USUARIO, $P_ESTADO);
+        $query = $this->WFModificarFichaModel->cambiarEstadoEtapaSolCambioFicha($P_ID, $P_ROL_WF, $P_USUARIO, $P_ESTADO, $P_OBSERVACION);
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }
 
-    public function cargarRolesWFUsuario() {
+    public function cargarRolesWFUsuario()
+    {
         $p_usuario = $this->input->get('p_usuario');
         $p_cod_emp = $this->input->get('p_cod_emp');
 
@@ -143,7 +150,8 @@ class WFModificarFichaController extends CI_Controller
         $this->output->set_output($result);
     }
 
-    public function anularSolicitudCambioFicha() {
+    public function anularSolicitudCambioFicha()
+    {
         $P_ID = $this->input->get('P_ID');
         $P_USUARIO = $this->input->get('P_USUARIO');
 
@@ -152,7 +160,8 @@ class WFModificarFichaController extends CI_Controller
         $this->output->set_output($result);
     }
 
-    public function cargarEtapasCambiarficha() {
+    public function cargarEtapasCambiarficha()
+    {
         $p_id = $this->input->get('p_id');
 
         $query = $this->WFModificarFichaModel->cargarEtapasCambiarficha($p_id);
@@ -160,7 +169,8 @@ class WFModificarFichaController extends CI_Controller
         $this->output->set_output($result);
     }
 
-    public function validarRolEtapa1() {
+    public function validarRolEtapa1()
+    {
         $p_rol = $this->input->get('p_rol');
 
         $query = $this->WFModificarFichaModel->validarRolEtapa1($p_rol);
@@ -177,11 +187,39 @@ class WFModificarFichaController extends CI_Controller
         $P_ESTADO_SOL = $this->input->get('P_ESTADO_SOL');
 
         $query = $this->WFModificarFichaModel->enviarCorreoCambioEtapaWFCambioFicha(
-              $P_ID 
-            , $P_COD_EMP 
-            , $P_COD_CC 
-            , $P_ROL_WF 
-            , $P_ESTADO_SOL );
+            $P_ID,
+            $P_COD_EMP,
+            $P_COD_CC,
+            $P_ROL_WF,
+            $P_ESTADO_SOL
+        );
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+
+    public function crearSolicitudCambioFichaDet() {
+
+        $P_ID_SOLICITUD = $this->input->get('P_ID_SOLICITUD');
+        $P_ID_PERSONAL = $this->input->get('P_ID_PERSONAL');
+        $P_USUARIO = $this->input->get('P_USUARIO');
+
+        $query = $this->WFModificarFichaModel->crearSolicitudCambioFichaDet(
+            $P_ID_SOLICITUD,
+            $P_ID_PERSONAL,
+            $P_USUARIO
+        );
+        $result = '{"success":"true", "items":' . json_encode($query) . '}';
+        $this->output->set_output($result);
+    }
+
+
+    public function cargarSolicitudesCambioFichaDet() {
+        $p_id = $this->input->get('p_id');
+
+        $query = $this->WFModificarFichaModel->cargarSolicitudesCambioFichaDet(
+            $p_id
+        );
         $result = '{"success":"true", "items":' . json_encode($query) . '}';
         $this->output->set_output($result);
     }

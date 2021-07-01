@@ -63,8 +63,10 @@ rutas[41] = "Formularios/Gestion/Indicadores/CierreMensual";
 rutas[42] = "Formularios/Gestion/Indicadores/Ausentismo";
 rutas[43] = "Formularios/Administracion/Tarifario";
 rutas[44] = "Formularios/Gestion/TarifarioMensual";
+rutas[45] = "Formularios/Administracion/Contrato";
+rutas[46] = "Formularios/Administracion/Reajuste";
 //TODO: Al Final cargar la raiz del sitio.
-rutas[45] = "Raiz";
+rutas[47] = "Raiz";
 
 Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
@@ -119,7 +121,9 @@ var promises = [
   sortec.async.PrometoSyncArchivos(rutas[42]),
   sortec.async.PrometoSyncArchivos(rutas[43]),
   sortec.async.PrometoSyncArchivos(rutas[44]),
-  sortec.async.PrometoSyncArchivos(rutas[45])
+  sortec.async.PrometoSyncArchivos(rutas[45]),
+  sortec.async.PrometoSyncArchivos(rutas[46]),
+  sortec.async.PrometoSyncArchivos(rutas[47])
 ];
 
 Ext.Promise.all(promises).then(function (values) {

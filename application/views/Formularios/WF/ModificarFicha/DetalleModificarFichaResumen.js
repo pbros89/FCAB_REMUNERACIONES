@@ -21,9 +21,8 @@ Ext.define("fcab.Container.WFModificarFichaDetalleResumen", {
       titleAlign: "center",
       border: false,
       frame: false,
-
+      width: '100%',
       padding: 10,
-      autoScroll: true,
       layout: {
         type: "column",
         align: "strech",
@@ -78,7 +77,8 @@ Ext.define("fcab.Container.WFModificarFichaDetalleResumen", {
   ],
 });
 
-var cargarResumenSolicitudCambiarFichaDetalle = function () {
+
+var cargarResumenSolicitudCambiarFichaDetalle = function() {
 
   var param = Ext.getCmp('WFModificarFichaDetalle').myExtraParams.param2;
   var lblTitulo = Ext.ComponentQuery.query(
@@ -105,144 +105,144 @@ var cargarResumenSolicitudCambiarFichaDetalle = function () {
 
   var trasladoHtml = '<table width="100%">' +
                       "<tr>" +
-                      "<td><b><u>Anexo Traslado Temporal / Reemplazo</u></b></td>" +
+                      "<td><b><u>Anexo Vinculante</u></b></td>" +
                       "</tr>" +
                       "</table><br>";
 
+  var trabajadores = storeCargarSolicitudesCambioFichaDet.data.items;
 
   /****** MODIFICAR DATOS *******/
 
-  if(param.MOTIVO_CAMBIO != null && param.MOTIVO_CAMBIO != '') {
-    //modificarCount++;
+  if (param.OBSERVACION != null && param.OBSERVACION != '') {
     modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td><b>Motivo modificación: </b><br>'+param.MOTIVO_CAMBIO+'</td>' +
-      "</tr></table><br>";
-  }
+      '<td width="100%"><b>Observación:</b> ' + param.OBSERVACION + '</td>' +
+      "</tr>" +
+      "</table><br>";
 
-  if(param.SUELDO != null && param.SUELDO != '' && param.SUELDO != '0' ) {
+    trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
+      '<td width="100%"><b>Observación:</b> ' + param.OBSERVACION + '</td>' +
+      "</tr>" +
+      "</table><br>";
+  }
+  if (param.COD_MOTIVO != null && param.COD_MOTIVO != '') {
     modificarCount++;
     modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Sueldo Actual: </b><br>'+param.SUELDO_OLD+'</td>' +
-      '<td width="50%"><b>Sueldo Nuevo:</b><br>'+param.SUELDO+'</td>' +
+      '<td width="100%"><b>Motivo:</b> ' + param.NOM_MOTIVO + '</td>' +
       "</tr>" +
-      "<tr>" +
-      '<td colspan=2><b>Comentario: </b><br>'+param.OBS_SUELDO+'</td>' +
-      "</tr></table><br>";
+      "</table><br>";
   }
 
-  if(param.COD_CARGO != null && param.COD_CARGO != '') {
+
+  if (param.SUELDO != null && param.SUELDO != '' && param.SUELDO != '0' ) {
     modificarCount++;
+    textMidPoint = param.MID_POINT == '1' ? ' <b>Supera mid-point</b>': '';
     modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Cargo Actual: </b><br>'+param.NOM_CARGO_OLD+'</td>' +
-      '<td width="50%"><b>Cargo Nuevo:</b><br>'+param.NOM_CARGO+'</td>' +
+      '<td width="100%"><b>Sueldo Nuevo:</b> ' + moneyFormat(param.SUELDO) + textMidPoint +'</td>' +
       "</tr>" +
-      "<tr>" +
-      '<td colspan=2><b>Comentario: </b><br>'+param.OBS_CARGO+'</td>' +
-      "</tr></table><br>";
+      "</table><br>";
   }
 
-  if(param.COD_CC != null && param.COD_CC != '') {
+  if (param.COD_CARGO != null && param.COD_CARGO != '') {
     modificarCount++;
     modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Centro de Costo Actual: </b><br>'+param.COD_CC_OLD+"-"+param.NOM_CC_OLD+'</td>' +
-      '<td width="50%"><b>Centro de Costo Nuevo:</b><br>'+param.COD_CC+"-"+param.NOM_CC+'</td>' +
+      '<td width="100%"><b>Cargo Nuevo:</b> ' + param.NOM_CARGO + '</td>' +
       "</tr>" +
-      "<tr>" +
-      "<td><b>Gerencia Actual: </b><br>"+param.NOM_GERENCIA_OLD+"</td>" +
-      "<td><b>Gerencia Nueva: </b><br>"+param.NOM_GERENCIA+"</td>" +
-      "</tr>" +
-      "<tr>" +
-      "<td><b>Departamento Actual: </b><br>"+param.NOM_DEPARTAMENTO_OLD+"</td>" +
-      "<td><b>Departamento Nuevo: </b><br>"+param.NOM_DEPARTAMENTO+"</td>" +
-      "</tr>" +
-      "<tr>" +
-      "<td><b>Jefatura Actual: </b><br>"+(param.RUT_JEFE_OLD != null ? param.RUT_JEFE_OLD+ " " + param.NOMBRE_JEFE_OLD :  '')+"</td>" +
-      "<td><b>Jefatura Nueva: </b><br>"+(param.RUT_JEFE != null ? param.RUT_JEFE+ " " + param.NOMBRE_JEFE : '')+"</td>" +
-      "</tr>" +
-      "<tr>" +
-      "<td colspan=2><b>Comentario: </b><br>"+param.OBS_CC+"</td>" +
-      "</tr></table><br>";
+      "</table><br>";
   }
 
-  if(param.COD_PLAZO  != null && param.COD_PLAZO != '') {
+  if (param.COD_CC != null && param.COD_CC != '') {
     modificarCount++;
     modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Plazo Actual: </b><br>'+param.NOM_PLAZO_OLD+'</td>' +
-      '<td width="50%"><b>Plazo Nuevo:</b><br>'+param.NOM_PLAZO+'</td>' +
+      '<td width="100%"><b>Centro de Costo Nuevo:</b> ' + param.COD_CC + " - " +  param.NOM_CC +'</td>' +
       "</tr>" +
       "<tr>" +
-      '<td colspan=2><b>Comentario: </b><br>'+param.OBS_PLAZO+'</td>' +
-      "</tr></table><br>";
-  }
-
-  if(param.COD_JORNADA != null && param.COD_JORNADA != '') {
-    modificarCount++;
-    modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Jornada Actual: </b><br>'+param.NOM_JORNADA_OLD+'</td>' +
-      '<td width="50%"><b>Jornada Nueva:</b><br>'+param.NOM_JORNADA+'</td>' +
+      "<td><b>Gerencia Nueva: </b> " + param.NOM_GERENCIA + "</td>" +
       "</tr>" +
       "<tr>" +
-      '<td colspan=2><b>Comentario: </b><br>'+param.OBS_JORNADA+'</td>' +
-      "</tr></table><br>";
-  }
-
-  if(param.COD_LUGAR != null && param.COD_LUGAR != '') {
-    modificarCount++;
-    modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Lugar de Trabajo Actual: </b><br>'+param.NOM_LUGAR_OLD+'</td>' +
-      '<td width="50%"><b>lugar de Trabajo Nuevo:</b><br>'+param.NOM_LUGAR+'</td>' +
+      "<td><b>Departamento Nuevo: </b> " + param.NOM_DEPARTAMENTO + "</td>" +
       "</tr>" +
       "<tr>" +
-      '<td colspan=2><b>Comentario: </b><br>'+param.OBS_LUGAR+'</td>' +
-      "</tr></table><br>";
+      "<td><b>Jefatura Nueva: </b> " +param.NOMBRE_JEFE + "</td>" +
+      "</tr>" +
+      "</table><br>";
   }
 
-  if(param.DESC_BONOS != null && param.DESC_BONOS != '') {
+  if (param.COD_PLAZO != null && param.COD_PLAZO != '') {
     modificarCount++;
     modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td><b>Bonos asignaciones y otras: </b><br>'+param.DESC_BONOS+'</td>' +
-      "</tr></table><br>";
+      '<td width="100%"><b>Plazo Nuevo:</b> ' + param.NOM_PLAZO + '</td>' +
+      "</tr>" +
+      "</table><br>";
+  }
+
+  if (param.COD_JORNADA != null && param.COD_JORNADA != '') {
+    modificarCount++;
+    modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
+      '<td width="100%"><b>Jornada Nueva:</b> ' + param.NOM_JORNADA + '</td>' +
+      "</tr>" +
+      "</table><br>";
+  }
+
+  if (param.COD_LUGAR != null && param.COD_LUGAR != '') {
+    modificarCount++;
+    modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
+      '<td width="100%"><b>Lugar de Trabajo Nuevo:</b> ' +  param.NOM_LUGAR + '</td>' +
+      "</tr>" +
+      "</table><br>";
+  }
+
+  if (param.COD_CONTRATO != null && param.COD_CONTRATO != '') {
+    modificarCount++;
+    modificarHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
+      '<td width="100%"><b>Contrato Nuevo:</b> ' + param.NOM_CONTRATO + '</td>' +
+      "</tr>" +
+      "</table><br>";
   }
 
   /*** TRASLADO ****/
-
-  if(param.TRAS_COD_CARGO != null && param.TRAS_COD_CARGO != '') {
+  if (param.TRAS_COD_CC != null && param.TRAS_COD_CC != '') {
     trasladoCount++;
     trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Cargo Actual: </b><br>'+param.NOM_CARGO_OLD+'</td>' +
-      '<td width="50%"><b>Cargo Propuesto:</b><br>'+param.TRAS_NOM_CARGO+'</td>' +
+      '<td width="100%"><b>CC Propuesto:</b> '+ param.TRAS_COD_CC + '-' + param.TRAS_NOM_CC + '</td>' +
       "</tr>" +
-      "<tr>" +
-      '<td colspan=2><b>Comentario: </b><br>'+param.OBS_TRAS_CARGO+'</td>' +
-      "</tr></table><br>";
+      "</table><br>";
   }
 
-  if(param.TRAS_INI != null && param.TRAS_INI != '' && 
+  if (param.TRAS_COD_CARGO != null && param.TRAS_COD_CARGO != '') {
+    trasladoCount++;
+    trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
+      '<td width="100%"><b>Cargo Propuesto:</b> ' + param.TRAS_NOM_CARGO + '</td>' +
+      "</tr>" +
+      "</table><br>";
+  }
+
+  if (param.TRAS_COD_CONTRATO != null && param.TRAS_COD_CONTRATO != '') {
+    trasladoCount++;
+    trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
+      '<td width="100%"><b>Contrato Propuesto:</b> ' + param.TRAS_COD_CONTRATO + '-' + param.TRAS_NOM_CONTRATO + '</td>' +
+      "</tr>" +
+      "</table><br>";
+  }
+
+  if (param.TRAS_INI != null && param.TRAS_INI != '' && 
   param.TRAS_FIN != null && param.TRAS_FIN != '') {
     trasladoCount++;
     trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td width="50%"><b>Traslado Inicia: </b><br>'+param.TRAS_INI+'</td>' +
-      '<td width="50%"><b>Traslado Termina:</b><br>'+param.TRAS_FIN+'</td>' +
+      '<td width="50%"><b>Traslado Inicia: </b> ' + param.TRAS_INI + '</td>' +
+      '<td width="50%"><b>Traslado Termina:</b> ' + param.TRAS_FIN + '</td>' +
       "</tr>" +
       "</table><br>";
   }
 
 
-  if(param.TRAS_TIENE_BONO != null && param.TRAS_TIENE_BONO != '0') {
+  if (param.TRAS_INI != null && param.TRAS_INI != '' && 
+  param.TRAS_INDEFINIDO  == '1') {
     trasladoCount++;
     trasladoHtml += '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-      '<td><b>Bono Reemplazo: </b><br>SI </td>' +
+      '<td width="50%"><b>Traslado Inicia: </b> ' + param.TRAS_INI + '</td>' +
+      '<td width="50%"><b>Traslado Termina:</b> Indefinido</td>' +
       "</tr>" +
       "</table><br>";
-  }else if(param.TRAS_TIENE_BONO != '1' ){
-    if(trasladoCount == 2)
-    {
-      '<table width="100%" style="border: 1px solid black; padding:10px"><tr>' +
-        '<td><b>Bono Reemplazo: </b><br>NO</td>' +
-        "</tr>" +
-      "</table><br>";
-      trasladoCount++;
-    }
   }
 
 
@@ -252,32 +252,34 @@ var cargarResumenSolicitudCambiarFichaDetalle = function () {
       param.USR_CREADOR +
       "</td>" +
       '<td align="right"><b>Periodo:</b> '+param.PERIODO+'</td>' +
-      "</tr><tr><td><b>Fecha Creación:</b> " +param.FECHA_CREACION+ "</td><td></td></tr></table>",);
+      "</tr><tr><td><b>Fecha Creación:</b> " +param.FECHA_CREACION+ "</td><td></td></tr></table><br>",);
   }
 
-  if(param.RUT != null && param.RUT != '') {
-    lblTrabajador.setHtml('<table width="100%" ><tr>' +
-    "<td><b>Trabajador:</b> "+param.RUT + " " + param.NOMBRE+"</td>" +
-    "</tr></table> <br>",);
+  if (trabajadores != null && trabajadores.length > 0) {
+
+    var html = '<table width="100%"><tr>' +
+      "<td><b><u>Trabajadores</u></b></td></tr></table><br>";
+    for (let index = 0; index < trabajadores.length; index++) {
+      const element = trabajadores[index].data;
+      console.log(element);
+      html += '<table width="100%"><tr><td style="border: 1px solid black; padding:10px">' + element.RUT + " " + element.NOMBRE + "</td></tr></table><br>";
+
+    }
+    lblTrabajador.setHtml(html);
   }
 
   lblModificar.setHtml(null);
   lblTraslado.setHtml(null);
 
-  if(modificarCount > 0) {
+  if (modificarCount > 0) {
     lblModificar.setHtml(modificarHtml);
   }
 
-  if(trasladoCount > 0) {
+  if (trasladoCount > 0) {
     lblTraslado.setHtml(trasladoHtml);
   }
-  
-  if(modificarCount > 0 && trasladoCount == 0 ||
-    modificarCount == 0 && trasladoCount == 3 ||
-    modificarCount > 0 && trasladoCount == 3) {
-      return true;
-    }else{
-      return false;
-    }
 
-};
+}
+
+
+

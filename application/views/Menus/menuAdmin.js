@@ -164,6 +164,34 @@ Ext.define("fcab.store.menu.admin", {
         cls: "x-hidden",
         //disabled: true
       },
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Maestro Contrato",
+        tipo: "tab",
+        tituloTab: "Maestro Contrato",
+        id: "menu_contrato",
+        formulario: "MasterContrato",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        cls: "x-hidden",
+        //disabled: true
+      },
+      {
+        name: "Filtro1", //Items a Filtrar
+        text: "Maestro Reajuste",
+        tipo: "tab",
+        tituloTab: "Maestro Reajuste",
+        id: "menu_reajuste",
+        formulario: "MasterReajuste",
+        icon: "icon-listaTab",
+        leaf: true,
+        iconCls: "icon-prototipo",
+        cerrable: 1,
+        cls: "x-hidden",
+        //disabled: true
+      },
     ],
   },
 });

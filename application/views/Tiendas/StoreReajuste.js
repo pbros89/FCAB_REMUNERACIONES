@@ -1,8 +1,8 @@
-var storeCagarSolicitudesCambioFicha=  Ext.create('Ext.data.Store', {
+var storeCargarReajustes =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/cagarSolicitudesCambioFicha',
+        url:    JsonHost + 'reajuste/ReajusteController/cargarReajustes',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -14,7 +14,7 @@ var storeCagarSolicitudesCambioFicha=  Ext.create('Ext.data.Store', {
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al cargar solicitudes',
+                    msg: 'Problemas al cargar reajuste',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -26,11 +26,12 @@ var storeCagarSolicitudesCambioFicha=  Ext.create('Ext.data.Store', {
     autoLoad: false
 });
 
-var storeCrearSolicitudCambioFicha=  Ext.create('Ext.data.Store', {
+
+var storeCrearReajuste =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/crearSolicitudCambioFicha',
+        url:    JsonHost + 'reajuste/ReajusteController/crearReajuste',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -42,7 +43,7 @@ var storeCrearSolicitudCambioFicha=  Ext.create('Ext.data.Store', {
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al crear solicitud',
+                    msg: 'Problemas al crear reajuste',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -54,11 +55,13 @@ var storeCrearSolicitudCambioFicha=  Ext.create('Ext.data.Store', {
     autoLoad: false
 });
 
-var storeCambiarEstadoEtapaSolCambioFicha=  Ext.create('Ext.data.Store', {
+
+
+var storeCargarSimulacionReajuste =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/cambiarEstadoEtapaSolCambioFicha',
+        url:    JsonHost + 'reajuste/ReajusteController/cargarSimulacionReajuste',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -70,7 +73,7 @@ var storeCambiarEstadoEtapaSolCambioFicha=  Ext.create('Ext.data.Store', {
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al cambiar estado',
+                    msg: 'Problemas al cargar simulación',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -82,12 +85,11 @@ var storeCambiarEstadoEtapaSolCambioFicha=  Ext.create('Ext.data.Store', {
     autoLoad: false
 });
 
-
-var storeCargarPersonalVigentePorPrivilegioUsuario =  Ext.create('Ext.data.Store', {
+var storeEliminarReajuste =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/cargarPersonalVigentePorPrivilegioUsuario',
+        url:    JsonHost + 'reajuste/ReajusteController/eliminarReajuste',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -99,7 +101,7 @@ var storeCargarPersonalVigentePorPrivilegioUsuario =  Ext.create('Ext.data.Store
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al cargar personal',
+                    msg: 'Problemas al eliminar reajuste',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -111,11 +113,12 @@ var storeCargarPersonalVigentePorPrivilegioUsuario =  Ext.create('Ext.data.Store
     autoLoad: false
 });
 
-var storeCargarRolesWFUsuario =  Ext.create('Ext.data.Store', {
+
+var storeCrearReajusteIng =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/cargarRolesWFUsuario',
+        url:    JsonHost + 'reajuste/ReajusteController/crearReajusteIng',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -127,7 +130,7 @@ var storeCargarRolesWFUsuario =  Ext.create('Ext.data.Store', {
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al cargar roles',
+                    msg: 'Problemas al crear ignorar',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -139,11 +142,12 @@ var storeCargarRolesWFUsuario =  Ext.create('Ext.data.Store', {
     autoLoad: false
 });
 
-var storeAnularSolicitudCambioFicha =  Ext.create('Ext.data.Store', {
+
+var storeEliminarReajusteIng =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/anularSolicitudCambioFicha',
+        url:    JsonHost + 'reajuste/ReajusteController/eliminarReajusteIng',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -155,7 +159,7 @@ var storeAnularSolicitudCambioFicha =  Ext.create('Ext.data.Store', {
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al cargar personal',
+                    msg: 'Problemas al eliminar reajuste',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -167,86 +171,11 @@ var storeAnularSolicitudCambioFicha =  Ext.create('Ext.data.Store', {
     autoLoad: false
 });
 
-var storeCargarEtapasCambiarficha =  Ext.create('Ext.data.Store', {
-
-    proxy: {
-        type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/cargarEtapasCambiarficha',
-        reader: {
-            type: 'json',
-            rootProperty: 'items'
-        },
-        listeners: {
-            exception: function(proxy, response, operation){
-                console.log(proxy);
-                console.log(response);
-                console.log(operation);
-                Ext.MessageBox.show({
-                    title: 'EXCEPCION',
-                    msg: 'Problemas al cargar etapas',
-                    icon: Ext.MessageBox.ERROR,
-                    buttons: Ext.Msg.OK
-                });
-            }
-        }
-    },
-    autoLoad: false
-});
-
-var storeValidarRolEtapa1 =  Ext.create('Ext.data.Store', {
-
-    proxy: {
-        type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/validarRolEtapa1',
-        reader: {
-            type: 'json',
-            rootProperty: 'items'
-        },
-        listeners: {
-            exception: function(proxy, response, operation){
-                console.log(proxy);
-                console.log(response);
-                console.log(operation);
-                Ext.MessageBox.show({
-                    title: 'EXCEPCION',
-                    msg: 'Problemas al validar rol',
-                    icon: Ext.MessageBox.ERROR,
-                    buttons: Ext.Msg.OK
-                });
-            }
-        }
-    },
-    autoLoad: false
-});
-
-
-var storeEnviarCorreoCambioEtapaWFCambioFicha =  Ext.create('Ext.data.Store', {
-
-    proxy: {
-        type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/enviarCorreoCambioEtapaWFCambioFicha',
-        reader: {
-            type: 'json',
-            rootProperty: 'items'
-        },
-        timeout: 300000,
-        listeners: {
-            exception: function(proxy, response, operation){
-                console.log(proxy);
-                console.log(response);
-                console.log(operation);
-            }
-        }
-    },
-    autoLoad: false
-});
-
-
-var storeCrearSolicitudCambioFichaDet =  Ext.create('Ext.data.Store', {
+var storeEliminarReajusteIngAll =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/crearSolicitudCambioFichaDet',
+        url:    JsonHost + 'reajuste/ReajusteController/eliminarReajusteIngAll',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -258,7 +187,7 @@ var storeCrearSolicitudCambioFichaDet =  Ext.create('Ext.data.Store', {
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al crear solicitud detalle',
+                    msg: 'Problemas al eliminar reajuste',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -271,11 +200,11 @@ var storeCrearSolicitudCambioFichaDet =  Ext.create('Ext.data.Store', {
 });
 
 
-var storeCargarSolicitudesCambioFichaDet =  Ext.create('Ext.data.Store', {
+var storeCargarReajusteIgnorados =  Ext.create('Ext.data.Store', {
    
     proxy: {
         type:   'ajax',
-        url:    JsonHost + 'WFModificarFicha/WFModificarFichaController/cargarSolicitudesCambioFichaDet',
+        url:    JsonHost + 'reajuste/ReajusteController/cargarReajusteIgnorados',
         reader: {
             type: 'json',
             rootProperty: 'items'
@@ -287,7 +216,7 @@ var storeCargarSolicitudesCambioFichaDet =  Ext.create('Ext.data.Store', {
                 console.log(operation);
                 Ext.MessageBox.show({
                     title: 'EXCEPCION',
-                    msg: 'Problemas al cargar detalle',
+                    msg: 'Problemas al cargar ignorados',
                     icon: Ext.MessageBox.ERROR,
                     buttons: Ext.Msg.OK
                 });
@@ -298,19 +227,6 @@ var storeCargarSolicitudesCambioFichaDet =  Ext.create('Ext.data.Store', {
     },
     autoLoad: false
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

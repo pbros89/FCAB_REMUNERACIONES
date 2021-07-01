@@ -105,6 +105,24 @@ Ext.define("fcab.view.MyViewport", {
                 countAdmin++;
               }
               break;
+            case "MAESTRO_CONTRATO":
+              if (estado == "A") {
+                var p = rootAdmin.items.items[0].store.getById(
+                  "menu_contrato"
+                );
+                p.data.cls = "";
+                countAdmin++;
+              }
+              break;
+            case "MAESTRO_REAJUSTE":
+              if (estado == "A") {
+                var p = rootAdmin.items.items[0].store.getById(
+                  "menu_reajuste"
+                );
+                p.data.cls = "";
+                countAdmin++;
+              }
+              break;
             /**************** MENUS GESTION *******************/
 
             case "PROCESO_MENSUAL":
@@ -522,14 +540,12 @@ Ext.define("fcab.view.MyViewport", {
       id: "west",
       //hidden: true,
       split: true,
-      autoScroll: true,
       collapsible: true,
       collapsed: true,
       //items: menuTree,
       borde: 0,
       items: [
         {
-          region: "center",
           xtype: "container",
           title: "",
           layout: "accordion",
@@ -555,8 +571,8 @@ Ext.define("fcab.view.MyViewport", {
             {
               title: "Administración",
               //scroll: 'vertical',
-              autoScroll: true,
               items: menuAdmin,
+              autoScroll: true,
               //hidden: true,
               //disabled: true,
               id: "menuAdmin",
@@ -564,8 +580,8 @@ Ext.define("fcab.view.MyViewport", {
             {
               title: "Solicitud",
               //scroll: 'vertical',
-              autoScroll: true,
               items: menuWF,
+              autoScroll: true,
               //hidden: true,
               //disabled: true,
               id: "menuWF",
@@ -573,8 +589,8 @@ Ext.define("fcab.view.MyViewport", {
             {
               title: "Reportes",
               //scroll: 'vertical',
-              autoScroll: true,
               items: menuReporte,
+              autoScroll: true,
               //hidden: true,
               //disabled: true,
               id: "menuReporte",

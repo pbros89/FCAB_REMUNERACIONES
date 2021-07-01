@@ -26,9 +26,9 @@ Ext.define("fcab.store.menu.wf", {
     children: [
       {
         name: "Filtro1", //Items a Filtrar
-        text: "Modificar Ficha de Personal",
+        text: "WF Modificación Datos Laborales",
         tipo: "tab",
-        tituloTab: "Solicitud Modificar Ficha de Personal",
+        tituloTab: "WF Modificación Datos Laborales",
         id: "menu_wf_cambio_ficha",
         formulario: "WFModificarFichaInicio", //xtype
         icon: "icon-listaTab",

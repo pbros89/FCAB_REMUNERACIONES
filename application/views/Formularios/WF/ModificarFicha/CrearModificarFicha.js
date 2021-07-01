@@ -2,10 +2,16 @@ Ext.define("fcab.Container.WFModificarFichaCrear", {
   extend: "Ext.container.Container",
   xtype: "WFModificarFichaCrear",
   itemId: "WFModificarFichaCrear",
-  layout: 'fit',
+  layout: 'anchor',
   listeners: {
     beforerender: function () {
-    console.log("height : " +Ext.getBody().getViewSize().height);
+      console.log("height : " + Ext.getBody().getViewSize().height);
+      var cbTipoForm = Ext.ComponentQuery.query('#cbTipoForm')[0];
+      var grid = Ext.ComponentQuery.query('#WFModificarFichaCrearSeleccionGrilla')[0];
+      var store = grid.getStore();
+      store.removeAll();
+
+      cbTipoForm.setValue("MODIFICAR");
       storeCargarParam_JORNADA.load();
       storeCargarParam_TIPO_CONTRATO.load();
       storeCargarCentroCostosFiltro.load();
@@ -13,6 +19,13 @@ Ext.define("fcab.Container.WFModificarFichaCrear", {
       storeCargarParam_LUGAR_TRABAJO.load();
       storeCargarParam_GERENCIA.load();
       storeCargarParam_DEPARTAMENTO.load()
+      storeCargarParam_SOL_CAMBIO_MOTIVO.load();
+      storeCargarContratos.load({
+        params: {
+          p_estado: 'A',
+          p_cod_emp: EMPRESA
+        }
+      });
       storeCargarPersonalVigentePorPrivilegioUsuario.load({
         params: {
           p_cod_emp: EMPRESA,
@@ -22,17 +35,17 @@ Ext.define("fcab.Container.WFModificarFichaCrear", {
       });
 
       storeExtras_cargarPeriodos.load({
-        callback: function(records, operation, success) {
+        callback: function (records, operation, success) {
           var cbPeriodo = Ext.ComponentQuery.query('#WFModificarFichaCrearPanelBuscar #cbPeriodo')[0];
 
-          if(records != null && records.length > 0) {
+          if (records != null && records.length > 0) {
             var date = new Date();
             console.log(records[0].data.PERIODO);
             console.log(records[1].data.PERIODO);
             console.log(date.getDate());
-            if(date.getDate() <= 19) {
+            if (date.getDate() <= 19) {
               cbPeriodo.setValue(records[0].data.PERIODO);
-            }else{
+            } else {
               cbPeriodo.setValue(records[1].data.PERIODO);
             }
           }
@@ -75,64 +88,65 @@ Ext.define("fcab.Container.WFModificarFichaCrearPanelBuscar", {
       items: [
         {
           xtype: "combo",
-          name: "cbTrabajador",
-          itemId: "cbTrabajador",
-          displayField: "INFO",
-          valueField: "PK_PERSONAL",
-          width: "100%",
-          store: storeCargarPersonalVigentePorPrivilegioUsuario,
-          fieldLabel: "Trabajador",
+          name: "cbTipoForm",
+          itemId: "cbTipoForm",
+          store: [['MODIFICAR', 'MODIFICAR DATOS'], ['TRASLADO', 'ANEXO VINCULANTE']],
+          fieldLabel: "Tipo de Solicitud",
           labelAlign: "top",
           queryMode: "local",
           triggerAction: "all",
-          editable: true,
+          editable: false,
           typeAhead: true,
           selectOnFocus: true,
           forceSelection: true,
           allowBlank: false,
           readOnly: false,
+          width: 200,
+          margin: '0 10 0 0',
           listeners: {
             change: function (obj, newValue, oldValue) {
+              var tabPanel = Ext.ComponentQuery.query("#WFModificarFichaCrearTabpanel")[0];
               var cbPeriodo = Ext.ComponentQuery.query('#WFModificarFichaCrearPanelBuscar #cbPeriodo')[0];
+              var tabLaboral = Ext.ComponentQuery.query('#WFModificarFichaCrearTabpanel #tabLaboral')[0];
+              var tabSeleccion = Ext.ComponentQuery.query('#WFModificarFichaCrearTabpanel #tabSeleccion')[0];
+              var tabTraslado = Ext.ComponentQuery.query('#WFModificarFichaCrearTabpanel #tabTraslado')[0];
               var tabResumen = Ext.ComponentQuery.query('#WFModificarFichaCrearTabpanel #tabResumen')[0];
+
               tabResumen.setDisabled(true);
               if (newValue) {
-                //TRABAJADOR SELECCIONADO SETIAR VALORES ACTUALES
-                Ext.ComponentQuery.query(
-                  "#WFModificarFichaCrearTabpanel"
-                )[0].setDisabled(false);
+                tabPanel.setDisabled(false);
+                tabPanel.setActiveTab(0);
+                switch (newValue) {
+                  case "MODIFICAR":
+                    tabLaboral.tab.show();
+                    tabTraslado.tab.hide();
+                    break;
+                  case "TRASLADO":
 
-                setTrabajadorModificarFichaGeneral(obj);
+                    tabLaboral.tab.hide();
+                    tabTraslado.tab.show();
+                    break;
+                }
+
+
+
+                /*setTrabajadorModificarFichaGeneral(obj);
                 setTrabajadorModificarFichaTraslado(obj);
-                cargarResumenSolicitudcambiarFicha();
+                cargarResumenSolicitudcambiarFicha();*/
 
-                if(cbPeriodo.getValue() != null && cbPeriodo.getValue() != '') {
+                if (cbPeriodo.getValue() != null && cbPeriodo.getValue() != '') {
                   tabResumen.setDisabled(false);
                 }
 
               } else {
                 //TRABAJADOR NO SELECCIONADO LIMPIAR VALORES ACTUALES Y DESACTIVAR PANEL
-                Ext.ComponentQuery.query(
-                  "#WFModificarFichaCrearTabpanel"
-                )[0].setDisabled(true);
-
-                resetModificarFichaGeneral();
-                resetModificarFichaTraslado();
+                tabPanel.setDisabled(true);
               }
+              resetModificarFichaGeneral();
+              resetModificarFichaTraslado();
             },
           },
         },
-      ],
-    },
-    {
-      xtype: "container",
-      flex: 2,
-      layout: {
-        type: "hbox",
-        align: "bottom",
-        pack: "end",
-      },
-      items: [
         {
           xtype: "combo",
           name: "cbPeriodo",
@@ -152,13 +166,13 @@ Ext.define("fcab.Container.WFModificarFichaCrearPanelBuscar", {
           readOnly: false,
           listeners: {
             change: function (obj, newValue, oldValue) {
-              var cbTrabajador = Ext.ComponentQuery.query('#WFModificarFichaCrearPanelBuscar #cbTrabajador')[0];
+              var cbTipoForm = Ext.ComponentQuery.query('#WFModificarFichaCrearPanelBuscar #cbTipoForm')[0];
               var tabResumen = Ext.ComponentQuery.query('#WFModificarFichaCrearTabpanel #tabResumen')[0];
-              
+
               tabResumen.setDisabled(true);
-              
+
               if (newValue) {
-                if(cbTrabajador.getValue() != null && cbTrabajador.getValue() != '') {
+                if (cbTipoForm.getValue() != null && cbTipoForm.getValue() != '') {
                   tabResumen.setDisabled(false);
                 }
 
@@ -168,7 +182,27 @@ Ext.define("fcab.Container.WFModificarFichaCrearPanelBuscar", {
         },
       ],
     },
-    
+    {
+      xtype: "container",
+      flex: 1,
+      layout: {
+        type: "hbox",
+        align: "bottom",
+        pack: "end",
+      },
+      items: [
+        {
+          xtype: "button",
+          text: "Limpiar Fomulario",
+          handler: function () {
+            resetModificarFichaGeneral();
+            resetModificarFichaTraslado();
+            cargarResumenSolicitudcambiarFicha();
+          }
+        }
+      ],
+    },
+
   ],
 });
 
@@ -177,14 +211,14 @@ Ext.define("fcab.Container.WFModificarFichaCrearTabpanel", {
   xtype: "WFModificarFichaCrearTabpanel",
   itemId: "WFModificarFichaCrearTabpanel",
   activeTab: 0,
-  flex: 1,
   disabled: true,
+  flex: 1,
   height: (Ext.getBody().getViewSize().height - 150) > 800 ? 800 : Ext.getBody().getViewSize().height - 150,
   listeners: {
     tabchange: function (tabPanel, tab) {
-     // console.log(tabPanel.itemId + " " + tab.itemId);
+      // console.log(tabPanel.itemId + " " + tab.itemId);
 
-      if(tab.itemId == 'tabResumen') {
+      if (tab.itemId == 'tabResumen') {
         cargarResumenSolicitudcambiarFicha();
       }
     },
@@ -193,13 +227,24 @@ Ext.define("fcab.Container.WFModificarFichaCrearTabpanel", {
     scrollable: true,
   },
   layout: {
-    align: "stretch",
     pack: "center",
   },
   items: [
     {
-      title: "Modificar Datos",
+      title: "1.- Selección de Trabajadores",
+      id: "tabSeleccion",
+      itemId: "tabSeleccion",
+      items: [
+        {
+          xtype: "WFModificarFichaCrearSeleccion",
+        },
+      ],
+    },
+    {
+      title: "2.- Modificar Datos",
+      id: "tabLaboral",
       itemId: "tabLaboral",
+      hidden: true,
       items: [
         {
           xtype: "WFModificarFichaCrearGeneral",
@@ -207,17 +252,19 @@ Ext.define("fcab.Container.WFModificarFichaCrearTabpanel", {
       ],
     },
     {
-      title: "Anexo Traslado Temporal / Reemplazo",
+      title: "2.- Anexo Vinculante",
+      id: "tabTraslado",
       itemId: "tabTraslado",
-      //disabled: true,
+      hidden: true,
       items: [
         {
           xtype: "WFModificarFichaCrearTraslado",
         },
       ],
     },
+
     {
-      title: "Resumen Solicitud",
+      title: "3.- Resumen Solicitud",
       itemId: "tabResumen",
       disabled: true,
       items: [
@@ -228,3 +275,5 @@ Ext.define("fcab.Container.WFModificarFichaCrearTabpanel", {
     },
   ],
 });
+
+

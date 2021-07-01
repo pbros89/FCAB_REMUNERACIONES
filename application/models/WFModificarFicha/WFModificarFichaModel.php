@@ -15,72 +15,51 @@ class WFModificarFichaModel extends CI_Model
     public function cagarSolicitudesCambioFicha($p_id, $p_cod_emp, $p_rut, $p_usuario, $p_estado, $p_rol, $p_periodo)
     {
         $sql = "SELECT 
-                    SOL.PK_ID,
-                    nvl(SOL.COD_CARGO, '') COD_CARGO,
-                    SOL.NOM_CARGO,
-                    SOL.COD_CC,
-                    SOL.NOM_CC,
-                    SOL.COD_GERENCIA,
-                    SOL.NOM_GERENCIA,
-                    SOL.COD_DEPARTAMENTO,
-                    SOL.NOM_DEPARTAMENTO,
-                    SOL.COD_PLAZO,
-                    SOL.NOM_PLAZO,
-                    SOL.COD_JORNADA,
-                    SOL.NOM_JORNADA,
-                    SOL.COD_LUGAR,
-                    SOL.NOM_LUGAR,
-                    SOL.DESC_BONOS,
-                    SOL.SUELDO,
-                    nvl(SOL.OBS_CARGO, 'SIN COMENTARIO') OBS_CARGO,
-                    nvl(SOL.OBS_CC, 'SIN COMENTARIO') OBS_CC,
-                    nvl(SOL.OBS_GERENCIA, 'SIN COMENTARIO') OBS_GERENCIA,
-                    nvl(SOL.OBS_DEPARTAMENTO, 'SIN COMENTARIO') OBS_DEPARTAMENTO,
-                    nvl(SOL.OBS_PLAZO, 'SIN COMENTARIO') OBS_PLAZO,
-                    nvl(SOL.OBS_JORNADA, 'SIN COMENTARIO') OBS_JORNADA,
-                    nvl(SOL.OBS_LUGAR, 'SIN COMENTARIO') OBS_LUGAR,
-                    nvl(SOL.OBS_SUELDO, 'SIN COMENTARIO') OBS_SUELDO,
-                    SOL.TRAS_COD_CARGO,
-                    SOL.TRAS_NOM_CARGO,
-                    nvl(SOL.OBS_TRAS_CARGO, 'SIN COMENTARIO') OBS_TRAS_CARGO,
-                    TO_CHAR(SOL.TRAS_INI, 'YYYY/MM/DD') TRAS_INI,
-                    TO_CHAR(SOL.TRAS_FIN, 'YYYY/MM/DD') TRAS_FIN,
-                    SOL.TRAS_TIENE_BONO,
-                    SOL.TRAS_BONO,
-                    SOL.MOTIVO_CAMBIO,
-                    SOL.USR_CREADOR,
-                    TO_CHAR(SOL.FECHA_CREACION, 'YYYY/MM/DD HH24:MI') FECHA_CREACION,
-                    SOL.COD_EMP,
-                    SOL.NOM_EMP,
-                    SOL.FK_PERSONAL,
-                    nvl(SOL.RUT_JEFE, '') RUT_JEFE,
-                    nvl(SOL.NOMBRE_JEFE, '') NOMBRE_JEFE,
-                    nvl(SOL.OBS_JEFE, 'SIN COMENTARIO') OBS_JEFE,
-                    SOL.ESTADO,
-                    SOL.FK_CASO,
-                    SOL.FK_NOMBRE_WF,
-                    SOL.COD_CC_SOL,
-                    SOL.PERIODO,
-                    SOL.ROL_CREADOR,
-                    PER.RUT,
-                    PER.NOMBRE,
-                    SOL.COD_CARGO_OLD,
-                    SOL.NOM_CARGO_OLD,
-                    SOL.COD_CC_OLD,
-                    SOL.NOM_CC_OLD,
-                    SOL.COD_GERENCIA_OLD,
-                    SOL.NOM_GERENCIA_OLD,
-                    SOL.COD_DEPARTAMENTO_OLD,
-                    SOL.NOM_DEPARTAMENTO_OLD,
-                    SOL.COD_PLAZO_OLD,
-                    SOL.NOM_PLAZO_OLD,
-                    SOL.COD_JORNADA_OLD,
-                    SOL.NOM_JORNADA_OLD,
-                    SOL.COD_LUGAR_OLD,
-                    SOL.NOM_LUGAR_OLD,
-                    nvl(SOL.RUT_JEFE_OLD, '') RUT_JEFE_OLD,
-                    nvl(SOL.NOMBRE_JEFE_OLD, '') NOMBRE_JEFE_OLD,
-                    SOL.SUELDO_OLD,
+                    SOL.PK_ID, 
+                    nvl(SOL.COD_CARGO, '') COD_CARGO, 
+                    SOL.NOM_CARGO, 
+                    SOL.COD_CC, 
+                    SOL.NOM_CC, 
+                    SOL.COD_GERENCIA, 
+                    SOL.NOM_GERENCIA, 
+                    SOL.COD_DEPARTAMENTO, 
+                    SOL.NOM_DEPARTAMENTO, 
+                    SOL.COD_PLAZO, 
+                    SOL.NOM_PLAZO, 
+                    SOL.COD_JORNADA, 
+                    SOL.NOM_JORNADA, 
+                    SOL.COD_LUGAR, 
+                    SOL.NOM_LUGAR, 
+                    SOL.SUELDO, 
+                    nvl(SOL.OBSERVACION, 'SIN COMENTARIO') OBSERVACION, 
+                    SOL.TRAS_COD_CARGO, 
+                    SOL.TRAS_NOM_CARGO, 
+                    TO_CHAR(SOL.TRAS_INI, 'YYYY/MM/DD') TRAS_INI, 
+                    TO_CHAR(SOL.TRAS_FIN, 'YYYY/MM/DD') TRAS_FIN, 
+                    SOL.TRAS_TIENE_BONO, SOL.TRAS_BONO, 
+                    SOL.USR_CREADOR, 
+                    TO_CHAR(SOL.FECHA_CREACION, 'YYYY/MM/DD HH24:MI') FECHA_CREACION, 
+                    SOL.COD_EMP, 
+                    SOL.NOM_EMP, 
+                    nvl(SOL.RUT_JEFE, '') RUT_JEFE, 
+                    nvl(SOL.NOMBRE_JEFE, '') NOMBRE_JEFE, 
+                    SOL.ESTADO, SOL.FK_CASO, 
+                    SOL.FK_NOMBRE_WF, 
+                    SOL.COD_CC_SOL, 
+                    SOL.PERIODO, 
+                    SOL.OBSERVACION,
+                    SOL.COD_CONTRATO,
+                    SOL.NOM_CONTRATO,
+                    SOL.TIPO,
+                    SOL.COD_MOTIVO,
+                    SOL.NOM_MOTIVO,
+                    SOL.ROL_CREADOR, 
+                    SOL.TRAS_COD_CC, 
+                    SOL.TRAS_NOM_CC, 
+                    SOL.TRAS_COD_CONTRATO, 
+                    SOL.TRAS_NOM_CONTRATO, 
+                    SOL.TRAS_INDEFINIDO, 
+                    SOL.MID_POINT, 
                     (
                         SELECT NVL(FLOOR(SYSDATE - MAX(FECHA_APROB)), 0) 
                         FROM NOV_WF_APROBACIONES APR, NOV_SOL_CAMBIO_FICHA CAM
@@ -116,8 +95,8 @@ class WFModificarFichaModel extends CI_Model
                         AND PFK_NOMBRE_WF = 'CAMBIO_FICHA'
                         AND ESTADO = 'RECHAZADO'
                     ) RECHAZO_ETAPA
-                FROM NOV_SOL_CAMBIO_FICHA SOL, NOV_PERSONAL PER
-                WHERE SOL.FK_PERSONAL = PER.PK_PERSONAL ";
+                FROM NOV_SOL_CAMBIO_FICHA SOL 
+                WHERE 1 = 1 ";
 
         if (!empty($p_rol) && $p_rol != 'ADMIN' && $p_rol != 'SUPER_ADMIN' && $p_rol != 'ANALISTA_RRHH') {
             $sql .= "AND SOL.COD_CC_SOL IN (
@@ -130,6 +109,10 @@ class WFModificarFichaModel extends CI_Model
             $sql .= "AND SOL.PK_ID = $p_id ";
         }
 
+        if (!empty($p_rut)) {
+            $sql .= "AND PK_ID IN (SELECT DISTINCT PFK_ID FROM NOV_SOL_CAMBIO_FICHA_DET WHERE RUT LIKE '%$p_rut%') ";
+        }
+
         if (!empty($p_cod_emp)) {
             $sql .= "AND SOL.COD_EMP = '$p_cod_emp' ";
         }
@@ -138,16 +121,44 @@ class WFModificarFichaModel extends CI_Model
             $sql .= "AND SOL.PERIODO = '$p_periodo' ";
         }
 
-        if (!empty($p_rut)) {
-            $sql .= "AND UPPER(PER.RUT) LIKE(UPPER('%$p_rut%')) ";
-        }
-
         if (!empty($p_estado)) {
             $sql .= "AND SOL.ESTADO = '$p_estado' ";
         }
         $sql .= "ORDER BY SOL.FECHA_CREACION DESC";
 
 
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function cargarSolicitudesCambioFichaDet($p_id) {
+        $sql = "SELECT 
+                    PFK_ID,
+                    PFK_PERSONAL,
+                    RUT,
+                    NOMBRE,
+                    COD_CARGO,
+                    NOM_CARGO,
+                    COD_CC,
+                    NOM_CC,
+                    COD_GERENCIA,
+                    NOM_GERENCIA,
+                    COD_DEPARTAMENTO,
+                    NOM_DEPARTAMENTO,
+                    COD_PLAZO,
+                    NOM_PLAZO,
+                    COD_JORNADA,
+                    NOM_JORNADA,
+                    COD_LUGAR,
+                    NOM_LUGAR,
+                    SUELDO,
+                    COD_EMP,
+                    NOM_EMP,
+                    RUT_JEFE,
+                    NOM_JEFE
+                FROM NOV_SOL_CAMBIO_FICHA_DET 
+                WHERE PFK_ID = $p_id ";
+        
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -202,30 +213,32 @@ class WFModificarFichaModel extends CI_Model
         $P_NOM_JORNADA,
         $P_COD_LUGAR,
         $P_NOM_LUGAR,
-        $P_DESC_BONOS,
         $P_SUELDO,
-        $P_OBS_CARGO,
-        $P_OBS_CC,
-        $P_OBS_PLAZO,
-        $P_OBS_JORNADA,
-        $P_OBS_LUGAR,
-        $P_OBS_SUELDO,
         $P_TRAS_COD_CARGO,
         $P_TRAS_NOM_CARGO,
-        $P_OBS_TRAS_CARGO,
         $P_TRAS_INI,
         $P_TRAS_FIN,
         $P_TRAS_TIENE_BONO,
         $P_TRAS_BONO,
-        $P_MOTIVO_CAMBIO,
         $P_USUARIO,
         $P_COD_EMP,
         $P_NOM_EMP,
-        $P_FK_PERSONAL,
         $P_ESTADO,
         $P_ROL_WF,
         $P_COD_CC_SOL,
-        $P_PERIODO
+        $P_PERIODO,
+        $P_OBSERVACION,
+        $P_COD_CONTRATO,
+        $P_NOM_CONTRATO,
+        $P_TIPO,
+        $P_COD_MOTIVO,
+        $P_NOM_MOTIVO,
+        $P_TRAS_COD_CC,
+        $P_TRAS_NOM_CC,
+        $P_TRAS_COD_CONTRATO,
+        $P_TRAS_NOM_CONTRATO,
+        $P_TRAS_INDEFINIDO,
+        $P_MID_POINT
     ) {
         $R_EST = 0;
         $R_MSG = "";
@@ -242,30 +255,32 @@ class WFModificarFichaModel extends CI_Model
                             , :P_NOM_JORNADA
                             , :P_COD_LUGAR
                             , :P_NOM_LUGAR
-                            , :P_DESC_BONOS
                             , :P_SUELDO
-                            , :P_OBS_CARGO
-                            , :P_OBS_CC
-                            , :P_OBS_PLAZO
-                            , :P_OBS_JORNADA
-                            , :P_OBS_LUGAR
-                            , :P_OBS_SUELDO
                             , :P_TRAS_COD_CARGO
                             , :P_TRAS_NOM_CARGO
-                            , :P_OBS_TRAS_CARGO
                             , :P_TRAS_INI
                             , :P_TRAS_FIN
                             , :P_TRAS_TIENE_BONO
                             , :P_TRAS_BONO
-                            , :P_MOTIVO_CAMBIO
                             , :P_USUARIO
                             , :P_COD_EMP
                             , :P_NOM_EMP
-                            , :P_FK_PERSONAL
                             , :P_ESTADO
                             , :P_ROL_WF
                             , :P_COD_CC_SOL
                             , :P_PERIODO
+                            , :P_OBSERVACION
+                            , :P_COD_CONTRATO
+                            , :P_NOM_CONTRATO
+                            , :P_TIPO
+                            , :P_COD_MOTIVO
+                            , :P_NOM_MOTIVO
+                            , :P_TRAS_COD_CC
+                            , :P_TRAS_NOM_CC
+                            , :P_TRAS_COD_CONTRATO
+                            , :P_TRAS_NOM_CONTRATO
+                            , :P_TRAS_INDEFINIDO
+                            , :P_MID_POINT
                             , :R_EST
                             , :R_MSG
                             , :R_ID
@@ -283,30 +298,33 @@ class WFModificarFichaModel extends CI_Model
         oci_bind_by_name($proc, "P_NOM_JORNADA", $P_NOM_JORNADA, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_COD_LUGAR", $P_COD_LUGAR, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_NOM_LUGAR", $P_NOM_LUGAR, 100, SQLT_CHR);
-        oci_bind_by_name($proc, "P_DESC_BONOS", $P_DESC_BONOS, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_SUELDO", $P_SUELDO);
-        oci_bind_by_name($proc, "P_OBS_CARGO", $P_OBS_CARGO, 1000, SQLT_CHR);
-        oci_bind_by_name($proc, "P_OBS_CC", $P_OBS_CC, 1000, SQLT_CHR);
-        oci_bind_by_name($proc, "P_OBS_PLAZO", $P_OBS_PLAZO, 1000, SQLT_CHR);
-        oci_bind_by_name($proc, "P_OBS_JORNADA", $P_OBS_JORNADA, 1000, SQLT_CHR);
-        oci_bind_by_name($proc, "P_OBS_LUGAR", $P_OBS_LUGAR, 1000, SQLT_CHR);
-        oci_bind_by_name($proc, "P_OBS_SUELDO", $P_OBS_SUELDO, 1000, SQLT_CHR);
         oci_bind_by_name($proc, "P_TRAS_COD_CARGO", $P_TRAS_COD_CARGO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_TRAS_NOM_CARGO", $P_TRAS_NOM_CARGO, 100, SQLT_CHR);
-        oci_bind_by_name($proc, "P_OBS_TRAS_CARGO", $P_OBS_TRAS_CARGO, 1000, SQLT_CHR);
         oci_bind_by_name($proc, "P_TRAS_INI", $P_TRAS_INI, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_TRAS_FIN", $P_TRAS_FIN, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_TRAS_TIENE_BONO", $P_TRAS_TIENE_BONO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_TRAS_BONO", $P_TRAS_BONO);
-        oci_bind_by_name($proc, "P_MOTIVO_CAMBIO", $P_MOTIVO_CAMBIO, 1000, SQLT_CHR);
         oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_COD_EMP", $P_COD_EMP, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_NOM_EMP", $P_NOM_EMP, 100, SQLT_CHR);
-        oci_bind_by_name($proc, "P_FK_PERSONAL", $P_FK_PERSONAL);
         oci_bind_by_name($proc, "P_ESTADO", $P_ESTADO, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_ROL_WF", $P_ROL_WF, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_COD_CC_SOL", $P_COD_CC_SOL, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_PERIODO", $P_PERIODO, 20, SQLT_CHR);
+        
+        oci_bind_by_name($proc, "P_OBSERVACION", $P_OBSERVACION, 1000, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_CONTRATO", $P_COD_CONTRATO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_NOM_CONTRATO", $P_NOM_CONTRATO, 1000, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TIPO", $P_TIPO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_COD_MOTIVO", $P_COD_MOTIVO, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_NOM_MOTIVO", $P_NOM_MOTIVO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TRAS_COD_CC", $P_TRAS_COD_CC, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TRAS_NOM_CC", $P_TRAS_NOM_CC, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TRAS_COD_CONTRATO", $P_TRAS_COD_CONTRATO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TRAS_NOM_CONTRATO", $P_TRAS_NOM_CONTRATO, 2000, SQLT_CHR);
+        oci_bind_by_name($proc, "P_TRAS_INDEFINIDO", $P_TRAS_INDEFINIDO, 1, SQLT_CHR);
+        oci_bind_by_name($proc, "P_MID_POINT", $P_MID_POINT, 1, SQLT_CHR);
 
         oci_bind_by_name($proc, "R_EST", $R_EST, -1, OCI_B_INT);
         oci_bind_by_name($proc, "R_MSG", $R_MSG, 200, SQLT_CHR);
@@ -327,7 +345,8 @@ class WFModificarFichaModel extends CI_Model
         $P_ID,
         $P_ROL_WF,
         $P_USUARIO,
-        $P_ESTADO
+        $P_ESTADO,
+        $P_OBSERVACION
     ) {
         $R_EST = 0;
         $R_MSG = "";
@@ -342,6 +361,7 @@ class WFModificarFichaModel extends CI_Model
                             , :P_ROL_WF
                             , :P_USUARIO
                             , :P_ESTADO
+                            , :P_OBSERVACION
                             , :R_EST
                             , :R_MSG
                             , :R_ID
@@ -353,6 +373,7 @@ class WFModificarFichaModel extends CI_Model
         oci_bind_by_name($proc, "P_ROL_WF", $P_ROL_WF, 20, SQLT_CHR);
         oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
         oci_bind_by_name($proc, "P_ESTADO", $P_ESTADO, 20, SQLT_CHR);
+        oci_bind_by_name($proc, "P_OBSERVACION", $P_OBSERVACION, 1000, SQLT_CHR);
 
         oci_bind_by_name($proc, "R_EST", $R_EST, -1, OCI_B_INT);
         oci_bind_by_name($proc, "R_MSG", $R_MSG, 200, SQLT_CHR);
@@ -401,7 +422,8 @@ class WFModificarFichaModel extends CI_Model
                     FK_ROL_WF,
                     ESTADO,
                     TO_CHAR(FECHA_APROB, 'YYYY/MM/DD HH24:MI') FECHA_APROB,
-                    USR_APROB
+                    USR_APROB,
+                    OBSERVACION
                 from nov_wf_aprobaciones
                 where pfk_nombre_wf = 'CAMBIO_FICHA'
                 and pfk_solicitud = $p_id
@@ -452,4 +474,35 @@ class WFModificarFichaModel extends CI_Model
         $result = array('r_est' => 0, 'r_msg' => 'OK');
         return $result;
     }
+
+    public function crearSolicitudCambioFichaDet(
+        $P_ID_SOLICITUD,
+        $P_ID_PERSONAL,
+        $P_USUARIO
+    ) {
+        $R_EST = 0;
+        $R_MSG = "";
+        $proc = oci_parse(
+            $this->db->conn_id,
+            "BEGIN NOV_INS_SOL_CAMBIO_FICHA_DET(
+                              :P_ID_SOLICITUD
+                            , :P_ID_PERSONAL
+                            , :P_USUARIO
+                            , :R_EST
+                            , :R_MSG);END;"
+        );
+
+        oci_bind_by_name($proc, "P_ID_SOLICITUD", $P_ID_SOLICITUD, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_ID_PERSONAL", $P_ID_PERSONAL, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "P_USUARIO", $P_USUARIO, 100, SQLT_CHR);
+        oci_bind_by_name($proc, "R_EST", $R_EST, -1, OCI_B_INT);
+        oci_bind_by_name($proc, "R_MSG", $R_MSG, 500, SQLT_CHR);
+
+        oci_execute($proc);
+
+        $result = array('r_est' => 0, 'r_msg' => 'OK');
+        return $result;
+    }
+
+    
 }

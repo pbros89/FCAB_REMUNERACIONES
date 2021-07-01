@@ -5,6 +5,7 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapas", {
   width: "100%",
   border: false,
   frame: false,
+  layout: 'fit',
   constructor: function (config) {
     this.callParent([config]);
   },
@@ -20,11 +21,10 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapas", {
       titleAlign: "center",
       border: false,
       frame: false,
-
+      width: '100%',
       padding: 10,
-      autoScroll: true,
       layout: {
-        type: "column",
+        type: "vbox",
         align: "strech",
       },
 
@@ -32,7 +32,7 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapas", {
         {
           xtype: "container",
           itemId: 'pnlBtn',
-          columnWidth: 1,
+          width: '100%',
           layout: {
             type: "hbox",
             align: "bottom",
@@ -46,7 +46,17 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapas", {
               style: 'background-color: green;',
               margin: '0 10 0 0',
               handler: function () {
-                cambiarEstadoEtapaSolCambioFicha('APROBADO');
+                ventanaDinamica(
+                  "WFModificarFichaDetalleEtapasObservacion",
+                  "Confirmar Aprobación",
+                  400,
+                  "",
+                  "WFModificarFichaDetalleEtapasObservacion",
+                  1,
+                  0,
+                  'APROBADO',
+                  'APROBADO'
+                );
               },
             },
             {
@@ -55,26 +65,36 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapas", {
               scale: 'large',
               style: 'background-color: crimson;',
               handler: function () {
-                cambiarEstadoEtapaSolCambioFicha('RECHAZADO');
+                ventanaDinamica(
+                  "WFModificarFichaDetalleEtapasObservacion",
+                  "Confirmar Rechazo",
+                  400,
+                  "",
+                  "WFModificarFichaDetalleEtapasObservacion",
+                  1,
+                  0,
+                  'RECHAZADO',
+                  'RECHAZADO'
+                );
+
               },
             },
           ],
         },
-  
+
         {
           xtype: "fieldset",
           title: "<b>Etapas Solicitud</b>",
           style: "margin: 5px",
-          columnWidth: 1,
+          width: '100%',
           layout: {
-            type: "column",
+            type: "vbox",
             align: "strech",
           },
           items: [
             {
               xtype: "label",
               itemId: "lblTitulo",
-              columnWidth: 1,
               style: "margin: 0 10px 10px 0",
             },
             {
@@ -93,14 +113,11 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapasGrilla", {
   xtype: "WFModificarFichaDetalleEtapasGrilla",
   itemId: "WFModificarFichaDetalleEtapasGrilla",
   store: storeCargarEtapasCambiarficha,
-  viewConfig: {
-    stripeRows: true,
-  },
   columnLines: true,
   emptyText: "Sin datos para mostrar",
-  filtros: null,
+  width: '100%',
   plugins: pluginFactory(),
-  columnWidth: 1,
+  flex: 1,
   columns: [
     {
       text: "Caso",
@@ -138,6 +155,13 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapasGrilla", {
       flex: 1
     },
     {
+      text: "Observación",
+      sortable: true,
+      dataIndex: "OBSERVACION",
+      hidden: false,
+      flex: 1
+    },
+    {
       text: "Estado",
       sortable: true,
       dataIndex: "ESTADO",
@@ -167,6 +191,67 @@ Ext.define("fcab.Container.WFModificarFichaDetalleEtapasGrilla", {
   ],
 });
 
+
+Ext.define("fcab.Container.WFModificarFichaDetalleEtapasObservacion", {
+  extend: "Ext.container.Container",
+  xtype: "WFModificarFichaDetalleEtapasObservacion",
+  itemId: "WFModificarFichaDetalleEtapasObservacion",
+  width: "100%",
+  border: false,
+  frame: false,
+  layout: 'fit',
+  constructor: function (config) {
+    this.callParent([config]);
+  },
+  items: [
+    {
+      xtype: "form",
+      titleAlign: "center",
+      border: false,
+      frame: false,
+      width: '100%',
+
+      layout: {
+        type: "vbox",
+        align: "strech",
+      },
+
+      items: [{
+        xtype: "textareafield",
+        name: "txtObservacion",
+        itemId: "txtObservacion",
+        labelAlign: "top",
+        fieldLabel: 'Observación',
+        width: "100%",
+        margin: 10,
+        typeAhead: true,
+        maxLength: 1000,
+        allowBlank: true,
+        readOnly: false,
+      },
+      ],
+      buttons: [{
+        text: "Cancelar",
+        handler: function () {
+          Ext.getCmp('WFModificarFichaDetalleEtapasObservacion').destroy();
+        }
+      },
+      {
+        text: "Confirmar",
+        handler: function () {
+          var param = Ext.getCmp('WFModificarFichaDetalleEtapasObservacion').myExtraParams.param1;
+          var form = this.up('form').getForm();
+          if (!ValidarFormulario(form)) return;
+          var values = form.getValues();
+          cambiarEstadoEtapaSolCambioFicha(param, values.txtObservacion);
+          Ext.getCmp('WFModificarFichaDetalleEtapasObservacion').destroy();
+        }
+      }]
+    },
+  ],
+});
+
+
 var cargarEtapasSolicitudCambiarFichaDetalle = function () {
 
   console.log("entro 1");
@@ -186,52 +271,52 @@ var cargarEtapasSolicitudCambiarFichaDetalle = function () {
     params: {
       'p_id': obj.PK_ID
     },
-    callback: function(records, operation, success) {
-      if(records != null && records.length > 0) {
+    callback: function (records, operation, success) {
+      if (records != null && records.length > 0) {
         var countEs = 0;
         var countRe = 0;
-        for(var i = 0; i < records.length; i++) {
+        for (var i = 0; i < records.length; i++) {
           console.log("entro 3");
           var item = records[i].data;
-          
 
-          if(item.ESTADO == 'EN ESPERA') {
-            if(countEs == 0 && countRe == 0) {
+
+          if (item.ESTADO == 'EN ESPERA') {
+            if (countEs == 0 && countRe == 0) {
               lblTitulo.setHtml(
                 '<table width="100%" >' +
-                '<tr><td><b>Mi Rol:</b> '+rol.NOMBRE+' ('+rol.PK_ROL_WF+')</td></tr>' +
-                "<tr><td><b>Caso:</b> "+item.PFK_CASO+"</td></tr> "+
-                "<tr><td><b>Etapa Actual:</b> "+item.PFK_ETAPA+"</td></tr>"+
-                "<tr><td><b>Rol Actual:</b> "+item.FK_ROL_WF+"</td></tr> "+
-                "</table>",);
+                '<tr><td><b>Mi Rol:</b> ' + rol.NOMBRE + ' (' + rol.PK_ROL_WF + ')</td></tr>' +
+                "<tr><td><b>Caso:</b> " + item.PFK_CASO + "</td></tr> " +
+                "<tr><td><b>Etapa Actual:</b> " + item.PFK_ETAPA + "</td></tr>" +
+                "<tr><td><b>Rol Actual:</b> " + item.FK_ROL_WF + "</td></tr> " +
+                "</table>");
             }
-            
+
             countEs++;
           }
 
           //console.log(i + " " +item.FK_ROL_WF + " " + rol.PK_ROL_WF + " " + obj.ESTADO + " " + countEs);
 
-          if(obj.ESTADO == 'ACTIVO' && 
-            item.FK_ROL_WF ==  rol.PK_ROL_WF && 
+          if (obj.ESTADO == 'ACTIVO' &&
+            item.FK_ROL_WF == rol.PK_ROL_WF &&
             countEs == 1) {
 
             console.log("entro 2");
             pnlBtn.show();
           }
 
-          if(item.ESTADO == 'RECHAZADO') {
+          if (item.ESTADO == 'RECHAZADO') {
             countRe++;
           }
-          
+
         }
 
-        if(countRe > 0 || countEs == 0) {
+        if (countRe > 0 || countEs == 0) {
           console.log("entro  mal");
           pnlBtn.hide();
           lblTitulo.setHtml(null);
         }
-        
-      }else{
+
+      } else {
         pnlBtn.hide();
         lblTitulo.setHtml(null);
       }
@@ -240,11 +325,11 @@ var cargarEtapasSolicitudCambiarFichaDetalle = function () {
 
 };
 
-var cambiarEstadoEtapaSolCambioFicha = function(estado) {
+var cambiarEstadoEtapaSolCambioFicha = function (estado, observacion) {
   var rol = Ext.getCmp('WFModificarFichaDetalle').myExtraParams.param1;
   var obj = Ext.getCmp('WFModificarFichaDetalle').myExtraParams.param2;
 
-  Ext.MessageBox.confirm('Etapa', '¿Está seguro de pasar la etapa a estado '+estado+'?', function(btn) {
+  Ext.MessageBox.confirm('Etapa', '¿Está seguro de pasar la etapa a estado ' + estado + '?', function (btn) {
     if (btn === 'yes') {
 
       Ext.MessageBox.show({
@@ -252,46 +337,47 @@ var cambiarEstadoEtapaSolCambioFicha = function(estado) {
         progressText: 'Espere por favor...',
         width: 300,
         wait: {
-            interval: 200
+          interval: 200
         }
       });
-      
+
       storeCambiarEstadoEtapaSolCambioFicha.proxy.setTimeout(300000);
       storeCambiarEstadoEtapaSolCambioFicha.load({
         params: {
           P_ID: obj.PK_ID,
           P_ROL_WF: rol.PK_ROL_WF,
           P_USUARIO: NOMBRE,
-          P_ESTADO: estado
+          P_ESTADO: estado,
+          P_OBSERVACION: observacion
         },
-        callback: function(records, operation, success) {
+        callback: function (records, operation, success) {
           Ext.MessageBox.hide();
-          cargarWFModificarFicha(null);
-          cargarEtapasSolicitudCambiarFichaDetalle();
-          if(records != null) {
-              if(records[0].data.r_msg == 'OK'){
+          console.log(records);
+          if (records != null) {
+            if (records[0].data.r_msg == 'OK') {
 
-                var item = records[0].data;
-                //console.log(item);
-                storeEnviarCorreoCambioEtapaWFCambioFicha.load({
-                  params: {
-                    P_ID: item.r_id,
-                    P_ROL_WF: item.r_rol,
-                    P_COD_EMP: EMPRESA,
-                    P_COD_CC: obj.COD_CC_SOL,
-                    P_ESTADO_SOL: item.r_est_sol
-                  },
-                });
-
-                showToast('Etapa cambiada correctamente');
-              }else{
-                  Ext.MessageBox.show({
-                      title: 'ADVERTENCIA',
-                      msg: records[0].data.r_msg,
-                      icon: Ext.MessageBox.WARNING,
-                      buttons: Ext.Msg.OK
-                  });
-              }
+              var item = records[0].data;
+              //console.log(item);
+              storeEnviarCorreoCambioEtapaWFCambioFicha.load({
+                params: {
+                  P_ID: item.r_id,
+                  P_ROL_WF: item.r_rol,
+                  P_COD_EMP: EMPRESA,
+                  P_COD_CC: obj.COD_CC_SOL,
+                  P_ESTADO_SOL: item.r_est_sol
+                },
+              });
+              cargarWFModificarFicha(null);
+              cargarEtapasSolicitudCambiarFichaDetalle();
+              showToast('Etapa cambiada correctamente');
+            } else {
+              Ext.MessageBox.show({
+                title: 'ADVERTENCIA',
+                msg: records[0].data.r_msg,
+                icon: Ext.MessageBox.WARNING,
+                buttons: Ext.Msg.OK
+              });
+            }
           }
         }
       });

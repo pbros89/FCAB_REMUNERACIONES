@@ -7,7 +7,7 @@ Ext.define("fcab.Container.WFModificarFichaDetalle", {
     height: (Ext.getBody().getViewSize().height - 150) > 800 ? 800 : Ext.getBody().getViewSize().height - 150,
     listeners: {
       beforerender: function () {
-        cargarResumenSolicitudCambiarFichaDetalle();
+        cargarTrabajadoresCambioFichaDetalle();
       }
     },
     //buttonAlign: 'center',
@@ -19,12 +19,22 @@ Ext.define("fcab.Container.WFModificarFichaDetalle", {
       pack: "center",
     },
     items: [
+      
       {
         title: "Resumen",
         itemId: "tabResumen",
         items: [
           {
             xtype: "WFModificarFichaDetalleResumen",
+          },
+        ],
+      },
+      {
+        title: "Trabajadores",
+        itemId: "tabTrabajadores",
+        items: [
+          {
+            xtype: "WFModificarFichaDetalleTrabajadores",
           },
         ],
       },
@@ -39,3 +49,18 @@ Ext.define("fcab.Container.WFModificarFichaDetalle", {
       },
     ],
   });
+
+
+  var cargarTrabajadoresCambioFichaDetalle = function() {
+    var param = Ext.getCmp('WFModificarFichaDetalle').myExtraParams.param2;
+    Ext.getCmp('WFModificarFichaDetalle').setDisabled(true);
+    storeCargarSolicitudesCambioFichaDet.load({
+      params: {
+        p_id: param.PK_ID
+      },
+      callback: function() {
+        cargarResumenSolicitudCambiarFichaDetalle();
+        Ext.getCmp('WFModificarFichaDetalle').setDisabled(false);
+      }
+    })
+  }
